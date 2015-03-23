@@ -3,6 +3,9 @@
  *
  *  Created on: Mar 22, 2015
  *      Author: neo
+ *	Usage:
+ *		Log logger(LOG_PATH);
+ *		logger.log(REPORT);
  */
 
 #ifndef LOG_H_
