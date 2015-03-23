@@ -9,6 +9,8 @@
 #include <iostream>
 using namespace std;
 
+#include "Log.h"
+
 int main( int argc, char* args[] )
 {
 	return 0;
