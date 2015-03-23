@@ -7,6 +7,17 @@
 
 #include "Log.h"
 
+Log* Log::_instance = 0;
+
+Log* Log::Instance(string path)
+{
+	if (_instance == 0)
+	{
+		_instance = new Log(path);
+	}
+	return _instance;
+}
+
 Log::Log(string path)
 {
 	//Assign the argument to the local atribute
