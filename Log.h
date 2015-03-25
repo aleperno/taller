@@ -20,13 +20,18 @@
 using namespace std;
 //Default log path
 #define LOG_PATH "log.txt"
+#define DEBUG "DEBUG"
+#define WARNING "WARNING"
+#define ERROR "ERROR"
+#define DELIMETER "\t"
+
 
 class Log
 {
 	protected:
 		Log(string path);
 	public:
-		void log(string reg);
+		void log(string level, string reg);
 		static Log* Instance(string path = LOG_PATH);
 	private:
 		static Log* _instance;

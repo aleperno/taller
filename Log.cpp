@@ -32,7 +32,7 @@ Log::Log(string path)
 	logFile.close();
 }
 
-void Log::log(string reg)
+void Log::log(string level, string reg)
 {
 	time_t timer;
 	time (&timer);
@@ -40,7 +40,8 @@ void Log::log(string reg)
 	stringTime = stringTime.substr(0,stringTime.length()-1);
 	//Open the stream
 	fstream logFile(_path.c_str(),fstream::app);
-	logFile << stringTime << "\t";
+	logFile << level << DELIMETER;
+	logFile << stringTime << DELIMETER;
 	logFile << reg << endl;
 	logFile.close();
 }
