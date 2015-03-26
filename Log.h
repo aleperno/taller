@@ -4,9 +4,9 @@
  *  Created on: Mar 22, 2015
  *      Author: neo
  *	Usage:
- *		Log::Instance(LOG_PATH)->log(REPORT);
+ *		Log::Instance(LOG_PATH)->log(LEVEL,REPORT);
  *		LOG_PATH may be empty
- *		REPORT MUST NOT be empty
+ *		LEVEL & REPORT MUST NOT be empty
  */
 
 #ifndef LOG_H_
@@ -20,10 +20,11 @@
 using namespace std;
 //Default log path
 #define LOG_PATH "log.txt"
+//Level Options
 #define DEBUG "DEBUG"
 #define WARNING "WARNING"
 #define ERROR "ERROR"
-#define DELIMETER "\t"
+#define DELIMETER ":"
 
 
 class Log
