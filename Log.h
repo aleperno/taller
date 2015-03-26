@@ -24,7 +24,7 @@ using namespace std;
 #define DEBUG "DEBUG"
 #define WARNING "WARNING"
 #define ERROR "ERROR"
-#define DELIMETER ":"
+#define DELIMETER "\t"
 
 
 class Log
