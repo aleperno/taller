@@ -1,4 +1,6 @@
 #include "Nivel.h"
+#include <Personaje.h>
+
 using namespace std;
 
 Nivel* Nivel::instance = NULL;
@@ -19,7 +21,7 @@ void Nivel::setearPersonajePorDefecto(Value defPersonaje){
 	this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
 	this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
 	this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
-	this->personaje.orientacion = defPersonaje.get("orientacion","").asString();
+	this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
 }
 
 void Nivel::setearCapasPorDefecto(Value defCapas){
@@ -97,8 +99,14 @@ Nivel::Nivel(Value root, Value defRoot){
 			this->ventana.alto_px = defVentana.get("altopx",-1).asInt();
 			Log::Instance()->log(WARNING,"Alto de la ventana en pixeles invalido o no definido. Se usa valor por defecto.");
 		}
-		
+		try
+		{
 		this->ventana.ancho = ventana.get("ancho",-1).asFloat();
+		}catch(...)
+		{
+			//Hay que agregar cual es el error y escribirlo en el log - Nik
+			this->ventana.ancho = defVentana.get("ancho",-1).asFloat();
+		}
 		if (this->ventana.ancho < 1) {
 			this->ventana.ancho = defVentana.get("ancho",-1).asFloat();
 			Log::Instance()->log(WARNING,"Ancho logico de la ventana invalido o no definido. Se usa valor por defecto.");
@@ -143,12 +151,17 @@ Nivel::Nivel(Value root, Value defRoot){
 			this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
 			Log::Instance()->log(WARNING,"Z-Index del personaje invalido o no definido. Se usa valor por defecto.");
 		}
-
-		this->personaje.orientacion = personaje.get("orientacion","").asString();
+		try{
+		this->personaje.orientacion = personaje.get("orientacion",1).asBool();
+		}catch(...){
+			this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
+			Log::Instance()->log(WARNING,"Orientacion del personaje invalida o no definida. Se usa valor por defecto.");
+		}
+		/*
 		if ((this->personaje.orientacion != "left") && (this->personaje.orientacion != "right" )) {
 			this->personaje.orientacion = defPersonaje.get("orientacion","").asString();
 			Log::Instance()->log(WARNING,"Orientacion del personaje invalida o no definida. Se usa valor por defecto.");
-		}
+		}*/
 
 	}
 
@@ -161,12 +174,14 @@ Nivel::Nivel(Value root, Value defRoot){
 			};
 			ifstream imagenTest(capaLocal.imagen_fondo.c_str());
 			if (!imagenTest.good()) {
-				Log::Instance()->log(WARNING,"Imagen de fondo para capa " + to_string(static_cast<long double>(i)) + " no es indicada o no existe.");
+				string msg = "Imagen de fondo para capa " + to_string(static_cast<long double>(i)) + " no es indicada o no existe.";
+				Log::Instance()->log(WARNING,msg);
 				capaSana = false;
 				imagenTest.close();
 			} else {
 				if (capaLocal.ancho < 1) {
-					Log::Instance()->log(WARNING,"Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " es invalido o no se define.");
+					string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " es invalido o no se define.";
+					Log::Instance()->log(WARNING,msg);
 					capaSana = false;
 				}
 			}

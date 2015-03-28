@@ -15,5 +15,5 @@
 "personaje": {	"ancho": 	15,
 		"alto": 	25,
 		"zindex":	1,
-		"orientacion":	"right"	}
+		"orientacion":	true	}
 }

@@ -7,40 +7,16 @@
 #include <vector>
 #include <json.h>
 #include <Log.h>
+#include <Personaje.h>
+#include <Ventana.h>
+#include <Capa.h>
+#include <Escritorio.h>
+
 using namespace Json;
 using namespace std;
 
 #define DEFAULT_CONFIG_PATH "Config/defconfig.json"
 #define SPRITE_SHEET_PATH "Config/spritesheet.png"
-
-class capa
-{
-	public:
-		string imagen_fondo;
-		float ancho;
-};
-class Ventana
-{
-	public:
-		int ancho_px;
-		int alto_px;
-		float ancho;
-};
-class Escenario
-{
-	public:
-		float ancho;
-		float alto;
-		float y_piso;
-};
-class Personaje
-{
-	public:
-		float ancho;
-		float alto;
-		int z_index;
-		string orientacion;
-};
 
 using namespace std;
 
