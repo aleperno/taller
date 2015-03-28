@@ -14,6 +14,5 @@ using namespace std;
 
 int main( int argc, char* args[] )
 {
-	Log::Instance()->log(DEBUG,"this is a test");
 	return 0;
 }
