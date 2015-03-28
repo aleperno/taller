@@ -5,7 +5,7 @@
  *      Author: neo
  */
 
-#include "Log.h"
+#include <Log.h>
 
 Log* Log::_instance = 0;
 
