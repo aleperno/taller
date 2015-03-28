@@ -10,7 +10,7 @@
 #include <Personaje.h>
 #include <Ventana.h>
 #include <Capa.h>
-#include <Escritorio.h>
+#include <Escenario.h>
 
 using namespace Json;
 using namespace std;
