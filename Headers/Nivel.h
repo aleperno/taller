@@ -10,33 +10,37 @@
 using namespace Json;
 using namespace std;
 
-#define DEFAULT_CONFIG_PATH "defconfig.json"
-#define SPRITE_SHEET_PATH "spritesheet.png"
+#define DEFAULT_CONFIG_PATH "Config/defconfig.json"
+#define SPRITE_SHEET_PATH "Config/spritesheet.png"
 
-class capa {
+class capa
+{
 	public:
 		string imagen_fondo;
 		float ancho;
 };
-class Ventana {
+class Ventana
+{
 	public:
 		int ancho_px;
 		int alto_px;
 		float ancho;
-	};
-class Escenario {
+};
+class Escenario
+{
 	public:
 		float ancho;
 		float alto;
 		float y_piso;
-	};
-class Personaje {
+};
+class Personaje
+{
 	public:
 		float ancho;
 		float alto;
 		int z_index;
 		string orientacion;
-	};
+};
 
 using namespace std;
 
