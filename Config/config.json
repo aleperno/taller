@@ -1,19 +1,19 @@
 {
 "ventana": {	"anchopx":	800,
 		"altopx":	600,
-		"ancho":	300	},
+		"ancho":	200	},
 
-"escenario": {	"ancho": 	1000.5,
+"escenario": {	"ancho": 	400,
 		"alto": 	150,
-		"ypiso":	0	},
+		"ypiso":	20	},
 
-"capas": [	{	"imagen_fondo": "fondo0.png",
+"capas": [	{	"imagen_fondo": "../Images/fondo0.png",
 			"ancho": 500	},
-		{	"imagen_fondo": "fondo1.png",
+		{	"imagen_fondo": "../Images/fondo1.png",
 			"ancho": 1000.5	}	],
 
-"personaje": {	"ancho": 	20,
+"personaje": {	"ancho": 	25,
 		"alto": 	35,
 		"zindex":	1,
-		"orientacion":	true	}
+		"orientacion":	false	}
 }

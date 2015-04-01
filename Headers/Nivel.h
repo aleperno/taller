@@ -15,8 +15,8 @@
 using namespace Json;
 using namespace std;
 
-#define DEFAULT_CONFIG_PATH "Config/defconfig.json"
-#define SPRITE_SHEET_PATH "Config/spritesheet.png"
+#define DEFAULT_CONFIG_PATH "../Config/defconfig.json"
+#define SPRITE_SHEET_PATH "../Images/spritesheet.png"
 
 using namespace std;
 
@@ -27,7 +27,7 @@ class Nivel{
 		Nivel(Value defRoot);
 
 		//Este se usa cuando no se usa el de arriba, pero archivo indicado podria tener
-		//errores simanticos lo cual implica que pueden ser necesarios los datos por defecto
+		//errores semanticos lo cual implica que pueden ser necesarios los datos por defecto
 		Nivel(Value root, Value defRoot);
 
 		void setearVentanaPorDefecto(Value defVentana);
