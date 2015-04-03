@@ -36,7 +36,7 @@ class Parser{
 		void setearCapasPorDefecto(Value defCapas);
 
 		static Parser* instance;
-
+		string _configPath;
 	public:
 		//Inicializa instancia usando ruta de *.json
 		static void Initialize(string path = DEFAULT_CONFIG_PATH);
@@ -46,6 +46,7 @@ class Parser{
 
 		//Destructor
 		static void KillInstance();
+		void reload();
 
 		//Los datos de Parser incluyen parametros de ventana, escenario, capas y personaje
 		//Ruta a sprite sheet es unica para todas ejecuciones

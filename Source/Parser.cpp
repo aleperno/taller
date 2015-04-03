@@ -293,7 +293,6 @@ void Parser::Initialize(string path){
 	Value root;
 	Value defRoot;
 	Reader reader;
-
 	delete(instance);
 
 	ifstream defaultConfigFile(DEFAULT_CONFIG_PATH);
@@ -324,6 +323,7 @@ void Parser::Initialize(string path){
 			}
 		}
 	}
+	instance->_configPath = path;
 }
 
 void Parser::KillInstance(){
@@ -331,4 +331,10 @@ void Parser::KillInstance(){
 		delete(instance);
 		instance = NULL;
 	}
+}
+
+void Parser::reload()
+{
+	string path = this->_configPath;
+	Initialize(path);
 }

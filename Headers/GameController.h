@@ -31,6 +31,9 @@ class GameController
 		void printLayers();
 		bool endOfGame(SDL_Event e);
 		void close();
+		void reloadConfig();
+		void getKeys();
+		bool _end_of_game;
 	public:
 		static GameController* Instance(Parser* parser = 0);
 		void run(int sleep_time = DEF_SLEEP_TIME);
