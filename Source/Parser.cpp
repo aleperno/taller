@@ -26,7 +26,7 @@ void Parser::setearPersonajePorDefecto(Value defPersonaje){
 void Parser::setearCapasPorDefecto(Value defCapas){
 	int nroCapas = defCapas.size();
 	for (int i=0; i<nroCapas; i++) {
-		capa capaLocal = {	defCapas[i].get("imagen_fondo","").asString(),
+		CapaData capaLocal = {	defCapas[i].get("imagen_fondo","").asString(),
 							defCapas[i].get("ancho",-1).asFloat(),
 		};
 		this->capas.push_back(capaLocal);
@@ -223,7 +223,7 @@ Parser::Parser(Value root, Value defRoot){
 			bool capaSana = true;
 			string rutaLocal;
 			float anchoLocal;
-			capa capaLocal;
+			CapaData capaLocal;
 
 			/*Es levantable como string la ruta a imagen? En todas pruebas, si no hubo error de parseo,
 			logro levantar cualquier verdura como string. Por las dudas lo dejo.*/

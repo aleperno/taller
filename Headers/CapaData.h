@@ -10,7 +10,7 @@
 using namespace std;
 #include <Log.h>
 
-class capa
+class CapaData
 {
 	public:
 		string imagen_fondo;

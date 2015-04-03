@@ -8,7 +8,7 @@
 #ifndef HEADERS_ESCRITORIO_H_
 #define HEADERS_ESCRITORIO_H_
 
-class Escenario
+class EscenarioData
 {
 	public:
 		float ancho;

@@ -7,10 +7,10 @@
 #include <vector>
 #include <json.h>
 #include <Log.h>
-#include <Personaje.h>
-#include <Ventana.h>
-#include <Capa.h>
-#include <Escenario.h>
+#include <PersonajeData.h>
+#include <VentanaData.h>
+#include <CapaData.h>
+#include <EscenarioData.h>
 
 using namespace Json;
 using namespace std;
@@ -49,10 +49,10 @@ class Parser{
 
 		//Los datos de Parser incluyen parametros de ventana, escenario, capas y personaje
 		//Ruta a sprite sheet es unica para todas ejecuciones
-		Ventana ventana;
-		Escenario escenario;
-		vector<capa> capas;
-		Personaje personaje;
+		VentanaData ventana;
+		EscenarioData escenario;
+		vector<CapaData> capas;
+		PersonajeData personaje;
 		string spriteSheetPath;
 	
 };

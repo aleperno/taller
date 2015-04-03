@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class Personaje
+class PersonajeData
 {
 	public:
 		float ancho;

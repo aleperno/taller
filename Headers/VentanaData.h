@@ -12,7 +12,7 @@
 using namespace std;
 #include <Log.h>
 
-class Ventana
+class VentanaData
 {
 	public:
 		int ancho_px;
