@@ -9,19 +9,20 @@
 
 Log* Log::_instance = 0;
 
-Log* Log::Instance(string path)
+Log* Log::Instance(int log_level, string path)
 {
 	if (_instance == 0)
 	{
-		_instance = new Log(path);
+		_instance = new Log(log_level,path);
 	}
 	return _instance;
 }
 
-Log::Log(string path)
+Log::Log(int log_level, string path)
 {
 	//Assign the argument to the local atribute
 	_path = path;
+	_logLevel = log_level;
 	//Check if the file exists, if not create it.
 	fstream logFile(path.c_str(),fstream::app);
 	if (!logFile)
@@ -32,18 +33,50 @@ Log::Log(string path)
 	logFile.close();
 }
 
-void Log::log(string level, string reg)
+void Log::log(int level, string reg)
 {
-	time_t timer;
-	time (&timer);
-	string stringTime = ctime(&timer);
-	stringTime = stringTime.substr(0,stringTime.length()-1);
-	//Open the stream
-	fstream logFile(_path.c_str(),fstream::app);
-	logFile << level << DELIMETER;
-	logFile << stringTime << DELIMETER;
-	logFile << reg << endl;
-	logFile.close();
+	bool allowed = canLog(level);
+	if (allowed)
+	{
+		time_t timer;
+		time (&timer);
+		string stringTime = ctime(&timer);
+		stringTime = stringTime.substr(0,stringTime.length()-1);
+		string prefix = getPrefix(level);
+		//Open the stream
+		fstream logFile(_path.c_str(),fstream::app);
+		logFile << prefix << DELIMETER;
+		logFile << stringTime << DELIMETER;
+		logFile << reg << endl;
+		logFile.close();
+	}
+}
+
+bool Log::canLog(int intentLevel)
+{
+	if (intentLevel <= _logLevel) //Ej Intento guardar un error en nivel debug
+	{
+		return true;
+	}else{
+		return false;
+	}
+}
+string Log::getPrefix(int level)
+{
+	string prefix = "";
+	switch(level)
+	{
+	case ERROR:
+		prefix = "ERROR";
+		break;
+	case WARNING:
+		prefix = "WARNING";
+		break;
+	case DEBUG:
+		prefix = "DEBUG";
+		break;
+	}
+	return prefix;
 }
 
 

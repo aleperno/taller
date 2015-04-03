@@ -10,37 +10,40 @@
 using namespace std;
 #include <json.h>
 #include <Log.h>
-#include <Nivel.h>
+#include <Parser.h>
 
 int main( int argc, char* args[] )
 {
+	Log logger = *Log::Instance(WARNING); //Instancio Log con nivel DEBUG
+	logger.log(DEBUG,"hola esto es un DEBUG"); //Pruebo loggear un debug, no deberia aparecer
+	return 0;
 	if (argc == 1) {
-		Nivel::Initialize(DEFAULT_CONFIG_PATH);
+		Parser::Initialize();
 	} else {
-		Nivel::Initialize(args[1]);
+		Parser::Initialize(args[1]);
 	}
 
-	cout << Nivel::Instance()->ventana.ancho_px << endl;
-	cout << Nivel::Instance()->ventana.alto_px << endl;
-	cout << Nivel::Instance()->ventana.ancho << endl << endl;
+	cout << Parser::Instance()->ventana.ancho_px << endl;
+	cout << Parser::Instance()->ventana.alto_px << endl;
+	cout << Parser::Instance()->ventana.ancho << endl << endl;
 
-	cout << Nivel::Instance()->escenario.ancho << endl;
-	cout << Nivel::Instance()->escenario.alto << endl;
-	cout << Nivel::Instance()->escenario.y_piso << endl << endl;
+	cout << Parser::Instance()->escenario.ancho << endl;
+	cout << Parser::Instance()->escenario.alto << endl;
+	cout << Parser::Instance()->escenario.y_piso << endl << endl;
 
-	cout << Nivel::Instance()->personaje.ancho << endl;
-	cout << Nivel::Instance()->personaje.alto << endl;
-	cout << Nivel::Instance()->personaje.z_index << endl;
-	cout << Nivel::Instance()->personaje.orientacion << endl << endl;;
+	cout << Parser::Instance()->personaje.ancho << endl;
+	cout << Parser::Instance()->personaje.alto << endl;
+	cout << Parser::Instance()->personaje.z_index << endl;
+	cout << Parser::Instance()->personaje.orientacion << endl << endl;;
 
-	cout << Nivel::Instance()->spriteSheetPath << endl << endl;
+	cout << Parser::Instance()->spriteSheetPath << endl << endl;
 
-	for (unsigned int i=0; i<Nivel::Instance()->capas.size(); i++) {
-		cout << Nivel::Instance()->capas[i].imagen_fondo << endl;
-		cout << Nivel::Instance()->capas[i].ancho << endl;
+	for (unsigned int i=0; i<Parser::Instance()->capas.size(); i++) {
+		cout << Parser::Instance()->capas[i].imagen_fondo << endl;
+		cout << Parser::Instance()->capas[i].ancho << endl;
 	}
 
-	Nivel::KillInstance();
+	Parser::KillInstance();
 
 	return 0;
 }

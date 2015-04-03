@@ -1,29 +1,29 @@
-#include "Nivel.h"
+#include "Parser.h"
 
 using namespace std;
 
-Nivel* Nivel::instance = NULL;
+Parser* Parser::instance = NULL;
 
-void Nivel::setearVentanaPorDefecto(Value defVentana){
+void Parser::setearVentanaPorDefecto(Value defVentana){
 	this->ventana.ancho_px = defVentana.get("anchopx",-1).asInt();
 	this->ventana.alto_px = defVentana.get("altopx",-1).asInt();
 	this->ventana.ancho = defVentana.get("ancho",-1).asFloat();
 }
 
-void Nivel::setearEscenarioPorDefecto(Value defEscenario){
+void Parser::setearEscenarioPorDefecto(Value defEscenario){
 	this->escenario.ancho = defEscenario.get("ancho",-1).asFloat();
 	this->escenario.alto = defEscenario.get("alto",-1).asFloat();
 	this->escenario.y_piso = defEscenario.get("ypiso",-1).asFloat();
 }
 
-void Nivel::setearPersonajePorDefecto(Value defPersonaje){
+void Parser::setearPersonajePorDefecto(Value defPersonaje){
 	this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
 	this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
 	this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
 	this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
 }
 
-void Nivel::setearCapasPorDefecto(Value defCapas){
+void Parser::setearCapasPorDefecto(Value defCapas){
 	int nroCapas = defCapas.size();
 	for (int i=0; i<nroCapas; i++) {
 		capa capaLocal = {	defCapas[i].get("imagen_fondo","").asString(),
@@ -33,7 +33,7 @@ void Nivel::setearCapasPorDefecto(Value defCapas){
 	}
 }
 
-Nivel::Nivel(Value defRoot) {
+Parser::Parser(Value defRoot) {
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
 	setearPersonajePorDefecto(defRoot["personaje"]);
@@ -42,7 +42,7 @@ Nivel::Nivel(Value defRoot) {
 	this->spriteSheetPath = SPRITE_SHEET_PATH;
 }
 
-Nivel::Nivel(Value root, Value defRoot){
+Parser::Parser(Value root, Value defRoot){
 	//FRENTE A AUSENCIA DE CUALQUIER COSA SE REEMPLAZA POR VALOR POR DEFECTO
 	Value defVentana = defRoot["ventana"];
 	Value defEscenario = defRoot["escenario"];
@@ -285,11 +285,11 @@ Nivel::Nivel(Value root, Value defRoot){
 	}
 }
 
-Nivel* Nivel::Instance(){
+Parser* Parser::Instance(){
 	return instance;
 }
 
-void Nivel::Initialize(string path){
+void Parser::Initialize(string path){
 	Value root;
 	Value defRoot;
 	Reader reader;
@@ -301,13 +301,13 @@ void Nivel::Initialize(string path){
 	defaultConfigFile.close();
 
 	if (path == DEFAULT_CONFIG_PATH) {
-		instance = new Nivel(defRoot);	//No se ingreso ruta.
+		instance = new Parser(defRoot);	//No se ingreso ruta.
 		Log::Instance()->log(WARNING,"No se ingreso ruta. Se usa configuracion por defecto.");
 
 	} else {
 		ifstream configFile(path);
 		if (!configFile.good())	{
-			instance = new Nivel(defRoot);	//No existe archivo en ruta ingresada.
+			instance = new Parser(defRoot);	//No existe archivo en ruta ingresada.
 			Log::Instance()->log(WARNING,"Archivo no existe. Se usa configuracion por defecto.");
 			configFile.close();
 
@@ -315,18 +315,18 @@ void Nivel::Initialize(string path){
 			bool parseoExitoso = reader.parse(configFile,root);
 			configFile.close();
 			if (!parseoExitoso) {
-				instance = new Nivel(defRoot);	//Archivo existe, tiene errores sintacticos.
+				instance = new Parser(defRoot);	//Archivo existe, tiene errores sintacticos.
 				Log::Instance()->log(WARNING,"Error de parseo. Se usa configuracion por defecto.\n" + reader.getFormattedErrorMessages());
 
 			} else {
 				//Archivo existe, no tiene errores sintacticos, pero puede tener semanticos.
-				instance = new Nivel(root,defRoot);
+				instance = new Parser(root,defRoot);
 			}
 		}
 	}
 }
 
-void Nivel::KillInstance(){
+void Parser::KillInstance(){
 	if (instance != NULL) {
 		delete(instance);
 		instance = NULL;
