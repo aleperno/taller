@@ -44,6 +44,7 @@ class Logger
 	public:
 		void log(int level, string reg);
 		static Logger* Instance(int log_level = ERROR, string path = LOG_PATH);
+		void banner();
 	private:
 		bool canLog(int level);
 		static Logger* _instance;

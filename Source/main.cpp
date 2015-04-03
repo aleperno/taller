@@ -14,15 +14,15 @@ using namespace std;
 
 int main( int argc, char* args[] )
 {
-	Logger logger = *Logger::Instance(WARNING); //Instancio Logger con nivel DEBUG
-	logger.log(DEBUG,"hola esto es un DEBUG"); //Pruebo Loggergear un debug, no deberia aparecer
-	return 0;
+	Logger logger = *Logger::Instance(ERROR); //Instancio Logger con nivel ERROR
+	logger.banner();
+	//logger.log(WARNING,"hola esto es un WARNING"); //Pruebo Loggergear un debug, no deberia aparecer
 	if (argc == 1) {
 		Parser::Initialize();
 	} else {
 		Parser::Initialize(args[1]);
 	}
-
+	/*
 	cout << Parser::Instance()->ventana.ancho_px << endl;
 	cout << Parser::Instance()->ventana.alto_px << endl;
 	cout << Parser::Instance()->ventana.ancho << endl << endl;
@@ -44,6 +44,7 @@ int main( int argc, char* args[] )
 	}
 
 	Parser::KillInstance();
-
+	*/
+	logger.log(DEBUG,"Fin del programa");
 	return 0;
 }

@@ -52,6 +52,19 @@ void Logger::log(int level, string reg)
 	}
 }
 
+void Logger::banner()
+{
+	time_t timer;
+	time (&timer);
+	string stringTime = ctime(&timer);
+	stringTime = stringTime.substr(0,stringTime.length()-1);
+	string output = string(80,'*') + "\n" + '*' + string(27,' ') + stringTime + string(27,' ') + "*\n" + string(80,'*') + '\n';
+	//Open the stream
+	fstream LoggerFile(_path.c_str(),fstream::app);
+	LoggerFile << output;
+	LoggerFile.close();
+}
+
 bool Logger::canLog(int intentLevel)
 {
 	if (intentLevel <= _logLevel) //Ej Intento guardar un error en nivel debug
