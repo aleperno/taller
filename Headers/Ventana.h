@@ -15,7 +15,7 @@
 using namespace std;
 #include <json.h>
 #include <Logger.h>
-#include "LTexture.h"
+#include "TextureHandler.h"
 class Ventana
 {
 	public:
