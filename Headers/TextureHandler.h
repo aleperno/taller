@@ -5,15 +5,15 @@
 #include <SDL_image.h>
 #include <string>
 
-class LTexture
+class TextureHandler
 {
 	public:
 		//Initializes variables
-		LTexture();
-		LTexture(SDL_Renderer* mRenderer);
+		TextureHandler();
+		TextureHandler(SDL_Renderer* mRenderer);
 
 		//Deallocates memory
-		~LTexture();
+		~TextureHandler();
 
 		//Loads image at specified path
 		bool loadFromFile( std::string path, bool img_PNG = false );

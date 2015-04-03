@@ -11,6 +11,8 @@ using namespace std;
 #include <json.h>
 #include <Logger.h>
 #include <Parser.h>
+#include <GameController.h>
+#include <Ventana.h>
 
 int main( int argc, char* args[] )
 {
@@ -22,6 +24,9 @@ int main( int argc, char* args[] )
 	} else {
 		Parser::Initialize(args[1]);
 	}
+	Parser* parser = Parser::Instance();
+	GameController* controlador = GameController::Instance(parser);
+	controlador->run();
 	/*
 	cout << Parser::Instance()->ventana.ancho_px << endl;
 	cout << Parser::Instance()->ventana.alto_px << endl;

@@ -1,7 +1,7 @@
-#include "LTexture.h"
+#include "TextureHandler.h"
 
 
-LTexture::LTexture()
+TextureHandler::TextureHandler()
 {
 	//Initialize
 	mTexture = NULL;
@@ -9,7 +9,7 @@ LTexture::LTexture()
 	mHeight = 0;
 }
 
-LTexture::LTexture(SDL_Renderer* mRenderer)
+TextureHandler::TextureHandler(SDL_Renderer* mRenderer)
 {
 	//Initialize
 	mTexture = NULL;
@@ -18,13 +18,13 @@ LTexture::LTexture(SDL_Renderer* mRenderer)
 	mHeight = 0;
 }
 
-LTexture::~LTexture()
+TextureHandler::~TextureHandler()
 {
 	//Deallocate
 	free();
 }
 
-bool LTexture::loadFromFile( std::string path, bool img_PNG)
+bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
 {
 	//Get rid of preexisting texture
 	free();
@@ -73,7 +73,7 @@ bool LTexture::loadFromFile( std::string path, bool img_PNG)
 	return mTexture != NULL;
 }
 
-void LTexture::free()
+void TextureHandler::free()
 {
 	//Free texture if it exists
 	if( mTexture != NULL )
@@ -85,33 +85,33 @@ void LTexture::free()
 	}
 }
 
-void LTexture::render( int x, int y)
+void TextureHandler::render( int x, int y)
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 	SDL_RenderCopy( this->mRenderer, mTexture, NULL, &renderQuad );
 }
 
-void LTexture::renderCut(int x, int y, int width, int height)
+void TextureHandler::renderCut(int x, int y, int width, int height)
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, width, height };
 	SDL_RenderCopy( this->mRenderer, mTexture, NULL, &renderQuad );
 }
 
-void LTexture::renderScaled( int x, int y, int width, int height )
+void TextureHandler::renderScaled( int x, int y, int width, int height )
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, width, height };
 	SDL_RenderCopy( this->mRenderer, mTexture, NULL, &renderQuad );
 }
 
-int LTexture::getWidth()
+int TextureHandler::getWidth()
 {
 	return mWidth;
 }
 
-int LTexture::getHeight()
+int TextureHandler::getHeight()
 {
 	return mHeight;
 }
