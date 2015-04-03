@@ -61,28 +61,28 @@ Parser::Parser(Value root, Value defRoot){
 	if (ventana.empty()) {
 		setearVentanaPorDefecto(defVentana);
 		hayVentana = false;
-		Log::Instance()->log(WARNING,"Ventana no definida. Se usa ventana por defecto.");
+		Logger::Instance()->log(WARNING,"Ventana no definida. Se usa ventana por defecto.");
 	};
 
 	Value escenario = root["escenario"];
 	if (escenario.empty()) {
 		setearEscenarioPorDefecto(defEscenario);
 		hayEscenario = false;
-		Log::Instance()->log(WARNING,"Escenario no definido. Se usa escenario por defecto.");
+		Logger::Instance()->log(WARNING,"Escenario no definido. Se usa escenario por defecto.");
 	};
 	
 	Value personaje = root["personaje"];
 	if (personaje.empty()) {
 		setearPersonajePorDefecto(defPersonaje);
 		hayPersonaje = false;
-		Log::Instance()->log(WARNING,"Personaje no definido. Se usa personaje por defecto.");
+		Logger::Instance()->log(WARNING,"Personaje no definido. Se usa personaje por defecto.");
 	};
 
 	Value capasJson = root["capas"];
 	if (capasJson.empty()) {
 		setearCapasPorDefecto(defCapas);
 		hayCapas = false;
-		Log::Instance()->log(WARNING,"Capas no definidas. Se usan capas por defecto.");
+		Logger::Instance()->log(WARNING,"Capas no definidas. Se usan capas por defecto.");
 	}
 
 	//Aca ya se sabe cuales estructuras existen en archivo y cuales no (se pusieron por defecto ya)
@@ -93,36 +93,36 @@ Parser::Parser(Value root, Value defRoot){
 		try	{	this->ventana.ancho_px = ventana.get("anchopx",-1).asInt();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho de la ventana en pixeles.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho de la ventana en pixeles.");
 			this->ventana.ancho_px = defVentana.get("anchopx",-1).asInt();
 		}
 		if (this->ventana.ancho_px < 2) {
 			this->ventana.ancho_px = defVentana.get("anchopx",-1).asInt();
-			Log::Instance()->log(WARNING,"Ancho de la ventana en pixeles invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Ancho de la ventana en pixeles invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----altopx-----
 		try {	this->ventana.alto_px = ventana.get("altopx",-1).asInt();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de alto de la ventana en pixeles.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de alto de la ventana en pixeles.");
 			this->ventana.alto_px = defVentana.get("altopx",-1).asInt();
 		}
 		if (this->ventana.alto_px < 2) {
 			this->ventana.alto_px = defVentana.get("altopx",-1).asInt();
-			Log::Instance()->log(WARNING,"Alto de la ventana en pixeles invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Alto de la ventana en pixeles invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----ancho-----
 		try	{	this->ventana.ancho = ventana.get("ancho",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho logico de la ventana.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho logico de la ventana.");
 			this->ventana.ancho = defVentana.get("ancho",-1).asFloat();
 		}
 		if (this->ventana.ancho < 2) {
 			this->ventana.ancho = defVentana.get("ancho",-1).asFloat();
-			Log::Instance()->log(WARNING,"Ancho logico de la ventana invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Ancho logico de la ventana invalido o no definido. Se usa valor por defecto.");
 		}
 	}
 
@@ -132,36 +132,36 @@ Parser::Parser(Value root, Value defRoot){
 		try {	this->escenario.ancho = escenario.get("ancho",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho logico del escenario.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho logico del escenario.");
 			this->escenario.ancho = defEscenario.get("ancho",-1).asFloat();
 		}
 		if (this->escenario.ancho < 2) {
 			this->escenario.ancho = defEscenario.get("ancho",-1).asFloat();
-			Log::Instance()->log(WARNING,"Ancho logico del escenario invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Ancho logico del escenario invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----alto-----
 		try {	this->escenario.alto = escenario.get("alto",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de alto logico del escenario.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de alto logico del escenario.");
 			this->escenario.alto = defEscenario.get("alto",-1).asFloat();
 		}
 		if (this->escenario.alto < 2) {
 			this->escenario.alto = defEscenario.get("alto",-1).asFloat();
-			Log::Instance()->log(WARNING,"Alto logico del escenario invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Alto logico del escenario invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----ypiso-----
 		try {	this->escenario.y_piso = escenario.get("ypiso",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de altura del piso.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de altura del piso.");
 			this->escenario.y_piso = defEscenario.get("ypiso",-1).asFloat();
 		}
 		if (this->escenario.y_piso < 0) {
 			this->escenario.y_piso = defEscenario.get("ypiso",-1).asFloat();
-			Log::Instance()->log(WARNING,"Altura logica del piso invalida o no definida. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Altura logica del piso invalida o no definida. Se usa valor por defecto.");
 		}
 	}
 
@@ -171,36 +171,36 @@ Parser::Parser(Value root, Value defRoot){
 		try {	this->personaje.ancho = personaje.get("ancho",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho del personaje.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de ancho del personaje.");
 			this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
 		}
 		if (this->personaje.ancho < 2) {
 			this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
-			Log::Instance()->log(WARNING,"Ancho logico del personaje invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Ancho logico del personaje invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----alto-----
 		try {	this->personaje.alto = personaje.get("alto",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de alto del personaje.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de alto del personaje.");
 			this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
 		}
 		if (this->personaje.alto < 2) {
 			this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
-			Log::Instance()->log(WARNING,"Alto logico del personaje invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Alto logico del personaje invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----zindex-----
 		try {	this->personaje.z_index = personaje.get("zindex",-1).asInt();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de z-index del personaje.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de z-index del personaje.");
 			this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
 		}
 		if (this->personaje.z_index < 0) {
 			this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
-			Log::Instance()->log(WARNING,"Z-Index del personaje invalido o no definido. Se usa valor por defecto.");
+			Logger::Instance()->log(WARNING,"Z-Index del personaje invalido o no definido. Se usa valor por defecto.");
 		}
 
 		//-----orientacion-----
@@ -209,7 +209,7 @@ Parser::Parser(Value root, Value defRoot){
 		try{	this->personaje.orientacion = personaje.get("orientacion",1).asBool();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Log::Instance()->log(WARNING,str + " Se usara valor por defecto de orientacion del personaje.");
+			Logger::Instance()->log(WARNING,str + " Se usara valor por defecto de orientacion del personaje.");
 			this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
 		}
 	}
@@ -231,7 +231,7 @@ Parser::Parser(Value root, Value defRoot){
 			catch(const exception &e) {
 				string str(e.what());
 				string msg = str + " Fondo de capa " + to_string(static_cast<long double>(i)) + ".";
-				Log::Instance()->log(WARNING,msg);
+				Logger::Instance()->log(WARNING,msg);
 				capaSana = false;
 			}
 
@@ -241,7 +241,7 @@ Parser::Parser(Value root, Value defRoot){
 				catch(const exception &e) {
 					string str(e.what());
 					string msg = str + " Ancho de capa " + to_string(static_cast<long double>(i)) + ".";
-					Log::Instance()->log(WARNING,msg);
+					Logger::Instance()->log(WARNING,msg);
 					capaSana = false;
 				}
 			}
@@ -254,14 +254,14 @@ Parser::Parser(Value root, Value defRoot){
 				//Chequeo si el archivo existe.
 				if (!imagenTest.good()) {
 					string msg = "Imagen de fondo para capa " + to_string(static_cast<long double>(i)) + " no es indicada o no existe.";
-					Log::Instance()->log(WARNING,msg);
+					Logger::Instance()->log(WARNING,msg);
 					capaSana = false;
 					imagenTest.close();
 				} else {
 					//Chequeo si el ancho es valido.
 					if (capaLocal.ancho < 2) {
 						string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " es invalido o no se define.";
-						Log::Instance()->log(WARNING,msg);
+						Logger::Instance()->log(WARNING,msg);
 						capaSana = false;
 					}
 				}
@@ -275,11 +275,11 @@ Parser::Parser(Value root, Value defRoot){
 		if (this->capas.size() == 0) {
 			//No hay capas validas, agarro los que son por defecto.
 			setearCapasPorDefecto(defCapas);
-			Log::Instance()->log(WARNING,"No hay capas con todos parametros validos. Se usaran capas por defecto.");
+			Logger::Instance()->log(WARNING,"No hay capas con todos parametros validos. Se usaran capas por defecto.");
 		} else {
 			//Hay por lo menos una capa valida. Veo si son todas validas, si no es asi - aviso.
 			if (this->capas.size() != capasJson.size()) {
-				Log::Instance()->log(WARNING,"Hay capas con uno o mas parametros invalidos. No se usan.");
+				Logger::Instance()->log(WARNING,"Hay capas con uno o mas parametros invalidos. No se usan.");
 			}
 		}
 	}
@@ -302,13 +302,13 @@ void Parser::Initialize(string path){
 
 	if (path == DEFAULT_CONFIG_PATH) {
 		instance = new Parser(defRoot);	//No se ingreso ruta.
-		Log::Instance()->log(WARNING,"No se ingreso ruta. Se usa configuracion por defecto.");
+		Logger::Instance()->log(WARNING,"No se ingreso ruta. Se usa configuracion por defecto.");
 
 	} else {
 		ifstream configFile(path);
 		if (!configFile.good())	{
 			instance = new Parser(defRoot);	//No existe archivo en ruta ingresada.
-			Log::Instance()->log(WARNING,"Archivo no existe. Se usa configuracion por defecto.");
+			Logger::Instance()->log(WARNING,"Archivo no existe. Se usa configuracion por defecto.");
 			configFile.close();
 
 		} else {
@@ -316,7 +316,7 @@ void Parser::Initialize(string path){
 			configFile.close();
 			if (!parseoExitoso) {
 				instance = new Parser(defRoot);	//Archivo existe, tiene errores sintacticos.
-				Log::Instance()->log(WARNING,"Error de parseo. Se usa configuracion por defecto.\n" + reader.getFormattedErrorMessages());
+				Logger::Instance()->log(WARNING,"Error de parseo. Se usa configuracion por defecto.\n" + reader.getFormattedErrorMessages());
 
 			} else {
 				//Archivo existe, no tiene errores sintacticos, pero puede tener semanticos.

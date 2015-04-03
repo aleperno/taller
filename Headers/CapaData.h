@@ -8,7 +8,7 @@
 #define HEADERS_CAPA_H_
 #include <string>
 using namespace std;
-#include <Log.h>
+#include <Logger.h>
 
 class CapaData
 {

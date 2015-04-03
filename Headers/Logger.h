@@ -1,26 +1,26 @@
 /*
- * Log.h
+ * Logger.h
  *
  *  Created on: Mar 22, 2015
  *      Author: neo
  *  Construction:
- *  	Log::Instance(log_level, path)
- *		log_level sets the available log levels
+ *  	Logger::Instance(Logger_level, path)
+ *		Logger_level sets the available Logger levels
  *		path sets the path to save.
  *		Both may be empty.
  *	Usage:
- *		Log::Instance()->log(LEVEL,REPORT);
- *		LOG_PATH may be empty
+ *		Logger::Instance()->Logger(LEVEL,REPORT);
+ *		Logger_PATH may be empty
  *		LEVEL & REPORT MUST NOT be empty
  *
- *	logLevel: There's 3 options
+ *	LoggerLevel: There's 3 options
  *		0: Error -> Default
  *		1: Warnings
  *		2: Debug
  */
 
-#ifndef LOG_H_
-#define LOG_H_
+#ifndef Logger_H_
+#define Logger_H_
 
 #include <time.h>
 #include <fstream>
@@ -28,7 +28,7 @@
 #include <string>
 
 using namespace std;
-//Default log path
+//Default Logger path
 #define LOG_PATH "log.txt"
 //Level Options
 #define DEBUG 2
@@ -37,16 +37,16 @@ using namespace std;
 #define DELIMETER "\t"
 
 
-class Log
+class Logger
 {
 	protected:
-		Log(int log_level, string path);
+		Logger(int log_level, string path);
 	public:
 		void log(int level, string reg);
-		static Log* Instance(int log_level = ERROR, string path = LOG_PATH);
+		static Logger* Instance(int log_level = ERROR, string path = LOG_PATH);
 	private:
 		bool canLog(int level);
-		static Log* _instance;
+		static Logger* _instance;
 		string _path;
 		int _logLevel;
 		string getPrefix(int level);
@@ -54,4 +54,4 @@ class Log
 
 
 
-#endif /* LOG_H_ */
+#endif /* Logger_H_ */

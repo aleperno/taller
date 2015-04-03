@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <json.h>
-#include <Log.h>
+#include <Logger.h>
 #include <PersonajeData.h>
 #include <VentanaData.h>
 #include <CapaData.h>

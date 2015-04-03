@@ -1,39 +1,39 @@
 /*
- * Log.cpp
+ * Logger.cpp
  *
  *  Created on: Mar 22, 2015
  *      Author: neo
  */
 
-#include <Log.h>
+#include <Logger.h>
 
-Log* Log::_instance = 0;
+Logger* Logger::_instance = 0;
 
-Log* Log::Instance(int log_level, string path)
+Logger* Logger::Instance(int Logger_level, string path)
 {
 	if (_instance == 0)
 	{
-		_instance = new Log(log_level,path);
+		_instance = new Logger(Logger_level,path);
 	}
 	return _instance;
 }
 
-Log::Log(int log_level, string path)
+Logger::Logger(int Logger_level, string path)
 {
 	//Assign the argument to the local atribute
 	_path = path;
-	_logLevel = log_level;
+	_logLevel = Logger_level;
 	//Check if the file exists, if not create it.
-	fstream logFile(path.c_str(),fstream::app);
-	if (!logFile)
+	fstream LoggerFile(path.c_str(),fstream::app);
+	if (!LoggerFile)
 	{
 		//The file does not exist, must create it
-		fstream logFile(path.c_str(),fstream::out);
+		fstream LoggerFile(path.c_str(),fstream::out);
 	}
-	logFile.close();
+	LoggerFile.close();
 }
 
-void Log::log(int level, string reg)
+void Logger::log(int level, string reg)
 {
 	bool allowed = canLog(level);
 	if (allowed)
@@ -44,15 +44,15 @@ void Log::log(int level, string reg)
 		stringTime = stringTime.substr(0,stringTime.length()-1);
 		string prefix = getPrefix(level);
 		//Open the stream
-		fstream logFile(_path.c_str(),fstream::app);
-		logFile << prefix << DELIMETER;
-		logFile << stringTime << DELIMETER;
-		logFile << reg << endl;
-		logFile.close();
+		fstream LoggerFile(_path.c_str(),fstream::app);
+		LoggerFile << prefix << DELIMETER;
+		LoggerFile << stringTime << DELIMETER;
+		LoggerFile << reg << endl;
+		LoggerFile.close();
 	}
 }
 
-bool Log::canLog(int intentLevel)
+bool Logger::canLog(int intentLevel)
 {
 	if (intentLevel <= _logLevel) //Ej Intento guardar un error en nivel debug
 	{
@@ -61,7 +61,7 @@ bool Log::canLog(int intentLevel)
 		return false;
 	}
 }
-string Log::getPrefix(int level)
+string Logger::getPrefix(int level)
 {
 	string prefix = "";
 	switch(level)

@@ -9,13 +9,13 @@
 #include <iostream>
 using namespace std;
 #include <json.h>
-#include <Log.h>
+#include <Logger.h>
 #include <Parser.h>
 
 int main( int argc, char* args[] )
 {
-	Log logger = *Log::Instance(WARNING); //Instancio Log con nivel DEBUG
-	logger.log(DEBUG,"hola esto es un DEBUG"); //Pruebo loggear un debug, no deberia aparecer
+	Logger logger = *Logger::Instance(WARNING); //Instancio Logger con nivel DEBUG
+	logger.log(DEBUG,"hola esto es un DEBUG"); //Pruebo Loggergear un debug, no deberia aparecer
 	return 0;
 	if (argc == 1) {
 		Parser::Initialize();
