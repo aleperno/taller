@@ -53,14 +53,14 @@ void Parser::setearParseoDeSprite() {
 	this->personaje.idle[0] = personaje["idle"][0].asInt();
 	this->personaje.idle[1] = personaje["idle"][1].asInt();
 
-	this->personaje.idle[0] = personaje["jumpUp"][0].asInt();
-	this->personaje.idle[1] = personaje["jumpUp"][1].asInt();
+	this->personaje.jumpUp[0] = personaje["jumpUp"][0].asInt();
+	this->personaje.jumpUp[1] = personaje["jumpUp"][1].asInt();
 
-	this->personaje.idle[0] = personaje["jumpFwd"][0].asInt();
-	this->personaje.idle[1] = personaje["jumpFwd"][1].asInt();
+	this->personaje.jumpFwd[0] = personaje["jumpFwd"][0].asInt();
+	this->personaje.jumpFwd[1] = personaje["jumpFwd"][1].asInt();
 
-	this->personaje.idle[0] = personaje["jumpBwd"][0].asInt();
-	this->personaje.idle[1] = personaje["jumpBwd"][1].asInt();
+	this->personaje.jumpBwd[0] = personaje["jumpBwd"][0].asInt();
+	this->personaje.jumpBwd[1] = personaje["jumpBwd"][1].asInt();
 
 	file.close();
 }
