@@ -17,6 +17,15 @@ class PersonajeData
 		float alto;
 		int z_index;
 		bool orientacion;
+
+		//sprite data
+		int height;
+		int width;
+		int walk[2];
+		int idle[2];
+		int jumpUp[2];
+		int jumpFwd[2];
+		int jumpBwd[2];
 };
 
 
