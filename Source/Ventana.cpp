@@ -42,3 +42,8 @@ void Ventana::clearScreen()
 	SDL_SetRenderDrawColor( _gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( _gRenderer );
 }
+
+void Ventana::updateScreen()
+{
+	SDL_RenderPresent( _gRenderer );
+}

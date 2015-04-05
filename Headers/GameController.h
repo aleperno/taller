@@ -12,11 +12,14 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 using namespace std;
 #include <json.h>
 #include <Logger.h>
 #include <Parser.h>
 #include <Ventana.h>
+#include <Capa.h>
+
 
 #define DEF_SLEEP_TIME 50
 
@@ -25,15 +28,25 @@ class GameController
 	protected:
 		GameController(Parser* parser);
 	private:
+		//Atributos
+		Ventana* _ventana;
+		EscenarioData _escenario;
+		vector<Capa*> _capas;
+		bool _end_of_game;
+
+		//Metodos
 		static GameController* _instance;
 		static Ventana* getVentana(Parser* parser);
-		Ventana* _ventana;
+		static EscenarioData getEscenario(Parser* parser);
+		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
 		void printLayers();
 		bool endOfGame(SDL_Event e);
 		void close();
 		void reloadConfig();
 		void getKeys();
-		bool _end_of_game;
+		void moveLayersRight();
+		void moveLayersLeft();
+
 	public:
 		static GameController* Instance(Parser* parser = 0);
 		void run(int sleep_time = DEF_SLEEP_TIME);

@@ -5,6 +5,7 @@
  *      Author: neo
  */
 #include <GameController.h>
+#define MOV_FACTOR 100; //Fraccion de la capa que se mueve por ciclo
 
 GameController* GameController::_instance = 0;
 
@@ -20,6 +21,8 @@ GameController* GameController::Instance(Parser* parser)
 GameController::GameController(Parser* parser)
 {
 	_ventana = GameController::getVentana(parser);
+	_escenario = GameController::getEscenario(parser);
+	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_end_of_game = false;
 }
 
@@ -33,10 +36,33 @@ Ventana* GameController::getVentana(Parser* parser)
 	return vent;
 }
 
+EscenarioData GameController::getEscenario(Parser* parser)
+{
+	return parser->escenario;
+}
+
+vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario)
+{
+	vector<Capa*> capas;
+	for (unsigned int i=0; i < parser->capas.size(); i++)
+	{
+		Capa* capa = new Capa(ventana,parser->capas[i],escenario);
+		capas.push_back(capa);
+	}
+	return capas;
+}
+
 void GameController::printLayers()
 {
+	//LimpioPantalla
 	this->_ventana->clearScreen();
 	this->_ventana->view();
+	for (unsigned int i=0; i<_capas.size(); i++)
+	{
+		_capas[i]->view();
+	}
+	//ActualizoPantalla
+	this->_ventana->updateScreen();
 }
 
 bool GameController::endOfGame(SDL_Event e)
@@ -89,5 +115,29 @@ void GameController::getKeys()
 	}else if( currentKeyStates[ SDL_SCANCODE_R ] )
 	{
 		this->reloadConfig();
+	}else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
+	{
+		this-> moveLayersRight();
+	}else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
+	{
+		this-> moveLayersLeft();
+	}
+}
+
+void GameController::moveLayersRight()
+{
+	float factor = (float) MOV_FACTOR;
+	for (unsigned int i=0; i<_capas.size(); i++)
+	{
+		_capas[i]->moveRight(factor);
+	}
+}
+
+void GameController::moveLayersLeft()
+{
+	float factor = (float) MOV_FACTOR;
+	for (unsigned int i=0; i<_capas.size(); i++)
+	{
+		_capas[i]->moveLeft(factor);
 	}
 }

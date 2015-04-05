@@ -27,7 +27,7 @@ class Ventana
 		void view();
 		~Ventana(); //Destructor
 		void clearScreen();
-	private:
+		void updateScreen();
 		SDL_Window* _gWindow;
 		SDL_Renderer* _gRenderer;
 };
