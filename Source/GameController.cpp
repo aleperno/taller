@@ -5,7 +5,7 @@
  *      Author: neo
  */
 #include <GameController.h>
-#define MOV_FACTOR 100; //Fraccion de la capa que se mueve por ciclo
+#define MOV_FACTOR 600; //Fraccion de la capa que se mueve por ciclo
 
 GameController* GameController::_instance = 0;
 
@@ -64,7 +64,7 @@ void GameController::printLayers()
 {
 	//LimpioPantalla
 	this->_ventana->clearScreen();
-	this->_ventana->view();
+	//this->_ventana->view();
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->view();
@@ -95,7 +95,7 @@ void GameController::run(int sleep_time)
 		this->printLayers();
 		_end_of_game = this->endOfGame(e);
 		this->getKeys();
-		SDL_Delay(sleep_time);
+		//SDL_Delay(sleep_time);
 	}
 	this->close();
 }

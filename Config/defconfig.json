@@ -7,10 +7,12 @@
 		"alto": 	100,
 		"ypiso":	15	},
 
-"capas": [	{	"imagen_fondo": "Images/space_aux2.png",
-			"ancho": 200	},
-		{	"imagen_fondo": "Images/space.3.png",
-			"ancho": 300	}	],
+"capas": [	{	"imagen_fondo": "Images/0.png",
+			"ancho": 300	},
+		{	"imagen_fondo": "Images/1.png",
+			"ancho": 250	},
+		{	"imagen_fondo": "Images/2.png",
+			"ancho": 200	}	],
 
 "personaje": {	"ancho": 	15,
 		"alto": 	25,
