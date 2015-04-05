@@ -33,11 +33,45 @@ void Parser::setearCapasPorDefecto(Value defCapas){
 	}
 }
 
+void Parser::setearParseoDeSprite() {
+	Value root;
+	Reader reader;
+
+	ifstream file(SPRITE_PARSE_PATH);
+
+	//Ese archivo se nuestro asi que tiene valores validos
+	bool parsing = reader.parse(file,root);
+
+	Value personaje = root["liukang"];
+	
+	this->personaje.height = personaje.get("height",-1).asInt();
+	this->personaje.width = personaje.get("width",-1).asInt();
+
+	this->personaje.walk[0] = personaje["walk"][0].asInt();
+	this->personaje.walk[1] = personaje["walk"][1].asInt();
+
+	this->personaje.idle[0] = personaje["idle"][0].asInt();
+	this->personaje.idle[1] = personaje["idle"][1].asInt();
+
+	this->personaje.jumpUp[0] = personaje["jumpUp"][0].asInt();
+	this->personaje.jumpUp[1] = personaje["jumpUp"][1].asInt();
+
+	this->personaje.jumpFwd[0] = personaje["jumpFwd"][0].asInt();
+	this->personaje.jumpFwd[1] = personaje["jumpFwd"][1].asInt();
+
+	this->personaje.jumpBwd[0] = personaje["jumpBwd"][0].asInt();
+	this->personaje.jumpBwd[1] = personaje["jumpBwd"][1].asInt();
+
+	file.close();
+}
+
 Parser::Parser(Value defRoot) {
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
 	setearPersonajePorDefecto(defRoot["personaje"]);
 	setearCapasPorDefecto(defRoot["capas"]);
+
+	setearParseoDeSprite();
 
 	this->spriteSheetPath = SPRITE_SHEET_PATH;
 }
@@ -283,6 +317,9 @@ Parser::Parser(Value root, Value defRoot){
 			}
 		}
 	}
+
+	setearParseoDeSprite();
+
 }
 
 Parser* Parser::Instance(){

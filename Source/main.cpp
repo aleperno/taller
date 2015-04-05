@@ -48,6 +48,11 @@ int main( int argc, char* args[] )
 		cout << Parser::Instance()->capas[i].ancho << endl;
 	}
 
+	cout << endl;
+	cout << Parser::Instance()->personaje.height << endl;
+	cout << Parser::Instance()->personaje.width << endl;
+	cout << Parser::Instance()->personaje.walk[1] << endl;
+
 	Parser::KillInstance();
 	*/
 	logger.log(DEBUG,"Fin del programa");

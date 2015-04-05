@@ -17,19 +17,22 @@ using namespace std;
 
 #define DEFAULT_CONFIG_PATH "Config/defconfig.json"
 #define SPRITE_SHEET_PATH "Images/spritesheet.png"
+#define SPRITE_PARSE_PATH "Config/spriteparse.json"
 
 using namespace std;
 
 class Parser{
 
 	private:
+		void setearParseoDeSprite();
+
 		//Este se usa cuando o no se especifico archivo, o no existe o tiene error de sintaxis
 		Parser(Value defRoot);
 
 		//Este se usa cuando no se usa el de arriba, pero archivo indicado podria tener
 		//errores semanticos lo cual implica que pueden ser necesarios los datos por defecto
 		Parser(Value root, Value defRoot);
-
+		
 		void setearVentanaPorDefecto(Value defVentana);
 		void setearEscenarioPorDefecto(Value defEscenario);
 		void setearPersonajePorDefecto(Value defPersonaje);
@@ -37,6 +40,7 @@ class Parser{
 
 		static Parser* instance;
 		string _configPath;
+
 	public:
 		//Inicializa instancia usando ruta de *.json
 		static void Initialize(string path = DEFAULT_CONFIG_PATH);
