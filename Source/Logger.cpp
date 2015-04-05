@@ -17,6 +17,10 @@ Logger* Logger::Instance(int Logger_level, string path)
 	}
 	return _instance;
 }
+void Logger::KillLogger(){
+	delete _instance;
+	_instance = NULL;
+}
 
 Logger::Logger(int Logger_level, string path)
 {

@@ -43,6 +43,7 @@ class Logger
 		Logger(int log_level, string path);
 	public:
 		void log(int level, string reg);
+		void KillLogger(); //Destructor;
 		static Logger* Instance(int log_level = ERROR, string path = LOG_PATH);
 		void banner();
 	private:

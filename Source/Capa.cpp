@@ -26,6 +26,13 @@ Capa::Capa(Ventana* ventana, CapaData data, EscenarioData escenario)
 	this->_alto_px = Capa::getHeight(ventana,_alto_log);
 }
 
+Capa::~Capa()
+{
+	//delete this;
+	cout << "destruyo capa" << endl;
+	delete _handler;
+}
+
 void Capa::view()
 {
 	int x = get_x_px();
@@ -49,7 +56,7 @@ int Capa::getHeight(Ventana* ventana, float alto_log_capa)
 {
 	int alto = 0;
 	alto = (float)(alto_log_capa * ventana->_alto_px) / ventana->_alto_log ;
-	cout << alto << endl;
+	//cout << alto << endl;
 	return alto;
 }
 
@@ -74,9 +81,9 @@ int Capa::get_y_px()
 
 void Capa::moveLeft(float factor)
 {
-	cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
+	//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
 	float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ;
-	cout << " me intento mover a " << new_x << endl;
+	//cout << " me intento mover a " << new_x << endl;
 	if (new_x + _ancho_log >= _ventana->_ancho_log)
 	{
 		_pos_x = new_x;

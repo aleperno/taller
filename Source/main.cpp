@@ -27,34 +27,9 @@ int main( int argc, char* args[] )
 	Parser* parser = Parser::Instance();
 	GameController* controlador = GameController::Instance(parser);
 	controlador->run();
-	/*
-	cout << Parser::Instance()->ventana.ancho_px << endl;
-	cout << Parser::Instance()->ventana.alto_px << endl;
-	cout << Parser::Instance()->ventana.ancho << endl << endl;
-
-	cout << Parser::Instance()->escenario.ancho << endl;
-	cout << Parser::Instance()->escenario.alto << endl;
-	cout << Parser::Instance()->escenario.y_piso << endl << endl;
-
-	cout << Parser::Instance()->personaje.ancho << endl;
-	cout << Parser::Instance()->personaje.alto << endl;
-	cout << Parser::Instance()->personaje.z_index << endl;
-	cout << Parser::Instance()->personaje.orientacion << endl << endl;;
-
-	cout << Parser::Instance()->spriteSheetPath << endl << endl;
-
-	for (unsigned int i=0; i<Parser::Instance()->capas.size(); i++) {
-		cout << Parser::Instance()->capas[i].imagen_fondo << endl;
-		cout << Parser::Instance()->capas[i].ancho << endl;
-	}
-
-	cout << endl;
-	cout << Parser::Instance()->personaje.height << endl;
-	cout << Parser::Instance()->personaje.width << endl;
-	cout << Parser::Instance()->personaje.walk[1] << endl;
-
-	Parser::KillInstance();
-	*/
 	logger.log(DEBUG,"Fin del programa");
+	logger.KillLogger();
+	Parser::KillInstance();
+	controlador->KillController();
 	return 0;
 }

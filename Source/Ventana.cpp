@@ -22,6 +22,7 @@ Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log)
 }
 Ventana::~Ventana()
 {
+	cout << "Destroying window" << endl;
 	SDL_DestroyRenderer( _gRenderer );
 	SDL_DestroyWindow( _gWindow );
 	//delete _gRenderer;

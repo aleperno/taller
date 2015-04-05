@@ -18,6 +18,14 @@ GameController* GameController::Instance(Parser* parser)
 	return _instance;
 }
 
+void GameController::KillController()
+{
+	delete this->_ventana;
+	_ventana = NULL;
+	delete _instance;
+	_instance = NULL;
+}
+
 GameController::GameController(Parser* parser)
 {
 	_ventana = GameController::getVentana(parser);
@@ -94,9 +102,16 @@ void GameController::run(int sleep_time)
 
 void GameController::close()
 {
-	this->_ventana->~Ventana();
+	//this->_ventana->~Ventana();
 	delete this->_ventana;
 	this->_ventana = NULL;
+
+	for ( vector<Capa*>::iterator i = _capas.begin(); i != _capas.end(); i++)
+	{
+		//delete *i;
+		(*i)->~Capa();
+	}
+	_capas.clear();
 }
 
 void GameController::reloadConfig()
@@ -105,7 +120,10 @@ void GameController::reloadConfig()
 	Parser* parser = Parser::Instance();
 	this->close();
 	_ventana = GameController::getVentana(parser);
+	_escenario = GameController::getEscenario(parser);
+	_capas = GameController::getCapas(_ventana,parser,_escenario);
 }
+
 void GameController::getKeys()
 {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );

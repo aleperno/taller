@@ -50,7 +50,7 @@ class GameController
 	public:
 		static GameController* Instance(Parser* parser = 0);
 		void run(int sleep_time = DEF_SLEEP_TIME);
-		~GameController(); //Destructor
+		void KillController(); //Destructor
 };
 
 #endif /* HEADERS_GAMECONTROLLER_H_ */

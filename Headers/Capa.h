@@ -40,6 +40,7 @@ class Capa
 		float getAlpha(float factor);
 	public:
 		Capa(Ventana* ventana, CapaData data, EscenarioData escenario);
+		~Capa();
 		void view();
 		void moveLeft(float factor);
 		void moveRight(float factor);
