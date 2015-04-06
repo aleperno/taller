@@ -81,7 +81,7 @@ int Capa::get_y_px()
 
 void Capa::moveLeft(float factor)
 {
-	cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
+	//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 	//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
 	//float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ; //viejo
 	float new_x = _pos_x - ((factor) + getBeta(factor));
@@ -96,7 +96,7 @@ void Capa::moveLeft(float factor)
 
 void Capa::moveRight(float factor)
 {
-	cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
+	//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 	//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
 	float new_x = _pos_x + factor + getBeta(factor);
 	if (new_x <= 0)
