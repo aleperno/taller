@@ -5,7 +5,7 @@
  *      Author: neo
  */
 #include <GameController.h>
-#define MOV_FACTOR 600; //Fraccion de la capa que se mueve por ciclo
+#define MOV_FACTOR 300; //Fraccion de la capa que se mueve por ciclo
 
 GameController* GameController::_instance = 0;
 

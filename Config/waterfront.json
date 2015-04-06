@@ -1,0 +1,29 @@
+{
+"ventana": {	"anchopx":	640,
+		"altopx":	480,
+		"ancho": 	150	},
+
+"escenario": {	"ancho": 	300,
+		"alto": 	100,
+		"ypiso":	15	},
+
+"capas": [	{	"imagen_fondo": "Images/waterfront/p_7.png",
+			"ancho": 160	},
+		{	"imagen_fondo": "Images/waterfront/p_6.png",
+			"ancho": 180	},
+		{	"imagen_fondo": "Images/waterfront/p_5.png",
+			"ancho": 200	},
+		{	"imagen_fondo": "Images/waterfront/p_4.png",
+			"ancho": 220	},
+		{	"imagen_fondo": "Images/waterfront/p_3.png",
+			"ancho": 240	},
+		{	"imagen_fondo": "Images/waterfront/p_2.png",
+			"ancho": 260	},
+		{	"imagen_fondo": "Images/waterfront/p_1.png",
+			"ancho": 265	}	],
+
+"personaje": {	"ancho": 	15,
+		"alto": 	25,
+		"zindex":	1,
+		"orientacion":	true	}
+}

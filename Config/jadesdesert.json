@@ -1,0 +1,25 @@
+{
+"ventana": {	"anchopx":	640,
+		"altopx":	480,
+		"ancho": 	150	},
+
+"escenario": {	"ancho": 	300,
+		"alto": 	100,
+		"ypiso":	15	},
+
+"capas": [	{	"imagen_fondo": "Images/jadesdesert/p_bg.png",
+			"ancho": 175	},
+		{	"imagen_fondo": "Images/jadesdesert/p_4.png",
+			"ancho": 200	},
+		{	"imagen_fondo": "Images/jadesdesert/p_3.png",
+			"ancho": 250	},
+		{	"imagen_fondo": "Images/jadesdesert/p_2.png",
+			"ancho": 300	},
+		{	"imagen_fondo": "Images/jadesdesert/p_1.png",
+			"ancho": 300	}	],
+
+"personaje": {	"ancho": 	15,
+		"alto": 	25,
+		"zindex":	1,
+		"orientacion":	true	}
+}
