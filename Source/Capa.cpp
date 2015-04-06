@@ -81,8 +81,10 @@ int Capa::get_y_px()
 
 void Capa::moveLeft(float factor)
 {
+	cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 	//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
-	float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ;
+	//float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ; //viejo
+	float new_x = _pos_x - ((factor) + getBeta(factor));
 	//cout << " me intento mover a " << new_x << endl;
 	if (new_x + _ancho_log >= _ventana->_ancho_log)
 	{
@@ -94,7 +96,9 @@ void Capa::moveLeft(float factor)
 
 void Capa::moveRight(float factor)
 {
-	float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor);
+	cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
+	//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
+	float new_x = _pos_x + factor + getBeta(factor);
 	if (new_x <= 0)
 	{
 		_pos_x = new_x;
@@ -114,4 +118,13 @@ float Capa::getAlpha(float factor)
 	float alpha = ((( ancho_escenario * (ancho_capa - ancho_ventana) ) / (ancho_escenario - ancho_ventana)) - ancho_capa ) / factor;
 	//cout << "ALPHA VALEEEEE " << alpha << endl;
 	return alpha;
+}
+
+float Capa::getBeta(float factor)
+{
+	float ancho_escenario = this->_escenario.ancho;
+	float ancho_capa = this->_ancho_log;
+	float ancho_ventana = this->_ventana->_ancho_log;
+	float beta = factor * (((ancho_capa - ancho_ventana)/(ancho_escenario - ancho_ventana) ) -1);
+	return beta;
 }

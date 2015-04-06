@@ -6,6 +6,7 @@
  */
 #include <GameController.h>
 #define MOV_FACTOR 300; //Fraccion de la capa que se mueve por ciclo
+#define MOV_FACTOR2 1//
 
 GameController* GameController::_instance = 0;
 
@@ -144,7 +145,7 @@ void GameController::getKeys()
 
 void GameController::moveLayersRight()
 {
-	float factor = (float) MOV_FACTOR;
+	float factor = (float) MOV_FACTOR2;
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->moveRight(factor);
@@ -153,7 +154,7 @@ void GameController::moveLayersRight()
 
 void GameController::moveLayersLeft()
 {
-	float factor = (float) MOV_FACTOR;
+	float factor = (float) MOV_FACTOR2;
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->moveLeft(factor);

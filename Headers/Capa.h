@@ -38,6 +38,7 @@ class Capa
 		int get_x_px();
 		int get_y_px();
 		float getAlpha(float factor);
+		float getBeta(float factor);
 	public:
 		Capa(Ventana* ventana, CapaData data, EscenarioData escenario);
 		~Capa();

@@ -5,6 +5,7 @@ log.txt
 makefile
 valgrind_script
 valgrind_log.txt
+test.json
 #################
 ## Eclipse
 #################
