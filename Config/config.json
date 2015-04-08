@@ -7,9 +7,9 @@
 		"alto": 	150,
 		"ypiso":	20	},
 
-"capas": [	{	"imagen_fondo": "Images/fondo0.png",
+"capas": [	{	"imagen_fondo": "Images/arenas/fondo0.png",
 			"ancho": 500	},
-		{	"imagen_fondo": "Images/fondo1.png",
+		{	"imagen_fondo": "Images/arenas/fondo1.png",
 			"ancho": 1000.5	}	],
 
 "personaje": {	"ancho": 	25,

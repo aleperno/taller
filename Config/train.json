@@ -7,11 +7,11 @@
 		"alto": 	100,
 		"ypiso":	15	},
 
-"capas": [	{	"imagen_fondo": "Images/train/0.png",
+"capas": [	{	"imagen_fondo": "Images/arenas/train/0.png",
 			"ancho": 160	},
-		{	"imagen_fondo": "Images/train/1.png",
+		{	"imagen_fondo": "Images/arenas/train/1.png",
 			"ancho": 170},
-		{	"imagen_fondo": "Images/train/2.png",
+		{	"imagen_fondo": "Images/arenas/train/2.png",
 			"ancho": 180	}	],
 
 "personaje": {	"ancho": 	15,

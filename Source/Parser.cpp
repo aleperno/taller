@@ -36,14 +36,24 @@ void Parser::setearCapasPorDefecto(Value defCapas){
 void Parser::setearParseoDeSprite() {
 	Value root;
 	Reader reader;
-
 	ifstream file(SPRITE_PARSE_PATH);
-
-	//Ese archivo se nuestro asi que tiene valores validos
-	bool parsing = reader.parse(file,root);
-
+		//Ese archivo es nuestro asi que tiene valores validos
+	//bool parsing = reader.parse(file,root);
+	if (!file.good())
+	{
+		Logger::Instance()->log(ERROR,"El archivo del spritesheets no existe");
+	}
+	bool parseoExitoso = reader.parse(file,root);
+	file.close();
+	if(!parseoExitoso)
+	{
+		Logger::Instance()->log(ERROR,"El archivo del spritesheets contiene errores");
+	}
 	Value personaje = root["liukang"];
-	
+	if (personaje.empty())
+	{
+		Logger::Instance()->log(ERROR,"El campo liukang no existe");
+	}
 	this->personaje.height = personaje.get("height",-1).asInt();
 	this->personaje.width = personaje.get("width",-1).asInt();
 
@@ -62,7 +72,9 @@ void Parser::setearParseoDeSprite() {
 	this->personaje.jumpBwd[0] = personaje["jumpBwd"][0].asInt();
 	this->personaje.jumpBwd[1] = personaje["jumpBwd"][1].asInt();
 
-	file.close();
+	this->personaje.imgPath = personaje["imgSrc"].asString();
+
+
 }
 
 Parser::Parser(Value defRoot) {

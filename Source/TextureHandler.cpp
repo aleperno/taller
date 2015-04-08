@@ -1,9 +1,10 @@
 #include "TextureHandler.h"
-
+const float ESCALA = 2;
 
 TextureHandler::TextureHandler()
 {
 	//Initialize
+	mRenderer = NULL;
 	mTexture = NULL;
 	mWidth = 0;
 	mHeight = 0;
@@ -85,6 +86,24 @@ void TextureHandler::free()
 	}
 }
 
+void TextureHandler::setColor( Uint8 red, Uint8 green, Uint8 blue )
+{
+	//Modulate texture rgb
+	SDL_SetTextureColorMod( mTexture, red, green, blue );
+}
+
+void TextureHandler::setBlendMode( SDL_BlendMode blending )
+{
+	//Set blending function
+	SDL_SetTextureBlendMode( mTexture, blending );
+}
+
+void TextureHandler::setAlpha( Uint8 alpha )
+{
+	//Modulate texture alpha
+	SDL_SetTextureAlphaMod( mTexture, alpha );
+}
+
 void TextureHandler::render( int x, int y)
 {
 	//Set rendering space and render to screen
@@ -104,6 +123,26 @@ void TextureHandler::renderScaled( int x, int y, int width, int height )
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, width, height };
 	SDL_RenderCopy( this->mRenderer, mTexture, NULL, &renderQuad );
+}
+
+void TextureHandler::renderAnimation(bool flip, int x, int y, SDL_Rect* clip)
+{
+	//Set rendering space and render to screen
+	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+
+	//Set clip rendering dimensions
+	if( clip != NULL )
+	{
+		renderQuad.w = clip->w * ESCALA;
+		renderQuad.h = clip->h * ESCALA;
+	}
+
+	//Render to screen
+	//SDL_RenderCopy( gRenderer, mTexture, clip, &renderQuad );
+	if(flip)
+		SDL_RenderCopyEx( this->mRenderer, mTexture, clip, &renderQuad, 0, NULL, SDL_FLIP_HORIZONTAL );
+	else
+		SDL_RenderCopyEx( this->mRenderer, mTexture, clip, &renderQuad, 0, NULL, SDL_FLIP_NONE );
 }
 
 int TextureHandler::getWidth()
