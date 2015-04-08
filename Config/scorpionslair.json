@@ -1,0 +1,27 @@
+{
+"ventana": {	"anchopx":	640,
+		"altopx":	480,
+		"ancho": 	150	},
+
+"escenario": {	"ancho": 	300,
+		"alto": 	100,
+		"ypiso":	15	},
+
+"capas": [	{	"imagen_fondo": "Images/arenas/scorpionslair/sl_bg.png",
+			"ancho": 175	},
+		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_4.png",
+			"ancho": 200	},
+		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_3.png",
+			"ancho": 250	},
+		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_2.png",
+			"ancho": 300	},
+		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_1.png",
+			"ancho": 300	},
+		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_0.png",
+			"ancho": 300	}	],
+
+"personaje": {	"ancho": 	15,
+		"alto": 	25,
+		"zindex":	1,
+		"orientacion":	true	}
+}
