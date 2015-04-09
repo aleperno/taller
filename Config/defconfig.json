@@ -20,6 +20,6 @@
 
 "personaje": {	"ancho": 	30,
 		"alto": 	50,
-		"zindex":	0,
+		"zindex":	5,
 		"orientacion":	true	}
 }

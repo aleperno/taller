@@ -45,7 +45,7 @@ class Personaje
 		float getBeta(float factor);
 		SDL_Rect* sprites;
 		SDL_Rect* loadMedia(PersonajeData data);
-		int _lastFrame=0;
+		int _lastFrame;
 
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);

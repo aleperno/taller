@@ -79,10 +79,14 @@ void GameController::printLayers()
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->view();
-		if (this->_personaje->_zIndex == (_capas.size()-i-1))
+		if (this->_personaje->_zIndex == (i))
 		{
 			this->_personaje->view();
 		}
+	}
+	if (this->_personaje->_zIndex >= _capas.size())
+	{
+		this->_personaje->view();
 	}
 	//ActualizoPantalla
 	this->_ventana->updateScreen();

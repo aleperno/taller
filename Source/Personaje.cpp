@@ -23,6 +23,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_zIndex = data.z_index;
 	this->_personajeData = data;
 	this->sprites = Personaje::loadMedia(data);
+	this->_lastFrame = 0;
 	//cout << _pos_x << endl;
 }
 
