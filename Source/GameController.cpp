@@ -7,6 +7,7 @@
 #include <GameController.h>
 #define MOV_FACTOR 300; //Fraccion de la capa que se mueve por ciclo
 #define MOV_FACTOR2 1//
+#define MOVE_P_FACTOR 1.3//
 
 GameController* GameController::_instance = 0;
 
@@ -23,6 +24,8 @@ void GameController::KillController()
 {
 	delete this->_ventana;
 	_ventana = NULL;
+	delete this->_personaje;
+	_personaje = NULL;
 	delete _instance;
 	_instance = NULL;
 }
@@ -32,7 +35,14 @@ GameController::GameController(Parser* parser)
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
+	_personaje = GameController::getPersonaje(_ventana,parser,_escenario);
 	_end_of_game = false;
+}
+
+Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario)
+{
+	Personaje* pers = new Personaje(ventana,parser->personaje,escenario);
+	return pers;
 }
 
 Ventana* GameController::getVentana(Parser* parser)
@@ -69,6 +79,10 @@ void GameController::printLayers()
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->view();
+		if (this->_personaje->_zIndex == (_capas.size()-i-1))
+		{
+			this->_personaje->view();
+		}
 	}
 	//ActualizoPantalla
 	this->_ventana->updateScreen();
@@ -123,6 +137,7 @@ void GameController::reloadConfig()
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
+	_personaje = GameController::getPersonaje(_ventana,parser,_escenario);
 }
 
 void GameController::getKeys()
@@ -136,10 +151,18 @@ void GameController::getKeys()
 		this->reloadConfig();
 	}else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
-		this-> moveLayersRight();
+		//this-> moveLayersRight();
+		if (this->_personaje->moveLeft(MOV_FACTOR2))
+		{
+			this-> moveLayersRight();
+		}
 	}else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
-		this-> moveLayersLeft();
+		//this-> moveLayersLeft();
+		if(this->_personaje->moveRight(MOV_FACTOR2))
+		{
+			this->moveLayersLeft();
+		}
 	}
 }
 

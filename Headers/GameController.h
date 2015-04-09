@@ -19,6 +19,7 @@ using namespace std;
 #include <Parser.h>
 #include <Ventana.h>
 #include <Capa.h>
+#include <Personaje.h>
 
 
 #define DEF_SLEEP_TIME 50
@@ -32,6 +33,7 @@ class GameController
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		vector<Capa*> _capas;
+		Personaje* _personaje;
 		bool _end_of_game;
 
 		//Metodos
@@ -39,6 +41,7 @@ class GameController
 		static Ventana* getVentana(Parser* parser);
 		static EscenarioData getEscenario(Parser* parser);
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
+		static Personaje* getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario);
 		void printLayers();
 		bool endOfGame(SDL_Event e);
 		void close();
