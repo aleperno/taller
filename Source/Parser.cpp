@@ -79,6 +79,7 @@ void Parser::setearParseoDeSprite() {
 }
 
 Parser::Parser(Value defRoot) {
+
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
 	setearPersonajePorDefecto(defRoot["personaje"]);
@@ -262,8 +263,9 @@ Parser::Parser(Value root, Value defRoot){
 	}
 
 	/*Llega con capas por defecto o asegurado que hay por lo menos una capa en json. Si las capas no son por defecto,
-	analiza una por una y descarta las capas que tienen valores invalidos. Si al final se queda por lo menos 1 capa - usa esa.
-	Y si son todas invalidas - carga las capas por defecto.*/
+	analiza una por una y descarta las capas que tienen valores invalidos, salvo anchos numericos invalidos.
+	En este caso estira ancho de capa si es mas angosta que ventana y comprime si supera ancho de escenario.
+	Si al final se queda por lo menos 1 capa - usa esa. Y si son todas invalidas - carga las capas por defecto.*/
 	if (hayCapas) {
 		for (unsigned int i=0; i<capasJson.size(); i++) {
 
@@ -306,10 +308,15 @@ Parser::Parser(Value root, Value defRoot){
 					imagenTest.close();
 				} else {
 					//Chequeo si el ancho es valido.
-					if (capaLocal.ancho < 2) {
-						string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " es invalido o no se define.";
+					if (capaLocal.ancho < this->ventana.ancho) {
+						string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " menor que ancho de la ventana. Se estira.";
+						capaLocal.ancho = this->ventana.ancho;
 						Logger::Instance()->log(WARNING,msg);
-						capaSana = false;
+					}
+					if (capaLocal.ancho > this->escenario.ancho) {
+						string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " mayor que ancho del escenario. Se comprime.";
+						capaLocal.ancho = this->escenario.ancho;
+						Logger::Instance()->log(WARNING,msg);
 					}
 				}
 			}
@@ -344,6 +351,8 @@ void Parser::Initialize(string path){
 	Value defRoot;
 	Reader reader;
 	delete(instance);
+
+	Logger::Instance()->log(DEBUG,"Configuracion a levantar: " + path);
 
 	ifstream defaultConfigFile(DEFAULT_CONFIG_PATH);
 	reader.parse(defaultConfigFile,defRoot);	//Queda parseado archivo por defecto. Siempre necesario.
