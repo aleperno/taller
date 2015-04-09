@@ -112,7 +112,7 @@ int Personaje::getHeight(Ventana* ventana, float alto_log_capa)
 	return alto;
 }
 
-bool Personaje::moveLeft(float factor)
+void Personaje::moveLeft(float factor)
 {
 	//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 	//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
@@ -123,14 +123,17 @@ bool Personaje::moveLeft(float factor)
 	if (new_x >= 0)
 	{
 		_pos_x = new_x;
-		return false;
 	}else{
 		_pos_x = 0;
-		return true;
 	}
 }
 
-bool Personaje::moveRight(float factor)
+bool Personaje::isLeftMargin()
+{
+	return (_pos_x == 0);
+}
+
+void Personaje::moveRight(float factor)
 {
 	//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 	//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
@@ -138,11 +141,14 @@ bool Personaje::moveRight(float factor)
 	if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
 	{
 		_pos_x = new_x;
-		return false;
 	}else{
 		_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
-		return true;
 	}
+}
+
+bool Personaje::isRightMargin()
+{
+	return (_pos_x + this->_ancho_log == this->_ventana->_ancho_log );
 }
 
 float Personaje::getBeta(float factor)

@@ -51,10 +51,12 @@ class Personaje
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
 		~Personaje();
 		void view();
-		bool moveLeft(float factor);
-		bool moveRight(float factor);
+		void moveLeft(float factor);
+		void moveRight(float factor);
 		unsigned int _zIndex;
 		void showIdle();
+		bool isLeftMargin();
+		bool isRightMargin();
 };
 
 

@@ -156,14 +156,16 @@ void GameController::getKeys()
 	}else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
 		//this-> moveLayersRight();
-		if (this->_personaje->moveLeft(MOV_FACTOR2))
+		this->_personaje->moveLeft(MOV_FACTOR2);
+		if (this->_personaje->isLeftMargin())
 		{
 			this-> moveLayersRight();
 		}
 	}else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
 		//this-> moveLayersLeft();
-		if(this->_personaje->moveRight(MOV_FACTOR2))
+		this->_personaje->moveRight(MOV_FACTOR2);
+		if(this->_personaje->isRightMargin())
 		{
 			this->moveLayersLeft();
 		}
