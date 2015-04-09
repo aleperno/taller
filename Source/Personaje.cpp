@@ -65,11 +65,12 @@ void Personaje::showIdle()
 {
 	++_lastFrame;
 	int aux = _lastFrame / SPEED;
-	if ( _lastFrame == 1 || aux >= this->_personajeData.idle[1])
+	if ( _lastFrame < this->_personajeData.idle[0] || aux > this->_personajeData.idle[1])
 	{
 		_lastFrame = this->_personajeData.idle[0] * SPEED;
 	}
 	int frame = _lastFrame/SPEED;
+	cout << frame << endl;
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
