@@ -5,7 +5,7 @@
 
 "escenario": {	"ancho": 	265,
 		"alto": 	100,
-		"ypiso":	15	},
+		"ypiso":	7	},
 
 "capas": [	{	"imagen_fondo": "Images/arenas/waterfront/p_7.png",
 			"ancho": 160	},
@@ -22,8 +22,8 @@
 		{	"imagen_fondo": "Images/arenas/waterfront/p_1.png",
 			"ancho": 265	}	],
 
-"personaje": {	"ancho": 	15,
-		"alto": 	25,
+"personaje": {	"ancho": 	30,
+		"alto": 	50,
 		"zindex":	1,
 		"orientacion":	true	}
 }

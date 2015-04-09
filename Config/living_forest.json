@@ -1,11 +1,11 @@
 {
 "ventana": {	"anchopx":	640,
-		"altopx":	400,
+		"altopx":	480,
 		"ancho": 	150	},
 
 "escenario": {	"ancho": 	300,
 		"alto": 	100,
-		"ypiso":	15	},
+		"ypiso":	7	},
 
 "capas": [	{	"imagen_fondo": "Images/arenas/living_forest/2.png",
 			"ancho": 200	},
@@ -14,8 +14,8 @@
 		{	"imagen_fondo": "Images/arenas/living_forest/0.png",
 			"ancho": 300}	],
 
-"personaje": {	"ancho": 	15,
-		"alto": 	25,
-		"zindex":	1,
+"personaje": {	"ancho": 	30,
+		"alto": 	50,
+		"zindex":	0,
 		"orientacion":	true	}
 }

@@ -5,7 +5,7 @@
 
 "escenario": {	"ancho": 	180,
 		"alto": 	100,
-		"ypiso":	15	},
+		"ypiso":	7	},
 
 "capas": [	{	"imagen_fondo": "Images/arenas/train/0.png",
 			"ancho": 160	},
@@ -14,8 +14,8 @@
 		{	"imagen_fondo": "Images/arenas/train/2.png",
 			"ancho": 180	}	],
 
-"personaje": {	"ancho": 	15,
-		"alto": 	25,
+"personaje": {	"ancho": 	30,
+		"alto": 	50,
 		"zindex":	1,
 		"orientacion":	true	}
 }
