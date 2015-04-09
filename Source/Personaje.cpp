@@ -21,7 +21,22 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_ancho_px = Personaje::getWidth(ventana,_ancho_log);
 	this->_alto_px = Personaje::getHeight(ventana,_alto_log);
 	this->_zIndex = data.z_index;
+	this->_personajeData = data;
+	this->sprites = Personaje::loadMedia(data);
 	//cout << _pos_x << endl;
+}
+
+SDL_Rect* Personaje::loadMedia(PersonajeData data)
+{
+	SDL_Rect* media = new SDL_Rect[data.size];
+	for (int i=0; i<data.size; i++)
+	{
+		media[i].x = i * data.width;
+		media[i].y = 0;
+		media[i].w = data.width;
+		media[i].h = data.height;
+	}
+	return media;
 }
 
 Personaje::~Personaje()
@@ -33,16 +48,31 @@ Personaje::~Personaje()
 
 void Personaje::view()
 {
-	{
-		int x = get_x_px();
-		int y = get_y_px();
+	this->showIdle();
+	//int x = get_x_px();
+	//int y = get_y_px();
 		//cout << "La posicion logica en x es " << _pos_x << " y en px es " << x << endl;
 		//cout << "La posicion logica en y es " << _pos_y << " y en px es " << y << endl;
 		//_handler->renderCut(x,y,_ancho_px * _factor_escala,_alto_px);
-		_handler->renderCut(x,y,_ancho_px,_alto_px);
+	//_handler->renderCut(x,y,_ancho_px,_alto_px);
 		//_handler->render(0,0);
 		//cout << "Se intenta dibujar capa " << endl;
+
+}
+
+void Personaje::showIdle()
+{
+	++_lastFrame;
+	int aux = _lastFrame / SPEED;
+	if ( _lastFrame == 1 || aux >= this->_personajeData.idle[1])
+	{
+		_lastFrame = this->_personajeData.idle[0] * SPEED;
 	}
+	int frame = _lastFrame/SPEED;
+	SDL_Rect* currentClip = &(this->sprites[frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 int Personaje::get_x_px()

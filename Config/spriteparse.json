@@ -1,11 +1,12 @@
 {
 "liukang": {	"height":	155,
 		"width":	76,
+		"size":		36,
 		"walk":		[0,8],
 		"idle":		[9,22],
 		"jumpUp":	[23,25],
 		"jumpFwd":	[26,30],
 		"jumpBwd":	[31,35],
-		"imgSrc" : "Images/characters/test.png"
+		"imgSrc" : "Images/characters/liukang.png"
 	}
 }

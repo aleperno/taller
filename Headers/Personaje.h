@@ -20,6 +20,8 @@ using namespace std;
 #include <PersonajeData.h>
 #include <EscenarioData.h>
 
+#define SPEED 5;
+
 class Personaje
 {
 	private:
@@ -27,6 +29,7 @@ class Personaje
 		TextureHandler* _handler;
 		Ventana* _ventana;
 		EscenarioData _escenario;
+		PersonajeData _personajeData;
 		float _alto_log;
 		float _ancho_log;
 		float _alto_px;
@@ -40,6 +43,10 @@ class Personaje
 		int get_y_px();
 		float getAlpha(float factor);
 		float getBeta(float factor);
+		SDL_Rect* sprites;
+		SDL_Rect* loadMedia(PersonajeData data);
+		int _lastFrame=0;
+
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
 		~Personaje();
@@ -47,6 +54,7 @@ class Personaje
 		bool moveLeft(float factor);
 		bool moveRight(float factor);
 		unsigned int _zIndex;
+		void showIdle();
 };
 
 

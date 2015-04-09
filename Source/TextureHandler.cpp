@@ -125,16 +125,16 @@ void TextureHandler::renderScaled( int x, int y, int width, int height )
 	SDL_RenderCopy( this->mRenderer, mTexture, NULL, &renderQuad );
 }
 
-void TextureHandler::renderAnimation(bool flip, int x, int y, SDL_Rect* clip)
+void TextureHandler::renderAnimation(bool flip, int x, int y, int width, int height, SDL_Rect* clip)
 {
 	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+	SDL_Rect renderQuad = { x, y, width, height };
 
 	//Set clip rendering dimensions
 	if( clip != NULL )
 	{
-		renderQuad.w = clip->w * ESCALA;
-		renderQuad.h = clip->h * ESCALA;
+		//renderQuad.w = clip->w ;
+		//renderQuad.h = clip->h ;
 	}
 
 	//Render to screen

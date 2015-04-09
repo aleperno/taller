@@ -40,7 +40,7 @@ class TextureHandler
 		void renderScaled( int x, int y, int width, int height );
 
 		//Renders texture at given point, cuted image
-		void renderAnimation(bool flip, int x, int y, SDL_Rect* clip);
+		void renderAnimation(bool flip, int x, int y, int width, int height, SDL_Rect* clip);
 
 		//Gets image dimensions
 		int getWidth();

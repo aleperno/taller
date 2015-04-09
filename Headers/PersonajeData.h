@@ -21,6 +21,7 @@ class PersonajeData
 		//sprite data
 		int height;
 		int width;
+		int size;
 		int walk[2];
 		int idle[2];
 		int jumpUp[2];

@@ -56,6 +56,7 @@ void Parser::setearParseoDeSprite() {
 	}
 	this->personaje.height = personaje.get("height",-1).asInt();
 	this->personaje.width = personaje.get("width",-1).asInt();
+	this->personaje.size = personaje.get("size",-1).asInt();
 
 	this->personaje.walk[0] = personaje["walk"][0].asInt();
 	this->personaje.walk[1] = personaje["walk"][1].asInt();
