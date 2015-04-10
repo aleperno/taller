@@ -21,6 +21,7 @@ using namespace std;
 #include <EscenarioData.h>
 
 #define SPEED 5;
+#define JMP_SPEED 10;
 
 class Personaje
 {
@@ -46,6 +47,12 @@ class Personaje
 		SDL_Rect* sprites;
 		SDL_Rect* loadMedia(PersonajeData data);
 		int _lastFrame;
+		bool isWalking;
+		bool isJumping;
+		bool isFalling;
+		void viewWalking();
+		void viewJump();
+
 
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
@@ -53,10 +60,13 @@ class Personaje
 		void view();
 		void moveLeft(float factor);
 		void moveRight(float factor);
+		void jump(float factor);
+		void idle();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isLeftMargin();
 		bool isRightMargin();
+		void continueAction(float factor);
 };
 
 

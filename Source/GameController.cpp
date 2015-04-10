@@ -8,6 +8,7 @@
 #define MOV_FACTOR 300; //Fraccion de la capa que se mueve por ciclo
 #define MOV_FACTOR2 1//
 #define MOVE_P_FACTOR 1.3//
+#define JMP_FACTOR 3
 
 GameController* GameController::_instance = 0;
 
@@ -169,7 +170,13 @@ void GameController::getKeys()
 		{
 			this->moveLayersLeft();
 		}
+	}else if(currentKeyStates[ SDL_SCANCODE_UP ])
+	{
+		this->_personaje->jump(JMP_FACTOR);
+	}else{
+		_personaje->idle();
 	}
+	_personaje->continueAction(JMP_FACTOR);
 }
 
 void GameController::moveLayersRight()

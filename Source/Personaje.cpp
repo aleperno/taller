@@ -24,6 +24,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_personajeData = data;
 	this->sprites = Personaje::loadMedia(data);
 	this->_lastFrame = 0;
+	this->isWalking = false;
+	this->isJumping = false;
+	this->isFalling = false;
 	//cout << _pos_x << endl;
 }
 
@@ -49,7 +52,19 @@ Personaje::~Personaje()
 
 void Personaje::view()
 {
-	this->showIdle();
+	//cout << this->_pos_y << endl;
+	if (isWalking)
+	{
+		this->viewWalking();
+	}
+	else if (isJumping || isFalling)
+	{
+		this->viewJump();
+	}
+	else
+	{
+		this->showIdle();
+	}
 	//int x = get_x_px();
 	//int y = get_y_px();
 		//cout << "La posicion logica en x es " << _pos_x << " y en px es " << x << endl;
@@ -59,17 +74,51 @@ void Personaje::view()
 		//_handler->render(0,0);
 		//cout << "Se intenta dibujar capa " << endl;
 
+
 }
 
 void Personaje::showIdle()
 {
 	++_lastFrame;
 	int aux = _lastFrame / SPEED;
-	if ( _lastFrame < this->_personajeData.idle[0] || aux > this->_personajeData.idle[1])
+	if ( aux < this->_personajeData.idle[0] || aux > this->_personajeData.idle[1])
 	{
 		_lastFrame = this->_personajeData.idle[0] * SPEED;
 	}
 	int frame = _lastFrame/SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->sprites[frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewWalking()
+{
+	++_lastFrame;
+	int aux = _lastFrame / SPEED;
+	if ( aux < this->_personajeData.walk[0] || aux > this->_personajeData.walk[1])
+	{
+		_lastFrame = this->_personajeData.walk[0] * SPEED;
+	}
+	int frame = _lastFrame/SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->sprites[frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewJump()
+{
+	cout << "Muestro salto" << endl;
+	++_lastFrame;
+	int aux = _lastFrame / JMP_SPEED;
+	if ( aux < this->_personajeData.jumpUp[0] || aux > this->_personajeData.jumpUp[1])
+	{
+		_lastFrame = this->_personajeData.jumpUp[0] * JMP_SPEED;
+	}
+	int frame = _lastFrame/JMP_SPEED;
 	cout << frame << endl;
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
@@ -114,17 +163,21 @@ int Personaje::getHeight(Ventana* ventana, float alto_log_capa)
 
 void Personaje::moveLeft(float factor)
 {
-	//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
-	//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
-	//float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ; //viejo
-	//cout << getBeta(factor) << endl;
-	float new_x = _pos_x - ((factor) + getBeta(factor));
-	//cout << " me intento mover a " << new_x << endl;
-	if (new_x >= 0)
+	if(!isJumping && !isFalling)
 	{
-		_pos_x = new_x;
-	}else{
-		_pos_x = 0;
+		this->isWalking = true;
+		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
+		//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
+		//float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ; //viejo
+		//cout << getBeta(factor) << endl;
+		float new_x = _pos_x - ((factor) + getBeta(factor));
+		//cout << " me intento mover a " << new_x << endl;
+		if (new_x >= 0)
+		{
+			_pos_x = new_x;
+		}else{
+			_pos_x = 0;
+		}
 	}
 }
 
@@ -133,16 +186,73 @@ bool Personaje::isLeftMargin()
 	return (_pos_x == 0);
 }
 
+void Personaje::jump(float factor)
+{
+	//cout << "salto" << endl;
+	if (! isFalling)
+	{
+	this->isJumping = true;
+	}
+	/*
+	if (!isFalling && !isJumping)
+	{
+		this->isJumping = true;
+		float new_pos = _pos_y + factor;
+		if (new_pos >= _alto_log)
+		{
+			//Estoy en altura maxima
+			isFalling=true;
+			isJumping=false;
+			_pos_y = _alto_log;
+		}else{
+			_pos_y = new_pos;
+		}
+	}
+	*/
+}
+
+void Personaje::continueAction(float factor)
+{
+	if (isFalling)
+	{
+		float new_pos = _pos_y - factor;
+		if (new_pos <= this->_escenario.y_piso)
+		{
+			_pos_y = _escenario.y_piso;
+			isFalling = false;
+		}else{
+			_pos_y = new_pos;
+		}
+	}
+	else if (isJumping && !isFalling)
+	{
+		float new_pos = _pos_y + factor;
+		if (new_pos >= _alto_log)
+		{
+			//Estoy en altura maxima
+			isFalling=true;
+			isJumping=false;
+			_pos_y = _alto_log;
+		}else{
+			_pos_y = new_pos;
+		}
+	}
+}
+
 void Personaje::moveRight(float factor)
 {
-	//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
-	//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
-	float new_x = _pos_x + factor + getBeta(factor);
-	if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
+	if(!isJumping && !isFalling)
 	{
-		_pos_x = new_x;
-	}else{
-		_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
+		this->isWalking = true;
+		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
+		//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
+		float new_x = _pos_x + factor + getBeta(factor);
+		if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
+		{
+			_pos_x = new_x;
+		}else{
+			_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
+		}
 	}
 }
 
@@ -159,4 +269,8 @@ float Personaje::getBeta(float factor)
 	float beta = factor * (((ancho_capa - ancho_ventana)/(ancho_escenario - ancho_ventana) ) -1);
 	//return beta;
 	return 0;
+}
+void Personaje::idle()
+{
+	this->isWalking = false;
 }
