@@ -6,7 +6,7 @@
  */
 #include <GameController.h>
 #define MOV_FACTOR 300; //Fraccion de la capa que se mueve por ciclo
-#define MOV_FACTOR2 1//
+#define MOV_FACTOR2 1.0//
 #define MOVE_P_FACTOR 1.3//
 #define JMP_FACTOR 3
 
@@ -111,7 +111,7 @@ void GameController::run(int sleep_time)
 {
 	while (! _end_of_game)
 	{
-		SDL_Event e;
+		SDL_Event e = *(new SDL_Event());
 		this->printLayers();
 		_end_of_game = this->endOfGame(e);
 		this->getKeys();
@@ -151,32 +151,56 @@ void GameController::getKeys()
 	if( currentKeyStates[ SDL_SCANCODE_ESCAPE ] )
 	{
 		_end_of_game = true;
-	}else if( currentKeyStates[ SDL_SCANCODE_R ] )
+	}
+	else if( currentKeyStates[ SDL_SCANCODE_R ] )
 	{
 		this->reloadConfig();
-	}else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_UP ])
+	{
+		this->_personaje->jump(JMP_FACTOR);
+	}
+	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
 		//this-> moveLayersRight();
-		this->_personaje->moveLeft(MOV_FACTOR2);
-		if (this->_personaje->isLeftMargin())
+		if ( !this->_personaje->isJump() && !this->_personaje->isFallDown() )
 		{
-			this-> moveLayersRight();
+			this->_personaje->moveLeft(MOV_FACTOR2);
+			if (this->_personaje->isLeftMargin())
+			{
+				this-> moveLayersRight();
+			}
 		}
-	}else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
+	}
+	else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
 		//this-> moveLayersLeft();
-		this->_personaje->moveRight(MOV_FACTOR2);
+		if ( !this->_personaje->isJump() && !this->_personaje->isFallDown() )
+		{
+			this->_personaje->moveRight(MOV_FACTOR2);
+			if(this->_personaje->isRightMargin())
+			{
+				this->moveLayersLeft();
+			}
+		}
+	}
+	else
+	{
+		_personaje->idle();
+	}
+	_personaje->continueAction(MOV_FACTOR2/2,JMP_FACTOR);
+	if ( this->_personaje->isMovingInJump() )
+	{ // Si el personaje esta saltando hacia alguno de los costados debo
+		// mover las capas si se encuentra en el margen de la ventana.
 		if(this->_personaje->isRightMargin())
 		{
 			this->moveLayersLeft();
 		}
-	}else if(currentKeyStates[ SDL_SCANCODE_UP ])
-	{
-		this->_personaje->jump(JMP_FACTOR);
-	}else{
-		_personaje->idle();
+		else if (this->_personaje->isLeftMargin())
+		{
+			this-> moveLayersRight();
+		}
 	}
-	_personaje->continueAction(JMP_FACTOR);
 }
 
 void GameController::moveLayersRight()

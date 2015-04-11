@@ -47,12 +47,18 @@ class Personaje
 		SDL_Rect* sprites;
 		SDL_Rect* loadMedia(PersonajeData data);
 		int _lastFrame;
-		bool isWalking;
-		bool isJumping;
-		bool isFalling;
+		bool _isWalking;
+		bool _isJumping;
+		bool _isJumpingRight;
+		bool _isJumpingLeft;
+		bool _isFalling;
+		bool _isFallingRight;
+		bool _isFallingLeft;
+		bool _invert;
 		void viewWalking();
 		void viewJump();
-
+		void viewJumpRight();
+		void viewJumpLeft();
 
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
@@ -66,7 +72,10 @@ class Personaje
 		void showIdle();
 		bool isLeftMargin();
 		bool isRightMargin();
-		void continueAction(float factor);
+		bool isJump();
+		bool isFallDown();
+		bool isMovingInJump();
+		void continueAction(float factor_x, float factor_y);
 };
 
 
