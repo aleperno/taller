@@ -49,6 +49,7 @@ class GameController
 		void getKeys();
 		void moveLayersRight();
 		void moveLayersLeft();
+		void moveLayers();
 
 	public:
 		static GameController* Instance(Parser* parser = 0);

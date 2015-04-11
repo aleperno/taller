@@ -22,6 +22,7 @@ using namespace std;
 
 #define SPEED 5;
 #define JMP_SPEED 10;
+#define JMP_SPEED2 7;
 
 class Personaje
 {
@@ -72,9 +73,12 @@ class Personaje
 		void showIdle();
 		bool isLeftMargin();
 		bool isRightMargin();
-		bool isJump();
-		bool isFallDown();
+		bool isJumping();
+		bool isFalling();
 		bool isMovingInJump();
+		bool isWalking();
+		bool isJumpingRight();
+		bool isJumpingLeft();
 		void continueAction(float factor_x, float factor_y);
 };
 

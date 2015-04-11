@@ -163,25 +163,18 @@ void GameController::getKeys()
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
 		//this-> moveLayersRight();
-		if ( !this->_personaje->isJump() && !this->_personaje->isFallDown() )
+		if ( !this->_personaje->isJumping() && !this->_personaje->isFalling() )
 		{
 			this->_personaje->moveLeft(MOV_FACTOR2);
-			if (this->_personaje->isLeftMargin())
-			{
-				this-> moveLayersRight();
-			}
 		}
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
 		//this-> moveLayersLeft();
-		if ( !this->_personaje->isJump() && !this->_personaje->isFallDown() )
+		if ( !this->_personaje->isJumping() && !this->_personaje->isFalling() )
 		{
 			this->_personaje->moveRight(MOV_FACTOR2);
-			if(this->_personaje->isRightMargin())
-			{
-				this->moveLayersLeft();
-			}
+
 		}
 	}
 	else
@@ -189,17 +182,20 @@ void GameController::getKeys()
 		_personaje->idle();
 	}
 	_personaje->continueAction(MOV_FACTOR2/2,JMP_FACTOR);
-	if ( this->_personaje->isMovingInJump() )
-	{ // Si el personaje esta saltando hacia alguno de los costados debo
-		// mover las capas si se encuentra en el margen de la ventana.
-		if(this->_personaje->isRightMargin())
-		{
-			this->moveLayersLeft();
-		}
-		else if (this->_personaje->isLeftMargin())
-		{
-			this-> moveLayersRight();
-		}
+	//Veo si debo correr las capas
+	this->moveLayers();
+}
+
+void GameController::moveLayers()
+{
+	//Veo si debo mover las capas
+	if(this->_personaje->isRightMargin() && (_personaje->isWalking() || _personaje->isJumpingRight()))
+	{
+		this->moveLayersLeft();
+	}
+	else if (this->_personaje->isLeftMargin() && (_personaje->isWalking() || _personaje->isJumpingLeft()))
+	{
+		this-> moveLayersRight();
 	}
 }
 
