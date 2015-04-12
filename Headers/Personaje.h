@@ -22,7 +22,6 @@ using namespace std;
 
 #define SPEED 5;
 #define JMP_SPEED 10;
-#define JMP_SPEED2 6;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
 
@@ -57,7 +56,6 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
-		bool _invert;
 		void viewWalking();
 		void viewJump();
 		void viewJumpRight();
@@ -70,6 +68,8 @@ class Personaje
 		void moveLeft(float factor);
 		void moveRight(float factor);
 		void jump(float factor);
+		void jumpRight(float factor);
+		void jumpLeft(float factor);
 		void idle();
 		unsigned int _zIndex;
 		void showIdle();

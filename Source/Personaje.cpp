@@ -31,7 +31,6 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
-	this->_invert = false;
 	//cout << _pos_x << endl;
 }
 
@@ -178,7 +177,7 @@ void Personaje::viewJumpLeft()
 		_lastFrame = this->_personajeData.jumpBwd[0] * JMP_SPEED2;
 	}
 	int frame = _lastFrame/JMP_SPEED2;
-	cout << frame << endl;
+	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
@@ -237,7 +236,6 @@ void Personaje::moveLeft(float factor)
 		}else{
 			_pos_x = 0;
 		}
-		this->_invert = true;
 	}
 }
 
@@ -249,15 +247,23 @@ bool Personaje::isLeftMargin()
 void Personaje::jump(float factor)
 {
 	//cout << "salto" << endl;
-	if ( !this->isFalling() )
+	if (  !this->isFalling() && !this->isJumping()  )
 	{
-		if( this->_isWalking )
-		{
-			if ( this->_invert ) this->_isJumpingLeft = true;
-			else this->_isJumpingRight = true;
-			this->_isWalking = false;
-		}
-		else this->_isJumping = true;
+		this->_isJumping = true;
+	}
+}
+
+void Personaje::jumpRight(float factor){
+	if ( !this->isFalling() && !this->isJumping() )
+	{
+		this->_isJumpingRight = true;
+	}
+}
+
+void Personaje::jumpLeft(float factor){
+	if ( !this->isFalling() && !this->isJumping() )
+	{
+		this->_isJumpingLeft = true;
 	}
 }
 
@@ -382,7 +388,6 @@ void Personaje::moveRight(float factor)
 			_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
 		}
 	}
-	this->_invert = false;
 }
 
 bool Personaje::isRightMargin()

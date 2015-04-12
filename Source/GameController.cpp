@@ -157,6 +157,14 @@ void GameController::getKeys()
 	{
 		this->reloadConfig();
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
+	{
+		this->_personaje->jumpLeft(JMP_FACTOR);
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_RIGHT ])
+	{
+		this->_personaje->jumpRight(JMP_FACTOR);
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
 		this->_personaje->jump(JMP_FACTOR);
