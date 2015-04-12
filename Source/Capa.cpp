@@ -24,6 +24,16 @@ Capa::Capa(Ventana* ventana, CapaData data, EscenarioData escenario)
 	//this-> _pos_x = -100;
 	this->_ancho_px = Capa::getWidth(ventana,_ancho_log);
 	this->_alto_px = Capa::getHeight(ventana,_alto_log);
+	this->animated = data.animado;
+	this->cantSprites = data.sprites;
+	this->_lastFrame = 0;
+	this->animDelay = data.animDelay;
+	if (animated){
+		//cout << "tengo una capa animada" << endl;
+		this->sprites = Capa::loadMedia(data,_ancho_px);
+	}else{
+		this->sprites = NULL;
+	}
 }
 
 Capa::~Capa()
@@ -40,9 +50,43 @@ void Capa::view()
 	//cout << "La posicion logica en x es " << _pos_x << " y en px es " << x << endl;
 	//cout << "La posicion logica en y es " << _pos_y << " y en px es " << y << endl;
 	//_handler->renderCut(x,y,_ancho_px * _factor_escala,_alto_px);
-	_handler->renderCut(x,y,_ancho_px,_alto_px);
+	if (animated){
+		//cout << "esta animado" << endl;
+		viewAnimated();
+	}else{
+		_handler->renderCut(x,y,_ancho_px,_alto_px);
+	}
 	//_handler->render(0,0);
 	//cout << "Se intenta dibujar capa " << endl;
+}
+
+void Capa::viewAnimated()
+{
+	++_lastFrame;
+	int aux = _lastFrame / animDelay;
+	if (aux > this->cantSprites - 1)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/animDelay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->sprites[frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+SDL_Rect* Capa::loadMedia(CapaData data, int height)
+{
+	SDL_Rect* media = new SDL_Rect[data.sprites];
+	for (int i=0; i<data.sprites; i++)
+	{
+		media[i].x = i * data.width_px;
+		media[i].y = 0;
+		media[i].w = data.width_px;
+		media[i].h = height;
+	}
+	return media;
 }
 
 int Capa::getWidth(Ventana* ventana, float ancho_log_capa)

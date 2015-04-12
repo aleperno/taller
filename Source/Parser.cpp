@@ -281,7 +281,6 @@ Parser::Parser(Value root, Value defRoot){
 			string rutaLocal;
 			float anchoLocal;
 			CapaData capaLocal;
-
 			/*Es levantable como string la ruta a imagen? En todas pruebas, si no hubo error de parseo,
 			logro levantar cualquier verdura como string. Por las dudas lo dejo.*/
 			try {	rutaLocal = capasJson[i].get("imagen_fondo","").asString();	}
@@ -306,6 +305,17 @@ Parser::Parser(Value root, Value defRoot){
 			if (capaSana) {
 				capaLocal.imagen_fondo = rutaLocal;
 				capaLocal.ancho = anchoLocal;
+				try{
+					capaLocal.animado = capasJson[i].get("animado",false).asBool();
+					capaLocal.width_px = capasJson[i].get("width_px",-1).asInt();
+					capaLocal.sprites = capasJson[i].get("spritesCant",-1).asInt();
+					capaLocal.animDelay = capasJson[i].get("animDelay",-1).asInt();
+				}catch(const exception &e){
+					capaLocal.animado = false;
+					capaLocal.width_px = 0;
+					capaLocal.sprites = 0;
+					capaLocal.animDelay = 0;
+				}
 
 				ifstream imagenTest(capaLocal.imagen_fondo.c_str());
 				//Chequeo si el archivo existe.

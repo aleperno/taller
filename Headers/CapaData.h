@@ -15,6 +15,10 @@ class CapaData
 	public:
 		string imagen_fondo;
 		float ancho;
+		bool animado;
+		int width_px;
+		int sprites;
+		int animDelay;
 };
 
 

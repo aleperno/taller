@@ -18,7 +18,7 @@ using namespace std;
 #include <Ventana.h>
 #include <CapaData.h>
 #include <EscenarioData.h>
-
+#define ANIMATED_SPEED  10;
 class Capa
 {
 	private:
@@ -39,6 +39,14 @@ class Capa
 		int get_y_px();
 		float getAlpha(float factor);
 		float getBeta(float factor);
+		int cantSprites;
+		int animDelay;
+		bool animated;
+		void viewAnimated();
+		SDL_Rect* sprites;
+		SDL_Rect* loadMedia(CapaData data, int height);
+		int _lastFrame;
+
 	public:
 		Capa(Ventana* ventana, CapaData data, EscenarioData escenario);
 		~Capa();
