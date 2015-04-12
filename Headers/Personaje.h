@@ -22,7 +22,7 @@ using namespace std;
 
 #define SPEED 5;
 #define JMP_SPEED 10;
-#define JMP_SPEED2 7;
+#define JMP_SPEED2 6;
 
 class Personaje
 {

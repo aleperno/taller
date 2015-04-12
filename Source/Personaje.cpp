@@ -178,7 +178,7 @@ void Personaje::viewJumpLeft()
 		_lastFrame = this->_personajeData.jumpBwd[0] * JMP_SPEED2;
 	}
 	int frame = _lastFrame/JMP_SPEED2;
-	//cout << frame << endl;
+	cout << frame << endl;
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
