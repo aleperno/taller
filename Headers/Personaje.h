@@ -22,7 +22,6 @@ using namespace std;
 
 #define SPEED 5;
 #define JMP_SPEED 10;
-#define JMP_SPEED2 6;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
 
