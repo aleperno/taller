@@ -51,7 +51,7 @@ SDL_Rect* Personaje::loadMedia(PersonajeData data)
 Personaje::~Personaje()
 {
 	//delete this;
-	cout << "destruyo capa" << endl;
+	//cout << "destruyo capa" << endl;
 	delete _handler;
 }
 
@@ -289,6 +289,7 @@ void Personaje::jump(float factor)
 	if (  !this->isFalling() && !this->isJumping()  )
 	{
 		this->_isJumping = true;
+		this->_isWalking = false;
 	}
 }
 
@@ -296,6 +297,7 @@ void Personaje::jumpRight(float factor){
 	if ( !this->isFalling() && !this->isJumping() )
 	{
 		this->_isJumpingRight = true;
+		this->_isWalking = false;
 	}
 }
 
@@ -303,6 +305,7 @@ void Personaje::jumpLeft(float factor){
 	if ( !this->isFalling() && !this->isJumping() )
 	{
 		this->_isJumpingLeft = true;
+		this->_isWalking = false;
 	}
 }
 
@@ -329,7 +332,8 @@ void Personaje::continueAction(float factor_x, float factor_y)
 
 		if ( this->_isFallingRight )
 		{
-			new_x = _pos_x + (factor_x + getBeta(factor_x))*JMP_SPEED_X;
+			new_x = _pos_x + (factor_x + getBeta(factor_x));
+			//cout << new_x - _pos_x << endl;
 			if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
 				_pos_x = new_x;
 			else
@@ -337,7 +341,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 		}
 		else if ( this->_isFallingLeft )
 		{
-			new_x = _pos_x - ((factor_x) + getBeta(factor_x))*JMP_SPEED_X;
+			new_x = _pos_x - ((factor_x) + getBeta(factor_x));
 			if (new_x >= 0)
 				_pos_x = new_x;
 			else
@@ -371,7 +375,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 
 		if ( this->_isJumpingRight )
 		{
-			new_x = _pos_x + (factor_x + getBeta(factor_x))*JMP_SPEED_X;
+			new_x = _pos_x + (factor_x + getBeta(factor_x));
 			if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
 				_pos_x = new_x;
 			else
@@ -380,7 +384,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 		}
 		else if ( this->_isJumpingLeft )
 		{
-			new_x = _pos_x - ((factor_x) + getBeta(factor_x))*JMP_SPEED_X;
+			new_x = _pos_x - ((factor_x) + getBeta(factor_x));
 			if (new_x >= 0)
 				_pos_x = new_x;
 			else

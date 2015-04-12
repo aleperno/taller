@@ -29,7 +29,7 @@ Capa::Capa(Ventana* ventana, CapaData data, EscenarioData escenario)
 Capa::~Capa()
 {
 	//delete this;
-	cout << "destruyo capa" << endl;
+	//cout << "destruyo capa" << endl;
 	delete _handler;
 }
 

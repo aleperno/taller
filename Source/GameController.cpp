@@ -7,7 +7,7 @@
 #include <GameController.h>
 #define MOV_FACTOR 300;   //Fraccion de la capa que se mueve por ciclo
 #define MOV_FACTOR2 1.0   //
-#define MOV_FACTOR_JMP 2.0
+#define MOV_FACTOR_JMP 1.5
 #define MOVE_P_FACTOR 1.3 //
 #define JMP_FACTOR 3
 
@@ -194,7 +194,7 @@ void GameController::getKeys()
 	{
 		_personaje->idle();
 	}
-	_personaje->continueAction(MOV_FACTOR2/2,JMP_FACTOR);
+	_personaje->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
 	//Veo si debo correr las capas
 	this->moveLayers();
 }
@@ -204,6 +204,7 @@ void GameController::moveLayers()
 	//Veo si debo mover las capas
 	if( this->_personaje->isRightMargin() && _personaje->isWalking() )
 	{
+		cout << "Esta caminando" << endl;
 		this->moveLayersLeft(MOV_FACTOR2);
 	}
 	else if ( this->_personaje->isRightMargin() && _personaje->isJumpingRight() )
