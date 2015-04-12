@@ -121,7 +121,7 @@ void Personaje::showIdle()
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 void Personaje::viewWalking()
@@ -137,7 +137,7 @@ void Personaje::viewWalking()
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 void Personaje::viewDuck()
@@ -161,7 +161,7 @@ void Personaje::viewDuck()
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 void Personaje::viewJump()
@@ -178,7 +178,7 @@ void Personaje::viewJump()
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 void Personaje::viewJumpRight()
@@ -194,7 +194,7 @@ void Personaje::viewJumpRight()
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 void Personaje::viewJumpLeft()
@@ -210,7 +210,7 @@ void Personaje::viewJumpLeft()
 	SDL_Rect* currentClip = &(this->sprites[frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
 int Personaje::get_x_px()
