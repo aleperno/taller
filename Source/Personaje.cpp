@@ -8,6 +8,7 @@
 
 Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario)
 {
+	Logger::Instance()->log(DEBUG,"Se crea personaje");
 	this->_ventana = ventana;
 	this->_handler = new TextureHandler(ventana->_gRenderer);
 	this->_alto_log = data.alto;
@@ -53,6 +54,7 @@ Personaje::~Personaje()
 	//delete this;
 	//cout << "destruyo capa" << endl;
 	delete _handler;
+	Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
 
 void Personaje::view()
@@ -254,6 +256,7 @@ void Personaje::moveLeft(float factor)
 	if( ( !this->_isJumping && !this->_isFalling ) || ( this->_isJumpingLeft ))
 	{
 		this->_isWalking = true;
+		Logger::Instance()->log(DEBUG,"Camino a la Izquierda");
 		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 		//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
 		//float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ; //viejo
@@ -314,6 +317,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 	float new_x;
 	if ( this->isFalling() )
 	{
+		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
 		float new_y = _pos_y - factor_y; // DIVIDO EL FACTOR POR 2 PORQUE SINO
 											 // LLEGA AL PISO ANTES DE MOSTRAR TODOS
 											 // LOS SPRITES
@@ -350,6 +354,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 	}
 	else if ( this->isJumping() )
 	{
+		Logger::Instance()->log(DEBUG,"El personaje esta saltando");
 		float new_y = _pos_y + factor_y; // DIVIDO EL FACTOR POR 2 PORQUE SINO
 											 // LLEGA AL PISO ANTES DE MOSTRAR TODOS
 											 // LOS SPRITES
@@ -420,6 +425,7 @@ void Personaje::moveRight(float factor)
 	if(!( this->_isJumping ) && !( this->_isFalling ))
 	{
 		this->_isWalking = true;
+		Logger::Instance()->log(DEBUG,"Camino a la derecha");
 		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 		//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
 		float new_x = _pos_x + factor + getBeta(factor);
@@ -446,7 +452,7 @@ float Personaje::getBeta(float factor)
 	float ancho_ventana = this->_ventana->_ancho_log;
 	float beta = factor * (((ancho_capa - ancho_ventana)/(ancho_escenario - ancho_ventana) ) -1);
 	beta = 0;
-	return 0;
+	return beta;
 }
 
 void Personaje::idle()

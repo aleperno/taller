@@ -30,6 +30,7 @@ void GameController::KillController()
 	_personaje = NULL;
 	delete _instance;
 	_instance = NULL;
+	Logger::Instance()->log(DEBUG,"Se destruye instancia de GameController");
 }
 
 GameController::GameController(Parser* parser)
@@ -39,6 +40,7 @@ GameController::GameController(Parser* parser)
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje = GameController::getPersonaje(_ventana,parser,_escenario);
 	_end_of_game = false;
+	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
 
 Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario)
@@ -110,6 +112,7 @@ bool GameController::endOfGame(SDL_Event e)
 
 void GameController::run(int sleep_time)
 {
+	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
 	while (! _end_of_game)
 	{
 		SDL_Event e = *(new SDL_Event());
@@ -119,6 +122,7 @@ void GameController::run(int sleep_time)
 		//SDL_Delay(sleep_time);
 	}
 	this->close();
+	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
 }
 
 void GameController::close()
@@ -137,6 +141,7 @@ void GameController::close()
 
 void GameController::reloadConfig()
 {
+	Logger::Instance()->log(DEBUG,"Se recarga la Configuracion");
 	Parser::Instance()->reload();
 	Parser* parser = Parser::Instance();
 	this->close();
@@ -204,7 +209,6 @@ void GameController::moveLayers()
 	//Veo si debo mover las capas
 	if( this->_personaje->isRightMargin() && _personaje->isWalking() )
 	{
-		cout << "Esta caminando" << endl;
 		this->moveLayersLeft(MOV_FACTOR2);
 	}
 	else if ( this->_personaje->isRightMargin() && _personaje->isJumpingRight() )

@@ -398,6 +398,7 @@ void Parser::KillInstance(){
 		delete(instance);
 		instance = NULL;
 	}
+	Logger::Instance()->log(DEBUG,"Se destruye el Parser");
 }
 
 void Parser::reload()
