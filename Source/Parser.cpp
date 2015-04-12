@@ -216,6 +216,9 @@ Parser::Parser(Value root, Value defRoot){
 		}
 	}
 
+	if (this->ventana.ancho > this->escenario.ancho) {
+	}
+
 	//Personaje
 	if (hayPersonaje) {
 		//-----ancho-----
