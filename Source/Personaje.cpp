@@ -25,6 +25,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->sprites = Personaje::loadMedia(data);
 	this->_lastFrame = 0;
 	this->_isWalking = false;
+	this->_isDucking = false;
 	this->_isJumping = false;
 	this->_isJumpingRight = false;
 	this->_isJumpingLeft = false;
@@ -73,6 +74,10 @@ void Personaje::view()
 		{
 			this->viewJump();
 		}
+	}
+	else if (this->_isDucking)
+	{
+		this->viewDuck();
 	}
 	else if (this->_isWalking)
 	{
@@ -126,6 +131,30 @@ void Personaje::viewWalking()
 	if ( aux < this->_personajeData.walk[0] || aux > this->_personajeData.walk[1])
 	{
 		_lastFrame = this->_personajeData.walk[0] * SPEED;
+	}
+	int frame = _lastFrame/SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->sprites[frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewDuck()
+{
+	int aux = _lastFrame / SPEED;
+	if ( aux < this->_personajeData.duck[1] )
+	{
+		++_lastFrame;
+		aux = _lastFrame / SPEED;
+		if ( aux < this->_personajeData.duck[0] || aux > this->_personajeData.duck[1])
+		{
+			_lastFrame = this->_personajeData.duck[0] * SPEED;
+		}
+	}
+	else
+	{
+		_lastFrame = this->_personajeData.duck[1] * SPEED;
 	}
 	int frame = _lastFrame/SPEED;
 	//cout << frame << endl;
@@ -221,6 +250,7 @@ int Personaje::getHeight(Ventana* ventana, float alto_log_capa)
 
 void Personaje::moveLeft(float factor)
 {
+	this->_isDucking = false;
 	if( ( !this->_isJumping && !this->_isFalling ) || ( this->_isJumpingLeft ))
 	{
 		this->_isWalking = true;
@@ -242,6 +272,15 @@ void Personaje::moveLeft(float factor)
 bool Personaje::isLeftMargin()
 {
 	return (_pos_x == 0);
+}
+
+void Personaje::duck()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		this->_isDucking = true;
+		this->_isWalking = false;
+	}
 }
 
 void Personaje::jump(float factor)
@@ -373,6 +412,7 @@ bool Personaje::isJumpingLeft()
 
 void Personaje::moveRight(float factor)
 {
+	this->_isDucking = false;
 	if(!( this->_isJumping ) && !( this->_isFalling ))
 	{
 		this->_isWalking = true;
@@ -407,5 +447,6 @@ float Personaje::getBeta(float factor)
 
 void Personaje::idle()
 {
+	this->_isDucking = false;
 	this->_isWalking = false;
 }

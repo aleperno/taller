@@ -50,6 +50,7 @@ class Personaje
 		SDL_Rect* loadMedia(PersonajeData data);
 		int _lastFrame;
 		bool _isWalking;
+		bool _isDucking;
 		bool _isJumping;
 		bool _isJumpingRight;
 		bool _isJumpingLeft;
@@ -57,6 +58,7 @@ class Personaje
 		bool _isFallingRight;
 		bool _isFallingLeft;
 		void viewWalking();
+		void viewDuck();
 		void viewJump();
 		void viewJumpRight();
 		void viewJumpLeft();
@@ -67,6 +69,7 @@ class Personaje
 		void view();
 		void moveLeft(float factor);
 		void moveRight(float factor);
+		void duck();
 		void jump(float factor);
 		void jumpRight(float factor);
 		void jumpLeft(float factor);

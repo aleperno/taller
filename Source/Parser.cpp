@@ -73,6 +73,9 @@ void Parser::setearParseoDeSprite() {
 	this->personaje.jumpBwd[0] = personaje["jumpBwd"][0].asInt();
 	this->personaje.jumpBwd[1] = personaje["jumpBwd"][1].asInt();
 
+	this->personaje.duck[0] = personaje["duck"][0].asInt();
+	this->personaje.duck[1] = personaje["duck"][1].asInt();
+
 	this->personaje.imgPath = personaje["imgSrc"].asString();
 
 

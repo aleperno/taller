@@ -169,6 +169,10 @@ void GameController::getKeys()
 	{
 		this->_personaje->jump(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_DOWN ])
+	{
+		this->_personaje->duck();
+	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
 		//this-> moveLayersRight();

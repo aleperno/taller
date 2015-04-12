@@ -27,6 +27,7 @@ class PersonajeData
 		int jumpUp[2];
 		int jumpFwd[2];
 		int jumpBwd[2];
+		int duck[2];
 
 		string imgPath;
 };
