@@ -5,9 +5,10 @@
  *      Author: neo
  */
 #include <GameController.h>
-#define MOV_FACTOR 300; //Fraccion de la capa que se mueve por ciclo
-#define MOV_FACTOR2 1.0//
-#define MOVE_P_FACTOR 1.3//
+#define MOV_FACTOR 300;   //Fraccion de la capa que se mueve por ciclo
+#define MOV_FACTOR2 1.0   //
+#define MOV_FACTOR_JMP 2.0
+#define MOVE_P_FACTOR 1.3 //
 #define JMP_FACTOR 3
 
 GameController* GameController::_instance = 0;
@@ -201,28 +202,34 @@ void GameController::getKeys()
 void GameController::moveLayers()
 {
 	//Veo si debo mover las capas
-	if(this->_personaje->isRightMargin() && (_personaje->isWalking() || _personaje->isJumpingRight()))
+	if( this->_personaje->isRightMargin() && _personaje->isWalking() )
 	{
-		this->moveLayersLeft();
+		this->moveLayersLeft(MOV_FACTOR2);
 	}
-	else if (this->_personaje->isLeftMargin() && (_personaje->isWalking() || _personaje->isJumpingLeft()))
+	else if ( this->_personaje->isRightMargin() && _personaje->isJumpingRight() )
 	{
-		this-> moveLayersRight();
+		this->moveLayersLeft(MOV_FACTOR_JMP);
+	}
+	else if ( this->_personaje->isLeftMargin() && _personaje->isWalking() )
+	{
+		this-> moveLayersRight(MOV_FACTOR2);
+	}
+	else if ( this->_personaje->isLeftMargin() && _personaje->isJumpingLeft() )
+	{
+		this-> moveLayersRight(MOV_FACTOR_JMP);
 	}
 }
 
-void GameController::moveLayersRight()
+void GameController::moveLayersRight(float factor)
 {
-	float factor = (float) MOV_FACTOR2;
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->moveRight(factor);
 	}
 }
 
-void GameController::moveLayersLeft()
+void GameController::moveLayersLeft(float factor)
 {
-	float factor = (float) MOV_FACTOR2;
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->moveLeft(factor);
