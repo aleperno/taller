@@ -22,7 +22,7 @@ using namespace std;
 #include <Personaje.h>
 
 
-#define DEF_SLEEP_TIME 50
+#define DEF_SLEEP_TIME 20
 
 class GameController
 {
@@ -47,8 +47,8 @@ class GameController
 		void close();
 		void reloadConfig();
 		void getKeys();
-		void moveLayersRight();
-		void moveLayersLeft();
+		void moveLayersRight(float factor);
+		void moveLayersLeft(float factor);
 		void moveLayers();
 
 	public:
