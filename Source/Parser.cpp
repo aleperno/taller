@@ -217,6 +217,8 @@ Parser::Parser(Value root, Value defRoot){
 	}
 
 	if (this->ventana.ancho > this->escenario.ancho) {
+		Logger::Instance()->log(WARNING,"Ancho logico de la ventana es mas grande que el escenario. Se achica el ancho de la ventana.");
+		this->ventana.ancho = this-> escenario.ancho;
 	}
 
 	//Personaje
