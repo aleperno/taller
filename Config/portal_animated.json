@@ -1,0 +1,31 @@
+{
+"ventana": {	"anchopx":	640,
+		"altopx":	480,
+		"ancho": 	150	},
+
+"escenario": {	"ancho": 	300,
+		"alto": 	100,
+		"ypiso":	7	},
+
+"capas": [	{	"imagen_fondo": "Images/arenas/portal/2.png",
+			"ancho": 295	},
+		{	"imagen_fondo": "Images/arenas/portal/2_a.png",
+			"ancho": 295,
+			"animado" : true,
+			"spritesCant" : 4,
+			"animDelay" : 15,
+			"height_px" : 256},
+		{	"imagen_fondo": "Images/arenas/portal/1_a.png",
+			"ancho": 295,
+			"animado" : true,
+			"spritesCant" : 5,
+			"animDelay" : 10,
+			"height_px" : 256},
+		{	"imagen_fondo": "Images/arenas/portal/0.png",
+			"ancho": 300	}	],
+
+"personaje": {	"ancho": 	30,
+		"alto": 	50,
+		"zindex":	3,
+		"orientacion":	false	}
+}
