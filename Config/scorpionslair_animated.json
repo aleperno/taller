@@ -18,7 +18,7 @@
 			"animado" : true,
 			"spritesCant" : 3,
 			"animDelay" : 10,
-			"width_px" : 1142},
+			"height_px" : 304},
 		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_1.png",
 			"ancho": 300	},
 		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_0.png",
