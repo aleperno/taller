@@ -14,9 +14,9 @@
 		{	"imagen_fondo": "Images/arenas/living_forest/0_a.png",
 			"ancho": 300,
 			"animado" : true,
-			"spritesCant" : 5,
-			"animDelay" : 15,
-			"width_px" : 784}	],
+			"spritesCant" : 15,
+			"animDelay" : 10,
+			"height_px" : 256}	],
 
 "personaje": {	"ancho": 	30,
 		"alto": 	50,

@@ -3,16 +3,16 @@
 		"altopx":	480,
 		"ancho": 	150	},
 
-"escenario": {	"ancho": 	180,
+"escenario": {	"ancho": 	300,
 		"alto": 	100,
 		"ypiso":	7	},
 
 "capas": [	{	"imagen_fondo": "Images/arenas/train/0.png",
-			"ancho": 160	},
+			"ancho": 200	},
 		{	"imagen_fondo": "Images/arenas/train/1.png",
-			"ancho": 170},
+			"ancho": 250},
 		{	"imagen_fondo": "Images/arenas/train/2.png",
-			"ancho": 180	}	],
+			"ancho": 300	}	],
 
 "personaje": {	"ancho": 	30,
 		"alto": 	50,

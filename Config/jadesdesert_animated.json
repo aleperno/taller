@@ -16,7 +16,7 @@
 			"animado" : true,
 			"spritesCant" : 5,
 			"animDelay" : 10,
-			"width_px" : 798},
+			"height_px" : 251},
 		{	"imagen_fondo": "Images/arenas/jadesdesert/p_2.png",
 			"ancho": 300	},
 		{	"imagen_fondo": "Images/arenas/jadesdesert/p_1.png",
