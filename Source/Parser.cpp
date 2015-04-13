@@ -307,12 +307,12 @@ Parser::Parser(Value root, Value defRoot){
 				capaLocal.ancho = anchoLocal;
 				try{
 					capaLocal.animado = capasJson[i].get("animado",false).asBool();
-					capaLocal.width_px = capasJson[i].get("width_px",-1).asInt();
+					capaLocal.height_px = capasJson[i].get("height_px",-1).asInt();
 					capaLocal.sprites = capasJson[i].get("spritesCant",-1).asInt();
 					capaLocal.animDelay = capasJson[i].get("animDelay",-1).asInt();
 				}catch(const exception &e){
 					capaLocal.animado = false;
-					capaLocal.width_px = 0;
+					capaLocal.height_px = 0;
 					capaLocal.sprites = 0;
 					capaLocal.animDelay = 0;
 				}

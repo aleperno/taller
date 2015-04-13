@@ -76,15 +76,15 @@ void Capa::viewAnimated()
 	this->_handler->renderAnimation(false,x,y,_ancho_px,_alto_px,currentClip);
 }
 
-SDL_Rect* Capa::loadMedia(CapaData data, int height)
+SDL_Rect* Capa::loadMedia(CapaData data, int width)
 {
 	SDL_Rect* media = new SDL_Rect[data.sprites];
 	for (int i=0; i<data.sprites; i++)
 	{
-		media[i].x = i * data.width_px;
-		media[i].y = 0;
-		media[i].w = data.width_px;
-		media[i].h = height;
+		media[i].x = 0;
+		media[i].y = i * data.height_px;
+		media[i].w = width;
+		media[i].h = data.height_px;
 	}
 	return media;
 }
