@@ -28,7 +28,7 @@ void parser(int argc, char* args[], int* lvl, string* path)
 			if (i+1 < argc)
 			{
 				_path = args[++i];
-				cout << _path << endl;
+				//cout << _path << endl;
 			}
 		}else if(string(args[i]) == "--level")
 		{

@@ -310,8 +310,10 @@ Parser::Parser(Value root, Value defRoot){
 					capaLocal.height_px = capasJson[i].get("height_px",-1).asInt();
 					capaLocal.sprites = capasJson[i].get("spritesCant",-1).asInt();
 					capaLocal.animDelay = capasJson[i].get("animDelay",-1).asInt();
+					//Logger::Instance()->log(ERROR,"TEST TRY");
 				}catch(const exception &e){
 					capaLocal.animado = false;
+					//Logger::Instance()->log(ERROR,"TEST CATCH");
 					capaLocal.height_px = 0;
 					capaLocal.sprites = 0;
 					capaLocal.animDelay = 0;
