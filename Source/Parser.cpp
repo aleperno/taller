@@ -37,23 +37,26 @@ void Parser::setearParseoDeSprite() {
 	Value root;
 	Reader reader;
 	ifstream file(SPRITE_PARSE_PATH);
-		//Ese archivo es nuestro asi que tiene valores validos
-	//bool parsing = reader.parse(file,root);
+
 	if (!file.good())
 	{
 		Logger::Instance()->log(ERROR,"El archivo del spritesheets no existe.");
 	}
 	bool parseoExitoso = reader.parse(file,root);
 	file.close();
+
 	if(!parseoExitoso)
 	{
 		Logger::Instance()->log(ERROR,"El archivo del spritesheets contiene errores.");
 	}
-	Value personaje = root["liukang"];
+
+	Value personaje = root[this->personaje.nombre];
 	if (personaje.empty())
 	{
-		Logger::Instance()->log(ERROR,"El campo liukang no existe.");
+		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje.nombre + "\" no existe. Se usa uno por defecto.");
+		personaje = root["liukang"];
 	}
+
 	this->personaje.height = personaje.get("height",-1).asInt();
 	this->personaje.width = personaje.get("width",-1).asInt();
 	this->personaje.size = personaje.get("size",-1).asInt();
@@ -268,6 +271,14 @@ Parser::Parser(Value root, Value defRoot){
 			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de orientacion del personaje.");
 			this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
 		}
+
+		//-----nombre-----
+		try {	this->personaje.nombre = personaje.get("nombre",-1).asString();	}
+		catch(const exception &e) {
+			string str(e.what());
+			Logger::Instance()->log(ERROR,str + " Se usara personaje (sprites) por defecto.");
+			this->personaje.nombre = defPersonaje.get("nombre",-1).asString();
+		}
 	}
 
 	/*Llega con capas por defecto o asegurado que hay por lo menos una capa en json. Si las capas no son por defecto,
@@ -333,11 +344,11 @@ Parser::Parser(Value root, Value defRoot){
 						capaLocal.ancho = this->ventana.ancho;
 						Logger::Instance()->log(WARNING,msg);
 					}
-					if (capaLocal.ancho > this->escenario.ancho) {
-						string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " mayor que ancho del escenario. Se comprime.";
-						capaLocal.ancho = this->escenario.ancho;
-						Logger::Instance()->log(WARNING,msg);
-					}
+					//if (capaLocal.ancho > this->escenario.ancho) {
+					//	string msg = "Ancho logico de la capa " + to_string(static_cast<long double>(i)) + " mayor que ancho del escenario. Se comprime.";
+					//	capaLocal.ancho = this->escenario.ancho;
+					//	Logger::Instance()->log(WARNING,msg);
+					//}
 				}
 			}
 

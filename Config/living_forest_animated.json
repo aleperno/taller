@@ -21,5 +21,6 @@
 "personaje": {	"ancho": 	30,
 		"alto": 	50,
 		"zindex":	3,
-		"orientacion":	false	}
+		"orientacion":	false,
+		"nombre":	"liukang"	}
 }

@@ -62,7 +62,16 @@ void Logger::banner()
 	time (&timer);
 	string stringTime = ctime(&timer);
 	stringTime = stringTime.substr(0,stringTime.length()-1);
-	string output = string(80,'*') + "\n" + '*' + string(27,' ') + stringTime + string(27,' ') + "*\n" + string(80,'*') + '\n';
+	string stringLevel;
+	switch	(_logLevel) {
+		case 0:	stringLevel = "ERR";
+				break;
+		case 1: stringLevel = "WAR";
+				break;
+		case 2:	stringLevel = "DEB";
+				break;
+	}
+	string output = string(80,'*') + "\n" + '*' + string(25,' ') + stringTime + ' ' + stringLevel + string(25,' ') + "*\n" + string(80,'*') + '\n';
 	//Open the stream
 	fstream LoggerFile(_path.c_str(),fstream::app);
 	LoggerFile << output;

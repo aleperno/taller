@@ -17,6 +17,7 @@ class PersonajeData
 		float alto;
 		int z_index;
 		bool orientacion;
+		string nombre;
 
 		//sprite data
 		int height;

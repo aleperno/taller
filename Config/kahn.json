@@ -1,6 +1,6 @@
 {
-"ventana": {	"anchopx":	640,
-		"altopx":	480,
+"ventana": {	"anchopx":	1920,
+		"altopx":	1000,
 		"ancho": 	150	},
 
 "escenario": {	"ancho": 	300,
@@ -17,5 +17,6 @@
 "personaje": {	"ancho": 	30,
 		"alto": 	50,
 		"zindex":	3,
-		"orientacion":	false	}
+		"orientacion":	false,
+		"nombre":	"liukang"	}
 }
