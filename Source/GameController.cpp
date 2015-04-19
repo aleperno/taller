@@ -45,7 +45,7 @@ GameController::GameController(Parser* parser)
 
 Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario)
 {
-	Personaje* pers = new Personaje(ventana,parser->personaje,escenario);
+	Personaje* pers = new Personaje(ventana,parser->personaje1,escenario);
 	return pers;
 }
 

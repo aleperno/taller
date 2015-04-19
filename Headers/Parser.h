@@ -24,6 +24,8 @@ class Parser{
 
 	private:
 		void setearParseoDeSprite();
+		void parsearSpritePersonaje(PersonajeData* personaje, Value persValue);
+		void setearDatosPersonaje(PersonajeData* personaje, Value persValue, Value persDef, int num);
 
 		//Este se usa cuando o no se especifico archivo, o no existe o tiene error de sintaxis
 		Parser(Value defRoot);
@@ -34,7 +36,7 @@ class Parser{
 		
 		void setearVentanaPorDefecto(Value defVentana);
 		void setearEscenarioPorDefecto(Value defEscenario);
-		void setearPersonajePorDefecto(Value defPersonaje);
+		void setearPersonajePorDefecto(PersonajeData* personaje,Value defPersonaje);
 		void setearCapasPorDefecto(Value defCapas);
 
 		static Parser* instance;
@@ -56,8 +58,8 @@ class Parser{
 		VentanaData ventana;
 		EscenarioData escenario;
 		vector<CapaData> capas;
-		PersonajeData personaje;
-		string spriteSheetPath;
+		PersonajeData personaje1;
+		PersonajeData personaje2;
 	
 };
 
