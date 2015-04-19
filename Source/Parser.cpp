@@ -22,6 +22,13 @@ void Parser::setearPersonajePorDefecto(PersonajeData* personaje,Value defPersona
 	personaje->z_index = defPersonaje.get("zindex",-1).asInt();
 	personaje->orientacion = defPersonaje.get("orientacion",1).asBool();
 	personaje->nombre = defPersonaje.get("nombre",1).asString();
+
+	personaje->golpe_alto = defPersonaje.get("golpe-alto",-1).asInt();
+	personaje->golpe_bajo = defPersonaje.get("golpe-bajo",-1).asInt();
+	personaje->patada_alta = defPersonaje.get("patada-alta",-1).asInt();
+	personaje->patada_baja = defPersonaje.get("patada-baja",-1).asInt();
+	personaje->defensa = defPersonaje.get("defensa",-1).asInt();
+	personaje->arrojar = defPersonaje.get("arrojar",-1).asInt();
 }
 
 void Parser::setearCapasPorDefecto(Value defCapas){
@@ -58,6 +65,10 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->duck[1] = persValue["duck"][1].asInt();
 
 	personaje->imgPath = persValue["imgSrc"].asString();
+
+	personaje->h_inicial = persValue.get("color-alternativo",-1).get("h-inicial",-1).asInt();
+	personaje->h_final = persValue.get("color-alternativo",-1).get("h-final",-1).asInt();
+	personaje->desplazamiento = persValue.get("color-alternativo",-1).get("desplazamiento",-1).asInt();
 }
 
 void Parser::setearParseoDeSprite() {
@@ -80,7 +91,7 @@ void Parser::setearParseoDeSprite() {
 	Value persValue = root[this->personaje1.nombre];
 	if (persValue.empty())
 	{
-		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje1.nombre + "\" no existe. Se usa uno por defecto.");
+		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje1.nombre + "\" (sprites) no existe. Se usa uno por defecto.");
 		persValue = root["liukang"];
 	}
 	parsearSpritePersonaje(&(this->personaje1), persValue);
@@ -88,7 +99,7 @@ void Parser::setearParseoDeSprite() {
 	persValue = root[this->personaje2.nombre];
 	if (persValue.empty())
 	{
-		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje2.nombre + "\" no existe. Se usa uno por defecto.");
+		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje2.nombre + "\" (sprites) no existe. Se usa uno por defecto.");
 		persValue = root["liukang"];
 	}
 	parsearSpritePersonaje(&(this->personaje2), persValue);
@@ -150,6 +161,7 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 		}
 
 	//-----nombre-----
+	//Mientras no hay error de parseo, todo es levantable como string.
 	try {	personaje->nombre = persValue.get("nombre",-1).asString();	}
 		catch(const exception &e) {
 			string str(e.what());
@@ -157,7 +169,15 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 			Logger::Instance()->log(ERROR,str + " Se usara personaje (sprites) por defecto.");
 			personaje->nombre = persDef.get("nombre",-1).asString();
 		}
-	}
+
+	//-----joyconfig----- POR AHORA ES ASI
+	personaje->golpe_alto = persValue.get("golpe-alto",-1).asInt();
+	personaje->golpe_bajo = persValue.get("golpe-bajo",-1).asInt();
+	personaje->patada_alta = persValue.get("patada-alta",-1).asInt();
+	personaje->patada_baja = persValue.get("patada-baja",-1).asInt();
+	personaje->defensa = persValue.get("defensa",-1).asInt();
+	personaje->arrojar = persValue.get("arrojar",-1).asInt();
+}
 
 
 Parser::Parser(Value defRoot) {
@@ -210,7 +230,7 @@ Parser::Parser(Value root, Value defRoot){
 	Value personaje2 = root["personaje2"];
 	if (personaje2.empty()) {
 		setearPersonajePorDefecto(&(this->personaje2),defPersonaje2);
-		hayPersonaje1 = false;
+		hayPersonaje2 = false;
 		Logger::Instance()->log(ERROR,"Personaje 2 no definido. Se usa personaje 2 por defecto.");
 	};
 
@@ -316,6 +336,8 @@ Parser::Parser(Value root, Value defRoot){
 		setearDatosPersonaje(&(this->personaje2), personaje2, defPersonaje2, 2);
 	}
 
+	setearParseoDeSprite();
+
 	/*Llega con capas por defecto o asegurado que hay por lo menos una capa en json. Si las capas no son por defecto,
 	analiza una por una y descarta las capas que tienen valores invalidos, salvo anchos numericos invalidos.
 	En este caso estira ancho de capa si es mas angosta que ventana y comprime si supera ancho de escenario.
@@ -403,8 +425,6 @@ Parser::Parser(Value root, Value defRoot){
 			}
 		}
 	}
-
-	setearParseoDeSprite();
 
 }
 

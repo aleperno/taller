@@ -8,7 +8,12 @@
 		"jumpFwd":	[26,30],
 		"jumpBwd":	[31,35],
 		"duck" :    [36,38],
-		"imgSrc" : "Images/characters/liukang.png"
+		"imgSrc" : "Images/characters/liukang.png",
+		"color-alternativo": {
+					"h-inicial": 340,
+					"h-final": 370,
+					"desplazamiento": -120
+					}
 	},
 
 "subzero": {	"height":	155,
@@ -20,6 +25,11 @@
 		"jumpFwd":	[26,30],
 		"jumpBwd":	[31,35],
 		"duck" :    [36,38],
-		"imgSrc" : "Images/characters/subzero.png"
+		"imgSrc" : "Images/characters/subzero.png",
+		"color-alternativo": {
+					"h-inicial": 180,
+					"h-final": 200,
+					"desplazamiento": 40
+					}
 	}
 }

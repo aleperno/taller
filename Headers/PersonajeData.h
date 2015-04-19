@@ -19,6 +19,19 @@ class PersonajeData
 		bool orientacion;
 		string nombre;
 
+		//color alternativo
+		int h_inicial;
+		int h_final;
+		int desplazamiento;
+
+		//joyconfig
+		int golpe_alto;
+		int golpe_bajo;
+		int patada_alta;
+		int patada_baja;
+		int defensa;
+		int arrojar;
+
 		//sprite data
 		int height;
 		int width;
