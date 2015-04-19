@@ -16,21 +16,48 @@ void Parser::setearEscenarioPorDefecto(Value defEscenario){
 	this->escenario.y_piso = defEscenario.get("ypiso",-1).asFloat();
 }
 
-void Parser::setearPersonajePorDefecto(Value defPersonaje){
-	this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
-	this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
-	this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
-	this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
+void Parser::setearPersonajePorDefecto(PersonajeData* personaje,Value defPersonaje){
+	personaje->ancho = defPersonaje.get("ancho",-1).asFloat();
+	personaje->alto = defPersonaje.get("alto",-1).asFloat();
+	personaje->z_index = defPersonaje.get("zindex",-1).asInt();
+	personaje->orientacion = defPersonaje.get("orientacion",1).asBool();
+	personaje->nombre = defPersonaje.get("nombre",1).asString();
 }
 
 void Parser::setearCapasPorDefecto(Value defCapas){
 	int nroCapas = defCapas.size();
 	for (int i=0; i<nroCapas; i++) {
 		CapaData capaLocal = {	defCapas[i].get("imagen_fondo","").asString(),
-							defCapas[i].get("ancho",-1).asFloat(),
+								defCapas[i].get("ancho",-1).asFloat(),
 		};
 		this->capas.push_back(capaLocal);
 	}
+}
+
+void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
+	personaje->height = persValue.get("height",-1).asInt();
+	personaje->width = persValue.get("width",-1).asInt();
+	personaje->size = persValue.get("size",-1).asInt();
+
+	personaje->walk[0] = persValue["walk"][0].asInt();
+	personaje->walk[1] = persValue["walk"][1].asInt();
+
+	personaje->idle[0] = persValue["idle"][0].asInt();
+	personaje->idle[1] = persValue["idle"][1].asInt();
+
+	personaje->jumpUp[0] = persValue["jumpUp"][0].asInt();
+	personaje->jumpUp[1] = persValue["jumpUp"][1].asInt();
+
+	personaje->jumpFwd[0] = persValue["jumpFwd"][0].asInt();
+	personaje->jumpFwd[1] = persValue["jumpFwd"][1].asInt();
+
+	personaje->jumpBwd[0] = persValue["jumpBwd"][0].asInt();
+	personaje->jumpBwd[1] = persValue["jumpBwd"][1].asInt();
+
+	personaje->duck[0] = persValue["duck"][0].asInt();
+	personaje->duck[1] = persValue["duck"][1].asInt();
+
+	personaje->imgPath = persValue["imgSrc"].asString();
 }
 
 void Parser::setearParseoDeSprite() {
@@ -40,7 +67,7 @@ void Parser::setearParseoDeSprite() {
 
 	if (!file.good())
 	{
-		Logger::Instance()->log(ERROR,"El archivo del spritesheets no existe.");
+		Logger::Instance()->log(ERROR,"El archivo de parseo de sprites no existe.");
 	}
 	bool parseoExitoso = reader.parse(file,root);
 	file.close();
@@ -50,45 +77,95 @@ void Parser::setearParseoDeSprite() {
 		Logger::Instance()->log(ERROR,"El archivo del spritesheets contiene errores.");
 	}
 
-	Value personaje = root[this->personaje.nombre];
-	if (personaje.empty())
+	Value persValue = root[this->personaje1.nombre];
+	if (persValue.empty())
 	{
-		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje.nombre + "\" no existe. Se usa uno por defecto.");
-		personaje = root["liukang"];
+		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje1.nombre + "\" no existe. Se usa uno por defecto.");
+		persValue = root["liukang"];
 	}
+	parsearSpritePersonaje(&(this->personaje1), persValue);
 
-	this->personaje.height = personaje.get("height",-1).asInt();
-	this->personaje.width = personaje.get("width",-1).asInt();
-	this->personaje.size = personaje.get("size",-1).asInt();
-
-	this->personaje.walk[0] = personaje["walk"][0].asInt();
-	this->personaje.walk[1] = personaje["walk"][1].asInt();
-
-	this->personaje.idle[0] = personaje["idle"][0].asInt();
-	this->personaje.idle[1] = personaje["idle"][1].asInt();
-
-	this->personaje.jumpUp[0] = personaje["jumpUp"][0].asInt();
-	this->personaje.jumpUp[1] = personaje["jumpUp"][1].asInt();
-
-	this->personaje.jumpFwd[0] = personaje["jumpFwd"][0].asInt();
-	this->personaje.jumpFwd[1] = personaje["jumpFwd"][1].asInt();
-
-	this->personaje.jumpBwd[0] = personaje["jumpBwd"][0].asInt();
-	this->personaje.jumpBwd[1] = personaje["jumpBwd"][1].asInt();
-
-	this->personaje.duck[0] = personaje["duck"][0].asInt();
-	this->personaje.duck[1] = personaje["duck"][1].asInt();
-
-	this->personaje.imgPath = personaje["imgSrc"].asString();
-
+	persValue = root[this->personaje2.nombre];
+	if (persValue.empty())
+	{
+		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje2.nombre + "\" no existe. Se usa uno por defecto.");
+		persValue = root["liukang"];
+	}
+	parsearSpritePersonaje(&(this->personaje2), persValue);
 
 }
+
+void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Value persDef, int num){
+	//-----ancho-----
+	try {	personaje->ancho = persValue.get("ancho",-1).asFloat();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto de ancho del personaje " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			personaje->ancho = persDef.get("ancho",-1).asFloat();
+		}
+		if (personaje->ancho < 2) {
+			personaje->ancho = persDef.get("ancho",-1).asFloat();
+			string msg = "Ancho logico del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+			Logger::Instance()->log(WARNING,msg);
+		}
+
+	//-----alto-----
+	try {	personaje->alto = persValue.get("alto",-1).asFloat();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto de alto del personaje " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			personaje->alto = persDef.get("alto",-1).asFloat();
+		}
+		if (personaje->alto < 2) {
+			personaje->alto = persDef.get("alto",-1).asFloat();
+			string msg = "Alto logico del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+			Logger::Instance()->log(WARNING,msg);
+		}
+
+	//-----zindex-----
+	try {	personaje->z_index = persValue.get("zindex",-1).asInt();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto de z-index del personaje " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			personaje->z_index = persDef.get("zindex",-1).asInt();
+		}
+		if (personaje->z_index < 0) {
+			personaje->z_index = persDef.get("zindex",-1).asInt();
+			string msg = "Z-index del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+			Logger::Instance()->log(WARNING,msg);
+		}
+
+	//-----orientacion-----
+	/*Es un poco distinto de los casos anteriores, ya que true/false/numero siempre es interpretable como bool y el
+	unico caso cuando no lo puede levantar es cuando es un string. O sea, si lo levanta asBool, es correcto siempre. */
+	try{	personaje->orientacion = persValue.get("orientacion",1).asBool();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto de orientacion del personaje " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			personaje->orientacion = persDef.get("orientacion",1).asBool();
+		}
+
+	//-----nombre-----
+	try {	personaje->nombre = persValue.get("nombre",-1).asString();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg =  " Se usara personaje (sprites) " + to_string(static_cast<long double>(num)) + " por defecto.";
+			Logger::Instance()->log(ERROR,str + " Se usara personaje (sprites) por defecto.");
+			personaje->nombre = persDef.get("nombre",-1).asString();
+		}
+	}
+
 
 Parser::Parser(Value defRoot) {
 
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
-	setearPersonajePorDefecto(defRoot["personaje"]);
+	setearPersonajePorDefecto(&(this->personaje1),defRoot["personaje1"]);
+	setearPersonajePorDefecto(&(this->personaje2),defRoot["personaje2"]);
 	setearCapasPorDefecto(defRoot["capas"]);
 
 	setearParseoDeSprite();
@@ -98,12 +175,14 @@ Parser::Parser(Value root, Value defRoot){
 	//FRENTE A AUSENCIA DE CUALQUIER COSA SE REEMPLAZA POR VALOR POR DEFECTO
 	Value defVentana = defRoot["ventana"];
 	Value defEscenario = defRoot["escenario"];
-	Value defPersonaje = defRoot["personaje"];
+	Value defPersonaje1 = defRoot["personaje1"];
+	Value defPersonaje2 = defRoot["personaje2"];
 	Value defCapas = defRoot["capas"];
 
 	bool hayVentana = true;
 	bool hayEscenario = true;
-	bool hayPersonaje = true;
+	bool hayPersonaje1 = true;
+	bool hayPersonaje2 = true;
 	bool hayCapas = true;
 
 	//Primero reviso estructuras enteras
@@ -121,11 +200,18 @@ Parser::Parser(Value root, Value defRoot){
 		Logger::Instance()->log(ERROR,"Escenario no definido. Se usa escenario por defecto.");
 	};
 	
-	Value personaje = root["personaje"];
-	if (personaje.empty()) {
-		setearPersonajePorDefecto(defPersonaje);
-		hayPersonaje = false;
-		Logger::Instance()->log(ERROR,"Personaje no definido. Se usa personaje por defecto.");
+	Value personaje1 = root["personaje1"];
+	if (personaje1.empty()) {
+		setearPersonajePorDefecto(&(this->personaje1),defPersonaje1);
+		hayPersonaje1 = false;
+		Logger::Instance()->log(ERROR,"Personaje 1 no definido. Se usa personaje 1 por defecto.");
+	};
+
+	Value personaje2 = root["personaje2"];
+	if (personaje2.empty()) {
+		setearPersonajePorDefecto(&(this->personaje2),defPersonaje2);
+		hayPersonaje1 = false;
+		Logger::Instance()->log(ERROR,"Personaje 2 no definido. Se usa personaje 2 por defecto.");
 	};
 
 	Value capasJson = root["capas"];
@@ -220,61 +306,14 @@ Parser::Parser(Value root, Value defRoot){
 		this->ventana.ancho = this-> escenario.ancho;
 	}
 
-	//Personaje
-	if (hayPersonaje) {
-		//-----ancho-----
-		try {	this->personaje.ancho = personaje.get("ancho",-1).asFloat();	}
-		catch(const exception &e) {
-			string str(e.what());
-			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de ancho del personaje.");
-			this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
-		}
-		if (this->personaje.ancho < 2) {
-			this->personaje.ancho = defPersonaje.get("ancho",-1).asFloat();
-			Logger::Instance()->log(WARNING,"Ancho logico del personaje invalido o no definido. Se usa valor por defecto.");
-		}
+	//Personaje1
+	if (hayPersonaje1) {
+		setearDatosPersonaje(&(this->personaje1), personaje1, defPersonaje1, 1);
+	}
 
-		//-----alto-----
-		try {	this->personaje.alto = personaje.get("alto",-1).asFloat();	}
-		catch(const exception &e) {
-			string str(e.what());
-			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de alto del personaje.");
-			this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
-		}
-		if (this->personaje.alto < 2) {
-			this->personaje.alto = defPersonaje.get("alto",-1).asFloat();
-			Logger::Instance()->log(WARNING,"Alto logico del personaje invalido o no definido. Se usa valor por defecto.");
-		}
-
-		//-----zindex-----
-		try {	this->personaje.z_index = personaje.get("zindex",-1).asInt();	}
-		catch(const exception &e) {
-			string str(e.what());
-			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de z-index del personaje.");
-			this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
-		}
-		if (this->personaje.z_index < 0) {
-			this->personaje.z_index = defPersonaje.get("zindex",-1).asInt();
-			Logger::Instance()->log(WARNING,"Z-Index del personaje invalido o no definido. Se usa valor por defecto.");
-		}
-
-		//-----orientacion-----
-		/*Es un poco distinto de los casos anteriores, ya que true/false/numero siempre es interpretable como bool y el
-		unico caso cuando no lo puede levantar es cuando es un string. O sea, si lo levanta asBool, es correcto siempre. */
-		try{	this->personaje.orientacion = personaje.get("orientacion",1).asBool();	}
-		catch(const exception &e) {
-			string str(e.what());
-			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de orientacion del personaje.");
-			this->personaje.orientacion = defPersonaje.get("orientacion",1).asBool();
-		}
-
-		//-----nombre-----
-		try {	this->personaje.nombre = personaje.get("nombre",-1).asString();	}
-		catch(const exception &e) {
-			string str(e.what());
-			Logger::Instance()->log(ERROR,str + " Se usara personaje (sprites) por defecto.");
-			this->personaje.nombre = defPersonaje.get("nombre",-1).asString();
-		}
+	//Personaje2
+	if (hayPersonaje2) {
+		setearDatosPersonaje(&(this->personaje2), personaje2, defPersonaje2, 2);
 	}
 
 	/*Llega con capas por defecto o asegurado que hay por lo menos una capa en json. Si las capas no son por defecto,

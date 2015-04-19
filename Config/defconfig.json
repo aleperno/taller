@@ -18,9 +18,43 @@
 		{	"imagen_fondo": "Images/arenas/jadesdesert/p_1.png",
 			"ancho": 300	}	],
 
-"personaje": {	"ancho": 	30,
+"personaje1": {	"ancho": 	30,
 		"alto": 	50,
-		"zindex":	5,
-		"orientacion":	false,
-		"nombre":	"liukang"	}
+		"zindex":	4,
+		"orientacion":	true,
+		"nombre":	"liukang",
+		"color-alternativo": {
+					"h-inicial": 40,
+					"h-final": 45,
+					"desplazamiento": 30
+					},
+		"joyconfig": {
+				"golpe-alto":	1,
+				"golpe-bajo":	2,
+				"patada-alta":	4,
+				"patada-baja":	3,
+				"defensa":	6,
+				"arrojar":	5
+				}
+		},
+
+"personaje2": {	"ancho": 	30,
+		"alto": 	50,
+		"zindex":	3,
+		"orientacion":	true,
+		"nombre":	"liukang",
+		"color-alternativo": {
+					"h-inicial": 40,
+					"h-final": 45,
+					"desplazamiento": 30
+					},
+		"joyconfig": {
+				"golpe-alto":	2,
+				"golpe-bajo":	1,
+				"patada-alta":	3,
+				"patada-baja":	4,
+				"defensa":	6,
+				"arrojar":	5
+				}
+		}
 }
