@@ -23,6 +23,7 @@ using namespace std;
 
 
 #define DEF_SLEEP_TIME 20
+#define WINDOW_MARGIN_TOLERANCE 10
 
 class GameController
 {

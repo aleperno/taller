@@ -26,13 +26,18 @@ class Ventana
 		//float _pos_x;
 		float _ancho_log;
 		float _alto_log;
-		Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log);
+		float _pos_log_x;
+		Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, EscenarioData escenario);
 		void view();
 		~Ventana(); //Destructor
 		void clearScreen();
 		void updateScreen();
 		SDL_Window* _gWindow;
 		SDL_Renderer* _gRenderer;
+		void moveLeft(float factor);
+		void moveRight(float factor);
+	private:
+		EscenarioData _escenario;
 };
 
 

@@ -6,12 +6,14 @@
  */
 #include <Ventana.h>
 
-Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log)
+Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, EscenarioData escenario)
 {
 	this-> _ancho_px = ancho_px;
 	this-> _alto_px = alto_px;
 	this-> _ancho_log = ancho_log;
 	this-> _alto_log = alto_log;
+	this-> _pos_log_x = (escenario.ancho - _ancho_log) / 2;
+	this->_escenario = escenario;
 
 	//Inicializacion ventana
 	SDL_Init( SDL_INIT_VIDEO );
@@ -47,4 +49,24 @@ void Ventana::clearScreen()
 void Ventana::updateScreen()
 {
 	SDL_RenderPresent( _gRenderer );
+}
+
+void Ventana::moveLeft(float factor)
+{
+	float new_x = this->_pos_log_x - factor;
+	if (new_x <= 0)
+	{
+		new_x = 0;
+	}
+	_pos_log_x = new_x;
+}
+
+void Ventana::moveRight(float factor)
+{
+	float new_x = this->_pos_log_x + factor;
+	if (new_x + this->_ancho_log >= _escenario.ancho)
+	{
+		new_x = _escenario.ancho - _ancho_log;
+	}
+	_pos_log_x = new_x;
 }

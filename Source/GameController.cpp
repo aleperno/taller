@@ -55,7 +55,7 @@ Ventana* GameController::getVentana(Parser* parser)
 	int alto_px = parser->ventana.alto_px;
 	float ancho_log = parser->ventana.ancho;
 	float alto_log = parser->escenario.alto;
-	Ventana* vent = new Ventana(ancho_px,alto_px,ancho_log,alto_log);
+	Ventana* vent = new Ventana(ancho_px,alto_px,ancho_log,alto_log,parser->escenario);
 	return vent;
 }
 
@@ -120,6 +120,7 @@ void GameController::run(int sleep_time)
 		_end_of_game = this->endOfGame(e);
 		this->getKeys();
 		//SDL_Delay(sleep_time);
+		//printf("La posicion de la ventana es %0.2f \n",_ventana->_pos_log_x);
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
@@ -207,19 +208,19 @@ void GameController::getKeys()
 void GameController::moveLayers()
 {
 	//Veo si debo mover las capas
-	if( this->_personaje->isRightMargin() && _personaje->isWalking() )
+	if( this->_personaje->isRightMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isWalking() )
 	{
 		this->moveLayersLeft(MOV_FACTOR2);
 	}
-	else if ( this->_personaje->isRightMargin() && _personaje->isJumpingRight() )
+	else if ( this->_personaje->isRightMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isJumpingRight() )
 	{
 		this->moveLayersLeft(MOV_FACTOR_JMP);
 	}
-	else if ( this->_personaje->isLeftMargin() && _personaje->isWalking() )
+	else if ( this->_personaje->isLeftMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isWalking() )
 	{
 		this-> moveLayersRight(MOV_FACTOR2);
 	}
-	else if ( this->_personaje->isLeftMargin() && _personaje->isJumpingLeft() )
+	else if ( this->_personaje->isLeftMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isJumpingLeft() )
 	{
 		this-> moveLayersRight(MOV_FACTOR_JMP);
 	}
@@ -231,6 +232,7 @@ void GameController::moveLayersRight(float factor)
 	{
 		_capas[i]->moveRight(factor);
 	}
+	this->_ventana->moveLeft(factor);
 }
 
 void GameController::moveLayersLeft(float factor)
@@ -239,4 +241,5 @@ void GameController::moveLayersLeft(float factor)
 	{
 		_capas[i]->moveLeft(factor);
 	}
+	this->_ventana->moveRight(factor);
 }

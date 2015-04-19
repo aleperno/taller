@@ -18,7 +18,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
 	this->_pos_y = escenario.y_piso;
-	this->_pos_x = ((- _ancho_log)+ventana->_ancho_log) /2;
+	this->_pos_x = (escenario.ancho - _ancho_log) /2;
 	this->_ancho_px = Personaje::getWidth(ventana,_ancho_log);
 	this->_alto_px = Personaje::getHeight(ventana,_alto_log);
 	this->_zIndex = data.z_index;
@@ -59,6 +59,7 @@ Personaje::~Personaje()
 
 void Personaje::view()
 {
+	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
 	if ( this->isJumping() || this->isFalling() )
 	{
@@ -219,7 +220,9 @@ int Personaje::get_x_px()
 {
 	float pos_r = 0; //La posicion en pixeles en reales
 	int pos_e = 0; //La posicion en pixeles verdadera (entero)
-	pos_r = ( _pos_x * _ancho_px) / _ancho_log;
+	float pos_rel = _pos_x - _ventana->_pos_log_x; //Posicion logica relativa a la ventana
+	pos_r = ( pos_rel * _ancho_px) / _ancho_log;
+	//pos_r = ( _pos_x * _ancho_px) / _ancho_log;
 	pos_e = (int) pos_r;
 	return pos_e;
 }
@@ -272,9 +275,9 @@ void Personaje::moveLeft(float factor)
 	}
 }
 
-bool Personaje::isLeftMargin()
+bool Personaje::isLeftMargin(float tolerance)
 {
-	return (_pos_x == 0);
+	return (_pos_x - _ventana->_pos_log_x <= tolerance);
 }
 
 void Personaje::duck()
@@ -338,10 +341,10 @@ void Personaje::continueAction(float factor_x, float factor_y)
 		{
 			new_x = _pos_x + (factor_x + getBeta(factor_x));
 			//cout << new_x - _pos_x << endl;
-			if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
+			if (new_x + this->_ancho_log <= _escenario.ancho)
 				_pos_x = new_x;
 			else
-				_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
+				_pos_x = _escenario.ancho - this->_ancho_log;
 		}
 		else if ( this->_isFallingLeft )
 		{
@@ -381,10 +384,10 @@ void Personaje::continueAction(float factor_x, float factor_y)
 		if ( this->_isJumpingRight )
 		{
 			new_x = _pos_x + (factor_x + getBeta(factor_x));
-			if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
+			if (new_x + this->_ancho_log <= _escenario.ancho)
 				_pos_x = new_x;
 			else
-				_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
+				_pos_x = _escenario.ancho - this->_ancho_log;
 
 		}
 		else if ( this->_isJumpingLeft )
@@ -429,20 +432,20 @@ void Personaje::moveRight(float factor)
 		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 		//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
 		float new_x = _pos_x + factor + getBeta(factor);
-		if (new_x + this->_ancho_log <= this->_ventana->_ancho_log)
+		if (new_x + this->_ancho_log <= _escenario.ancho)
 		{
 			_pos_x = new_x;
 		}
 		else
 		{
-			_pos_x = this->_ventana->_ancho_log - this->_ancho_log;
+			_pos_x = this->_escenario.ancho - this->_ancho_log;
 		}
 	}
 }
 
-bool Personaje::isRightMargin()
+bool Personaje::isRightMargin(float tolerance)
 {
-	return (_pos_x + this->_ancho_log == this->_ventana->_ancho_log );
+	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= tolerance);
 }
 
 float Personaje::getBeta(float factor)
