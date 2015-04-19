@@ -16,7 +16,6 @@ using namespace Json;
 using namespace std;
 
 #define DEFAULT_CONFIG_PATH "Config/defconfig.json"
-#define SPRITE_SHEET_PATH "Images/spritesheet.png"
 #define SPRITE_PARSE_PATH "Config/spriteparse.json"
 
 using namespace std;

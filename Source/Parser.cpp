@@ -92,8 +92,6 @@ Parser::Parser(Value defRoot) {
 	setearCapasPorDefecto(defRoot["capas"]);
 
 	setearParseoDeSprite();
-
-	this->spriteSheetPath = SPRITE_SHEET_PATH;
 }
 
 Parser::Parser(Value root, Value defRoot){
@@ -102,8 +100,6 @@ Parser::Parser(Value root, Value defRoot){
 	Value defEscenario = defRoot["escenario"];
 	Value defPersonaje = defRoot["personaje"];
 	Value defCapas = defRoot["capas"];
-
-	this->spriteSheetPath = SPRITE_SHEET_PATH;
 
 	bool hayVentana = true;
 	bool hayEscenario = true;
