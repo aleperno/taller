@@ -64,7 +64,7 @@ int main( int argc, char* args[] )
 	Parser::Initialize(path);
 	Parser* parser = Parser::Instance();
 
-	cout << parser->personaje1.ancho << endl << parser->personaje1.alto << endl << parser->personaje1.z_index << endl;
+	/*cout << parser->personaje1.ancho << endl << parser->personaje1.alto << endl << parser->personaje1.z_index << endl;
 	cout << parser->personaje1.orientacion << endl << parser->personaje1.nombre << endl;
 	cout << parser->personaje1.golpe_alto << endl << parser->personaje1.golpe_bajo << endl << parser->personaje1.patada_alta << endl;
 	cout << parser->personaje1.patada_baja << endl << parser->personaje1.defensa << endl << parser->personaje1.arrojar << endl;
@@ -74,7 +74,7 @@ int main( int argc, char* args[] )
 	cout << parser->personaje2.orientacion << endl << parser->personaje2.nombre << endl;
 	cout << parser->personaje2.golpe_alto << endl << parser->personaje2.golpe_bajo << endl << parser->personaje2.patada_alta << endl;
 	cout << parser->personaje2.patada_baja << endl << parser->personaje2.defensa << endl << parser->personaje2.arrojar << endl;
-	cout << parser->personaje2.h_inicial << endl << parser->personaje2.h_final << endl << parser->personaje2.desplazamiento << endl << endl;
+	cout << parser->personaje2.h_inicial << endl << parser->personaje2.h_final << endl << parser->personaje2.desplazamiento << endl << endl;*/
 
 	GameController* controlador = GameController::Instance(parser);
 	controlador->run();

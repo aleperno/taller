@@ -85,7 +85,7 @@ void Parser::setearParseoDeSprite() {
 
 	if(!parseoExitoso)
 	{
-		Logger::Instance()->log(ERROR,"El archivo del spritesheets contiene errores.");
+		Logger::Instance()->log(ERROR,"El archivo de parseo de sprites contiene errores.");
 	}
 
 	Value persValue = root[this->personaje1.nombre];
