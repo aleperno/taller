@@ -12,11 +12,15 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 #include <json.h>
 #include <Logger.h>
 #include <TextureHandler.h>
 #include <EscenarioData.h>
+
+#define SHAKE_INTENSITY 10
+#define SHAKE_LENGTH 20
 
 class Ventana
 {
@@ -36,8 +40,15 @@ class Ventana
 		SDL_Renderer* _gRenderer;
 		void moveLeft(float factor);
 		void moveRight(float factor);
+		void toggleShake();
+
 	private:
 		EscenarioData _escenario;
+		bool _isShaking;
+		int _shakeLenght = SHAKE_LENGTH;
+		int _shakeIntensity = SHAKE_INTENSITY;
+		void shake();
+		int _window_x,_window_y;
 };
 
 

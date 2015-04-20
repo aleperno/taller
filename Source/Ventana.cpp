@@ -14,13 +14,18 @@ Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, Esc
 	this-> _alto_log = alto_log;
 	this-> _pos_log_x = (escenario.ancho - _ancho_log) / 2;
 	this->_escenario = escenario;
-
+	this->_isShaking = false;
+	int x,y;
 	//Inicializacion ventana
 	SDL_Init( SDL_INIT_VIDEO );
 	this -> _gWindow = SDL_CreateWindow( "Mortal Kombat - Taller", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _ancho_px, _alto_px, SDL_WINDOW_SHOWN );
 	this -> _gRenderer = SDL_CreateRenderer( this->_gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	int imgFlags = IMG_INIT_PNG;
 	IMG_Init( imgFlags );
+
+	SDL_GetWindowPosition(_gWindow,&x,&y);
+	_window_x = x;
+	_window_y = y;
 }
 Ventana::~Ventana()
 {
@@ -48,6 +53,10 @@ void Ventana::clearScreen()
 
 void Ventana::updateScreen()
 {
+	if(_isShaking)
+	{
+		this->shake();
+	}
 	SDL_RenderPresent( _gRenderer );
 }
 
@@ -69,4 +78,23 @@ void Ventana::moveRight(float factor)
 		new_x = _escenario.ancho - _ancho_log;
 	}
 	_pos_log_x = new_x;
+}
+
+void Ventana::toggleShake()
+{
+	this->_isShaking = true;
+}
+
+void Ventana::shake()
+{
+	int x = rand() % _shakeIntensity;
+	int y = rand() % _shakeIntensity;
+	SDL_SetWindowPosition(_gWindow,_window_x + x,_window_y + y);
+	_shakeLenght--;
+	if(_shakeLenght == 0)
+	{
+		SDL_SetWindowPosition(_gWindow,_window_x,_window_y);
+		_shakeLenght = SHAKE_LENGTH;
+		_isShaking = false;
+	}
 }

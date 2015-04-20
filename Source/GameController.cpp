@@ -96,6 +96,13 @@ void GameController::printLayers()
 	this->_ventana->updateScreen();
 }
 
+void GameController::viewWindowPosition()
+{
+	int x,y;
+	SDL_GetWindowPosition(_ventana->_gWindow,&x,&y);
+	printf("La ventana esta en %d, %d \n",x,y);
+}
+
 bool GameController::endOfGame(SDL_Event e)
 {
 	bool end_of_game = false;
@@ -121,6 +128,7 @@ void GameController::run(int sleep_time)
 		this->getKeys();
 		//SDL_Delay(sleep_time);
 		//printf("La posicion de la ventana es %0.2f \n",_ventana->_pos_log_x);
+		//viewWindowPosition();
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
@@ -195,6 +203,9 @@ void GameController::getKeys()
 			this->_personaje->moveRight(MOV_FACTOR2);
 
 		}
+	}	else if( currentKeyStates[ SDL_SCANCODE_S ] )
+	{
+		_ventana->toggleShake();
 	}
 	else
 	{

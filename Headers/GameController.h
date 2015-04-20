@@ -51,6 +51,8 @@ class GameController
 		void moveLayersRight(float factor);
 		void moveLayersLeft(float factor);
 		void moveLayers();
+		//Testing
+		void viewWindowPosition();
 
 	public:
 		static GameController* Instance(Parser* parser = 0);
