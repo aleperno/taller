@@ -26,6 +26,9 @@ Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, Esc
 	SDL_GetWindowPosition(_gWindow,&x,&y);
 	_window_x = x;
 	_window_y = y;
+
+	this->_shakeIntensity = SHAKE_INTENSITY;
+	this ->_shakeLenght = SHAKE_LENGTH;
 }
 Ventana::~Ventana()
 {

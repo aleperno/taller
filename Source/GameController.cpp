@@ -6,10 +6,10 @@
  */
 #include <GameController.h>
 #define MOV_FACTOR 300;   //Fraccion de la capa que se mueve por ciclo
-#define MOV_FACTOR2 1.0   //
-#define MOV_FACTOR_JMP 1.5
-#define MOVE_P_FACTOR 1.3 //
-#define JMP_FACTOR 3
+#define MOV_FACTOR2 0.8   //
+#define MOV_FACTOR_JMP 1.2
+#define MOVE_P_FACTOR 1 //
+#define JMP_FACTOR 2
 
 GameController* GameController::_instance = 0;
 

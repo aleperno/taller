@@ -45,8 +45,8 @@ class Ventana
 	private:
 		EscenarioData _escenario;
 		bool _isShaking;
-		int _shakeLenght = SHAKE_LENGTH;
-		int _shakeIntensity = SHAKE_INTENSITY;
+		int _shakeLenght;
+		int _shakeIntensity;
 		void shake();
 		int _window_x,_window_y;
 };

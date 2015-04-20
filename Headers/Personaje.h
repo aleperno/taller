@@ -20,7 +20,7 @@ using namespace std;
 #include <PersonajeData.h>
 #include <EscenarioData.h>
 
-#define SPEED 5;
+#define SPEED 3;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
