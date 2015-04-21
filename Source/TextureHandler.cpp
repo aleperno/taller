@@ -34,7 +34,7 @@ bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
 	SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path
-	SDL_Surface* loadedSurface;
+	//SDL_Surface* loadedSurface;
 	if(img_PNG){ 
 		loadedSurface = IMG_Load( path.c_str() );
 		if( loadedSurface == NULL ){

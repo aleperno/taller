@@ -34,7 +34,7 @@ class GameController
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		vector<Capa*> _capas;
-		Personaje* _personaje;
+		Personaje* _personaje;		
 		bool _end_of_game;
 
 		//Metodos

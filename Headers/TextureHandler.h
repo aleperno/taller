@@ -46,13 +46,15 @@ class TextureHandler
 		int getWidth();
 		int getHeight();
 
+		SDL_Surface* loadedSurface;
+
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;
 		
 		//The actual window
 		SDL_Renderer* mRenderer;
-
+		
 		//Image dimensions
 		int mWidth;
 		int mHeight;

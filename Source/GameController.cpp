@@ -92,6 +92,15 @@ void GameController::printLayers()
 	{
 		this->_personaje->view();
 	}
+
+	//Solo para pruebas
+	/*SDL_Rect collisionRect = Personaje::Interseccion(_personaje->Bordes(), _personaje_2->Bordes());
+    if(collisionRect.w != 0 && collisionRect.h != 0)
+        if(Personaje::CheckCollision(_personaje, _personaje_2))
+            printf("Colision");*/
+	//Fin solo para pruebas
+
+
 	//ActualizoPantalla
 	this->_ventana->updateScreen();
 }

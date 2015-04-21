@@ -85,6 +85,13 @@ class Personaje
 		bool isJumpingRight();
 		bool isJumpingLeft();
 		void continueAction(float factor_x, float factor_y);
+
+		SDL_Rect Bordes();
+        SDL_Rect BordesFrame();
+        SDL_Rect BordesNormalizados(const SDL_Rect& rect);
+        static SDL_Rect Interseccion(const SDL_Rect& boundsA, const SDL_Rect& boundsB);
+        static bool CheckCollision(Personaje* personajeA, Personaje* personajeB);
+        static bool AlphaXY(Personaje* personaje, int x, int y);
 };
 
 
