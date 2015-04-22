@@ -63,10 +63,7 @@ bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
 			//Get image dimensions
 			mWidth = loadedSurface->w;
 			mHeight = loadedSurface->h;
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
+		}		
 	}
 
 	//Return success
@@ -79,6 +76,7 @@ void TextureHandler::free()
 	//Free texture if it exists
 	if( mTexture != NULL )
 	{
+		SDL_FreeSurface( loadedSurface );
 		SDL_DestroyTexture( mTexture );
 		mTexture = NULL;
 		mWidth = 0;
