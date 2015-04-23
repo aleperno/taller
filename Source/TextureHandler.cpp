@@ -34,7 +34,7 @@ bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
 	SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path
-	//SDL_Surface* loadedSurface;
+	SDL_Surface* loadedSurface;
 	if(img_PNG){ 
 		loadedSurface = IMG_Load( path.c_str() );
 		if( loadedSurface == NULL ){
@@ -66,6 +66,8 @@ bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
 		}		
 	}
 
+	SDL_FreeSurface( loadedSurface );
+
 	//Return success
 	mTexture = newTexture;
 	return mTexture != NULL;
@@ -76,7 +78,6 @@ void TextureHandler::free()
 	//Free texture if it exists
 	if( mTexture != NULL )
 	{
-		SDL_FreeSurface( loadedSurface );
 		SDL_DestroyTexture( mTexture );
 		mTexture = NULL;
 		mWidth = 0;
