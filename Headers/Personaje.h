@@ -35,20 +35,20 @@ class Personaje
 		PersonajeData _personajeData;
 		float _alto_log;
 		float _ancho_log;
-		float _alto_px;
-		float _ancho_px;
-		float _factor_escala; //Factor de escala
 		float _pos_x;
 		float _pos_y;
-		static int getWidth(Ventana* ventana,float ancho_log_capa);
-		static int getHeight(Ventana* ventana, float alto_log_capa);
+		float _alto_px;
+		float _ancho_px;
 		int get_x_px();
 		int get_y_px();
+		float _factor_escala; //Factor de escala
+		static int getWidth(Ventana* ventana,float ancho_log_capa);
+		static int getHeight(Ventana* ventana, float alto_log_capa);
 		float getAlpha(float factor);
-		float getBeta(float factor);
+		float getBeta(float factor);	
 		SDL_Rect* sprites;
 		SDL_Rect* loadMedia(PersonajeData data);
-		int _lastFrame;
+		int _lastFrame;		
 		bool _isWalking;
 		bool _isDucking;
 		bool _isJumping;
@@ -62,6 +62,7 @@ class Personaje
 		void viewJump();
 		void viewJumpRight();
 		void viewJumpLeft();
+		void setBoundingBox();
 
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
@@ -85,13 +86,7 @@ class Personaje
 		bool isJumpingRight();
 		bool isJumpingLeft();
 		void continueAction(float factor_x, float factor_y);
-
-		SDL_Rect Bordes();
-        SDL_Rect BordesFrame();
-        SDL_Rect BordesNormalizados(const SDL_Rect& rect);
-        static SDL_Rect Interseccion(const SDL_Rect& boundsA, const SDL_Rect& boundsB);
-        static bool CheckCollision(Personaje* personajeA, Personaje* personajeB);
-        static bool AlphaXY(Personaje* personaje, int x, int y);
+		SDL_Rect boundingBox;
 };
 
 

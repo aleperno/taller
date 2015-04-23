@@ -94,16 +94,61 @@ void GameController::printLayers()
 	}
 
 	//Solo para pruebas
-	/*SDL_Rect collisionRect = Personaje::Interseccion(_personaje->Bordes(), _personaje_2->Bordes());
-    if(collisionRect.w != 0 && collisionRect.h != 0)
-        if(Personaje::CheckCollision(_personaje, _personaje_2))
-            printf("Colision");*/
+	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje->boundingBox );
+
+	SDL_Rect wall;
+    wall.x = 300;
+    wall.y = 300;
+    wall.w = 100;
+    wall.h = 100;
+	SDL_RenderDrawRect( _ventana->_gRenderer, &wall );
+
+	bool colisiona = hayColision(_personaje->boundingBox, wall);
+	if(colisiona)
+	{
+		//Pruebo colision en una accion
+		if(_personaje->_isJumping)
+			printf("X ");
+	}*/
 	//Fin solo para pruebas
 
 
 	//ActualizoPantalla
 	this->_ventana->updateScreen();
 }
+
+
+bool GameController::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
+{
+	float factor_cercania = 0.25f;
+	bool colision = true;
+
+	//Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
+    int izqBB1 = boundingBox_1.x;
+	int izqBB2 = boundingBox_2.x;
+    int rgtBB1 = boundingBox_1.x + boundingBox_1.w;
+	int rgtBB2 = boundingBox_2.x + boundingBox_2.w;;
+    
+	int upBB1 = boundingBox_1.y;
+	int upBB2 = boundingBox_2.y;
+	int downBB1 = boundingBox_1.y + boundingBox_1.h;
+    int downBB2 = boundingBox_2.y + boundingBox_2.h;
+
+	//Chequeo las condiciones de no-colision
+    if( downBB1 <= upBB2 + factor_cercania * boundingBox_2.h )
+        colision = false;
+    if( upBB1 + factor_cercania * boundingBox_2.h >= downBB2 )
+        colision = false;
+    if( rgtBB1 <= izqBB2 + factor_cercania * boundingBox_2.w )
+        colision = false;
+    if( izqBB1 + factor_cercania * boundingBox_2.w >= rgtBB2 )
+        colision = false;
+
+	//Si no se da ninguna condicion de no-colision, entonces hay colision
+    return colision;
+}
+
+
 
 void GameController::viewWindowPosition()
 {

@@ -33,18 +33,17 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+	this->setBoundingBox();
 	//cout << _pos_x << endl;
 }
 
-
-//*****************************************************************************************************//
-//**************************************** COLISIONES *************************************************//
-//*****************************************************************************************************//
-
-//*****************************************************************************************************//
-//************************************** FIN COLISIONES ***********************************************//
-//*****************************************************************************************************//
-
+void Personaje::setBoundingBox()
+{
+	boundingBox.x = this->get_x_px();
+	boundingBox.y = this->get_y_px();
+	boundingBox.w = this->_ancho_px;
+	boundingBox.h = this->_alto_px;
+}
 
 SDL_Rect* Personaje::loadMedia(PersonajeData data)
 {
@@ -69,6 +68,7 @@ Personaje::~Personaje()
 
 void Personaje::view()
 {
+	this->setBoundingBox();
 	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
 	if ( this->isJumping() || this->isFalling() )

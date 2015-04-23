@@ -38,6 +38,7 @@ class GameController
 		bool _end_of_game;
 
 		//Metodos
+		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 		static GameController* _instance;
 		static Ventana* getVentana(Parser* parser);
 		static EscenarioData getEscenario(Parser* parser);
