@@ -14,6 +14,7 @@ class EscenarioData
 		float ancho;
 		float alto;
 		float y_piso;
+		int	z_index;
 };
 
 #endif /* HEADERS_ESCRITORIO_H_ */

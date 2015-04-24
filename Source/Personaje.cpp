@@ -21,7 +21,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_pos_x = (escenario.ancho - _ancho_log) /2;
 	this->_ancho_px = Personaje::getWidth(ventana,_ancho_log);
 	this->_alto_px = Personaje::getHeight(ventana,_alto_log);
-	this->_zIndex = data.z_index;
+	this->_zIndex = escenario.z_index;
 	this->_personajeData = data;
 	this->sprites = Personaje::loadMedia(data);
 	this->_lastFrame = 0;

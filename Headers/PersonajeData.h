@@ -15,7 +15,6 @@ class PersonajeData
 	public:
 		float ancho;
 		float alto;
-		int z_index;
 		bool orientacion;
 		string nombre;
 

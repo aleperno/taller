@@ -14,12 +14,12 @@ void Parser::setearEscenarioPorDefecto(Value defEscenario){
 	this->escenario.ancho = defEscenario.get("ancho",-1).asFloat();
 	this->escenario.alto = defEscenario.get("alto",-1).asFloat();
 	this->escenario.y_piso = defEscenario.get("ypiso",-1).asFloat();
+	this->escenario.z_index = defEscenario.get("zindex",-1).asInt();
 }
 
 void Parser::setearPersonajePorDefecto(PersonajeData* personaje,Value defPersonaje){
 	personaje->ancho = defPersonaje.get("ancho",-1).asFloat();
 	personaje->alto = defPersonaje.get("alto",-1).asFloat();
-	personaje->z_index = defPersonaje.get("zindex",-1).asInt();
 	personaje->orientacion = defPersonaje.get("orientacion",1).asBool();
 	personaje->nombre = defPersonaje.get("nombre",1).asString();
 
@@ -132,20 +132,6 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 		if (personaje->alto < 2) {
 			personaje->alto = persDef.get("alto",-1).asFloat();
 			string msg = "Alto logico del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
-			Logger::Instance()->log(WARNING,msg);
-		}
-
-	//-----zindex-----
-	try {	personaje->z_index = persValue.get("zindex",-1).asInt();	}
-		catch(const exception &e) {
-			string str(e.what());
-			string msg = " Se usara valor por defecto de z-index del personaje " + to_string(static_cast<long double>(num)) + ".";
-			Logger::Instance()->log(ERROR,str + msg);
-			personaje->z_index = persDef.get("zindex",-1).asInt();
-		}
-		if (personaje->z_index < 0) {
-			personaje->z_index = persDef.get("zindex",-1).asInt();
-			string msg = "Z-index del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
 			Logger::Instance()->log(WARNING,msg);
 		}
 
@@ -318,6 +304,18 @@ Parser::Parser(Value root, Value defRoot){
 		if (this->escenario.y_piso < 0) {
 			this->escenario.y_piso = defEscenario.get("ypiso",-1).asFloat();
 			Logger::Instance()->log(WARNING,"Altura logica del piso invalida o no definida. Se usa valor por defecto.");
+		}
+
+		//-----zindex-----
+		try {	this->escenario.z_index = escenario.get("zindex",-1).asInt();	}
+		catch(const exception &e) {
+			string str(e.what());
+			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de z-index para personajes.");
+			this->escenario.z_index = defEscenario.get("zindex",-1).asInt();
+		}
+		if (this->escenario.z_index < 0) {
+			this->escenario.z_index = defEscenario.get("zindex",-1).asInt();
+			Logger::Instance()->log(WARNING,"Z-index invalido o no definido. Se usa valor por defecto.");
 		}
 	}
 
