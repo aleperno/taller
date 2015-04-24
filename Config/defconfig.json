@@ -21,7 +21,6 @@
 
 "personaje1": {	"ancho": 	30,
 		"alto": 	50,
-		"orientacion":	true,
 		"nombre":	"liukang",
 
 		"golpe-alto":	1,
@@ -34,7 +33,6 @@
 
 "personaje2": {	"ancho": 	30,
 		"alto": 	50,
-		"orientacion":	false,
 		"nombre":	"subzero",
 
 		"golpe-alto":	2,

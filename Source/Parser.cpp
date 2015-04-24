@@ -20,7 +20,6 @@ void Parser::setearEscenarioPorDefecto(Value defEscenario){
 void Parser::setearPersonajePorDefecto(PersonajeData* personaje,Value defPersonaje){
 	personaje->ancho = defPersonaje.get("ancho",-1).asFloat();
 	personaje->alto = defPersonaje.get("alto",-1).asFloat();
-	personaje->orientacion = defPersonaje.get("orientacion",1).asBool();
 	personaje->nombre = defPersonaje.get("nombre",1).asString();
 
 	personaje->golpe_alto = defPersonaje.get("golpe-alto",-1).asInt();
@@ -135,17 +134,6 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 			Logger::Instance()->log(WARNING,msg);
 		}
 
-	//-----orientacion-----
-	/*Es un poco distinto de los casos anteriores, ya que true/false/numero siempre es interpretable como bool y el
-	unico caso cuando no lo puede levantar es cuando es un string. O sea, si lo levanta asBool, es correcto siempre. */
-	try{	personaje->orientacion = persValue.get("orientacion",1).asBool();	}
-		catch(const exception &e) {
-			string str(e.what());
-			string msg = " Se usara valor por defecto de orientacion del personaje " + to_string(static_cast<long double>(num)) + ".";
-			Logger::Instance()->log(ERROR,str + msg);
-			personaje->orientacion = persDef.get("orientacion",1).asBool();
-		}
-
 	//-----nombre-----
 	//Mientras no hay error de parseo, todo es levantable como string.
 	try {	personaje->nombre = persValue.get("nombre",-1).asString();	}
@@ -171,7 +159,9 @@ Parser::Parser(Value defRoot) {
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
 	setearPersonajePorDefecto(&(this->personaje1),defRoot["personaje1"]);
+	this->personaje1.orientacion = false;	//presonaje 1 es el que aparece al lado izquierdo, mirando a la derecha
 	setearPersonajePorDefecto(&(this->personaje2),defRoot["personaje2"]);
+	this->personaje2.orientacion = true;	// [ P1->		<-P2 ]
 	setearCapasPorDefecto(defRoot["capas"]);
 
 	setearParseoDeSprite();
@@ -328,11 +318,13 @@ Parser::Parser(Value root, Value defRoot){
 	if (hayPersonaje1) {
 		setearDatosPersonaje(&(this->personaje1), personaje1, defPersonaje1, 1);
 	}
+	this->personaje1.orientacion = false;
 
 	//Personaje2
 	if (hayPersonaje2) {
 		setearDatosPersonaje(&(this->personaje2), personaje2, defPersonaje2, 2);
 	}
+	this->personaje2.orientacion = true;
 
 	setearParseoDeSprite();
 
