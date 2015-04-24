@@ -5,20 +5,37 @@
 
 "escenario": {	"ancho": 	300,
 		"alto": 	100,
-		"ypiso":	7	},
+		"ypiso":	7,
+		"zindex":	3	},
 
 "capas": [	{	"imagen_fondo": "Images/arenas/tower/3.png",
 			"ancho": 200	},
 		{	"imagen_fondo": "Images/arenas/tower/2.png",
 			"ancho": 295	},
 		{	"imagen_fondo": "Images/arenas/tower/1.png",
-			"ancho": 295},
+			"ancho": 295	},
 		{	"imagen_fondo": "Images/arenas/tower/0.png",
 			"ancho": 300	}	],
 
-"personaje": {	"ancho": 	30,
+"personaje1": {	"ancho": 	30,
 		"alto": 	50,
-		"zindex":	3,
-		"orientacion":	true,
-		"nombre":	"liukang"	}
+		"nombre":	"subzero",
+
+		"golpe-alto":	0,
+		"golpe-bajo":	1,
+		"patada-alta":	2,
+		"patada-baja":	3,
+		"defensa":	4,
+		"arrojar":	5	},
+
+"personaje2": {	"ancho": 	30,
+		"alto": 	50,
+		"nombre":	"liukang",
+
+		"golpe-alto":	0,
+		"golpe-bajo":	1,
+		"patada-alta":	2,
+		"patada-baja":	3,
+		"defensa":	4,
+		"arrojar":	5	}
 }

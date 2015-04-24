@@ -5,7 +5,8 @@
 
 "escenario": {	"ancho": 	300,
 		"alto": 	100,
-		"ypiso":	7	},
+		"ypiso":	7,
+		"zindex":	4	},
 
 "capas": [	{	"imagen_fondo": "Images/arenas/scorpionslair/sl_bg.png",
 			"ancho": 175	},
@@ -18,15 +19,31 @@
 			"animado" : true,
 			"spritesCant" : 3,
 			"animDelay" : 10,
-			"height_px" : 304},
+			"height_px" : 304	},
 		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_1.png",
 			"ancho": 300	},
 		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_0.png",
 			"ancho": 300	}	],
 
-"personaje": {	"ancho": 	30,
+"personaje1": {	"ancho": 	30,
 		"alto": 	50,
-		"zindex":	4,
-		"orientacion":	false,
-		"nombre":	"subzero"	}
+		"nombre":	"subzero",
+
+		"golpe-alto":	0,
+		"golpe-bajo":	1,
+		"patada-alta":	2,
+		"patada-baja":	3,
+		"defensa":	4,
+		"arrojar":	5	},
+
+"personaje2": {	"ancho": 	30,
+		"alto": 	50,
+		"nombre":	"liukang",
+
+		"golpe-alto":	0,
+		"golpe-bajo":	1,
+		"patada-alta":	2,
+		"patada-baja":	3,
+		"defensa":	4,
+		"arrojar":	5	}
 }

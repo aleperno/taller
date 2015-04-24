@@ -28,8 +28,7 @@
 		"patada-alta":	2,
 		"patada-baja":	3,
 		"defensa":	4,
-		"arrojar":	5
-	},
+		"arrojar":	5	},
 
 "personaje2": {	"ancho": 	30,
 		"alto": 	50,
@@ -40,6 +39,5 @@
 		"patada-alta":	2,
 		"patada-baja":	3,
 		"defensa":	4,
-		"arrojar":	5
-	}
+		"arrojar":	5	}
 }
