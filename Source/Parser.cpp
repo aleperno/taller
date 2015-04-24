@@ -66,8 +66,31 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->imgPath = persValue["imgSrc"].asString();
 
 	personaje->h_inicial = persValue.get("color-alternativo",-1).get("h-inicial",-1).asInt();
+	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
+	while (personaje->h_inicial > 359) {
+		personaje->h_inicial -= 360;
+	}
+	while (personaje->h_inicial < 0) {
+		personaje->h_inicial += 360;
+	}
+	
 	personaje->h_final = persValue.get("color-alternativo",-1).get("h-final",-1).asInt();
+	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
+	while (personaje->h_final > 359) {
+		personaje->h_final -= 360;
+	}
+	while (personaje->h_final < 0) {
+		personaje->h_final += 360;
+	}
+
 	personaje->desplazamiento = persValue.get("color-alternativo",-1).get("desplazamiento",-1).asInt();
+	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
+	while (personaje->desplazamiento > 359) {
+		personaje->desplazamiento -= 360;
+	}
+	while (personaje->desplazamiento < 0) {
+		personaje->desplazamiento += 360;
+	}
 }
 
 void Parser::setearParseoDeSprite() {
