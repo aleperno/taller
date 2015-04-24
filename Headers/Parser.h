@@ -25,6 +25,8 @@ class Parser{
 	private:
 		void setearParseoDeSprite();
 		void parsearSpritePersonaje(PersonajeData* personaje, Value persValue);
+		bool asignarBoton(int* boton, bool (&teclasUsadas)[6], Value persValue, int num, string valueString, string botonString);
+		void corregirBoton(int* boton, bool (&teclasUsadas)[6], int num, string botonString);
 		void setearDatosPersonaje(PersonajeData* personaje, Value persValue, Value persDef, int num);
 
 		//Este se usa cuando o no se especifico archivo, o no existe o tiene error de sintaxis

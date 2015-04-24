@@ -19,11 +19,11 @@
 		"alto": 	50,
 		"nombre":	"subzero",
 
-		"golpe-alto":	1,
-		"golpe-bajo":	2,
-		"patada-alta":	4,
+		"golpe-alto":	0,
+		"golpe-bajo":	1,
+		"patada-alta":	2,
 		"patada-baja":	3,
-		"defensa":	6,
+		"defensa":	4,
 		"arrojar":	5
 	},
 
@@ -31,11 +31,11 @@
 		"alto": 	50,
 		"nombre":	"liukang",
 
-		"golpe-alto":	2,
+		"golpe-alto":	0,
 		"golpe-bajo":	1,
-		"patada-alta":	3,
-		"patada-baja":	4,
-		"defensa":	6,
+		"patada-alta":	2,
+		"patada-baja":	3,
+		"defensa":	4,
 		"arrojar":	5
 	}
 }

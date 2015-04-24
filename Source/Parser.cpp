@@ -128,6 +128,42 @@ void Parser::setearParseoDeSprite() {
 
 }
 
+bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[6], Value persValue, int num, string valueString, string botonString) {
+	try	{	*boton = persValue.get(valueString,-1).asInt();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			return false;
+		}
+		if ((*boton < 0) || (*boton > 5)) {
+			string msg = "Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + " es invalido o no definido.";
+			Logger::Instance()->log(WARNING,msg);
+			return false;
+		} else {
+			if (teclasUsadas[*boton] == true) {
+				string msg = "Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + " ya se usa.";
+				Logger::Instance()->log(WARNING,msg);
+				return false;
+			} else {
+				teclasUsadas[*boton] = true;
+				return true;
+			}
+		}
+}
+
+void Parser::corregirBoton(int* boton, bool (&teclasUsadas)[6], int num, string botonString){
+		int k = 0;
+		while (teclasUsadas[k]){
+			k++;
+		}
+		*boton = k;
+		teclasUsadas[k] = true;
+		string msg = "Personaje " + to_string(static_cast<long double>(num)) + ", boton de "
+						+ botonString + ": " + to_string(static_cast<long double>(k)) + ".";
+		Logger::Instance()->log(WARNING,msg);
+}
+
 void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Value persDef, int num){
 	//-----ancho-----
 	try {	personaje->ancho = persValue.get("ancho",-1).asFloat();	}
@@ -167,15 +203,26 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 			personaje->nombre = persDef.get("nombre",-1).asString();
 		}
 
-	//-----joyconfig----- POR AHORA ES ASI
-	personaje->golpe_alto = persValue.get("golpe-alto",-1).asInt();
-	personaje->golpe_bajo = persValue.get("golpe-bajo",-1).asInt();
-	personaje->patada_alta = persValue.get("patada-alta",-1).asInt();
-	personaje->patada_baja = persValue.get("patada-baja",-1).asInt();
-	personaje->defensa = persValue.get("defensa",-1).asInt();
-	personaje->arrojar = persValue.get("arrojar",-1).asInt();
-}
+	//-----joyconfig-----
+	//Teclas validas: 0, 1, 2, 3, 4, 5
+	//Primero asigna todos valores validos. Luego a los que son invalidos les pone teclas desocupadas en orden creciente.
+	bool teclasUsadas[6] = { false };
 
+	bool BotonGolpeAlto = asignarBoton(&(personaje->golpe_alto), teclasUsadas, persValue, num, "golpe-alto", "golpe alto");
+	bool BotonGolpeBajo = asignarBoton(&(personaje->golpe_bajo), teclasUsadas, persValue, num, "golpe-bajo", "golpe bajo");
+	bool BotonPatadaAlta = asignarBoton(&(personaje->patada_alta), teclasUsadas, persValue, num, "patada-alta", "patada alta");
+	bool BotonPatadaBaja = asignarBoton(&(personaje->patada_baja), teclasUsadas, persValue, num, "patada-baja", "patada baja");
+	bool BotonDefensa = asignarBoton(&(personaje->defensa), teclasUsadas, persValue, num, "defensa", "defensa");
+	bool BotonArrojar = asignarBoton(&(personaje->arrojar), teclasUsadas, persValue, num, "arrojar", "arrojar");
+	
+	if (!BotonGolpeAlto)	corregirBoton(&(personaje->golpe_alto), teclasUsadas, num, "golpe alto");
+	if (!BotonGolpeBajo)	corregirBoton(&(personaje->golpe_bajo), teclasUsadas, num, "golpe bajo");
+	if (!BotonPatadaAlta)	corregirBoton(&(personaje->patada_alta), teclasUsadas, num, "patada alta");
+	if (!BotonPatadaBaja)	corregirBoton(&(personaje->patada_baja), teclasUsadas, num, "patada baja");
+	if (!BotonDefensa)	corregirBoton(&(personaje->defensa), teclasUsadas, num, "defensa");
+	if (!BotonArrojar)	corregirBoton(&(personaje->arrojar), teclasUsadas, num, "arrojar");
+
+}
 
 Parser::Parser(Value defRoot) {
 
