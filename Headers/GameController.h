@@ -20,6 +20,7 @@ using namespace std;
 #include <Ventana.h>
 #include <Capa.h>
 #include <Personaje.h>
+#include <StringUtil.h>
 
 
 #define DEF_SLEEP_TIME 20
@@ -52,6 +53,7 @@ class GameController
 		void moveLayersRight(float factor);
 		void moveLayersLeft(float factor);
 		void moveLayers();
+		bool iniciarSDL();
 		//Testing
 		void viewWindowPosition();
 

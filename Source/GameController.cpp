@@ -35,12 +35,21 @@ void GameController::KillController()
 
 GameController::GameController(Parser* parser)
 {
+	//Initialize SDL
+	if(!iniciarSDL())
+		Logger::Instance()->log(ERROR,"SDL could not initialize!");
+	else
+		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(SDL_NumJoysticks()));
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje = GameController::getPersonaje(_ventana,parser,_escenario);
 	_end_of_game = false;
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
+}
+
+bool GameController::iniciarSDL() {
+	return (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
 }
 
 Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario)

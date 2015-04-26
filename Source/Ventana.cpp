@@ -17,7 +17,6 @@ Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, Esc
 	this->_isShaking = false;
 	int x,y;
 	//Inicializacion ventana
-	SDL_Init( SDL_INIT_VIDEO );
 	this -> _gWindow = SDL_CreateWindow( "Mortal Kombat - Taller", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _ancho_px, _alto_px, SDL_WINDOW_SHOWN );
 	this -> _gRenderer = SDL_CreateRenderer( this->_gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	int imgFlags = IMG_INIT_PNG;
