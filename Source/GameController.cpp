@@ -130,6 +130,7 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 void GameController::actualizarHealthbars() {
 	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
 	this->hud2.health.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
+	this->hud2.health.x = _ventana->_ancho_px - (this->hud2.externo.w-this->hud2.interno.w)/2 - this->hud2.health.w;
 }
 
 void GameController::printHUD() {
@@ -243,6 +244,27 @@ bool GameController::endOfGame(SDL_Event* e)
 		if( e->type == SDL_QUIT )
 		{
 			end_of_game = true;
+		}
+		if( e->type == SDL_KEYDOWN )
+		{
+			switch( e->key.keysym.sym ) {
+			case SDLK_1:
+				_personaje1->healthPoints -= 10;
+				break;
+			case SDLK_2:
+				_personaje2->healthPoints -= 10;
+				break;
+			}
+
+			if (_personaje1->healthPoints <= 0) {
+				Logger::Instance()->log(WARNING,"Gano personaje 2.");
+				this->reloadConfig();
+			}
+
+			if (_personaje2->healthPoints <= 0) {
+				Logger::Instance()->log(WARNING,"Gano personaje 1.");
+				this->reloadConfig();
+			}
 		}
 	}
 	return end_of_game;
