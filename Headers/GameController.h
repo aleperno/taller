@@ -55,6 +55,7 @@ class GameController
 		static Personaje* getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, int numero);
 		void printLayers();
 		void prepararHUD();
+		void actualizarHealthbars();
 		void printHUD();
 		bool endOfGame(SDL_Event* e);
 		void close();
