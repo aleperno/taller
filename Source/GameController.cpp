@@ -26,8 +26,10 @@ void GameController::KillController()
 {
 	delete this->_ventana;
 	_ventana = NULL;
-	delete this->_personaje;
-	_personaje = NULL;
+	delete this->_personaje1;
+	_personaje1 = NULL;
+	delete this->_personaje2;
+	_personaje2 = NULL;
 	delete _instance;
 	_instance = NULL;
 	Logger::Instance()->log(DEBUG,"Se destruye instancia de GameController");
@@ -43,7 +45,8 @@ GameController::GameController(Parser* parser)
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje = GameController::getPersonaje(_ventana,parser,_escenario);
+	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
+	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
 	_end_of_game = false;
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
@@ -52,10 +55,18 @@ bool GameController::iniciarSDL() {
 	return (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
 }
 
-Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario)
+Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, int numero)
 {
-	Personaje* pers = new Personaje(ventana,parser->personaje1,escenario);
-	return pers;
+	Personaje* pers;
+	switch (numero) {
+	case 1:
+		pers = new Personaje(ventana,parser->personaje1,escenario);
+		return pers;
+	case 2:
+		pers = new Personaje(ventana,parser->personaje2,escenario);
+		return pers;
+	}
+	
 }
 
 Ventana* GameController::getVentana(Parser* parser)
@@ -92,18 +103,18 @@ void GameController::printLayers()
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->view();
-		if (this->_personaje->_zIndex == (i))
+		if (this->_personaje1->_zIndex == (i))
 		{
-			this->_personaje->view();
+			this->_personaje1->view();
 		}
 	}
-	if (this->_personaje->_zIndex >= _capas.size())
+	if (this->_personaje1->_zIndex >= _capas.size())
 	{
-		this->_personaje->view();
+		this->_personaje1->view();
 	}
 
 	//Solo para pruebas
-	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje->boundingBox );
+	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje1->boundingBox );
 
 	SDL_Rect wall;
     wall.x = 300;
@@ -112,7 +123,7 @@ void GameController::printLayers()
     wall.h = 100;
 	SDL_RenderDrawRect( _ventana->_gRenderer, &wall );
 
-	bool colisiona = hayColision(_personaje->boundingBox, wall);
+	bool colisiona = hayColision(_personaje1->boundingBox, wall);
 	if(colisiona)
 	{
 		//Pruebo colision en una accion
@@ -217,10 +228,16 @@ void GameController::reloadConfig()
 	Parser::Instance()->reload();
 	Parser* parser = Parser::Instance();
 	this->close();
+
+	if(!iniciarSDL())
+		Logger::Instance()->log(ERROR,"SDL could not initialize!");
+	else
+		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(SDL_NumJoysticks()));
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje = GameController::getPersonaje(_ventana,parser,_escenario);
+	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
+	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
 }
 
 void GameController::getKeys()
@@ -236,34 +253,34 @@ void GameController::getKeys()
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
 	{
-		this->_personaje->jumpLeft(JMP_FACTOR);
+		this->_personaje1->jumpLeft(JMP_FACTOR);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_RIGHT ])
 	{
-		this->_personaje->jumpRight(JMP_FACTOR);
+		this->_personaje1->jumpRight(JMP_FACTOR);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
-		this->_personaje->jump(JMP_FACTOR);
+		this->_personaje1->jump(JMP_FACTOR);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ])
 	{
-		this->_personaje->duck();
+		this->_personaje1->duck();
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
 		//this-> moveLayersRight();
-		if ( !this->_personaje->isJumping() && !this->_personaje->isFalling() )
+		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() )
 		{
-			this->_personaje->moveLeft(MOV_FACTOR2);
+			this->_personaje1->moveLeft(MOV_FACTOR2);
 		}
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
 		//this-> moveLayersLeft();
-		if ( !this->_personaje->isJumping() && !this->_personaje->isFalling() )
+		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() )
 		{
-			this->_personaje->moveRight(MOV_FACTOR2);
+			this->_personaje1->moveRight(MOV_FACTOR2);
 
 		}
 	}	else if( currentKeyStates[ SDL_SCANCODE_S ] )
@@ -272,9 +289,9 @@ void GameController::getKeys()
 	}
 	else
 	{
-		_personaje->idle();
+		_personaje1->idle();
 	}
-	_personaje->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
+	_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
 	//Veo si debo correr las capas
 	this->moveLayers();
 }
@@ -282,19 +299,19 @@ void GameController::getKeys()
 void GameController::moveLayers()
 {
 	//Veo si debo mover las capas
-	if( this->_personaje->isRightMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isWalking() )
+	if( this->_personaje1->isRightMargin(WINDOW_MARGIN_TOLERANCE) && _personaje1->isWalking() )
 	{
 		this->moveLayersLeft(MOV_FACTOR2);
 	}
-	else if ( this->_personaje->isRightMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isJumpingRight() )
+	else if ( this->_personaje1->isRightMargin(WINDOW_MARGIN_TOLERANCE) && _personaje1->isJumpingRight() )
 	{
 		this->moveLayersLeft(MOV_FACTOR_JMP);
 	}
-	else if ( this->_personaje->isLeftMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isWalking() )
+	else if ( this->_personaje1->isLeftMargin(WINDOW_MARGIN_TOLERANCE) && _personaje1->isWalking() )
 	{
 		this-> moveLayersRight(MOV_FACTOR2);
 	}
-	else if ( this->_personaje->isLeftMargin(WINDOW_MARGIN_TOLERANCE) && _personaje->isJumpingLeft() )
+	else if ( this->_personaje1->isLeftMargin(WINDOW_MARGIN_TOLERANCE) && _personaje1->isJumpingLeft() )
 	{
 		this-> moveLayersRight(MOV_FACTOR_JMP);
 	}
