@@ -61,12 +61,12 @@ Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, Escenar
 	switch (numero) {
 	case 1:
 		pers = new Personaje(ventana,parser->personaje1,escenario);
-		return pers;
+		break;
 	case 2:
 		pers = new Personaje(ventana,parser->personaje2,escenario);
-		return pers;
+		break;
 	}
-	
+	return pers;
 }
 
 Ventana* GameController::getVentana(Parser* parser)
@@ -177,13 +177,13 @@ void GameController::viewWindowPosition()
 	printf("La ventana esta en %d, %d \n",x,y);
 }
 
-bool GameController::endOfGame(SDL_Event e)
+bool GameController::endOfGame(SDL_Event* e)
 {
 	bool end_of_game = false;
-	while( SDL_PollEvent( &e ) != 0 )
+	while( SDL_PollEvent( e ) != 0 )
 	{
 		//User requests quit
-		if( e.type == SDL_QUIT )
+		if( e->type == SDL_QUIT )
 		{
 			end_of_game = true;
 		}
@@ -196,13 +196,14 @@ void GameController::run(int sleep_time)
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
 	while (! _end_of_game)
 	{
-		SDL_Event e = *(new SDL_Event());
+		SDL_Event* e = new SDL_Event();
 		this->printLayers();
 		_end_of_game = this->endOfGame(e);
 		this->getKeys();
 		//SDL_Delay(sleep_time);
 		//printf("La posicion de la ventana es %0.2f \n",_ventana->_pos_log_x);
 		//viewWindowPosition();
+		delete e;
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
