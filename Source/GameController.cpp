@@ -37,8 +37,10 @@ void GameController::KillController()
 
 void GameController::calcularHUD()
 {
-	hudH = _ventana->_alto_px/20;
-	hudW = _ventana->_ancho_px*2/5;
+	hudExternH = _ventana->_alto_px/15;
+	hudExternW = _ventana->_ancho_px*2/5;
+	hudInternH = _ventana->_alto_px/17;
+	hudInternW = _ventana->_ancho_px*20/55;
 }
 
 GameController::GameController(Parser* parser)
@@ -103,13 +105,22 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 }
 
 void GameController::printHUD() {
-	SDL_Rect wall;
-    wall.x = 0;
-    wall.y = 0;
-    wall.w = hudW;
-    wall.h = hudH;
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
-	SDL_RenderFillRect( _ventana->_gRenderer, &wall );
+	SDL_Rect hudExterno;
+    hudExterno.x = 0;
+    hudExterno.y = 0;
+    hudExterno.w = hudExternW;
+    hudExterno.h = hudExternH;
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xAA, 0xAA, 0xAA, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &hudExterno );
+
+	SDL_Rect hudInterno;
+    hudInterno.x = (hudExternW-hudInternW)/2;
+    hudInterno.y = (hudExternH-hudInternH)/2;
+    hudInterno.w = hudInternW;
+    hudInterno.h = hudInternH;
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0x00, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &hudInterno );
+
 }
 
 void GameController::printLayers()

@@ -37,8 +37,10 @@ class GameController
 		vector<Capa*> _capas;
 		Personaje* _personaje1;
 		Personaje* _personaje2;
-		int hudW;
-		int hudH;
+		int hudExternW;
+		int hudExternH;
+		int hudInternW;
+		int hudInternH;
 		bool _end_of_game;
 
 		//Metodos
