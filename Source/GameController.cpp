@@ -293,6 +293,10 @@ void GameController::close()
 	//this->_ventana->~Ventana();
 	delete this->_ventana;
 	this->_ventana = NULL;
+	delete this->_personaje1;
+	this->_personaje1 = NULL;
+	delete this->_personaje2;
+	this->_personaje2 = NULL;
 
 	for ( vector<Capa*>::iterator i = _capas.begin(); i != _capas.end(); i++)
 	{
