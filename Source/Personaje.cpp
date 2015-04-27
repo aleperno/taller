@@ -25,6 +25,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_personajeData = data;
 	this->sprites = Personaje::loadMedia(data);
 	this->_lastFrame = 0;
+	this->healthPoints = 100;
 	this->_isWalking = false;
 	this->_isDucking = false;
 	this->_isJumping = false;

@@ -37,6 +37,8 @@ class GameController
 		vector<Capa*> _capas;
 		Personaje* _personaje1;
 		Personaje* _personaje2;
+		int hudW;
+		int hudH;
 		bool _end_of_game;
 
 		//Metodos
@@ -47,6 +49,8 @@ class GameController
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
 		static Personaje* getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, int numero);
 		void printLayers();
+		void calcularHUD();
+		void printHUD();
 		bool endOfGame(SDL_Event* e);
 		void close();
 		void reloadConfig();

@@ -67,6 +67,7 @@ class Personaje
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
 		~Personaje();
+		int healthPoints;
 		void view();
 		void moveLeft(float factor);
 		void moveRight(float factor);

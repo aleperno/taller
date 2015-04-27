@@ -35,6 +35,12 @@ void GameController::KillController()
 	Logger::Instance()->log(DEBUG,"Se destruye instancia de GameController");
 }
 
+void GameController::calcularHUD()
+{
+	hudH = _ventana->_alto_px/20;
+	hudW = _ventana->_ancho_px*2/5;
+}
+
 GameController::GameController(Parser* parser)
 {
 	//Initialize SDL
@@ -47,6 +53,7 @@ GameController::GameController(Parser* parser)
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
+	this->calcularHUD();
 	_end_of_game = false;
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
@@ -95,6 +102,16 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 	return capas;
 }
 
+void GameController::printHUD() {
+	SDL_Rect wall;
+    wall.x = 0;
+    wall.y = 0;
+    wall.w = hudW;
+    wall.h = hudH;
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &wall );
+}
+
 void GameController::printLayers()
 {
 	//LimpioPantalla
@@ -113,6 +130,8 @@ void GameController::printLayers()
 		this->_personaje1->view();
 	}
 
+	this->printHUD();
+
 	//Solo para pruebas
 	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje1->boundingBox );
 
@@ -127,7 +146,7 @@ void GameController::printLayers()
 	if(colisiona)
 	{
 		//Pruebo colision en una accion
-		if(_personaje->_isJumping)
+		if(_personaje1->_isJumping)
 			printf("X ");
 	}*/
 	//Fin solo para pruebas
@@ -239,6 +258,7 @@ void GameController::reloadConfig()
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
+	this->calcularHUD();
 }
 
 void GameController::getKeys()
