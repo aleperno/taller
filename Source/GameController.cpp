@@ -35,12 +35,33 @@ void GameController::KillController()
 	Logger::Instance()->log(DEBUG,"Se destruye instancia de GameController");
 }
 
-void GameController::calcularHUD()
+void GameController::prepararHUD()
 {
-	hudExternH = _ventana->_alto_px/15;
-	hudExternW = _ventana->_ancho_px*2/5;
-	hudInternH = _ventana->_alto_px/17;
-	hudInternW = _ventana->_ancho_px*20/55;
+	int hudExternH = _ventana->_alto_px/15;
+	int hudExternW = _ventana->_ancho_px*2/5;
+	int hudInternH = _ventana->_alto_px/20;
+	int hudInternW = _ventana->_ancho_px*20/53;
+
+	this->hud1.externo.h = hudExternH;
+	this->hud1.externo.w = hudExternW;
+	this->hud1.externo.x = 0;
+	this->hud1.externo.y = 0;
+
+	this->hud2.externo.h = hudExternH;
+	this->hud2.externo.w = hudExternW;
+	this->hud2.externo.x = _ventana->_ancho_px - hudExternW;
+	this->hud2.externo.y = 0;
+
+	this->hud1.interno.h = hudInternH;
+	this->hud1.interno.w = hudInternW;
+	this->hud1.interno.x = (hudExternW-hudInternW)/2;
+	this->hud1.interno.y = (hudExternH-hudInternH)/2;
+
+	this->hud2.interno.h = hudInternH;
+	this->hud2.interno.w = hudInternW;
+	this->hud2.interno.x = _ventana->_ancho_px - (hudExternW-hudInternW)/2 - hudInternW;
+	this->hud2.interno.y = (hudExternH-hudInternH)/2;
+
 }
 
 GameController::GameController(Parser* parser)
@@ -55,7 +76,7 @@ GameController::GameController(Parser* parser)
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
-	this->calcularHUD();
+	this->prepararHUD();
 	_end_of_game = false;
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
@@ -105,21 +126,14 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 }
 
 void GameController::printHUD() {
-	SDL_Rect hudExterno;
-    hudExterno.x = 0;
-    hudExterno.y = 0;
-    hudExterno.w = hudExternW;
-    hudExterno.h = hudExternH;
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xAA, 0xAA, 0xAA, 0xFF );
-	SDL_RenderFillRect( _ventana->_gRenderer, &hudExterno );
 
-	SDL_Rect hudInterno;
-    hudInterno.x = (hudExternW-hudInternW)/2;
-    hudInterno.y = (hudExternH-hudInternH)/2;
-    hudInterno.w = hudInternW;
-    hudInterno.h = hudInternH;
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xAA, 0xAA, 0xAA, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externo) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externo) );
+
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0x00, 0xFF );
-	SDL_RenderFillRect( _ventana->_gRenderer, &hudInterno );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.interno) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.interno) );
 
 }
 
@@ -269,7 +283,7 @@ void GameController::reloadConfig()
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
-	this->calcularHUD();
+	this->prepararHUD();
 }
 
 void GameController::getKeys()
