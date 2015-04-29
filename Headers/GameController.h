@@ -26,6 +26,9 @@ using namespace std;
 #define DEF_SLEEP_TIME 20
 #define WINDOW_MARGIN_TOLERANCE 10
 
+//Analog joystick dead zone
+#define JOYSTICK_DEAD_ZONE 8000
+
 class GameController
 {
 	protected:
@@ -73,6 +76,8 @@ class GameController
 		void setEndOfGame(bool value);
 		void actualizarGanador();
 		void procesarJoystick(SDL_Event* e);
+		void procesarAxis(SDL_Event* e);
+		void procesarBotones(SDL_Event* e);
 		//Testing
 		void viewWindowPosition();
 

@@ -263,9 +263,49 @@ void GameController::actualizarGanador() {
 	}
 }
 
+void GameController::procesarAxis(SDL_Event* e) {
+	for (int i=0; i<this->_numJoysticks;++i) {
+		if (e->jaxis.which == i) {
+			//X axis motion
+			if (e->jaxis.axis == 0) {
+				//Left
+				if ( e->jaxis.value < -JOYSTICK_DEAD_ZONE ) {
+					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed left");
+				}
+				//Right
+				else if ( e->jaxis.value > JOYSTICK_DEAD_ZONE) {
+					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed right");
+				} else {
+					//IDLE
+				}
+			}
+					//Y axis motion
+			else if (e->jaxis.axis == 1) {
+				//Up
+				if ( e->jaxis.value < -JOYSTICK_DEAD_ZONE ) {
+					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed up");
+				}
+				//Down
+				else if ( e->jaxis.value > JOYSTICK_DEAD_ZONE) {
+					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed down");
+				} else {
+					//IDLE
+				}
+			}
+		}
+	}
+}
+
+void GameController::procesarBotones(SDL_Event* e) {
+	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
+}
+
 void GameController::procesarJoystick(SDL_Event* e) {
 	if (e->type == SDL_JOYBUTTONDOWN) {
-		Logger::Instance()->log(DEBUG,"Se apreto el boton " + StringUtil::int2string(e->jbutton.button) + " del joystick " + StringUtil::int2string(e->jdevice.which));
+		this->procesarBotones(e);
+	}
+	else if (e->type == SDL_JOYAXISMOTION) {
+		this->procesarAxis(e);
 	}
 }
 
