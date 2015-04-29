@@ -45,6 +45,11 @@ class GameController
 		hudPersonaje hud1;
 		hudPersonaje hud2;
 		bool _end_of_game;
+		SDL_Joystick* _joystickOne;
+		SDL_Joystick* _joystickTwo;
+		const char* _joystickOneID;
+		const char* _joystickTwoID;
+		int _numJoysticks;
 
 		//Metodos
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
@@ -65,6 +70,9 @@ class GameController
 		void moveLayersLeft(float factor);
 		void moveLayers();
 		bool iniciarSDL();
+		void setEndOfGame(bool value);
+		void actualizarGanador();
+		void procesarJoystick(SDL_Event* e);
 		//Testing
 		void viewWindowPosition();
 

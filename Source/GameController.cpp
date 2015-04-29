@@ -69,10 +69,20 @@ void GameController::prepararHUD()
 GameController::GameController(Parser* parser)
 {
 	//Initialize SDL
-	if(!iniciarSDL())
+	if(!iniciarSDL()) {
 		Logger::Instance()->log(ERROR,"SDL could not initialize!");
-	else
-		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(SDL_NumJoysticks()));
+		Logger::Instance()->log(ERROR,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
+	} else {
+		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
+		if (this->_numJoysticks > 0 ) {
+			this->_joystickOne = SDL_JoystickOpen(0);
+			this->_joystickOneID = SDL_JoystickName(this->_joystickOne);
+		}
+		if (this->_numJoysticks == 2) {
+			this->_joystickTwo = SDL_JoystickOpen(1);
+			this->_joystickTwoID = SDL_JoystickName(this->_joystickTwo);
+		}
+	}
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
@@ -84,7 +94,9 @@ GameController::GameController(Parser* parser)
 }
 
 bool GameController::iniciarSDL() {
-	return (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
+	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
+	this->_numJoysticks = SDL_NumJoysticks();
+	return flag;
 }
 
 Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, int numero)
@@ -235,6 +247,28 @@ void GameController::viewWindowPosition()
 	printf("La ventana esta en %d, %d \n",x,y);
 }
 
+void GameController::setEndOfGame(bool value) {
+	 this->_end_of_game = value;
+}
+
+void GameController::actualizarGanador() {
+	if (this->_personaje1->healthPoints <= 0) {
+		Logger::Instance()->log(WARNING,"Gano personaje 2.");
+		this->reloadConfig();
+	} else {
+		if (this->_personaje2->healthPoints <= 0) {
+			Logger::Instance()->log(WARNING,"Gano personaje 1.");
+			this->reloadConfig();
+		}
+	}
+}
+
+void GameController::procesarJoystick(SDL_Event* e) {
+	if (e->type == SDL_JOYBUTTONDOWN) {
+		Logger::Instance()->log(DEBUG,"Se apreto el boton " + StringUtil::int2string(e->jbutton.button) + " del joystick " + StringUtil::int2string(e->jdevice.which));
+	}
+}
+
 bool GameController::endOfGame(SDL_Event* e)
 {
 	bool end_of_game = false;
@@ -272,17 +306,19 @@ bool GameController::endOfGame(SDL_Event* e)
 
 void GameController::run(int sleep_time)
 {
+	SDL_Event e;
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
-	while (! _end_of_game)
+	while (!this->_end_of_game)
 	{
-		SDL_Event* e = new SDL_Event();
+		while( SDL_PollEvent(&e) != 0 )
+		{
+			//User requests quit
+			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+			this->procesarJoystick(&e);
+		}
 		this->printLayers();
-		_end_of_game = this->endOfGame(e);
 		this->getKeys();
-		//SDL_Delay(sleep_time);
-		//printf("La posicion de la ventana es %0.2f \n",_ventana->_pos_log_x);
-		//viewWindowPosition();
-		delete e;
+		this->actualizarGanador();
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
@@ -290,7 +326,6 @@ void GameController::run(int sleep_time)
 
 void GameController::close()
 {
-	//this->_ventana->~Ventana();
 	delete this->_ventana;
 	this->_ventana = NULL;
 	delete this->_personaje1;
@@ -368,9 +403,18 @@ void GameController::getKeys()
 			this->_personaje1->moveRight(MOV_FACTOR2);
 
 		}
-	}	else if( currentKeyStates[ SDL_SCANCODE_S ] )
+	}
+	else if( currentKeyStates[ SDL_SCANCODE_S ] )
 	{
 		_ventana->toggleShake();
+	}
+	else if (currentKeyStates[ SDL_SCANCODE_1])
+	{
+		this->_personaje1->healthPoints -= 10;
+	}
+	else if ( currentKeyStates [ SDL_SCANCODE_2])
+	{
+		this->_personaje2->healthPoints -=10;
 	}
 	else
 	{
