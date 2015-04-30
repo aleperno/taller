@@ -42,7 +42,9 @@ class GameController
 		Personaje* _personaje2;
 		struct hudPersonaje {
 			SDL_Rect externo;
+			SDL_Rect externoIlum;
 			SDL_Rect interno;
+			SDL_Rect healthIlum;
 			SDL_Rect health;
 		};
 		hudPersonaje hud1;

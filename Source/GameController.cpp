@@ -62,6 +62,26 @@ void GameController::prepararHUD()
 	this->hud2.interno.x = _ventana->_ancho_px - (hudExternW-hudInternW)/2 - hudInternW;
 	this->hud2.interno.y = (hudExternH-hudInternH)/2;
 
+	this->hud1.externoIlum.h = hudExternH/2;
+	this->hud1.externoIlum.w = hudExternW;
+	this->hud1.externoIlum.x = 0;
+	this->hud1.externoIlum.y = 0;
+
+	this->hud1.healthIlum.h = hudExternH/2 - (hudExternH-hudInternH)/2;
+	this->hud1.healthIlum.w = hudInternW;
+	this->hud1.healthIlum.x = this->hud1.interno.x;
+	this->hud1.healthIlum.y = this->hud1.interno.y;
+
+	this->hud2.externoIlum.h = hudExternH/2;
+	this->hud2.externoIlum.w = hudExternW;
+	this->hud2.externoIlum.x = this->hud2.externo.x;
+	this->hud2.externoIlum.y = 0;
+
+	this->hud2.healthIlum.h = hudExternH/2 - (hudExternH-hudInternH)/2;
+	this->hud2.healthIlum.w = hudInternW;
+	this->hud2.healthIlum.x = this->hud2.interno.x;
+	this->hud2.healthIlum.y = this->hud2.interno.y;
+
 	this->hud1.health = this->hud1.interno;
 	this->hud2.health = this->hud2.interno;
 }
@@ -141,15 +161,23 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 
 void GameController::actualizarHealthbars() {
 	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
+	this->hud1.healthIlum.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
+
 	this->hud2.health.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
+	this->hud2.healthIlum.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
 	this->hud2.health.x = _ventana->_ancho_px - (this->hud2.externo.w-this->hud2.interno.w)/2 - this->hud2.health.w;
+	this->hud2.healthIlum.x = _ventana->_ancho_px - (this->hud2.externo.w-this->hud2.interno.w)/2 - this->hud2.health.w;
 }
 
 void GameController::printHUD() {
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xAA, 0xAA, 0xAA, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externo) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externo) );
+
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xBB, 0xBB, 0xBB, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externoIlum) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externoIlum) );
 
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0x00, 0xFF );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.interno) );
@@ -157,9 +185,13 @@ void GameController::printHUD() {
 
 	this->actualizarHealthbars();
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xCC, 0x00, 0x00, 0xFF );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.health) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.health) );
+
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.healthIlum) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.healthIlum) );
 
 }
 
