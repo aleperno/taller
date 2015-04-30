@@ -3,6 +3,7 @@
 //Using SDL, SDL_image, and strings
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <string>
 
 class TextureHandler
@@ -17,6 +18,9 @@ class TextureHandler
 
 		//Loads image at specified path
 		bool loadFromFile( std::string path, bool img_PNG = false );
+
+		//Creates image from font string
+		bool loadFromRenderedText( std::string textureText, SDL_Color textColor, TTF_Font* font );
 
 		//Deallocates texture
 		void free();

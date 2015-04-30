@@ -84,6 +84,15 @@ void GameController::prepararHUD()
 
 	this->hud1.health = this->hud1.interno;
 	this->hud2.health = this->hud2.interno;
+
+	TTF_Init();
+
+	font = TTF_OpenFont(FONT_PATH,hudExternH);
+	SDL_Color textColor = { 255, 0, 0 };
+	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
+	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
+	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, textColor, font);
+	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, textColor, font);
 }
 
 GameController::GameController(Parser* parser)
@@ -193,6 +202,8 @@ void GameController::printHUD() {
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.healthIlum) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.healthIlum) );
 
+	this->hud1.nombreTexture->render(0,this->hud1.externo.h);
+	this->hud2.nombreTexture->render(this->hud2.externo.x,this->hud2.externo.h);
 }
 
 void GameController::printLayers()
@@ -398,8 +409,15 @@ void GameController::run(int sleep_time)
 
 void GameController::close()
 {
+	this->hud1.nombreTexture->free();
+	this->hud2.nombreTexture->free();
+	TTF_CloseFont( font );
+	font = NULL;
+	TTF_Quit();
+
 	delete this->_ventana;
 	this->_ventana = NULL;
+	
 	delete this->_personaje1;
 	this->_personaje1 = NULL;
 	delete this->_personaje2;
