@@ -88,11 +88,21 @@ void GameController::prepararHUD()
 	TTF_Init();
 
 	font = TTF_OpenFont(FONT_PATH,hudExternH);
-	SDL_Color textColor = { 255, 0, 0 };
+	SDL_Color textColor = { 200, 0, 0 };
 	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, textColor, font);
 	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, textColor, font);
+
+	this->hud1.nombre.h = this->hud1.nombreTexture->getHeight();
+	this->hud1.nombre.w = this->hud1.nombreTexture->getWidth();
+	this->hud1.nombre.x = 0;
+	this->hud1.nombre.y = hudExternH;
+
+	this->hud2.nombre.h = this->hud2.nombreTexture->getHeight();
+	this->hud2.nombre.w = this->hud2.nombreTexture->getWidth();
+	this->hud2.nombre.x = _ventana->_ancho_px - this->hud2.nombreTexture->getWidth();
+	this->hud2.nombre.y = hudExternH;
 }
 
 GameController::GameController(Parser* parser)
@@ -202,8 +212,12 @@ void GameController::printHUD() {
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.healthIlum) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.healthIlum) );
 
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.nombre) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.nombre) );
+
 	this->hud1.nombreTexture->render(0,this->hud1.externo.h);
-	this->hud2.nombreTexture->render(this->hud2.externo.x,this->hud2.externo.h);
+	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth() ,this->hud2.externo.h);
 }
 
 void GameController::printLayers()

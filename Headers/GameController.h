@@ -51,6 +51,7 @@ class GameController
 			SDL_Rect healthIlum;
 			SDL_Rect health;
 			TextureHandler* nombreTexture;
+			SDL_Rect nombre;
 		};
 		hudPersonaje hud1;
 		hudPersonaje hud2;
