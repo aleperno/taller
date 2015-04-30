@@ -65,31 +65,73 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 
 	personaje->imgPath = persValue["imgSrc"].asString();
 
-	personaje->h_inicial = persValue.get("color-alternativo",-1).get("h-inicial",-1).asInt();
-	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
-	while (personaje->h_inicial > 359) {
-		personaje->h_inicial -= 360;
+	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.
+	En caso de que hay valor invalido ("pepe") tambien dijeron varias veces que una opcion
+	es logear que no se puede hacer transformacion y no cambiar color. A esos fines se
+	devuelven '-1' en este caso.*/
+	bool colorAlternativoValido = true;
+	string str = "";
+	try	{	personaje->h_inicial = persValue.get("color-alternativo",-1).get("h-inicial",-1).asFloat();	}
+	catch(const exception &e) {
+		str = e.what();
+		colorAlternativoValido = false;
 	}
-	while (personaje->h_inicial < 0) {
-		personaje->h_inicial += 360;
-	}
-	
-	personaje->h_final = persValue.get("color-alternativo",-1).get("h-final",-1).asInt();
-	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
-	while (personaje->h_final > 359) {
-		personaje->h_final -= 360;
-	}
-	while (personaje->h_final < 0) {
-		personaje->h_final += 360;
+	if (colorAlternativoValido) {
+		if (personaje->h_inicial == -1)		colorAlternativoValido = false;
 	}
 
-	personaje->desplazamiento = persValue.get("color-alternativo",-1).get("desplazamiento",-1).asInt();
-	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
-	while (personaje->desplazamiento > 359) {
-		personaje->desplazamiento -= 360;
+	if (colorAlternativoValido) {
+		try	{	personaje->h_final = persValue.get("color-alternativo",-1).get("h-final",-1).asFloat();	}
+		catch(const exception &e) {
+			str = e.what();
+			colorAlternativoValido = false;
+		}
 	}
-	while (personaje->desplazamiento < 0) {
-		personaje->desplazamiento += 360;
+	if (colorAlternativoValido) {
+		if (personaje->h_final == -1)		colorAlternativoValido = false;
+	}
+	
+	if (colorAlternativoValido) {
+		try	{	personaje->desplazamiento = persValue.get("color-alternativo",-1).get("desplazamiento",-1).asFloat();	}
+		catch(const exception &e) {
+			str = e.what();
+			colorAlternativoValido = false;
+		}
+	}
+	if (colorAlternativoValido) {
+		if (personaje->desplazamiento == -1)		colorAlternativoValido = false;
+	}
+
+	if (colorAlternativoValido) {
+	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
+		while (!(personaje->h_inicial < 360)) {
+			personaje->h_inicial -= 360;
+		}
+		while (personaje->h_inicial < 0) {
+			personaje->h_inicial += 360;
+		}
+		while (!(personaje->h_final < 360)) {
+			personaje->h_final -= 360;
+		}
+		while (personaje->h_final < 0) {
+			personaje->h_final += 360;
+		}
+		while (!(personaje->desplazamiento < 360)) {
+			personaje->desplazamiento -= 360;
+		}
+		while (personaje->desplazamiento < 0) {
+			personaje->desplazamiento += 360;
+		}
+	} else {
+		personaje->h_inicial = -1;
+		personaje->h_final = -1;
+		personaje->desplazamiento = -1;
+		string msg = "Color alternativo de " + personaje->nombre + " es invalido. No sera posible cambiar color en caso de ser necesario.";
+		if (str == "") {
+			Logger::Instance()->log(ERROR,msg);
+		} else {
+			Logger::Instance()->log(ERROR,str + " " + msg);
+		}
 	}
 }
 
