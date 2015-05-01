@@ -32,7 +32,6 @@ class Personaje
 		TextureHandler* _handler;
 		Ventana* _ventana;
 		EscenarioData _escenario;
-		PersonajeData _personajeData;
 		float _alto_log;
 		float _ancho_log;
 		float _pos_x;
@@ -65,9 +64,10 @@ class Personaje
 		void setBoundingBox();
 
 	public:
-		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
+		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool cambiarColor);
 		~Personaje();
 		int healthPoints;
+		PersonajeData _personajeData;
 		void view();
 		void moveLeft(float factor);
 		void moveRight(float factor);

@@ -10,6 +10,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -28,6 +29,8 @@ using namespace std;
 
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
+//Font path
+#define FONT_PATH "Images/ardestine.ttf"
 
 class GameController
 {
@@ -40,10 +43,15 @@ class GameController
 		vector<Capa*> _capas;
 		Personaje* _personaje1;
 		Personaje* _personaje2;
+		TTF_Font* font;
 		struct hudPersonaje {
 			SDL_Rect externo;
+			SDL_Rect externoIlum;
 			SDL_Rect interno;
+			SDL_Rect healthIlum;
 			SDL_Rect health;
+			TextureHandler* nombreTexture;
+			SDL_Rect nombre;
 		};
 		hudPersonaje hud1;
 		hudPersonaje hud2;

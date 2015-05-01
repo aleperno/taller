@@ -62,8 +62,47 @@ void GameController::prepararHUD()
 	this->hud2.interno.x = _ventana->_ancho_px - (hudExternW-hudInternW)/2 - hudInternW;
 	this->hud2.interno.y = (hudExternH-hudInternH)/2;
 
+	this->hud1.externoIlum.h = hudExternH/2;
+	this->hud1.externoIlum.w = hudExternW;
+	this->hud1.externoIlum.x = 0;
+	this->hud1.externoIlum.y = 0;
+
+	this->hud1.healthIlum.h = hudExternH/2 - (hudExternH-hudInternH)/2;
+	this->hud1.healthIlum.w = hudInternW;
+	this->hud1.healthIlum.x = this->hud1.interno.x;
+	this->hud1.healthIlum.y = this->hud1.interno.y;
+
+	this->hud2.externoIlum.h = hudExternH/2;
+	this->hud2.externoIlum.w = hudExternW;
+	this->hud2.externoIlum.x = this->hud2.externo.x;
+	this->hud2.externoIlum.y = 0;
+
+	this->hud2.healthIlum.h = hudExternH/2 - (hudExternH-hudInternH)/2;
+	this->hud2.healthIlum.w = hudInternW;
+	this->hud2.healthIlum.x = this->hud2.interno.x;
+	this->hud2.healthIlum.y = this->hud2.interno.y;
+
 	this->hud1.health = this->hud1.interno;
 	this->hud2.health = this->hud2.interno;
+
+	TTF_Init();
+
+	font = TTF_OpenFont(FONT_PATH,hudExternH);
+	SDL_Color textColor = { 0xCC, 0, 0 };
+	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
+	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
+	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, textColor, font);
+	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, textColor, font);
+
+	this->hud1.nombre.h = this->hud1.nombreTexture->getHeight();
+	this->hud1.nombre.w = this->hud1.nombreTexture->getWidth();
+	this->hud1.nombre.x = 0;
+	this->hud1.nombre.y = hudExternH;
+
+	this->hud2.nombre.h = this->hud2.nombreTexture->getHeight();
+	this->hud2.nombre.w = this->hud2.nombreTexture->getWidth();
+	this->hud2.nombre.x = _ventana->_ancho_px - this->hud2.nombreTexture->getWidth();
+	this->hud2.nombre.y = hudExternH;
 }
 
 GameController::GameController(Parser* parser)
@@ -114,10 +153,13 @@ Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, Escenar
 	Personaje* pers;
 	switch (numero) {
 	case 1:
-		pers = new Personaje(ventana,parser->personaje1,escenario);
+		pers = new Personaje(ventana,parser->personaje1,escenario,false);
 		break;
 	case 2:
-		pers = new Personaje(ventana,parser->personaje2,escenario);
+		if (parser->personaje1.nombre == parser->personaje2.nombre)
+			pers = new Personaje(ventana,parser->personaje2,escenario,true);
+		else
+			pers = new Personaje(ventana,parser->personaje2,escenario,false);
 		break;
 	}
 	return pers;
@@ -151,15 +193,23 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 
 void GameController::actualizarHealthbars() {
 	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
+	this->hud1.healthIlum.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
+
 	this->hud2.health.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
+	this->hud2.healthIlum.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
 	this->hud2.health.x = _ventana->_ancho_px - (this->hud2.externo.w-this->hud2.interno.w)/2 - this->hud2.health.w;
+	this->hud2.healthIlum.x = _ventana->_ancho_px - (this->hud2.externo.w-this->hud2.interno.w)/2 - this->hud2.health.w;
 }
 
 void GameController::printHUD() {
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xAA, 0xAA, 0xAA, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externo) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externo) );
+
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xBB, 0xBB, 0xBB, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externoIlum) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externoIlum) );
 
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0x00, 0xFF );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.interno) );
@@ -167,10 +217,20 @@ void GameController::printHUD() {
 
 	this->actualizarHealthbars();
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xCC, 0x00, 0x00, 0xFF );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.health) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.health) );
 
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.healthIlum) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.healthIlum) );
+
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.nombre) );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.nombre) );
+
+	this->hud1.nombreTexture->render(0,this->hud1.externo.h);
+	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth() ,this->hud2.externo.h);
 }
 
 void GameController::printLayers()
@@ -402,8 +462,16 @@ void GameController::close()
 		this->_joystickTwo = NULL;
 		this->setPlayer2(false);
 	}
+
+	this->hud1.nombreTexture->free();
+	this->hud2.nombreTexture->free();
+	TTF_CloseFont( font );
+	font = NULL;
+	TTF_Quit();
+
 	delete this->_ventana;
 	this->_ventana = NULL;
+	
 	delete this->_personaje1;
 	this->_personaje1 = NULL;
 	delete this->_personaje2;

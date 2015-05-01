@@ -19,9 +19,9 @@ class PersonajeData
 		string nombre;
 
 		//color alternativo
-		int h_inicial;
-		int h_final;
-		int desplazamiento;
+		float h_inicial;
+		float h_final;
+		float desplazamiento;
 
 		//joyconfig
 		int golpe_alto;
