@@ -25,7 +25,23 @@ TextureHandler::~TextureHandler()
 	free();
 }
 
-bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
+void TextureHandler::cambiarColor(SDL_Surface* loadedSurface)
+{
+	uint32_t* pixelsDeSurface = ( uint32_t * )loadedSurface->pixels;
+
+	Uint8 r;
+	Uint8 g;
+	Uint8 b;
+	Uint8 a;
+	for (int i=0; i<(loadedSurface->h); i++) {
+		for (int j=0; j<(loadedSurface->w); j++) {
+			SDL_GetRGBA(pixelsDeSurface[i * loadedSurface->w + j], loadedSurface->format, &r, &g, &b, &a);
+			pixelsDeSurface[i * loadedSurface->w + j] = SDL_MapRGBA(loadedSurface->format, 0, 0, 0xFF, a);
+		}
+	}
+}
+
+bool TextureHandler::loadFromFile( std::string path, bool cambiarColor, float h_inicial, float h_final, float desplazamiento, bool img_PNG)
 {
 	//Get rid of preexisting texture
 	free();
@@ -51,6 +67,10 @@ bool TextureHandler::loadFromFile( std::string path, bool img_PNG)
 	{
 		//Color key image
 		//SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+
+		if (cambiarColor) {
+			this->cambiarColor(loadedSurface);
+		}
 
 		//Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface( this->mRenderer, loadedSurface );

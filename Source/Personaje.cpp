@@ -14,7 +14,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_alto_log = data.alto;
 	this->_ancho_log = data.ancho;
 	string path = data.imgPath;
-	this->_handler->loadFromFile(path,true);
+	this->_handler->loadFromFile(path,false,0,0,0,true);
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
 	this->_pos_y = escenario.y_piso;

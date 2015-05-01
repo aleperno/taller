@@ -16,8 +16,10 @@ class TextureHandler
 		//Deallocates memory
 		~TextureHandler();
 
+		void cambiarColor(SDL_Surface* loadedSurface);
+
 		//Loads image at specified path
-		bool loadFromFile( std::string path, bool img_PNG = false );
+		bool loadFromFile( std::string path, bool cambiarColor, float h_inicial, float h_final, float desplazamiento, bool img_PNG = false );
 
 		//Creates image from font string
 		bool loadFromRenderedText( std::string textureText, SDL_Color textColor, TTF_Font* font );

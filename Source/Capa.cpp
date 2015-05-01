@@ -13,7 +13,7 @@ Capa::Capa(Ventana* ventana, CapaData data, EscenarioData escenario)
 	this->_alto_log = _ventana->_alto_log;
 	this->_ancho_log = data.ancho;
 	string path = data.imagen_fondo;
-	this->_handler->loadFromFile(path,true);
+	this->_handler->loadFromFile(path,false,0,0,0,true);
 	this-> _escenario = escenario;
 	//cout << "Se crea capa con imagen " << path << endl;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
