@@ -116,12 +116,6 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 		while (personaje->h_final < 0) {
 			personaje->h_final += 360;
 		}
-		while (!(personaje->desplazamiento < 360)) {
-			personaje->desplazamiento -= 360;
-		}
-		while (personaje->desplazamiento < 0) {
-			personaje->desplazamiento += 360;
-		}
 	} else {
 		personaje->h_inicial = -1;
 		personaje->h_final = -1;

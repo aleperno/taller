@@ -5,6 +5,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <string>
+#include <vector>
+#include <iostream>
+#include <cmath>
+using namespace std;
 
 class TextureHandler
 {
@@ -16,7 +20,10 @@ class TextureHandler
 		//Deallocates memory
 		~TextureHandler();
 
-		void cambiarColor(SDL_Surface* loadedSurface);
+		void setearHSVPorPixel(SDL_Surface* loadedSurface, vector<float>* hue, vector<float>* saturation, vector<float>* value);
+		void setearNuevoRGB(SDL_Surface* loadedSurface, vector<float>* hue, vector<float>* saturation, vector<float>* value);
+		void alterarHue(vector<float>* hue, float h_inicial, float h_final, float desplazamiento);
+		void cambiarColor(SDL_Surface* loadedSurface, float h_inicial, float h_final, float desplazamiento);
 
 		//Loads image at specified path
 		bool loadFromFile( std::string path, bool cambiarColor, float h_inicial, float h_final, float desplazamiento, bool img_PNG = false );

@@ -25,20 +25,128 @@ TextureHandler::~TextureHandler()
 	free();
 }
 
-void TextureHandler::cambiarColor(SDL_Surface* loadedSurface)
+void TextureHandler::setearNuevoRGB(SDL_Surface* loadedSurface, vector<float>* hue, vector<float>* saturation, vector<float>* value)
 {
 	uint32_t* pixelsDeSurface = ( uint32_t * )loadedSurface->pixels;
-
 	Uint8 r;
 	Uint8 g;
 	Uint8 b;
 	Uint8 a;
-	for (int i=0; i<(loadedSurface->h); i++) {
-		for (int j=0; j<(loadedSurface->w); j++) {
-			SDL_GetRGBA(pixelsDeSurface[i * loadedSurface->w + j], loadedSurface->format, &r, &g, &b, &a);
-			pixelsDeSurface[i * loadedSurface->w + j] = SDL_MapRGBA(loadedSurface->format, 0, 0, 0xFF, a);
+
+	for (int i=0; i<hue->size(); i++) {
+		
+		float Hi = floor(hue->at(i) / 60);
+		float Vmin = (100 - saturation->at(i)) * (value->at(i)) / 100;
+		float num = (value->at(i) - Vmin) * fmod(hue->at(i),60) / 60;
+		float Vinc = Vmin + num;
+		float Vdec = value->at(i) - num;
+
+		float red;
+		float green;
+		float blue;
+
+		switch ((int)Hi) {
+		case 0:	red = value->at(i);
+				green = Vinc;
+				blue = Vmin;
+				break;
+		case 1:	red = Vdec;
+				green = value->at(i);
+				blue = Vmin;
+				break;
+		case 2:	red = Vmin;
+				green = value->at(i);
+				blue = Vinc;
+				break;
+		case 3:	red = Vmin;
+				green = Vdec;
+				blue = value->at(i);
+				break;
+		case 4: red = Vinc;
+				green = Vmin;
+				blue = value->at(i);
+				break;
+		case 5: red = value->at(i);
+				green = Vmin;
+				blue = Vdec;
+				break;
+		}
+
+		SDL_GetRGBA(pixelsDeSurface[i], loadedSurface->format, &r, &g, &b, &a);
+		r = (Uint8) floor(red * 255 / 100 + 0.5);
+		g = (Uint8) floor(green * 255 / 100 + 0.5);
+		b = (Uint8) floor(blue * 255 / 100 + 0.5);
+
+		pixelsDeSurface[i] = SDL_MapRGBA(loadedSurface->format, r, g, b, a);
+	}
+}
+
+void TextureHandler::setearHSVPorPixel(SDL_Surface* loadedSurface, vector<float>* hue, vector<float>* saturation, vector<float>* value)
+{
+	uint32_t* pixelsDeSurface = ( uint32_t * )loadedSurface->pixels;
+	Uint8 r;
+	Uint8 g;
+	Uint8 b;
+	Uint8 a;
+
+	for (int i=0; i<hue->size(); i++) {
+		SDL_GetRGBA(pixelsDeSurface[i], loadedSurface->format, &r, &g, &b, &a);
+		float normR = ((float)r)/255;
+		float normG = ((float)g)/255;
+		float normB = ((float)b)/255;
+
+		float rgb_max = std::max(normR, std::max(normG, normB));
+		float rgb_min = std::min(normR, std::min(normG, normB));
+		float delta = rgb_max - rgb_min;
+
+		value->at(i) = rgb_max*100;
+
+		if (rgb_max == 0)	saturation->at(i) = 0;
+		else	saturation->at(i) = delta*100 / rgb_max;
+
+		float hueLocal;
+		if (rgb_min == rgb_max)		hueLocal = 0;
+		else	if (rgb_max == normG)	hueLocal = 60 * (normB-normR) / delta + 120;
+		else	if (rgb_max == normB)	hueLocal = 60 * (normR-normG) / delta + 240;
+		else	if (normG < normB)	hueLocal = 60 * (normG-normB) / delta + 360; //rgb_max=normR
+		else	hueLocal = 60 * (normG-normB) / delta;
+		hue->at(i) = hueLocal;
+	}
+}
+
+void TextureHandler::alterarHue(vector<float>* hue, float h_inicial, float h_final, float desplazamiento) {
+	if (h_inicial < h_final) {
+		for (int i=0; i<hue->size(); i++) {
+			if ((h_inicial <= hue->at(i)) && (h_final >= hue->at(i))) {
+				hue->at(i) += desplazamiento;
+				while (!(hue->at(i) < 360))		{ hue->at(i) -= 360; }
+				while (hue->at(i) < 0)	{ hue->at(i) += 360; }
+			}
 		}
 	}
+
+	if (h_inicial > h_final) {
+		for (int i=0; i<hue->size(); i++) {
+			if ((h_inicial <= hue->at(i)) || (h_final >= hue->at(i))) {
+				hue->at(i) += desplazamiento;
+				while (!(hue->at(i) < 360))		{ hue->at(i) -= 360; }
+				while (hue->at(i) < 0)	{ hue->at(i) += 360; }
+			}
+		}
+	}
+}
+
+void TextureHandler::cambiarColor(SDL_Surface* loadedSurface, float h_inicial, float h_final, float desplazamiento)
+{
+	vector<float> hue((loadedSurface->w)*(loadedSurface->h));
+	vector<float> saturation((loadedSurface->w)*(loadedSurface->h));
+	vector<float> value((loadedSurface->w)*(loadedSurface->h));
+
+	setearHSVPorPixel(loadedSurface, &hue, &saturation, &value);
+
+	alterarHue(&hue, h_inicial, h_final, desplazamiento);
+
+	setearNuevoRGB(loadedSurface, &hue, &saturation, &value);
 }
 
 bool TextureHandler::loadFromFile( std::string path, bool cambiarColor, float h_inicial, float h_final, float desplazamiento, bool img_PNG)
@@ -69,7 +177,7 @@ bool TextureHandler::loadFromFile( std::string path, bool cambiarColor, float h_
 		//SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		if (cambiarColor) {
-			this->cambiarColor(loadedSurface);
+			this->cambiarColor(loadedSurface,h_inicial,h_final,desplazamiento);
 		}
 
 		//Create texture from surface pixels
