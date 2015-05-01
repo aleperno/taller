@@ -10,9 +10,9 @@
 		"duck" :    [36,38],
 		"imgSrc" : "Images/characters/liukang.png",
 		"color-alternativo": {
-					"h-inicial": 340,
-					"h-final": 370,
-					"desplazamiento": -120
+					"h-inicial": -20,
+					"h-final": 10,
+					"desplazamiento": 120
 					}
 	},
 
@@ -29,7 +29,7 @@
 		"color-alternativo": {
 					"h-inicial": 180,
 					"h-final": 200,
-					"desplazamiento": 40
+					"desplazamiento": 100
 					}
 	}
 }

@@ -88,7 +88,7 @@ void GameController::prepararHUD()
 	TTF_Init();
 
 	font = TTF_OpenFont(FONT_PATH,hudExternH);
-	SDL_Color textColor = { 200, 0, 0 };
+	SDL_Color textColor = { 0xCC, 0, 0 };
 	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, textColor, font);
@@ -143,10 +143,13 @@ Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, Escenar
 	Personaje* pers;
 	switch (numero) {
 	case 1:
-		pers = new Personaje(ventana,parser->personaje1,escenario);
+		pers = new Personaje(ventana,parser->personaje1,escenario,false);
 		break;
 	case 2:
-		pers = new Personaje(ventana,parser->personaje2,escenario);
+		if (parser->personaje1.nombre == parser->personaje2.nombre)
+			pers = new Personaje(ventana,parser->personaje2,escenario,true);
+		else
+			pers = new Personaje(ventana,parser->personaje2,escenario,false);
 		break;
 	}
 	return pers;

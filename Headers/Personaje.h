@@ -64,7 +64,7 @@ class Personaje
 		void setBoundingBox();
 
 	public:
-		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario);
+		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool cambiarColor);
 		~Personaje();
 		int healthPoints;
 		PersonajeData _personajeData;
