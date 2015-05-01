@@ -33,7 +33,7 @@ void TextureHandler::setearNuevoRGB(SDL_Surface* loadedSurface, vector<float>* h
 	Uint8 b;
 	Uint8 a;
 
-	for (int i=0; i<hue->size(); i++) {
+	for (unsigned int i=0; i<hue->size(); i++) {
 		
 		float Hi = floor(hue->at(i) / 60);
 		float Vmin = (100 - saturation->at(i)) * (value->at(i)) / 100;
@@ -89,7 +89,7 @@ void TextureHandler::setearHSVPorPixel(SDL_Surface* loadedSurface, vector<float>
 	Uint8 b;
 	Uint8 a;
 
-	for (int i=0; i<hue->size(); i++) {
+	for (unsigned int i=0; i<hue->size(); i++) {
 		SDL_GetRGBA(pixelsDeSurface[i], loadedSurface->format, &r, &g, &b, &a);
 		float normR = ((float)r)/255;
 		float normG = ((float)g)/255;
@@ -116,7 +116,7 @@ void TextureHandler::setearHSVPorPixel(SDL_Surface* loadedSurface, vector<float>
 
 void TextureHandler::alterarHue(vector<float>* hue, float h_inicial, float h_final, float desplazamiento) {
 	if (h_inicial < h_final) {
-		for (int i=0; i<hue->size(); i++) {
+		for (unsigned int i=0; i<hue->size(); i++) {
 			if ((h_inicial <= hue->at(i)) && (h_final >= hue->at(i))) {
 				hue->at(i) += desplazamiento;
 				while (!(hue->at(i) < 360))		{ hue->at(i) -= 360; }
@@ -126,7 +126,7 @@ void TextureHandler::alterarHue(vector<float>* hue, float h_inicial, float h_fin
 	}
 
 	if (h_inicial > h_final) {
-		for (int i=0; i<hue->size(); i++) {
+		for (unsigned int i=0; i<hue->size(); i++) {
 			if ((h_inicial <= hue->at(i)) || (h_final >= hue->at(i))) {
 				hue->at(i) += desplazamiento;
 				while (!(hue->at(i) < 360))		{ hue->at(i) -= 360; }
