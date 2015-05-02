@@ -140,14 +140,14 @@ void GameController::printLayers()
 		_capas[i]->view();
 		if (this->_personaje1->_zIndex == (i))
 		{
-			this->_personaje1->view();
-			this->_personaje2->view();
+			this->_personaje1->view(_personaje2);
+			this->_personaje2->view(_personaje1);
 		}
 	}
 	if (this->_personaje1->_zIndex >= _capas.size())
 	{
-		this->_personaje1->view();
-		this->_personaje2->view();
+		this->_personaje1->view(_personaje2);
+		this->_personaje2->view(_personaje1);
 	}
 
 	this->_hud->printHUD();

@@ -38,6 +38,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+
+	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
 	//cout << _pos_x << endl;
 }
@@ -93,8 +95,9 @@ Personaje::~Personaje()
 	Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
 
-void Personaje::view()
+void Personaje::view(Personaje* otherPlayer)
 {
+	this->_orientacion = (this->_pos_x > otherPlayer->_pos_x );
 	this->setBoundingBox();
 	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
@@ -161,7 +164,7 @@ void Personaje::showIdle()
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_IDLE][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 /*
 	++_lastFrame;
 	int aux = _lastFrame / SPEED;
@@ -191,7 +194,7 @@ void Personaje::viewWalking()
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_WALK][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 
 /*
 	++_lastFrame;
@@ -231,7 +234,7 @@ void Personaje::viewDuck()
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DUCK][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 
 /*
 	int aux = _lastFrame / SPEED;
@@ -271,7 +274,7 @@ void Personaje::viewJump()
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JUMP][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 
 	
 /*
@@ -304,7 +307,7 @@ void Personaje::viewJumpRight()
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPF][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 
 /*
 	++_lastFrame;
@@ -335,7 +338,7 @@ void Personaje::viewJumpLeft()
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPB][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 
 /*
 	++_lastFrame;
