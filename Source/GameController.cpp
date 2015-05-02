@@ -37,7 +37,10 @@ void GameController::KillController()
 
 GameController::GameController(Parser* parser)
 {
-	//Initialize SDL
+	this->_joystickOne = NULL;
+	this->_joystickTwo = NULL;
+	this->_hayPlayer1 = false;
+	this->_hayPlayer2 = false;
 	if(!iniciarSDL()) {
 		Logger::Instance()->log(ERROR,"SDL could not initialize!");
 		Logger::Instance()->log(ERROR,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
