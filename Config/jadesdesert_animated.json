@@ -25,7 +25,7 @@
 
 "personaje1": {	"ancho": 	30,
 		"alto": 	50,
-		"nombre":	"subzero",
+		"nombre":	"liukang",
 
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
@@ -36,7 +36,7 @@
 
 "personaje2": {	"ancho": 	30,
 		"alto": 	50,
-		"nombre":	"liukang",
+		"nombre":	"subzero",
 
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
