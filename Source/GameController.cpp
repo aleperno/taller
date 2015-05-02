@@ -438,14 +438,14 @@ void GameController::getKeysPlayer2() {
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_A ] )
 	{
-		if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() )
+		if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() && canMoveLeft(_personaje2,_personaje1))
 		{
 			this->_personaje2->moveLeft(MOV_FACTOR2);
 		}
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_D ] )
 	{
-		if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() )
+		if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() && canMoveRight(_personaje2,_personaje1) )
 		{
 			this->_personaje2->moveRight(MOV_FACTOR2);
 		}
@@ -475,14 +475,14 @@ void GameController::getKeysPlayer1() {
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
-		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() )
+		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveLeft(_personaje1,_personaje2) )
 		{
 			this->_personaje1->moveLeft(MOV_FACTOR2);
 		}
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
-		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() )
+		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveRight(_personaje1,_personaje2))
 		{
 			this->_personaje1->moveRight(MOV_FACTOR2);
 		}
@@ -491,21 +491,18 @@ void GameController::getKeysPlayer1() {
 	}
 }
 
-<<<<<<< HEAD
-void GameController::moveLayers(Personaje* pers, Personaje* otherPers)
-=======
 /*
 * Se mantiene el Keyboard scan para testing, en caso de no tener Joystick
 * Solo se mapean acciones de Player1
 */
+
 void GameController::getKeys()
 {
 	this->getKeysPlayer1();
 	this->getKeysPlayer2();
 }
 
-void GameController::moveLayers()
->>>>>>> c18d6db98b928d9bf168fa0885273a2255b8c2f5
+void GameController::moveLayers(Personaje* pers, Personaje* otherPers)
 {
 	//Veo si debo mover las capas
 	if( pers->isRightMargin() && pers->isWalking() && !otherPers->isLeftMargin() )
