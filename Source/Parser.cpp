@@ -46,34 +46,28 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->size = persValue.get("size",-1).asInt();
 
 	int i = 0;
-	personaje->walk[0] = persValue["walk"][0].asInt();
-	personaje->walk[1] = persValue["walk"][1].asInt();
-	personaje->cantSprites[i] = (personaje->walk[1] - personaje->walk[0]);
+	personaje->cantSprites[i] = persValue["walk"][1].asInt();
+	personaje->anchoSprites[i] = persValue["walk"][0].asInt();
 	i++;
 
-	personaje->idle[0] = persValue["idle"][0].asInt();
-	personaje->idle[1] = persValue["idle"][1].asInt();
-	personaje->cantSprites[i] = (personaje->idle[1] - personaje->idle[0]);
+	personaje->cantSprites[i] = persValue["idle"][1].asInt();
+	personaje->anchoSprites[i] = persValue["idle"][0].asInt();
 	i++;
 
-	personaje->jumpUp[0] = persValue["jumpUp"][0].asInt();
-	personaje->jumpUp[1] = persValue["jumpUp"][1].asInt();
-	personaje->cantSprites[i] = (personaje->jumpUp[1] - personaje->jumpUp[0]);
+	personaje->cantSprites[i] = persValue["jumpUp"][1].asInt();
+	personaje->anchoSprites[i] = persValue["jumpUp"][0].asInt();
 	i++;
 
-	personaje->jumpFwd[0] = persValue["jumpFwd"][0].asInt();
-	personaje->jumpFwd[1] = persValue["jumpFwd"][1].asInt();
-	personaje->cantSprites[i] = (personaje->jumpFwd[1] - personaje->jumpFwd[0]);
+	personaje->cantSprites[i] = persValue["jumpFwd"][1].asInt();
+	personaje->anchoSprites[i] = persValue["jumpFwd"][0].asInt();
 	i++;
 
-	personaje->jumpBwd[0] = persValue["jumpBwd"][0].asInt();
-	personaje->jumpBwd[1] = persValue["jumpBwd"][1].asInt();
-	personaje->cantSprites[i] = (personaje->jumpBwd[1] - personaje->jumpBwd[0]);
+	personaje->cantSprites[i] = persValue["jumpBwd"][1].asInt();
+	personaje->anchoSprites[i] = persValue["jumpBwd"][0].asInt();
 	i++;
 
-	personaje->duck[0] = persValue["duck"][0].asInt();
-	personaje->duck[1] = persValue["duck"][1].asInt();
-	personaje->cantSprites[i] = (personaje->duck[1] - personaje->duck[0]);
+	personaje->cantSprites[i] = persValue["duck"][1].asInt();
+	personaje->anchoSprites[i] = persValue["duck"][0].asInt();
 	i++;
 
 	/*
@@ -599,3 +593,4 @@ void Parser::reload()
 	string path = this->_configPath;
 	Initialize(path);
 }
+
