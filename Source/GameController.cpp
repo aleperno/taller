@@ -127,6 +127,8 @@ GameController::GameController(Parser* parser)
 bool GameController::iniciarSDL() {
 	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
 	this->_numJoysticks = SDL_NumJoysticks();
+	this->_joystickOne = NULL;
+	this->_joystickTwo = NULL;
 	if (this->_numJoysticks > 0 ) {
 				this->_joystickOne = SDL_JoystickOpen(0);
 				if (this->_joystickOne) {
