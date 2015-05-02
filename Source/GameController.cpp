@@ -113,14 +113,6 @@ GameController::GameController(Parser* parser)
 		Logger::Instance()->log(ERROR,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
 	} else {
 		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
-		if (this->_numJoysticks > 0 ) {
-			this->_joystickOne = SDL_JoystickOpen(0);
-			this->_joystickOneID = SDL_JoystickName(this->_joystickOne);
-		}
-		if (this->_numJoysticks == 2) {
-			this->_joystickTwo = SDL_JoystickOpen(1);
-			this->_joystickTwoID = SDL_JoystickName(this->_joystickTwo);
-		}
 	}
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
@@ -135,6 +127,24 @@ GameController::GameController(Parser* parser)
 bool GameController::iniciarSDL() {
 	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
 	this->_numJoysticks = SDL_NumJoysticks();
+	if (this->_numJoysticks > 0 ) {
+				this->_joystickOne = SDL_JoystickOpen(0);
+				if (this->_joystickOne) {
+					this->_hayPlayer1 = true;
+				} else {
+					this->_hayPlayer1 = false;
+					Logger::Instance()->log(ERROR,"No se ha iniciado el Joystick del player 1");
+				}
+			}
+			if (this->_numJoysticks == 2) {
+				this->_joystickTwo = SDL_JoystickOpen(1);
+				if (this->_joystickTwo) {
+					this->_hayPlayer2 = true;
+				} else {
+					this->_hayPlayer2 = false;
+					Logger::Instance()->log(ERROR,"No se ha iniciado el Joystick del Player 2");
+				}
+			}
 	return flag;
 }
 
@@ -323,86 +333,84 @@ void GameController::actualizarGanador() {
 	}
 }
 
-void GameController::procesarAxis(SDL_Event* e) {
-	for (int i=0; i<this->_numJoysticks;++i) {
-		if (e->jaxis.which == i) {
-			//X axis motion
-			if (e->jaxis.axis == 0) {
-				//Left
-				if ( e->jaxis.value < -JOYSTICK_DEAD_ZONE ) {
-					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed left");
-				}
-				//Right
-				else if ( e->jaxis.value > JOYSTICK_DEAD_ZONE) {
-					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed right");
-				} else {
-					//IDLE
-				}
-			}
-					//Y axis motion
-			else if (e->jaxis.axis == 1) {
-				//Up
-				if ( e->jaxis.value < -JOYSTICK_DEAD_ZONE ) {
-					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed up");
-				}
-				//Down
-				else if ( e->jaxis.value > JOYSTICK_DEAD_ZONE) {
-					Logger::Instance()->log(DEBUG,"Joystick #" + StringUtil::int2string(i) +" pressed down");
-				} else {
-					//IDLE
-				}
-			}
-		}
-	}
-}
-
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
 }
 
 void GameController::procesarJoystick(SDL_Event* e) {
-	if (e->type == SDL_JOYBUTTONDOWN) {
-		this->procesarBotones(e);
-	}
-	else if (e->type == SDL_JOYAXISMOTION) {
-		this->procesarAxis(e);
-	}
+		switch (e->type) {
+		case SDL_JOYBUTTONDOWN:
+			this->procesarBotones(e);
+			break;
+		case SDL_JOYDEVICEADDED:
+			Logger::Instance()->log(DEBUG,"Se ha enchufado un Joystick");
+			break;
+		case SDL_JOYDEVICEREMOVED:
+			Logger::Instance()->log(ERROR,"Se ha desenchufado un Joystick");
+			break;
+ 	}
 }
 
-bool GameController::endOfGame(SDL_Event* e)
-{
-	bool end_of_game = false;
-	while( SDL_PollEvent( e ) != 0 )
-	{
-		//User requests quit
-		if( e->type == SDL_QUIT )
-		{
-			end_of_game = true;
+void GameController::procesarMovimientoJoystick() {
+	if (this->hayPlayer1()) {
+		const Sint16 AXSP1 = SDL_JoystickGetAxis(this->_joystickOne,0);
+		const Sint16 AYSP1 = SDL_JoystickGetAxis(this->_joystickOne,1);
+
+		if (AXSP1 < 0 && AYSP1 < 0) {
+			this->_personaje1->jumpLeft(JMP_FACTOR);
+ 		}
+		else if (AXSP1 > 0 && AYSP1 < 0) {
+			this->_personaje1->jumpRight(JMP_FACTOR);
 		}
-		if( e->type == SDL_KEYDOWN )
-		{
-			switch( e->key.keysym.sym ) {
-			case SDLK_1:
-				_personaje1->healthPoints -= 10;
-				break;
-			case SDLK_2:
-				_personaje2->healthPoints -= 10;
-				break;
+		else if (AYSP1 < 0) {
+			this->_personaje1->jump(JMP_FACTOR);
+		}
+		else if (AYSP1 > 0) {
+			this->_personaje1->duck();
+		}
+		else if (AXSP1 < 0) {
+			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() ) {
+				this->_personaje1->moveLeft(MOV_FACTOR2);
+ 			}
+		}
+		else if (AXSP1 > 0) {
+			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() ) {
+				this->_personaje1->moveRight(MOV_FACTOR2);
 			}
-
-			if (_personaje1->healthPoints <= 0) {
-				Logger::Instance()->log(WARNING,"Gano personaje 2.");
-				this->reloadConfig();
-			}
-
-			if (_personaje2->healthPoints <= 0) {
-				Logger::Instance()->log(WARNING,"Gano personaje 1.");
-				this->reloadConfig();
-			}
+		} else {
+			this->_personaje1->idle();
 		}
 	}
-	return end_of_game;
+	if (this->hayPlayer2()) {
+		const Sint16 AXSP2 = SDL_JoystickGetAxis(this->_joystickTwo,0);
+		const Sint16 AYSP2 = SDL_JoystickGetAxis(this->_joystickTwo,1);
+		if (AXSP2 < 0 && AYSP2 < 0) {
+			this->_personaje2->jumpLeft(JMP_FACTOR);
+		}
+		else if (AXSP2 > 0 && AYSP2 < 0) {
+			this->_personaje2->jumpRight(JMP_FACTOR);
+		}
+		else if (AYSP2 < 0) {
+			this->_personaje2->jump(JMP_FACTOR);
+		}
+		else if (AYSP2 > 0) {
+			this->_personaje2->duck();
+		}
+		else if (AXSP2 < 0) {
+			if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() ) {
+				this->_personaje2->moveLeft(MOV_FACTOR2);
+ 			}
+ 		}
+		else if (AXSP2 > 0) {
+			if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() ) {
+				this->_personaje2->moveRight(MOV_FACTOR2);
+			}
+		} else {
+			this->_personaje2->idle();
+		}
+ 	}
 }
+ 
 
 void GameController::run(int sleep_time)
 {
@@ -412,20 +420,50 @@ void GameController::run(int sleep_time)
 	{
 		while( SDL_PollEvent(&e) != 0 )
 		{
-			//User requests quit
 			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 			this->procesarJoystick(&e);
 		}
-		this->printLayers();
-		this->getKeys();
+		this->procesarMovimientoJoystick();
+ 		this->getKeys();
+		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
+		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
+		this->moveLayers();
 		this->actualizarGanador();
+		this->printLayers();
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
 }
 
+bool GameController::hayPlayer1() {
+	return this->_hayPlayer1;
+}
+
+void GameController::setPlayer1(bool value) {
+	this->_hayPlayer1 = value;
+}
+
+void GameController::setPlayer2(bool value) {
+	this->_hayPlayer2 = value;
+}
+
+bool GameController::hayPlayer2() {
+	return this->_hayPlayer2;
+}
+
 void GameController::close()
 {
+	if (hayPlayer1()) {
+		SDL_JoystickClose(this->_joystickOne);
+		this->_joystickOne = NULL;
+		this->setPlayer1(false);
+	}
+	if (hayPlayer2()) {
+		SDL_JoystickClose(this->_joystickTwo);
+		this->_joystickTwo = NULL;
+		this->setPlayer2(false);
+	}
+
 	this->hud1.nombreTexture->free();
 	this->hud2.nombreTexture->free();
 	TTF_CloseFont( font );
@@ -467,6 +505,10 @@ void GameController::reloadConfig()
 	this->prepararHUD();
 }
 
+/*
+* Se mantiene el Keyboard scan para testing, en caso de no tener Joystick
+* Solo se mapean acciones de Player1
+*/
 void GameController::getKeys()
 {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
@@ -496,7 +538,6 @@ void GameController::getKeys()
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
-		//this-> moveLayersRight();
 		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() )
 		{
 			this->_personaje1->moveLeft(MOV_FACTOR2);
@@ -504,11 +545,9 @@ void GameController::getKeys()
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
 	{
-		//this-> moveLayersLeft();
 		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() )
 		{
 			this->_personaje1->moveRight(MOV_FACTOR2);
-
 		}
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_S ] )
@@ -525,11 +564,8 @@ void GameController::getKeys()
 	}
 	else
 	{
-		_personaje1->idle();
+		if (!this->hayPlayer1())_personaje1->idle();
 	}
-	_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
-	//Veo si debo correr las capas
-	this->moveLayers();
 }
 
 void GameController::moveLayers()
