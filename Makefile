@@ -14,7 +14,7 @@ COMPILER_FLAGS = -Wall -Werror -pedantic -pedantic-errors
 COMPILER_FLAGS += -std=c++11
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -I/usr/include/SDL2 -I$(PWD)/Headers -lSDL2 -lSDL2_image -lSDL2main -LHeaders/*.h 
+LINKER_FLAGS = -I/usr/include/SDL2 -I$(PWD)/Headers -lSDL2 -lSDL2_image -lSDL2main -lSDL2_ttf -LHeaders/*.h 
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = MortalKombat
