@@ -65,6 +65,7 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
+		bool _orientacion;
 		void viewWalking();
 		void viewDuck();
 		void viewJump();
@@ -78,7 +79,7 @@ class Personaje
 		~Personaje();
 		int healthPoints;
 		PersonajeData _personajeData;
-		void view();
+		void view(Personaje* otherPlayer);
 		void moveLeft(float factor);
 		void moveRight(float factor);
 		void duck();
@@ -97,6 +98,7 @@ class Personaje
 		bool isJumpingRight();
 		bool isJumpingLeft();
 		void continueAction(float factor_x, float factor_y);
+		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
 };
 
