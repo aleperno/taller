@@ -247,7 +247,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_r) this->reloadConfig();
 			else if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_s) this->_ventana->toggleShake();
+			else if (e->key.keysym.sym == SDLK_v) this->_ventana->toggleShake();
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
 			break;
@@ -403,12 +403,45 @@ void GameController::reloadConfig()
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
 }
 
-/*
-* Se mantiene el Keyboard scan para testing, en caso de no tener Joystick
-* Solo se mapean acciones de Player1
-*/
-void GameController::getKeys()
-{
+void GameController::getKeysPlayer2() {
+
+	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+	if(currentKeyStates[ SDL_SCANCODE_W ] && currentKeyStates[ SDL_SCANCODE_A ])
+	{
+		this->_personaje2->jumpLeft(JMP_FACTOR);
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_W ] && currentKeyStates[ SDL_SCANCODE_D ])
+	{
+		this->_personaje2->jumpRight(JMP_FACTOR);
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_W ])
+	{
+		this->_personaje2->jump(JMP_FACTOR);
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_S ])
+	{
+		this->_personaje2->duck();
+	}
+	else if( currentKeyStates[ SDL_SCANCODE_A ] )
+	{
+		if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() )
+		{
+			this->_personaje2->moveLeft(MOV_FACTOR2);
+		}
+	}
+	else if( currentKeyStates[ SDL_SCANCODE_D ] )
+	{
+		if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() )
+		{
+			this->_personaje2->moveRight(MOV_FACTOR2);
+		}
+	} else 	{
+		if (!this->hayPlayer2())_personaje2->idle();
+	}
+}
+
+void GameController::getKeysPlayer1() {
+
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
 	{
@@ -442,6 +475,16 @@ void GameController::getKeys()
 	} else 	{
 		if (!this->hayPlayer1())_personaje1->idle();
 	}
+}
+
+/*
+* Se mantiene el Keyboard scan para testing, en caso de no tener Joystick
+* Solo se mapean acciones de Player1
+*/
+void GameController::getKeys()
+{
+	this->getKeysPlayer1();
+	this->getKeysPlayer2();
 }
 
 void GameController::moveLayers()
