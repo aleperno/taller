@@ -234,6 +234,50 @@ void GameController::actualizarGanador() {
 
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
+		if (e->jdevice.which == 0) {
+		switch (e->jbutton.button) {
+		case 0 :
+			cout << "Player 1 apreto 0" << endl;
+			break;
+		case 1 :
+			cout << "Player 1 apreto 1" << endl;
+			break;
+		case 2 :
+			cout << "Player 1 apreto 2" << endl;
+			break;
+		case 3 :
+			cout << "Player 1 apreto 3" << endl;
+			break;
+		case 4 :
+			cout << "Player 1 apreto 4" << endl;
+			break;
+		case 5 :
+			cout << "Player 1 apreto 5" << endl;
+			break;
+		}
+	}
+	else if (e->jdevice.which == 1) {
+		switch (e->jbutton.button) {
+				case 0 :
+					cout << "Player 2 apreto 0" << endl;
+					break;
+				case 1 :
+					cout << "Player 2 apreto 1" << endl;
+					break;
+				case 2 :
+					cout << "Player 2 apreto 2" << endl;
+					break;
+				case 3 :
+					cout << "Player 2 apreto 3" << endl;
+					break;
+				case 4 :
+					cout << "Player 2 apreto 4" << endl;
+					break;
+				case 5 :
+					cout << "Player 2 apreto 5" << endl;
+					break;
+				}
+	}
 }
 
 void GameController::procesarEventos(SDL_Event* e) {
