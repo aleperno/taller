@@ -61,7 +61,7 @@ class GameController
 		static Ventana* getVentana(Parser* parser);
 		static EscenarioData getEscenario(Parser* parser);
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
-		static Personaje* getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, int numero);
+		static Personaje* getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, bool pers_ppal);
 		static Hud* getHud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2);
 		void printLayers();
 		bool endOfGame(SDL_Event* e);

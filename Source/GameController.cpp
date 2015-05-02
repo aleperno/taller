@@ -47,8 +47,8 @@ GameController::GameController(Parser* parser)
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
-	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
+	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
+	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
 	_end_of_game = false;
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
@@ -86,19 +86,17 @@ Hud* GameController::getHud(Ventana* ventana, Personaje* personaje1, Personaje* 
 	return hud;
 }
 
-Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, int numero)
+Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, bool pers_ppal)
 {
 	Personaje* pers;
-	switch (numero) {
-	case 1:
-		pers = new Personaje(ventana,parser->personaje1,escenario,false);
-		break;
-	case 2:
+	if (pers_ppal)
+	{
+		pers = new Personaje(ventana,parser->personaje1,escenario,pers_ppal);
+	}else{
 		if (parser->personaje1.nombre == parser->personaje2.nombre)
-			pers = new Personaje(ventana,parser->personaje2,escenario,true);
+			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal);
 		else
-			pers = new Personaje(ventana,parser->personaje2,escenario,false);
-		break;
+			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal);
 	}
 	return pers;
 }
@@ -140,11 +138,13 @@ void GameController::printLayers()
 		if (this->_personaje1->_zIndex == (i))
 		{
 			this->_personaje1->view();
+			this->_personaje2->view();
 		}
 	}
 	if (this->_personaje1->_zIndex >= _capas.size())
 	{
 		this->_personaje1->view();
+		this->_personaje2->view();
 	}
 
 	this->_hud->printHUD();
@@ -395,8 +395,8 @@ void GameController::reloadConfig()
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,1);
-	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,2);
+	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
+	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
 }
 
