@@ -376,10 +376,8 @@ void GameController::close()
 	delete this->_personaje2;
 	this->_personaje2 = NULL;
 
-	for ( vector<Capa*>::iterator i = _capas.begin(); i != _capas.end(); i++)
-	{
-		//delete *i;
-		(*i)->~Capa();
+	for(std::size_t i=0; i<this->_capas.size(); ++i) {
+		delete this->_capas[i];
 	}
 	_capas.clear();
 }
