@@ -54,8 +54,6 @@ class Personaje
 		float getBeta(float factor);	
 		vector<SDL_Rect*> vectorSprites;
 		vector<SDL_Rect*> loadVectorMedia(PersonajeData data);
-		SDL_Rect* sprites;
-		SDL_Rect* loadMedia(PersonajeData data);
 		int _lastFrame;		
 		bool _isWalking;
 		bool _isDucking;

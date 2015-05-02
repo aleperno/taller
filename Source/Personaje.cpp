@@ -27,7 +27,6 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_zIndex = escenario.z_index;
 	this->_personajeData = data;
 	this->vectorSprites = Personaje::loadVectorMedia(data);
-	this->sprites = Personaje::loadMedia(data);
 	this->_lastFrame = 0;
 	this->healthPoints = 100;
 	this->_isWalking = false;
@@ -52,19 +51,6 @@ void Personaje::setBoundingBox()
 	boundingBox.h = this->_alto_px;
 }
 
-SDL_Rect* Personaje::loadMedia(PersonajeData data)
-{
-	SDL_Rect* media = new SDL_Rect[data.size];
-	for (int i=0; i<data.size; i++)
-	{
-		media[i].x = i * data.width;
-		media[i].y = 0;
-		media[i].w = data.width;
-		media[i].h = data.height;
-	}
-	return media;
-}
-
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
 	vector<SDL_Rect*> media;
@@ -79,7 +65,7 @@ vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 		{
 			rectMedia[j].x = j * data.width;
 			rectMedia[j].y = i * data.height;
-			rectMedia[j].w = data.width;
+			rectMedia[j].w = data.anchoSprites[i];
 			rectMedia[j].h = data.height;
 		}
 		media.push_back(rectMedia);
@@ -424,6 +410,7 @@ void Personaje::duck()
 {
 	if (  !this->isFalling() && !this->isJumping()  )
 	{
+		if (this->_isDucking) this->_lastFrame = 0;
 		this->_isDucking = true;
 		this->_isWalking = false;
 	}
@@ -434,6 +421,7 @@ void Personaje::jump(float factor)
 	//cout << "salto" << endl;
 	if (  !this->isFalling() && !this->isJumping()  )
 	{
+		if (!this->_isJumping) this->_lastFrame = 0;
 		this->_isJumping = true;
 		this->_isWalking = false;
 	}
@@ -442,6 +430,7 @@ void Personaje::jump(float factor)
 void Personaje::jumpRight(float factor){
 	if ( !this->isFalling() && !this->isJumping() )
 	{
+		if (!this->_isJumpingRight) this->_lastFrame = 0;
 		this->_isJumpingRight = true;
 		this->_isWalking = false;
 	}
@@ -450,6 +439,7 @@ void Personaje::jumpRight(float factor){
 void Personaje::jumpLeft(float factor){
 	if ( !this->isFalling() && !this->isJumping() )
 	{
+		if (!this->_isJumpingLeft) this->_lastFrame = 0;
 		this->_isJumpingLeft = true;
 		this->_isWalking = false;
 	}
