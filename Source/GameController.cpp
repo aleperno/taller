@@ -135,6 +135,9 @@ void GameController::printLayers()
 	//LimpioPantalla
 	this->_ventana->clearScreen();
 	//this->_ventana->view();
+	if (_ventana->isShaking())
+		_ventana->setShakeIntensity();
+
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->view();
