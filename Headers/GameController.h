@@ -81,6 +81,8 @@ class GameController
 		bool hayPlayer2();
 		void setPlayer1(bool value);
 		void setPlayer2(bool value);
+		void getKeysPlayer1();
+		void getKeysPlayer2();
 		//Testing
 		void viewWindowPosition();
 
