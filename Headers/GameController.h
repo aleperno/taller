@@ -74,10 +74,8 @@ class GameController
 		bool iniciarSDL();
 		void setEndOfGame(bool value);
 		void actualizarGanador();
-		void procesarJoystick(SDL_Event* e);
-		void procesarAxis(SDL_Event* e, int* Xdir, int* Ydir);
+		void procesarEventos(SDL_Event* e);
 		void procesarBotones(SDL_Event* e);
-		void calcularMovimiento(int Xdir, int Ydir, SDL_JoystickID indiceJoystick);
 		void procesarMovimientoJoystick();
 		bool hayPlayer1();
 		bool hayPlayer2();
@@ -93,3 +91,4 @@ class GameController
 };
 
 #endif /* HEADERS_GAMECONTROLLER_H_ */
+
