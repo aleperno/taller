@@ -340,8 +340,8 @@ void GameController::run(int sleep_time)
 		}
 		this->procesarMovimientoJoystick();
  		this->getKeys();
-		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
-		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR);
+		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
+		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 		this->moveLayers(_personaje1,_personaje2);
 		this->moveLayers(_personaje2,_personaje1);
 		this->actualizarGanador();
@@ -509,7 +509,7 @@ void GameController::moveLayers(Personaje* pers, Personaje* otherPers)
 	{
 		this->moveLayersLeft(MOV_FACTOR2);
 	}
-	else if ( this->_personaje1->isRightMargin() && _personaje1->isJumpingRight() )
+	else if ( pers->isRightMargin() && pers->isJumpingRight() && !otherPers->isLeftMargin() )
 	{
 		this->moveLayersLeft(MOV_FACTOR_JMP);
 	}
@@ -517,7 +517,7 @@ void GameController::moveLayers(Personaje* pers, Personaje* otherPers)
 	{
 		this-> moveLayersRight(MOV_FACTOR2);
 	}
-	else if ( this->_personaje1->isLeftMargin() && _personaje1->isJumpingLeft() )
+	else if ( pers->isLeftMargin() && pers->isJumpingLeft() && !otherPers->isRightMargin())
 	{
 		this-> moveLayersRight(MOV_FACTOR_JMP);
 	}

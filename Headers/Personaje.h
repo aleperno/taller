@@ -97,7 +97,7 @@ class Personaje
 		bool isWalking();
 		bool isJumpingRight();
 		bool isJumpingLeft();
-		void continueAction(float factor_x, float factor_y);
+		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
 };
