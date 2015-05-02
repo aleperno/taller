@@ -415,9 +415,9 @@ void Personaje::moveLeft(float factor)
 	}
 }
 
-bool Personaje::isLeftMargin(float tolerance)
+bool Personaje::isLeftMargin()
 {
-	return (_pos_x - _ventana->_pos_log_x <= tolerance);
+	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE);
 }
 
 void Personaje::duck()
@@ -583,9 +583,9 @@ void Personaje::moveRight(float factor)
 	}
 }
 
-bool Personaje::isRightMargin(float tolerance)
+bool Personaje::isRightMargin()
 {
-	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= tolerance);
+	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE);
 }
 
 float Personaje::getBeta(float factor)

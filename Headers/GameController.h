@@ -26,7 +26,7 @@ using namespace std;
 
 
 #define DEF_SLEEP_TIME 20
-#define WINDOW_MARGIN_TOLERANCE 10
+
 
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
@@ -54,7 +54,6 @@ class GameController
 		bool _hayPlayer2;
 		Hud* _hud;
 
-
 		//Metodos
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 		static GameController* _instance;
@@ -70,7 +69,7 @@ class GameController
 		void getKeys();
 		void moveLayersRight(float factor);
 		void moveLayersLeft(float factor);
-		void moveLayers();
+		void moveLayers(Personaje* pers, Personaje* otherPers);
 		bool iniciarSDL();
 		void setEndOfGame(bool value);
 		void actualizarGanador();
@@ -83,6 +82,8 @@ class GameController
 		void setPlayer2(bool value);
 		//Testing
 		void viewWindowPosition();
+		bool canMoveRight(Personaje* pers, Personaje* otherPers);
+		bool canMoveLeft(Personaje* pers, Personaje* otherPers);
 
 	public:
 		static GameController* Instance(Parser* parser = 0);

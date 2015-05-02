@@ -89,8 +89,8 @@ class Personaje
 		void idle();
 		unsigned int _zIndex;
 		void showIdle();
-		bool isLeftMargin(float tolerance);
-		bool isRightMargin(float tolerance);
+		bool isLeftMargin();
+		bool isRightMargin();
 		bool isJumping();
 		bool isFalling();
 		bool isMovingInJump();
