@@ -45,24 +45,43 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->width = persValue.get("width",-1).asInt();
 	personaje->size = persValue.get("size",-1).asInt();
 
+	int i = 0;
 	personaje->walk[0] = persValue["walk"][0].asInt();
 	personaje->walk[1] = persValue["walk"][1].asInt();
+	personaje->cantSprites[i] = (personaje->walk[1] - personaje->walk[0]);
+	i++;
 
 	personaje->idle[0] = persValue["idle"][0].asInt();
 	personaje->idle[1] = persValue["idle"][1].asInt();
+	personaje->cantSprites[i] = (personaje->idle[1] - personaje->idle[0]);
+	i++;
 
 	personaje->jumpUp[0] = persValue["jumpUp"][0].asInt();
 	personaje->jumpUp[1] = persValue["jumpUp"][1].asInt();
+	personaje->cantSprites[i] = (personaje->jumpUp[1] - personaje->jumpUp[0]);
+	i++;
 
 	personaje->jumpFwd[0] = persValue["jumpFwd"][0].asInt();
 	personaje->jumpFwd[1] = persValue["jumpFwd"][1].asInt();
+	personaje->cantSprites[i] = (personaje->jumpFwd[1] - personaje->jumpFwd[0]);
+	i++;
 
 	personaje->jumpBwd[0] = persValue["jumpBwd"][0].asInt();
 	personaje->jumpBwd[1] = persValue["jumpBwd"][1].asInt();
+	personaje->cantSprites[i] = (personaje->jumpBwd[1] - personaje->jumpBwd[0]);
+	i++;
 
 	personaje->duck[0] = persValue["duck"][0].asInt();
 	personaje->duck[1] = persValue["duck"][1].asInt();
+	personaje->cantSprites[i] = (personaje->duck[1] - personaje->duck[0]);
+	i++;
 
+	/*
+	for(int j = 0; j < i; j++)
+	{
+		cout << j+1 << " - " << personaje->cantSprites[j] << endl;
+	}
+	*/
 	personaje->imgPath = persValue["imgSrc"].asString();
 
 	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.

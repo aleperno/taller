@@ -25,6 +25,13 @@ using namespace std;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
 
+#define POS_FILA_WALK 0
+#define POS_FILA_IDLE 1
+#define POS_FILA_JUMP 2
+#define POS_FILA_JMPF 3
+#define POS_FILA_JMPB 4
+#define POS_FILA_DUCK 5
+
 class Personaje
 {
 	private:
@@ -45,6 +52,8 @@ class Personaje
 		static int getHeight(Ventana* ventana, float alto_log_capa);
 		float getAlpha(float factor);
 		float getBeta(float factor);	
+		vector<SDL_Rect*> vectorSprites;
+		vector<SDL_Rect*> loadVectorMedia(PersonajeData data);
 		SDL_Rect* sprites;
 		SDL_Rect* loadMedia(PersonajeData data);
 		int _lastFrame;		

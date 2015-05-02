@@ -23,6 +23,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_alto_px = Personaje::getHeight(ventana,_alto_log);
 	this->_zIndex = escenario.z_index;
 	this->_personajeData = data;
+	this->vectorSprites = Personaje::loadVectorMedia(data);
 	this->sprites = Personaje::loadMedia(data);
 	this->_lastFrame = 0;
 	this->healthPoints = 100;
@@ -55,6 +56,28 @@ SDL_Rect* Personaje::loadMedia(PersonajeData data)
 		media[i].y = 0;
 		media[i].w = data.width;
 		media[i].h = data.height;
+	}
+	return media;
+}
+
+vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
+{
+	vector<SDL_Rect*> media;
+	unsigned int cantSprites = 6;
+	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK" };
+	for (unsigned int i=0; i < cantSprites; i++)
+	{
+		//cout << acciones[i] << endl;
+		//cout << "	Fila: " << i << " - Cantidada de sprites: " << data.cantSprites[i] << endl;
+		SDL_Rect* rectMedia = new SDL_Rect[data.cantSprites[i] + 1];
+		for (int j=0; j <= data.cantSprites[i]; j++)
+		{
+			rectMedia[j].x = j * data.width;
+			rectMedia[j].y = i * data.height;
+			rectMedia[j].w = data.width;
+			rectMedia[j].h = data.height;
+		}
+		media.push_back(rectMedia);
 	}
 	return media;
 }
@@ -126,6 +149,19 @@ void Personaje::showIdle()
 {
 	++_lastFrame;
 	int aux = _lastFrame / SPEED;
+	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_IDLE] )
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_IDLE][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+/*
+	++_lastFrame;
+	int aux = _lastFrame / SPEED;
 	if ( aux < this->_personajeData.idle[0] || aux > this->_personajeData.idle[1])
 	{
 		_lastFrame = this->_personajeData.idle[0] * SPEED;
@@ -136,10 +172,25 @@ void Personaje::showIdle()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+*/
 }
 
 void Personaje::viewWalking()
 {
+	++_lastFrame;
+	int aux = _lastFrame / SPEED;
+	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_WALK] )
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_WALK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+/*
 	++_lastFrame;
 	int aux = _lastFrame / SPEED;
 	if ( aux < this->_personajeData.walk[0] || aux > this->_personajeData.walk[1])
@@ -152,10 +203,34 @@ void Personaje::viewWalking()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+*/
 }
 
 void Personaje::viewDuck()
 {
+	int aux = _lastFrame / SPEED;
+	if ( aux < this->_personajeData.cantSprites[POS_FILA_DUCK] )
+	{
+		++_lastFrame;
+		aux = _lastFrame / SPEED;
+		if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_DUCK]+1)
+		{
+			_lastFrame = 0;
+		}
+	}
+	else if ( aux > this->_personajeData.cantSprites[POS_FILA_DUCK] )
+	{
+		_lastFrame = this->_personajeData.cantSprites[POS_FILA_DUCK];
+	}
+
+	int frame = _lastFrame/SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DUCK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+/*
 	int aux = _lastFrame / SPEED;
 	if ( aux < this->_personajeData.duck[1] )
 	{
@@ -176,10 +251,27 @@ void Personaje::viewDuck()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+*/
 }
 
 void Personaje::viewJump()
 {
+	++_lastFrame;
+	int aux = _lastFrame / JMP_SPEED;
+	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_JUMP])
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/JMP_SPEED;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JUMP][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+	
+/*
 	//cout << "Muestro salto" << endl;
 	++_lastFrame;
 	int aux = _lastFrame / JMP_SPEED;
@@ -193,10 +285,25 @@ void Personaje::viewJump()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+*/
 }
 
 void Personaje::viewJumpRight()
 {
+	++_lastFrame;
+	int aux = _lastFrame / JMP_SPEED2;
+	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_JMPF])
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/JMP_SPEED2;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPF][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+/*
 	++_lastFrame;
 	int aux = _lastFrame / JMP_SPEED2;
 	if ( aux < this->_personajeData.jumpFwd[0] || aux > this->_personajeData.jumpFwd[1])
@@ -209,10 +316,25 @@ void Personaje::viewJumpRight()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+*/
 }
 
 void Personaje::viewJumpLeft()
 {
+	++_lastFrame;
+	int aux = _lastFrame / JMP_SPEED2;
+	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_JMPB])
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/JMP_SPEED2;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPB][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+/*
 	++_lastFrame;
 	int aux = _lastFrame / JMP_SPEED2;
 	if ( aux < this->_personajeData.jumpBwd[0] || aux > this->_personajeData.jumpBwd[1])
@@ -225,6 +347,7 @@ void Personaje::viewJumpLeft()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
+*/
 }
 
 int Personaje::get_x_px()
