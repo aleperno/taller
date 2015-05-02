@@ -43,14 +43,6 @@ class PersonajeData
 		int cantSprites[CANTIDAD_MAXIMA_SPRITES];
 		int anchoSprites[CANTIDAD_MAXIMA_SPRITES];
 
-		/*
-		int walk[2];
-		int idle[2];
-		int jumpUp[2];
-		int jumpFwd[2];
-		int jumpBwd[2];
-		int duck[2];
-		*/
 
 		string imgPath;
 };
