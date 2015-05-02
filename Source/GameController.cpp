@@ -279,7 +279,6 @@ void GameController::printLayers()
 	this->_ventana->updateScreen();
 }
 
-
 bool GameController::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 {
 	float factor_cercania = 0.25f;
@@ -310,8 +309,6 @@ bool GameController::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2
     return colision;
 }
 
-
-
 void GameController::viewWindowPosition()
 {
 	int x,y;
@@ -339,7 +336,7 @@ void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
 }
 
-void GameController::procesarJoystick(SDL_Event* e) {
+void GameController::procesarEventos(SDL_Event* e) {
 		switch (e->type) {
 		case SDL_JOYBUTTONDOWN:
 			this->procesarBotones(e);
@@ -349,6 +346,13 @@ void GameController::procesarJoystick(SDL_Event* e) {
 			break;
 		case SDL_JOYDEVICEREMOVED:
 			Logger::Instance()->log(ERROR,"Se ha desenchufado un Joystick");
+			break;
+		case SDL_KEYDOWN:
+			if (e->key.keysym.sym == SDLK_r) this->reloadConfig();
+			else if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_s) this->_ventana->toggleShake();
+			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
+			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
 			break;
  	}
 }
@@ -413,7 +417,6 @@ void GameController::procesarMovimientoJoystick() {
  	}
 }
  
-
 void GameController::run(int sleep_time)
 {
 	SDL_Event e;
@@ -423,7 +426,7 @@ void GameController::run(int sleep_time)
 		while( SDL_PollEvent(&e) != 0 )
 		{
 			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
-			this->procesarJoystick(&e);
+			this->procesarEventos(&e);
 		}
 		this->procesarMovimientoJoystick();
  		this->getKeys();
@@ -514,15 +517,7 @@ void GameController::reloadConfig()
 void GameController::getKeys()
 {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-	if( currentKeyStates[ SDL_SCANCODE_ESCAPE ] )
-	{
-		_end_of_game = true;
-	}
-	else if( currentKeyStates[ SDL_SCANCODE_R ] )
-	{
-		this->reloadConfig();
-	}
-	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
+	if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
 	{
 		this->_personaje1->jumpLeft(JMP_FACTOR);
 	}
@@ -551,21 +546,7 @@ void GameController::getKeys()
 		{
 			this->_personaje1->moveRight(MOV_FACTOR2);
 		}
-	}
-	else if( currentKeyStates[ SDL_SCANCODE_S ] )
-	{
-		_ventana->toggleShake();
-	}
-	else if (currentKeyStates[ SDL_SCANCODE_1])
-	{
-		this->_personaje1->healthPoints -= 10;
-	}
-	else if ( currentKeyStates [ SDL_SCANCODE_2])
-	{
-		this->_personaje2->healthPoints -=10;
-	}
-	else
-	{
+	} else 	{
 		if (!this->hayPlayer1())_personaje1->idle();
 	}
 }
@@ -608,3 +589,4 @@ void GameController::moveLayersLeft(float factor)
 	}
 	this->_ventana->moveRight(factor);
 }
+
