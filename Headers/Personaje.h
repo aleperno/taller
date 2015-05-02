@@ -89,15 +89,15 @@ class Personaje
 		void idle();
 		unsigned int _zIndex;
 		void showIdle();
-		bool isLeftMargin(float tolerance);
-		bool isRightMargin(float tolerance);
+		bool isLeftMargin();
+		bool isRightMargin();
 		bool isJumping();
 		bool isFalling();
 		bool isMovingInJump();
 		bool isWalking();
 		bool isJumpingRight();
 		bool isJumpingLeft();
-		void continueAction(float factor_x, float factor_y);
+		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
 };
