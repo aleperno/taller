@@ -270,7 +270,7 @@ void Personaje::moveLeft(float factor)
 	if( ( !this->_isJumping && !this->_isFalling ) || ( this->_isJumpingLeft ))
 	{
 		this->_isWalking = true;
-		//Logger::Instance()->log(DEBUG,"Camino a la Izquierda");
+		Logger::Instance()->log(DEBUG,"Camino a la Izquierda");
 		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 		//cout << "La pos actual es " << _pos_x << " el ancho logico es " << _ancho_log;
 		//float new_x = _pos_x - ((_ancho_log / factor) + getAlpha(factor)) ; //viejo
@@ -331,7 +331,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 	float new_x;
 	if ( this->isFalling() )
 	{
-		//Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
+		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
 		float new_y = _pos_y - factor_y; // DIVIDO EL FACTOR POR 2 PORQUE SINO
 											 // LLEGA AL PISO ANTES DE MOSTRAR TODOS
 											 // LOS SPRITES
@@ -368,7 +368,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 	}
 	else if ( this->isJumping() )
 	{
-		//Logger::Instance()->log(DEBUG,"El personaje esta saltando");
+		Logger::Instance()->log(DEBUG,"El personaje esta saltando");
 		float new_y = _pos_y + factor_y; // DIVIDO EL FACTOR POR 2 PORQUE SINO
 											 // LLEGA AL PISO ANTES DE MOSTRAR TODOS
 											 // LOS SPRITES
@@ -439,7 +439,7 @@ void Personaje::moveRight(float factor)
 	if(!( this->_isJumping ) && !( this->_isFalling ))
 	{
 		this->_isWalking = true;
-		//Logger::Instance()->log(DEBUG,"Camino a la derecha");
+		Logger::Instance()->log(DEBUG,"Camino a la derecha");
 		//cout << "Me intento mover " << factor << "y beta vale "<< getBeta(factor) << endl;
 		//float new_x = _pos_x + (_ancho_log / factor) + getAlpha(factor); //viejo
 		float new_x = _pos_x + factor + getBeta(factor);

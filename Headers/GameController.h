@@ -58,8 +58,6 @@ class GameController
 		bool _end_of_game;
 		SDL_Joystick* _joystickOne;
 		SDL_Joystick* _joystickTwo;
-		bool _hayPlayer1;
-		bool _hayPlayer2;
 		const char* _joystickOneID;
 		const char* _joystickTwoID;
 		int _numJoysticks;
@@ -86,14 +84,8 @@ class GameController
 		void setEndOfGame(bool value);
 		void actualizarGanador();
 		void procesarJoystick(SDL_Event* e);
-		void procesarAxis(SDL_Event* e, int* Xdir, int* Ydir);
+		void procesarAxis(SDL_Event* e);
 		void procesarBotones(SDL_Event* e);
-		void calcularMovimiento(int Xdir, int Ydir, SDL_JoystickID indiceJoystick);
-		void procesarMovimientoJoystick();
-		bool hayPlayer1();
-		bool hayPlayer2();
-		void setPlayer1(bool value);
-		void setPlayer2(bool value);
 		//Testing
 		void viewWindowPosition();
 
