@@ -110,7 +110,10 @@ int Capa::get_x_px()
 	int pos_e = 0; //La posicion en pixeles verdadera (entero)
 	pos_r = ( _pos_x * _ancho_px) / _ancho_log;
 	pos_e = (int) pos_r;
-	return pos_e;
+	int shake = 0;
+	if (this->_ventana->isShaking())
+		shake = this->_ventana->shake();
+	return pos_e+shake;
 }
 
 int Capa::get_y_px()
@@ -120,7 +123,10 @@ int Capa::get_y_px()
 	pos_r = ( (_alto_log - _pos_y) * _alto_px) / _alto_log;
 	pos_e = (int) pos_r;
 	pos_e =  pos_e -_alto_px;
-	return pos_e;
+	int shake = 0;
+	if (this->_ventana->isShaking())
+		shake = this->_ventana->shake();
+	return pos_e+shake;
 }
 
 void Capa::moveLeft(float factor)

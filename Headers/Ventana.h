@@ -19,8 +19,9 @@ using namespace std;
 #include <TextureHandler.h>
 #include <EscenarioData.h>
 
-#define SHAKE_INTENSITY 10
+#define SHAKE_INTENSITY 20
 #define SHAKE_LENGTH 20
+#define WINDOW_MARGIN_TOLERANCE 10
 
 class Ventana
 {
@@ -41,14 +42,17 @@ class Ventana
 		void moveLeft(float factor);
 		void moveRight(float factor);
 		void toggleShake();
+		bool isShaking();
+		int shake();
+		void setShakeIntensity();
 
 	private:
 		EscenarioData _escenario;
 		bool _isShaking;
 		int _shakeLenght;
 		int _shakeIntensity;
-		void shake();
 		int _window_x,_window_y;
+		int _shakeInt;
 };
 
 

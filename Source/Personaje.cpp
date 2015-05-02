@@ -401,9 +401,9 @@ void Personaje::moveLeft(float factor)
 	}
 }
 
-bool Personaje::isLeftMargin(float tolerance)
+bool Personaje::isLeftMargin()
 {
-	return (_pos_x - _ventana->_pos_log_x <= tolerance);
+	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE);
 }
 
 void Personaje::duck()
@@ -445,15 +445,13 @@ void Personaje::jumpLeft(float factor){
 	}
 }
 
-void Personaje::continueAction(float factor_x, float factor_y)
+void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherPers)
 {
 	float new_x;
 	if ( this->isFalling() )
 	{
 		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
-		float new_y = _pos_y - factor_y; // DIVIDO EL FACTOR POR 2 PORQUE SINO
-											 // LLEGA AL PISO ANTES DE MOSTRAR TODOS
-											 // LOS SPRITES
+		float new_y = _pos_y - factor_y;
 		if (new_y <= this->_escenario.y_piso)
 		{
 			// Lleg� al piso.
@@ -467,7 +465,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 			_pos_y = new_y;
 		}
 
-		if ( this->_isFallingRight )
+		if ( this->_isFallingRight && !(otherPers->isLeftMargin() && this->isRightMargin()))
 		{
 			new_x = _pos_x + (factor_x + getBeta(factor_x));
 			//cout << new_x - _pos_x << endl;
@@ -476,7 +474,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 			else
 				_pos_x = _escenario.ancho - this->_ancho_log;
 		}
-		else if ( this->_isFallingLeft )
+		else if ( this->_isFallingLeft && !(otherPers->isRightMargin() && this->isLeftMargin()))
 		{
 			new_x = _pos_x - ((factor_x) + getBeta(factor_x));
 			if (new_x >= 0)
@@ -511,7 +509,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 			_pos_y = new_y;
 		}
 
-		if ( this->_isJumpingRight )
+		if ( this->_isJumpingRight && !(otherPers->isLeftMargin() && this->isRightMargin()))
 		{
 			new_x = _pos_x + (factor_x + getBeta(factor_x));
 			if (new_x + this->_ancho_log <= _escenario.ancho)
@@ -520,7 +518,7 @@ void Personaje::continueAction(float factor_x, float factor_y)
 				_pos_x = _escenario.ancho - this->_ancho_log;
 
 		}
-		else if ( this->_isJumpingLeft )
+		else if ( this->_isJumpingLeft && !(otherPers->isRightMargin() && this->isLeftMargin()))
 		{
 			new_x = _pos_x - ((factor_x) + getBeta(factor_x));
 			if (new_x >= 0)
@@ -573,9 +571,9 @@ void Personaje::moveRight(float factor)
 	}
 }
 
-bool Personaje::isRightMargin(float tolerance)
+bool Personaje::isRightMargin()
 {
-	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= tolerance);
+	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE);
 }
 
 float Personaje::getBeta(float factor)
