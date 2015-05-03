@@ -151,20 +151,6 @@ void Personaje::showIdle()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
-/*
-	++_lastFrame;
-	int aux = _lastFrame / SPEED;
-	if ( aux < this->_personajeData.idle[0] || aux > this->_personajeData.idle[1])
-	{
-		_lastFrame = this->_personajeData.idle[0] * SPEED;
-	}
-	int frame = _lastFrame/SPEED;
-	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->sprites[frame]);
-	int x = get_x_px();
-	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
-*/
 }
 
 void Personaje::viewWalking()
@@ -181,21 +167,6 @@ void Personaje::viewWalking()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
-
-/*
-	++_lastFrame;
-	int aux = _lastFrame / SPEED;
-	if ( aux < this->_personajeData.walk[0] || aux > this->_personajeData.walk[1])
-	{
-		_lastFrame = this->_personajeData.walk[0] * SPEED;
-	}
-	int frame = _lastFrame/SPEED;
-	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->sprites[frame]);
-	int x = get_x_px();
-	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
-*/
 }
 
 void Personaje::viewDuck()
@@ -221,30 +192,6 @@ void Personaje::viewDuck()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
-
-/*
-	int aux = _lastFrame / SPEED;
-	if ( aux < this->_personajeData.duck[1] )
-	{
-		++_lastFrame;
-		aux = _lastFrame / SPEED;
-		if ( aux < this->_personajeData.duck[0] || aux > this->_personajeData.duck[1])
-		{
-			_lastFrame = this->_personajeData.duck[0] * SPEED;
-		}
-	}
-	else
-	{
-		_lastFrame = this->_personajeData.duck[1] * SPEED;
-	}
-	int frame = _lastFrame/SPEED;
-	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->sprites[frame]);
-	int x = get_x_px();
-	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
-
-*/
 }
 
 void Personaje::viewJump()
@@ -261,23 +208,6 @@ void Personaje::viewJump()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
-
-	
-/*
-	//cout << "Muestro salto" << endl;
-	++_lastFrame;
-	int aux = _lastFrame / JMP_SPEED;
-	if ( aux < this->_personajeData.jumpUp[0] || aux > this->_personajeData.jumpUp[1])
-	{
-		_lastFrame = this->_personajeData.jumpUp[0] * JMP_SPEED;
-	}
-	int frame = _lastFrame/JMP_SPEED;
-	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->sprites[frame]);
-	int x = get_x_px();
-	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
-*/
 }
 
 void Personaje::viewJumpRight()
@@ -294,21 +224,6 @@ void Personaje::viewJumpRight()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
-
-/*
-	++_lastFrame;
-	int aux = _lastFrame / JMP_SPEED2;
-	if ( aux < this->_personajeData.jumpFwd[0] || aux > this->_personajeData.jumpFwd[1])
-	{
-		_lastFrame = this->_personajeData.jumpFwd[0] * JMP_SPEED2;
-	}
-	int frame = _lastFrame/JMP_SPEED2;
-	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->sprites[frame]);
-	int x = get_x_px();
-	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
-*/
 }
 
 void Personaje::viewJumpLeft()
@@ -325,21 +240,6 @@ void Personaje::viewJumpLeft()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
-
-/*
-	++_lastFrame;
-	int aux = _lastFrame / JMP_SPEED2;
-	if ( aux < this->_personajeData.jumpBwd[0] || aux > this->_personajeData.jumpBwd[1])
-	{
-		_lastFrame = this->_personajeData.jumpBwd[0] * JMP_SPEED2;
-	}
-	int frame = _lastFrame/JMP_SPEED2;
-	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->sprites[frame]);
-	int x = get_x_px();
-	int y = get_y_px();
-	this->_handler->renderAnimation(this->_personajeData.orientacion,x,y,_ancho_px,_alto_px,currentClip);
-*/
 }
 
 int Personaje::get_x_px()
@@ -410,7 +310,7 @@ void Personaje::duck()
 {
 	if (  !this->isFalling() && !this->isJumping()  )
 	{
-		if (this->_isDucking) this->_lastFrame = 0;
+		if (!this->_isDucking) this->_lastFrame = 0;
 		this->_isDucking = true;
 		this->_isWalking = false;
 	}
