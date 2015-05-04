@@ -7,7 +7,7 @@
 #include <GameController.h>
 #define MOV_FACTOR 300;   //Fraccion de la capa que se mueve por ciclo
 #define MOV_FACTOR2 0.8   //
-#define MOV_FACTOR_JMP 1.2
+#define MOV_FACTOR_JMP 2
 #define MOVE_P_FACTOR 1 //
 #define JMP_FACTOR 2
 
@@ -157,7 +157,8 @@ void GameController::printLayers()
 
 	//Solo para pruebas
 	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje1->boundingBox );
-
+    SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje2->boundingBox );
+	
 	SDL_Rect wall;
     wall.x = 300;
     wall.y = 300;
@@ -530,6 +531,12 @@ void GameController::getKeysPlayer1() {
 	{
 		this->_personaje1->jump(JMP_FACTOR);
 	}
+	//Prueba de lanzamiento
+	/*else if(currentKeyStates[ SDL_SCANCODE_L ])
+	{
+		this->_personaje1->lanzarArma();
+	}*/
+	//Fin prueba lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
 	{
 		this->_personaje1->blockDuck();

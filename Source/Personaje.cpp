@@ -37,6 +37,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+
+	this->_isThrowing = false;
+
 	this->_isBlocking = false;
 	this->_isDizzy = false;
 
@@ -45,6 +48,13 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
 	this-> _data = data;
 	//cout << _pos_x << endl;
+}
+
+void Personaje::lanzarArma()
+{
+	this->_isThrowing = true;
+	Arma* _arma = new Arma("[METER PATH DEL ARMA]", _orientacion, _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex, _pos_y, _pos_x);
+	_arma->viewLanzar();
 }
 
 void Personaje::setBoundingBox()

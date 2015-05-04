@@ -19,6 +19,7 @@ using namespace std;
 #include <Ventana.h>
 #include <PersonajeData.h>
 #include <EscenarioData.h>
+#include <Arma.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
@@ -67,8 +68,12 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
+
+		bool _isThrowing;
+
 		bool _isBlocking;
 		bool _isDizzy;
+
 		bool _orientacion;
 		void viewWalking();
 		void viewDuck();
@@ -79,7 +84,6 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void setBoundingBox();
-
 
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal);
@@ -110,6 +114,7 @@ class Personaje
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
+		void lanzarArma();
 };
 
 
