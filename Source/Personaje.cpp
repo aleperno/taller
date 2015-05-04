@@ -37,6 +37,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+	this->_isBlocking = false;
+	this->_isDizzy = false;
 
 	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
@@ -56,7 +58,7 @@ void Personaje::setBoundingBox()
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
 	vector<SDL_Rect*> media;
-	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK", "BLOCK", "BLOCKDUCK" };
+	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK", "BLOCK", "BLOCKDUCK", "DIZZY" };
 	for (unsigned int i=0; i < data.cantSprites.size(); i++)
 	{
 		//cout << acciones[i] << endl;
@@ -112,6 +114,10 @@ void Personaje::view(Personaje* otherPlayer)
 	else if (this->_isDucking)
 	{
 		this->viewDuck();
+	}
+	else if (this->_isDizzy)
+	{
+		this->viewDizzy();
 	}
 	else if (this->_isBlocking)
 	{
@@ -195,6 +201,23 @@ void Personaje::viewDuck()
 	}
 	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DUCK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewDizzy()
+{
+	int delay = _data.velSprites[POS_FILA_DIZZY];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_DIZZY] )
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DIZZY][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
@@ -334,6 +357,7 @@ void Personaje::moveLeft(float factor)
 {
 	this->_isDucking = false;
 	this->_isBlocking = false;
+	this->_isDizzy = false;
 	if( ( !this->_isJumping && !this->_isFalling ) || ( this->_isJumpingLeft ))
 	{
 		this->_isWalking = true;
@@ -366,6 +390,19 @@ void Personaje::duck()
 		this->_isDucking = true;
 		this->_isBlocking = false;
 		this->_isWalking = false;
+		this->_isDizzy = false;
+	}
+}
+
+void Personaje::dizzy()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		if (!this->_isDizzy) this->_lastFrame = 0;
+		this->_isDizzy = true;
+		this->_isDucking = false;
+		this->_isWalking = false;
+		this->_isBlocking = false;
 	}
 }
 
@@ -377,6 +414,7 @@ void Personaje::block()
 		this->_isBlocking = true;
 		this->_isDucking = false;
 		this->_isWalking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -388,6 +426,7 @@ void Personaje::blockDuck()
 		this->_isDucking = true;
 		this->_isBlocking = true;
 		this->_isWalking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -399,6 +438,9 @@ void Personaje::jump(float factor)
 		if (!this->_isJumping) this->_lastFrame = 0;
 		this->_isJumping = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -408,6 +450,9 @@ void Personaje::jumpRight(float factor){
 		if (!this->_isJumpingRight) this->_lastFrame = 0;
 		this->_isJumpingRight = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -417,6 +462,9 @@ void Personaje::jumpLeft(float factor){
 		if (!this->_isJumpingLeft) this->_lastFrame = 0;
 		this->_isJumpingLeft = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -529,6 +577,7 @@ void Personaje::moveRight(float factor)
 {
 	this->_isDucking = false;
 	this->_isBlocking = false;
+	this->_isDizzy = false;
 	if(!( this->_isJumping ) && !( this->_isFalling ))
 	{
 		this->_isWalking = true;
@@ -567,4 +616,5 @@ void Personaje::idle()
 	this->_isBlocking = false;
 	this->_isDucking = false;
 	this->_isWalking = false;
+	this->_isDizzy = false;
 }

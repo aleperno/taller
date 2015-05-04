@@ -33,6 +33,7 @@ using namespace std;
 #define POS_FILA_DUCK		5
 #define POS_FILA_BLOCK		6
 #define POS_FILA_BLOCKDUCK	7
+#define POS_FILA_DIZZY		8
 
 class Personaje
 {
@@ -67,9 +68,11 @@ class Personaje
 		bool _isFallingRight;
 		bool _isFallingLeft;
 		bool _isBlocking;
+		bool _isDizzy;
 		bool _orientacion;
 		void viewWalking();
 		void viewDuck();
+		void viewDizzy();
 		void viewBlock();
 		void viewBlockDuck();
 		void viewJump();
@@ -93,6 +96,7 @@ class Personaje
 		void idle();
 		void block();
 		void blockDuck();
+		void dizzy();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isLeftMargin();

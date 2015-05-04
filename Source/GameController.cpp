@@ -473,6 +473,10 @@ void GameController::getKeysPlayer2() {
 	{
 		this->_personaje2->jumpRight(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_9 ])
+	{
+		this->_personaje2->dizzy();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_W ])
 	{
 		this->_personaje2->jump(JMP_FACTOR);
@@ -517,6 +521,10 @@ void GameController::getKeysPlayer1() {
 	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_RIGHT ])
 	{
 		this->_personaje1->jumpRight(JMP_FACTOR);
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_0 ])
+	{
+		this->_personaje1->dizzy();
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
