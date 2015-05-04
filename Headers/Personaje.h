@@ -39,6 +39,7 @@ class Personaje
 		TextureHandler* _handler;
 		Ventana* _ventana;
 		EscenarioData _escenario;
+		PersonajeData _data;
 		float _alto_log;
 		float _ancho_log;
 		float _pos_x;

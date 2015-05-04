@@ -40,6 +40,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
 	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
+
+	this-> _data = data;
 	//cout << _pos_x << endl;
 }
 
@@ -54,16 +56,15 @@ void Personaje::setBoundingBox()
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
 	vector<SDL_Rect*> media;
-	unsigned int cantSprites = 6;
 	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK" };
-	for (unsigned int i=0; i < cantSprites; i++)
+	for (unsigned int i=0; i < data.cantSprites.size(); i++)
 	{
 		//cout << acciones[i] << endl;
 		//cout << "	Fila: " << i << " - Cantidada de sprites: " << data.cantSprites[i] << endl;
-		SDL_Rect* rectMedia = new SDL_Rect[data.cantSprites[i] + 1];
-		for (int j=0; j <= data.cantSprites[i]; j++)
+		SDL_Rect* rectMedia = new SDL_Rect[data.cantSprites[i]];
+		for (int j=0; j < data.cantSprites[i]; j++)
 		{
-			rectMedia[j].x = j * data.width;
+			rectMedia[j].x = j * data.anchoSprites[i];
 			rectMedia[j].y = i * data.height;
 			rectMedia[j].w = data.anchoSprites[i];
 			rectMedia[j].h = data.height;
@@ -139,13 +140,14 @@ bool Personaje::isFalling()
 
 void Personaje::showIdle()
 {
+	int delay = _data.velSprites[POS_FILA_IDLE];
 	++_lastFrame;
-	int aux = _lastFrame / SPEED;
-	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_IDLE] )
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_IDLE] )
 	{
 		_lastFrame = 0;
 	}
-	int frame = _lastFrame/SPEED;
+	int frame = _lastFrame/delay;
 	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_IDLE][frame]);
 	int x = get_x_px();
@@ -155,13 +157,14 @@ void Personaje::showIdle()
 
 void Personaje::viewWalking()
 {
+	int delay = _data.velSprites[POS_FILA_WALK];
 	++_lastFrame;
-	int aux = _lastFrame / SPEED;
-	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_WALK] )
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_WALK] )
 	{
 		_lastFrame = 0;
 	}
-	int frame = _lastFrame/SPEED;
+	int frame = _lastFrame/delay;
 	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_WALK][frame]);
 	int x = get_x_px();
@@ -171,23 +174,18 @@ void Personaje::viewWalking()
 
 void Personaje::viewDuck()
 {
-	int aux = _lastFrame / SPEED;
-	if ( aux < this->_personajeData.cantSprites[POS_FILA_DUCK] )
+	int delay = _data.velSprites[POS_FILA_DUCK];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
 	{
-		++_lastFrame;
-		aux = _lastFrame / SPEED;
-		if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_DUCK]+1)
-		{
-			_lastFrame = 0;
-		}
-	}
-	else if ( aux > this->_personajeData.cantSprites[POS_FILA_DUCK] )
+		_lastFrame = 0;
+	}else if(aux >= _data.cantSprites[POS_FILA_DUCK])
 	{
-		_lastFrame = this->_personajeData.cantSprites[POS_FILA_DUCK];
+		frame = _data.cantSprites[POS_FILA_DUCK]-1;
 	}
-
-	int frame = _lastFrame/SPEED;
-	//cout << frame << endl;
+	cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DUCK][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
@@ -196,13 +194,14 @@ void Personaje::viewDuck()
 
 void Personaje::viewJump()
 {
+	int delay = _data.velSprites[POS_FILA_JUMP];
 	++_lastFrame;
-	int aux = _lastFrame / JMP_SPEED;
-	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_JUMP])
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JUMP])
 	{
 		_lastFrame = 0;
 	}
-	int frame = _lastFrame/JMP_SPEED;
+	int frame = _lastFrame/delay;
 	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JUMP][frame]);
 	int x = get_x_px();
@@ -212,13 +211,14 @@ void Personaje::viewJump()
 
 void Personaje::viewJumpRight()
 {
+	int delay = _data.velSprites[POS_FILA_JMPF];
 	++_lastFrame;
-	int aux = _lastFrame / JMP_SPEED2;
-	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_JMPF])
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JMPF])
 	{
 		_lastFrame = 0;
 	}
-	int frame = _lastFrame/JMP_SPEED2;
+	int frame = _lastFrame/delay;
 	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPF][frame]);
 	int x = get_x_px();
@@ -228,13 +228,14 @@ void Personaje::viewJumpRight()
 
 void Personaje::viewJumpLeft()
 {
+	int delay = _data.velSprites[POS_FILA_JMPB];
 	++_lastFrame;
-	int aux = _lastFrame / JMP_SPEED2;
-	if ( aux < 0 || aux > this->_personajeData.cantSprites[POS_FILA_JMPB])
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JMPB])
 	{
 		_lastFrame = 0;
 	}
-	int frame = _lastFrame/JMP_SPEED2;
+	int frame = _lastFrame/delay;
 	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPB][frame]);
 	int x = get_x_px();

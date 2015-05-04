@@ -45,30 +45,29 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->width = persValue.get("width",-1).asInt();
 	personaje->size = persValue.get("size",-1).asInt();
 
-	int i = 0;
-	personaje->cantSprites[i] = persValue["walk"][1].asInt();
-	personaje->anchoSprites[i] = persValue["walk"][0].asInt();
-	i++;
+	personaje->velSprites.push_back(persValue["walk"][2].asInt());
+	personaje->cantSprites.push_back(persValue["walk"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["walk"][0].asInt());
 
-	personaje->cantSprites[i] = persValue["idle"][1].asInt();
-	personaje->anchoSprites[i] = persValue["idle"][0].asInt();
-	i++;
+	personaje->velSprites.push_back(persValue["idle"][2].asInt());
+	personaje->cantSprites.push_back(persValue["idle"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["idle"][0].asInt());
 
-	personaje->cantSprites[i] = persValue["jumpUp"][1].asInt();
-	personaje->anchoSprites[i] = persValue["jumpUp"][0].asInt();
-	i++;
+	personaje->velSprites.push_back(persValue["jumpUp"][2].asInt());
+	personaje->cantSprites.push_back(persValue["jumpUp"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["jumpUp"][0].asInt());
 
-	personaje->cantSprites[i] = persValue["jumpFwd"][1].asInt();
-	personaje->anchoSprites[i] = persValue["jumpFwd"][0].asInt();
-	i++;
+	personaje->velSprites.push_back(persValue["jumpFwd"][2].asInt());
+	personaje->cantSprites.push_back(persValue["jumpFwd"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["jumpFwd"][0].asInt());
 
-	personaje->cantSprites[i] = persValue["jumpBwd"][1].asInt();
-	personaje->anchoSprites[i] = persValue["jumpBwd"][0].asInt();
-	i++;
+	personaje->velSprites.push_back(persValue["jumpBwd"][2].asInt());
+	personaje->cantSprites.push_back(persValue["jumpBwd"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["jumpBwd"][0].asInt());
 
-	personaje->cantSprites[i] = persValue["duck"][1].asInt();
-	personaje->anchoSprites[i] = persValue["duck"][0].asInt();
-	i++;
+	personaje->velSprites.push_back(persValue["duck"][2].asInt());
+	personaje->cantSprites.push_back(persValue["duck"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["duck"][0].asInt());
 
 	/*
 	for(int j = 0; j < i; j++)

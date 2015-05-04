@@ -40,8 +40,9 @@ class PersonajeData
 
 		// [ spritesWalk , spritesIdle , spritesJumpUp , spritesJumpFwd ,
 		//   spritesJumpBwd , spritesDuck ]
-		int cantSprites[CANTIDAD_MAXIMA_SPRITES];
-		int anchoSprites[CANTIDAD_MAXIMA_SPRITES];
+		vector<int> cantSprites;
+		vector<int> anchoSprites;
+		vector<int> velSprites;
 
 
 		string imgPath;
