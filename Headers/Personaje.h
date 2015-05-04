@@ -44,6 +44,7 @@ class Personaje
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		PersonajeData _data;
+		Arma* arma;
 		float _alto_log;
 		float _ancho_log;
 		float _pos_x;

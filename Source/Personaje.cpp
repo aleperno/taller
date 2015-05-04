@@ -37,7 +37,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
-
+	
 	this->_isThrowing = false;
 
 	this->_isBlocking = false;
@@ -47,19 +47,30 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->setBoundingBox();
 
 	this-> _data = data;
+
+	//TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
+	this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
 	//cout << _pos_x << endl;
 }
 
 void Personaje::lanzarArma()
 {
-	this->_isThrowing = true;
-	Arma* _arma = new Arma("[METER PATH DEL ARMA]", _orientacion, _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex, _pos_y, _pos_x);
-	_arma->viewLanzar();
+	if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+	{
+		this->_isThrowing = true;
+
+		//Seteo la posción inicial del arma y la orientación
+		//TODO: Acomodar la posición de salida de forma correcta
+		arma->_pos_x = this->_pos_x;
+		arma->_pos_y = this->_pos_y;
+		arma->_orientacion = this->_orientacion;
+	}
 }
 
 void Personaje::setBoundingBox()
 {
 	boundingBox.x = this->get_x_px();
+
 	boundingBox.y = this->get_y_px();
 	boundingBox.w = this->_ancho_px;
 	boundingBox.h = this->_alto_px;
@@ -91,6 +102,7 @@ Personaje::~Personaje()
 	//delete this;
 	//cout << "destruyo capa" << endl;
 	delete _handler;
+	arma->~Arma();
 	Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
 
@@ -136,6 +148,13 @@ void Personaje::view(Personaje* otherPlayer)
 	else if (this->_isWalking)
 	{
 		this->viewWalking();
+	}
+	else if(this->_isThrowing)
+	{
+		//Lanzar arma
+		this->arma->viewLanzar();
+		//TODO: Hay que poner el personaje en posición de tiro - renderizo en idle para prueba, sino desaparece el personaje por no renderizarlo
+		this->showIdle();
 	}
 	else
 	{
@@ -481,6 +500,7 @@ void Personaje::jumpLeft(float factor){
 void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherPers)
 {
 	float new_x;
+	float new_x_arma = arma->_pos_x;
 	if ( this->isFalling() )
 	{
 		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
@@ -558,6 +578,36 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				_pos_x = new_x;
 			else
 				_pos_x = 0;
+		}
+	}
+	else if(this->_isThrowing)
+	{
+		if(!this->_orientacion)
+		{
+			//TODO: Falta chequear colision contra el otro player
+			if (new_x_arma >= _escenario.ancho)
+			{
+				this->_isThrowing = false;
+				//printf("X ");
+			}
+			else
+			{
+				new_x_arma += 4;
+				arma->_pos_x = new_x_arma;
+			}
+		}
+		else
+		{
+			if (new_x_arma <= 0)
+			{
+				this->_isThrowing = false;	
+				//printf("X ");
+			}
+			else
+			{
+				new_x_arma -= 4;
+				arma->_pos_x = new_x_arma;
+			}
 		}
 	}
 }

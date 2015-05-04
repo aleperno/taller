@@ -532,10 +532,10 @@ void GameController::getKeysPlayer1() {
 		this->_personaje1->jump(JMP_FACTOR);
 	}
 	//Prueba de lanzamiento
-	/*else if(currentKeyStates[ SDL_SCANCODE_L ])
+	else if(currentKeyStates[ SDL_SCANCODE_L ])
 	{
 		this->_personaje1->lanzarArma();
-	}*/
+	}
 	//Fin prueba lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
 	{
