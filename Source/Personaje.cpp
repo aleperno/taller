@@ -56,7 +56,7 @@ void Personaje::setBoundingBox()
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
 	vector<SDL_Rect*> media;
-	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK" };
+	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK", "BLOCK", "BLOCKDUCK" };
 	for (unsigned int i=0; i < data.cantSprites.size(); i++)
 	{
 		//cout << acciones[i] << endl;
@@ -105,9 +105,17 @@ void Personaje::view(Personaje* otherPlayer)
 			this->viewJump();
 		}
 	}
+	else if (this->_isDucking && this->_isBlocking)
+	{
+		this->viewBlockDuck();
+	}
 	else if (this->_isDucking)
 	{
 		this->viewDuck();
+	}
+	else if (this->_isBlocking)
+	{
+		this->viewBlock();
 	}
 	else if (this->_isWalking)
 	{
@@ -185,8 +193,50 @@ void Personaje::viewDuck()
 	{
 		frame = _data.cantSprites[POS_FILA_DUCK]-1;
 	}
-	cout << frame << endl;
+	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DUCK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewBlock()
+{
+	int delay = _data.velSprites[POS_FILA_BLOCK];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+	{
+		_lastFrame = 0;
+	}
+	else if(aux >= _data.cantSprites[POS_FILA_BLOCK] - 1)
+	{
+		frame = _data.cantSprites[POS_FILA_BLOCK]-2;
+	}
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_BLOCK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewBlockDuck()
+{
+	int delay = _data.velSprites[POS_FILA_BLOCKDUCK];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+	{
+		_lastFrame = 0;
+	}
+	else if(aux >= _data.cantSprites[POS_FILA_BLOCKDUCK] - 1)
+	{
+		frame = _data.cantSprites[POS_FILA_BLOCKDUCK]-2;
+	}
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_BLOCKDUCK][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
@@ -283,6 +333,7 @@ int Personaje::getHeight(Ventana* ventana, float alto_log_capa)
 void Personaje::moveLeft(float factor)
 {
 	this->_isDucking = false;
+	this->_isBlocking = false;
 	if( ( !this->_isJumping && !this->_isFalling ) || ( this->_isJumpingLeft ))
 	{
 		this->_isWalking = true;
@@ -313,6 +364,29 @@ void Personaje::duck()
 	{
 		if (!this->_isDucking) this->_lastFrame = 0;
 		this->_isDucking = true;
+		this->_isBlocking = false;
+		this->_isWalking = false;
+	}
+}
+
+void Personaje::block()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		if (!this->_isBlocking) this->_lastFrame = 0;
+		this->_isBlocking = true;
+		this->_isDucking = false;
+		this->_isWalking = false;
+	}
+}
+
+void Personaje::blockDuck()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		if (!this->_isBlocking) this->_lastFrame = 0;
+		this->_isDucking = true;
+		this->_isBlocking = true;
 		this->_isWalking = false;
 	}
 }
@@ -454,6 +528,7 @@ bool Personaje::isJumpingLeft()
 void Personaje::moveRight(float factor)
 {
 	this->_isDucking = false;
+	this->_isBlocking = false;
 	if(!( this->_isJumping ) && !( this->_isFalling ))
 	{
 		this->_isWalking = true;
@@ -489,6 +564,7 @@ float Personaje::getBeta(float factor)
 
 void Personaje::idle()
 {
+	this->_isBlocking = false;
 	this->_isDucking = false;
 	this->_isWalking = false;
 }

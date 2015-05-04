@@ -477,9 +477,17 @@ void GameController::getKeysPlayer2() {
 	{
 		this->_personaje2->jump(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_S] && currentKeyStates[ SDL_SCANCODE_E ])
+	{
+		this->_personaje2->blockDuck();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_S ])
 	{
 		this->_personaje2->duck();
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_E ])
+	{
+		this->_personaje2->block();
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_A ] )
 	{
@@ -514,9 +522,17 @@ void GameController::getKeysPlayer1() {
 	{
 		this->_personaje1->jump(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
+	{
+		this->_personaje1->blockDuck();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ])
 	{
 		this->_personaje1->duck();
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_B ])
+	{
+		this->_personaje1->block();
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{

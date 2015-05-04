@@ -25,12 +25,14 @@ using namespace std;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
 
-#define POS_FILA_WALK 0
-#define POS_FILA_IDLE 1
-#define POS_FILA_JUMP 2
-#define POS_FILA_JMPF 3
-#define POS_FILA_JMPB 4
-#define POS_FILA_DUCK 5
+#define POS_FILA_WALK		0
+#define POS_FILA_IDLE		1
+#define POS_FILA_JUMP		2
+#define POS_FILA_JMPF		3
+#define POS_FILA_JMPB		4
+#define POS_FILA_DUCK		5
+#define POS_FILA_BLOCK		6
+#define POS_FILA_BLOCKDUCK	7
 
 class Personaje
 {
@@ -64,9 +66,12 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
+		bool _isBlocking;
 		bool _orientacion;
 		void viewWalking();
 		void viewDuck();
+		void viewBlock();
+		void viewBlockDuck();
 		void viewJump();
 		void viewJumpRight();
 		void viewJumpLeft();
@@ -86,6 +91,8 @@ class Personaje
 		void jumpRight(float factor);
 		void jumpLeft(float factor);
 		void idle();
+		void block();
+		void blockDuck();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isLeftMargin();
