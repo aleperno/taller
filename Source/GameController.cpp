@@ -94,12 +94,12 @@ Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, Escenar
 	Personaje* pers;
 	if (pers_ppal)
 	{
-		pers = new Personaje(ventana,parser->personaje1,escenario,pers_ppal);
+		pers = new Personaje(ventana,parser->personaje1,escenario,pers_ppal,false);
 	}else{
 		if (parser->personaje1.nombre == parser->personaje2.nombre)
-			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal);
+			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal,true);
 		else
-			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal);
+			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal,false);
 	}
 	return pers;
 }

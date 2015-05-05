@@ -6,7 +6,7 @@
  */
 #include <Personaje.h>
 
-Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal)
+Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor)
 {
 	Logger::Instance()->log(DEBUG,"Se crea personaje");
 	this->_ventana = ventana;
@@ -14,7 +14,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_alto_log = data.alto;
 	this->_ancho_log = data.ancho;
 	string path = data.imgPath;
-	this->_handler->loadFromFile(path,!pers_ppal,data.h_inicial,data.h_final,data.desplazamiento,true);
+	this->_handler->loadFromFile(path,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
 	this->_pos_y = escenario.y_piso;
