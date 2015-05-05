@@ -60,9 +60,8 @@ void Personaje::lanzarArma()
 		this->_isThrowing = true;
 
 		//Seteo la posción inicial del arma y la orientación
-		//TODO: Acomodar la posición de salida de forma correcta
-		arma->_pos_x = this->_pos_x;
-		arma->_pos_y = this->_pos_y;
+		arma->_pos_x = this->_pos_x + this->_ancho_log;
+		arma->_pos_y = this->_pos_y + this->_alto_log - 20;
 		arma->_orientacion = this->_orientacion;
 	}
 }
@@ -598,14 +597,15 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		if(!this->_orientacion)
 		{
 			//TODO: Falta chequear colision contra el otro player
-			if (new_x_arma >= _escenario.ancho)
+			//Está en el define la velocidad del arma -> hay que entrar por json
+			if (new_x_arma >= this->_escenario.ancho)
 			{
 				this->_isThrowing = false;
 				//printf("X ");
 			}
 			else
 			{
-				new_x_arma += 4;
+				new_x_arma += ARMA_SPEED;
 				arma->_pos_x = new_x_arma;
 			}
 		}
@@ -618,7 +618,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			}
 			else
 			{
-				new_x_arma -= 4;
+				new_x_arma -= ARMA_SPEED;
 				arma->_pos_x = new_x_arma;
 			}
 		}
