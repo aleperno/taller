@@ -53,6 +53,7 @@ class GameController
 		bool _hayPlayer1;
 		bool _hayPlayer2;
 		Hud* _hud;
+		bool minimizado;
 
 		//Metodos
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );

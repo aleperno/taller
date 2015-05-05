@@ -37,6 +37,7 @@ void GameController::KillController()
 
 GameController::GameController(Parser* parser)
 {
+	minimizado = false;
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -299,7 +300,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
 			break;
- 	}
+		case SDL_WINDOWEVENT:
+			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+			break;
+		}
 }
 
 void GameController::procesarMovimientoJoystick() {
@@ -381,19 +386,22 @@ void GameController::run(int sleep_time)
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
 	while (!this->_end_of_game)
 	{
+		if (minimizado)		SDL_Delay(sleep_time);
 		while( SDL_PollEvent(&e) != 0 )
 		{
 			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 			this->procesarEventos(&e);
 		}
-		this->procesarMovimientoJoystick();
- 		this->getKeys();
-		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
-		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
-		this->moveLayers(_personaje1,_personaje2);
-		this->moveLayers(_personaje2,_personaje1);
-		this->actualizarGanador();
-		this->printLayers();
+		if (!minimizado) {
+			this->procesarMovimientoJoystick();
+ 			this->getKeys();
+			_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
+			_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
+			this->moveLayers(_personaje1,_personaje2);
+			this->moveLayers(_personaje2,_personaje1);
+			this->actualizarGanador();
+			this->printLayers();
+		}
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
