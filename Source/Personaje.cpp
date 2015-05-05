@@ -314,11 +314,9 @@ void Personaje::viewJump()
 void Personaje::viewJumpRight()
 {
 	int pos_fil = 0;
-	cout << _orientacion << endl;
 	if (this->_orientacion){
 		pos_fil = POS_FILA_JMPB;
 	}else{
-		cout << "del otro lado" << endl;
 		pos_fil = POS_FILA_JMPF;
 	}
 	int delay = _data.velSprites[pos_fil];
