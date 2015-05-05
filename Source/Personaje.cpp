@@ -313,16 +313,25 @@ void Personaje::viewJump()
 
 void Personaje::viewJumpRight()
 {
-	int delay = _data.velSprites[POS_FILA_JMPF];
+	int pos_fil = 0;
+	cout << _orientacion << endl;
+	if (this->_orientacion){
+		pos_fil = POS_FILA_JMPB;
+	}else{
+		cout << "del otro lado" << endl;
+		pos_fil = POS_FILA_JMPF;
+	}
+	int delay = _data.velSprites[pos_fil];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JMPF])
+
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[pos_fil])
 	{
 		_lastFrame = 0;
 	}
 	int frame = _lastFrame/delay;
 	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPF][frame]);
+	SDL_Rect* currentClip = &(this->vectorSprites[pos_fil][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
@@ -330,16 +339,22 @@ void Personaje::viewJumpRight()
 
 void Personaje::viewJumpLeft()
 {
-	int delay = _data.velSprites[POS_FILA_JMPB];
+	int pos_fil = 0;
+	if (this->_orientacion){
+		pos_fil = POS_FILA_JMPF;
+	}else{
+		pos_fil = POS_FILA_JMPB;
+	}
+	int delay = _data.velSprites[pos_fil];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JMPB])
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[pos_fil])
 	{
 		_lastFrame = 0;
 	}
 	int frame = _lastFrame/delay;
 	//cout << frame << endl;
-	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_JMPB][frame]);
+	SDL_Rect* currentClip = &(this->vectorSprites[pos_fil][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
