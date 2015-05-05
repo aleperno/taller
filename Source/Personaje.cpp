@@ -6,7 +6,7 @@
  */
 #include <Personaje.h>
 
-Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal)
+Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor)
 {
 	Logger::Instance()->log(DEBUG,"Se crea personaje");
 	this->_ventana = ventana;
@@ -14,7 +14,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_alto_log = data.alto;
 	this->_ancho_log = data.ancho;
 	string path = data.imgPath;
-	this->_handler->loadFromFile(path,!pers_ppal,data.h_inicial,data.h_final,data.desplazamiento,true);
+	this->_handler->loadFromFile(path,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
 	this->_pos_y = escenario.y_piso;
@@ -37,17 +37,40 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+	
+	this->_isThrowing = false;
+
+	this->_isBlocking = false;
+	this->_isDizzy = false;
 
 	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
 
 	this-> _data = data;
+
+	//TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
+	this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
 	//cout << _pos_x << endl;
+}
+
+void Personaje::lanzarArma()
+{
+	if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+	{
+		this->_isThrowing = true;
+
+		//Seteo la posción inicial del arma y la orientación
+		//TODO: Acomodar la posición de salida de forma correcta
+		arma->_pos_x = this->_pos_x;
+		arma->_pos_y = this->_pos_y;
+		arma->_orientacion = this->_orientacion;
+	}
 }
 
 void Personaje::setBoundingBox()
 {
 	boundingBox.x = this->get_x_px();
+
 	boundingBox.y = this->get_y_px();
 	boundingBox.w = this->_ancho_px;
 	boundingBox.h = this->_alto_px;
@@ -56,7 +79,7 @@ void Personaje::setBoundingBox()
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
 	vector<SDL_Rect*> media;
-	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK" };
+	//const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK", "BLOCK", "BLOCKDUCK", "DIZZY" };
 	for (unsigned int i=0; i < data.cantSprites.size(); i++)
 	{
 		//cout << acciones[i] << endl;
@@ -79,6 +102,7 @@ Personaje::~Personaje()
 	//delete this;
 	//cout << "destruyo capa" << endl;
 	delete _handler;
+	arma->~Arma();
 	Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
 
@@ -105,13 +129,32 @@ void Personaje::view(Personaje* otherPlayer)
 			this->viewJump();
 		}
 	}
+	else if (this->_isDucking && this->_isBlocking)
+	{
+		this->viewBlockDuck();
+	}
 	else if (this->_isDucking)
 	{
 		this->viewDuck();
 	}
+	else if (this->_isDizzy)
+	{
+		this->viewDizzy();
+	}
+	else if (this->_isBlocking)
+	{
+		this->viewBlock();
+	}
 	else if (this->_isWalking)
 	{
 		this->viewWalking();
+	}
+	else if(this->_isThrowing)
+	{
+		//Lanzar arma
+		this->arma->viewLanzar();
+		//TODO: Hay que poner el personaje en posición de tiro - renderizo en idle para prueba, sino desaparece el personaje por no renderizarlo
+		this->showIdle();
 	}
 	else
 	{
@@ -185,8 +228,67 @@ void Personaje::viewDuck()
 	{
 		frame = _data.cantSprites[POS_FILA_DUCK]-1;
 	}
-	cout << frame << endl;
+	//cout << frame << endl;
 	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DUCK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewDizzy()
+{
+	int delay = _data.velSprites[POS_FILA_DIZZY];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_DIZZY] )
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_DIZZY][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewBlock()
+{
+	int delay = _data.velSprites[POS_FILA_BLOCK];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+	{
+		_lastFrame = 0;
+	}
+	else if(aux >= _data.cantSprites[POS_FILA_BLOCK] - 1)
+	{
+		frame = _data.cantSprites[POS_FILA_BLOCK]-2;
+	}
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_BLOCK][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewBlockDuck()
+{
+	int delay = _data.velSprites[POS_FILA_BLOCKDUCK];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+	{
+		_lastFrame = 0;
+	}
+	else if(aux >= _data.cantSprites[POS_FILA_BLOCKDUCK] - 1)
+	{
+		frame = _data.cantSprites[POS_FILA_BLOCKDUCK]-2;
+	}
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_BLOCKDUCK][frame]);
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
@@ -283,6 +385,8 @@ int Personaje::getHeight(Ventana* ventana, float alto_log_capa)
 void Personaje::moveLeft(float factor)
 {
 	this->_isDucking = false;
+	this->_isBlocking = false;
+	this->_isDizzy = false;
 	if( ( !this->_isJumping && !this->_isFalling ) || ( this->_isJumpingLeft ))
 	{
 		this->_isWalking = true;
@@ -313,7 +417,45 @@ void Personaje::duck()
 	{
 		if (!this->_isDucking) this->_lastFrame = 0;
 		this->_isDucking = true;
+		this->_isBlocking = false;
 		this->_isWalking = false;
+		this->_isDizzy = false;
+	}
+}
+
+void Personaje::dizzy()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		if (!this->_isDizzy) this->_lastFrame = 0;
+		this->_isDizzy = true;
+		this->_isDucking = false;
+		this->_isWalking = false;
+		this->_isBlocking = false;
+	}
+}
+
+void Personaje::block()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		if (!this->_isBlocking) this->_lastFrame = 0;
+		this->_isBlocking = true;
+		this->_isDucking = false;
+		this->_isWalking = false;
+		this->_isDizzy = false;
+	}
+}
+
+void Personaje::blockDuck()
+{
+	if (  !this->isFalling() && !this->isJumping()  )
+	{
+		if (!this->_isBlocking) this->_lastFrame = 0;
+		this->_isDucking = true;
+		this->_isBlocking = true;
+		this->_isWalking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -325,6 +467,9 @@ void Personaje::jump(float factor)
 		if (!this->_isJumping) this->_lastFrame = 0;
 		this->_isJumping = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -334,6 +479,9 @@ void Personaje::jumpRight(float factor){
 		if (!this->_isJumpingRight) this->_lastFrame = 0;
 		this->_isJumpingRight = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
@@ -343,12 +491,16 @@ void Personaje::jumpLeft(float factor){
 		if (!this->_isJumpingLeft) this->_lastFrame = 0;
 		this->_isJumpingLeft = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
 void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherPers)
 {
 	float new_x;
+	float new_x_arma = arma->_pos_x;
 	if ( this->isFalling() )
 	{
 		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
@@ -428,6 +580,36 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				_pos_x = 0;
 		}
 	}
+	else if(this->_isThrowing)
+	{
+		if(!this->_orientacion)
+		{
+			//TODO: Falta chequear colision contra el otro player
+			if (new_x_arma >= _escenario.ancho)
+			{
+				this->_isThrowing = false;
+				//printf("X ");
+			}
+			else
+			{
+				new_x_arma += 4;
+				arma->_pos_x = new_x_arma;
+			}
+		}
+		else
+		{
+			if (new_x_arma <= 0)
+			{
+				this->_isThrowing = false;	
+				//printf("X ");
+			}
+			else
+			{
+				new_x_arma -= 4;
+				arma->_pos_x = new_x_arma;
+			}
+		}
+	}
 }
 
 bool Personaje::isMovingInJump()
@@ -454,6 +636,8 @@ bool Personaje::isJumpingLeft()
 void Personaje::moveRight(float factor)
 {
 	this->_isDucking = false;
+	this->_isBlocking = false;
+	this->_isDizzy = false;
 	if(!( this->_isJumping ) && !( this->_isFalling ))
 	{
 		this->_isWalking = true;
@@ -489,6 +673,8 @@ float Personaje::getBeta(float factor)
 
 void Personaje::idle()
 {
+	this->_isBlocking = false;
 	this->_isDucking = false;
 	this->_isWalking = false;
+	this->_isDizzy = false;
 }

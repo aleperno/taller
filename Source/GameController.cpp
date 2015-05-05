@@ -7,7 +7,7 @@
 #include <GameController.h>
 #define MOV_FACTOR 300;   //Fraccion de la capa que se mueve por ciclo
 #define MOV_FACTOR2 0.8   //
-#define MOV_FACTOR_JMP 1.2
+#define MOV_FACTOR_JMP 2
 #define MOVE_P_FACTOR 1 //
 #define JMP_FACTOR 2
 
@@ -94,12 +94,12 @@ Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, Escenar
 	Personaje* pers;
 	if (pers_ppal)
 	{
-		pers = new Personaje(ventana,parser->personaje1,escenario,pers_ppal);
+		pers = new Personaje(ventana,parser->personaje1,escenario,pers_ppal,false);
 	}else{
 		if (parser->personaje1.nombre == parser->personaje2.nombre)
-			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal);
+			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal,true);
 		else
-			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal);
+			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal,false);
 	}
 	return pers;
 }
@@ -157,7 +157,8 @@ void GameController::printLayers()
 
 	//Solo para pruebas
 	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje1->boundingBox );
-
+    SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje2->boundingBox );
+	
 	SDL_Rect wall;
     wall.x = 300;
     wall.y = 300;
@@ -473,13 +474,25 @@ void GameController::getKeysPlayer2() {
 	{
 		this->_personaje2->jumpRight(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_9 ])
+	{
+		this->_personaje2->dizzy();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_W ])
 	{
 		this->_personaje2->jump(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_S] && currentKeyStates[ SDL_SCANCODE_E ])
+	{
+		this->_personaje2->blockDuck();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_S ])
 	{
 		this->_personaje2->duck();
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_E ])
+	{
+		this->_personaje2->block();
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_A ] )
 	{
@@ -510,13 +523,31 @@ void GameController::getKeysPlayer1() {
 	{
 		this->_personaje1->jumpRight(JMP_FACTOR);
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_0 ])
+	{
+		this->_personaje1->dizzy();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
 		this->_personaje1->jump(JMP_FACTOR);
 	}
+	//Prueba de lanzamiento
+	else if(currentKeyStates[ SDL_SCANCODE_L ])
+	{
+		this->_personaje1->lanzarArma();
+	}
+	//Fin prueba lanzamiento
+	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
+	{
+		this->_personaje1->blockDuck();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ])
 	{
 		this->_personaje1->duck();
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_B ])
+	{
+		this->_personaje1->block();
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{

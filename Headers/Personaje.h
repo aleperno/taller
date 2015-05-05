@@ -19,18 +19,22 @@ using namespace std;
 #include <Ventana.h>
 #include <PersonajeData.h>
 #include <EscenarioData.h>
+#include <Arma.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
 
-#define POS_FILA_WALK 0
-#define POS_FILA_IDLE 1
-#define POS_FILA_JUMP 2
-#define POS_FILA_JMPF 3
-#define POS_FILA_JMPB 4
-#define POS_FILA_DUCK 5
+#define POS_FILA_WALK		0
+#define POS_FILA_IDLE		1
+#define POS_FILA_JUMP		2
+#define POS_FILA_JMPF		3
+#define POS_FILA_JMPB		4
+#define POS_FILA_DUCK		5
+#define POS_FILA_BLOCK		6
+#define POS_FILA_BLOCKDUCK	7
+#define POS_FILA_DIZZY		8
 
 class Personaje
 {
@@ -40,6 +44,7 @@ class Personaje
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		PersonajeData _data;
+		Arma* arma;
 		float _alto_log;
 		float _ancho_log;
 		float _pos_x;
@@ -64,17 +69,25 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
+
+		bool _isThrowing;
+
+		bool _isBlocking;
+		bool _isDizzy;
+
 		bool _orientacion;
 		void viewWalking();
 		void viewDuck();
+		void viewDizzy();
+		void viewBlock();
+		void viewBlockDuck();
 		void viewJump();
 		void viewJumpRight();
 		void viewJumpLeft();
 		void setBoundingBox();
 
-
 	public:
-		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal);
+		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
 		~Personaje();
 		int healthPoints;
 		PersonajeData _personajeData;
@@ -86,6 +99,9 @@ class Personaje
 		void jumpRight(float factor);
 		void jumpLeft(float factor);
 		void idle();
+		void block();
+		void blockDuck();
+		void dizzy();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isLeftMargin();
@@ -99,6 +115,7 @@ class Personaje
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
+		void lanzarArma();
 };
 
 

@@ -1,35 +1,41 @@
 {
-"liukang": {	"height":	155,
-		"width":	76,
-		"size":		39,
-		"walk":		[76,9,5],
-		"idle":		[76,14,4],
-		"jumpUp":	[76,3,3],
-		"jumpFwd":	[76,5,3],
-		"jumpBwd":	[76,5,3],
-		"duck" :    [76,3,4],
-		"imgSrc" : "Images/characters/liukang.png",
-		"color-alternativo": {
-					"h-inicial": -20,
-					"h-final": 10,
-					"desplazamiento": 120
-					}
-	},
+"liukang": {	"height":		155,
+				"width":		76,
+				"size":			39,
+				"walk":			[76,9,5],
+				"idle":			[76,14,4],
+				"jumpUp":		[76,3,12],
+				"jumpFwd":		[76,14,3],
+				"jumpBwd":		[76,14,3],
+				"duck" :		[76,3,4],
+				"block":		[76,3,4],
+				"blockDuck":	[76,3,4],
+				"dizzy":		[76,9,7],
+				"imgSrc" : "Images/characters/liukang.png",
+				"color-alternativo": {
+							"h-inicial": -20,
+							"h-final": 10,
+							"desplazamiento": 120
+							}
+			},
 
-"subzero": {	"height":	155,
-		"width":	76,
-		"size":		39,
-		"walk":		[76,9,5],
-		"idle":		[76,14,4],
-		"jumpUp":	[76,3,3],
-		"jumpFwd":	[76,5,3],
-		"jumpBwd":	[76,5,3],
-		"duck" :    [76,3,4],
-		"imgSrc" : "Images/characters/subzero.png",
-		"color-alternativo": {
-					"h-inicial": 180,
-					"h-final": 200,
-					"desplazamiento": 100
-					}
-	}
+"subzero": {	"height":		155,
+				"width":		76,
+				"size":			39,
+				"walk":			[76,9,5],
+				"idle":			[76,14,4],
+				"jumpUp":		[76,3,12],
+				"jumpFwd":		[76,14,3],
+				"jumpBwd":		[76,14,3],
+				"duck" :		[76,3,4],
+				"block":		[76,3,4],
+				"blockDuck":	[76,3,4],
+				"dizzy":		[76,9,7],
+				"imgSrc" : "Images/characters/subzero.png",
+				"color-alternativo": {
+							"h-inicial": 180,
+							"h-final": 200,
+							"desplazamiento": 100
+							}
+			}
 }
