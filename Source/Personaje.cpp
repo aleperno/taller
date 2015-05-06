@@ -53,6 +53,36 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	//cout << _pos_x << endl;
 }
 
+bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
+{
+	float factor_cercania = 0.25f;
+	bool colision = true;
+
+	//Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
+    int izqBB1 = boundingBox_1.x;
+	int izqBB2 = boundingBox_2.x;
+    int rgtBB1 = boundingBox_1.x + boundingBox_1.w;
+	int rgtBB2 = boundingBox_2.x + boundingBox_2.w;;
+    
+	int upBB1 = boundingBox_1.y;
+	int upBB2 = boundingBox_2.y;
+	int downBB1 = boundingBox_1.y + boundingBox_1.h;
+    int downBB2 = boundingBox_2.y + boundingBox_2.h;
+
+	//Chequeo las condiciones de no-colision
+    if( downBB1 <= upBB2 + factor_cercania * boundingBox_2.h )
+        colision = false;
+    if( upBB1 + factor_cercania * boundingBox_2.h >= downBB2 )
+        colision = false;
+    if( rgtBB1 <= izqBB2 + factor_cercania * boundingBox_2.w )
+        colision = false;
+    if( izqBB1 + factor_cercania * boundingBox_2.w >= rgtBB2 )
+        colision = false;
+
+	//Si no se da ninguna condicion de no-colision, entonces hay colision
+    return colision;
+}
+
 void Personaje::lanzarArma()
 {
 	if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
@@ -60,8 +90,11 @@ void Personaje::lanzarArma()
 		this->_isThrowing = true;
 
 		//Seteo la posción inicial del arma y la orientación
-		arma->_pos_x = this->_pos_x + this->_ancho_log;
-		arma->_pos_y = this->_pos_y + this->_alto_log - 20;
+		if(!this->_orientacion)
+			arma->_pos_x = this->_pos_x + this->_ancho_log/2;
+		else
+			arma->_pos_x = this->_pos_x;
+		arma->_pos_y = this->_pos_y + this->_alto_log /1.75f;
 		arma->_orientacion = this->_orientacion;
 	}
 }
@@ -596,30 +629,44 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 	{
 		if(!this->_orientacion)
 		{
-			//TODO: Falta chequear colision contra el otro player
-			//Está en el define la velocidad del arma -> hay que entrar por json
-			if (new_x_arma >= this->_escenario.ancho)
+			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
+			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
+			if ((new_x_arma >= this->_escenario.ancho) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
-				//printf("X ");
 			}
 			else
 			{
 				new_x_arma += ARMA_SPEED;
-				arma->_pos_x = new_x_arma;
+				if((arma->_pos_x <= otherPers->_pos_x) && (new_x_arma >= otherPers->_pos_x))
+				{
+					//Hay hit entre 2 frames
+					this->_isThrowing = false;
+				}
+				else
+				{
+					arma->_pos_x = new_x_arma;
+				}
 			}
 		}
 		else
 		{
-			if (new_x_arma <= 0)
+			if ((new_x_arma <= 0) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;	
-				//printf("X ");
 			}
 			else
 			{
 				new_x_arma -= ARMA_SPEED;
-				arma->_pos_x = new_x_arma;
+				if((arma->_pos_x >= otherPers->_pos_x) && (new_x_arma <= otherPers->_pos_x))
+				{
+					//Hay hit entre 2 frames
+					this->_isThrowing = false;
+				}
+				else
+				{
+					arma->_pos_x = new_x_arma;
+				}
 			}
 		}
 	}

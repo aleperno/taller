@@ -87,6 +87,8 @@ class Personaje
 		void viewJumpLeft();
 		void setBoundingBox();
 
+		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
+
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
 		~Personaje();

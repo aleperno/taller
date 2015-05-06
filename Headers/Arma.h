@@ -7,7 +7,6 @@ class Arma
 	private:
 		TextureHandler* _handler;
 		Ventana* _ventana;
-		SDL_Rect boundingBox;
 		float _alto_px;
 		float _ancho_px;
 		float _alto_log;
@@ -21,6 +20,7 @@ class Arma
 		int get_y_px();
 
 	public:
+		SDL_Rect boundingBox;
 		float _pos_x;
 		float _pos_y;
 		bool _orientacion;

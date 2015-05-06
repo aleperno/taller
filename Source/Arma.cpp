@@ -31,9 +31,6 @@ void Arma::viewLanzar()
 	rect->y = 0;
 	rect->w = this->_handler->getWidth();
 	rect->h = this->_handler->getHeight();
-
-	printf("%.2f  ", this->_alto_log);
-	//SDL_RenderDrawRect( _ventana->_gRenderer, &this->boundingBox );
 	
 	int x = get_x_px();
 	int y = get_y_px();
