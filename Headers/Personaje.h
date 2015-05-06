@@ -86,7 +86,7 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void setBoundingBox();
-
+		void resetearArma();
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 
 	public:

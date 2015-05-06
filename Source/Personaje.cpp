@@ -88,21 +88,25 @@ void Personaje::lanzarArma()
 	if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
 	{
 		this->_isThrowing = true;
-
-		//Seteo la posción inicial del arma y la orientación
-		if(!this->_orientacion)
-			arma->_pos_x = this->_pos_x + this->_ancho_log/2;
-		else
-			arma->_pos_x = this->_pos_x;
-		arma->_pos_y = this->_pos_y + this->_alto_log /1.75f;
-		arma->_orientacion = this->_orientacion;
+		this->resetearArma();
 	}
+}
+
+void Personaje::resetearArma()
+{
+	//Seteo la posción inicial del arma y la orientación
+	if(!this->_orientacion)
+		arma->_pos_x = this->_pos_x + this->_ancho_log/2;
+	else
+		arma->_pos_x = this->_pos_x;
+	arma->_pos_y = this->_pos_y + this->_alto_log /1.75f;
+	arma->_orientacion = this->_orientacion;
+	arma->setBoundingBox();
 }
 
 void Personaje::setBoundingBox()
 {
 	boundingBox.x = this->get_x_px();
-
 	boundingBox.y = this->get_y_px();
 	boundingBox.w = this->_ancho_px;
 	boundingBox.h = this->_alto_px;
@@ -634,6 +638,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			if ((new_x_arma >= this->_escenario.ancho) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
+				this->resetearArma();
 			}
 			else
 			{
@@ -642,6 +647,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				{
 					//Hay hit entre 2 frames
 					this->_isThrowing = false;
+					this->resetearArma();
 				}
 				else
 				{
@@ -654,6 +660,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			if ((new_x_arma <= 0) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;	
+				this->resetearArma();
 			}
 			else
 			{
@@ -662,6 +669,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				{
 					//Hay hit entre 2 frames
 					this->_isThrowing = false;
+					this->resetearArma();
 				}
 				else
 				{

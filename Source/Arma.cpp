@@ -31,7 +31,7 @@ void Arma::viewLanzar()
 	rect->y = 0;
 	rect->w = this->_handler->getWidth();
 	rect->h = this->_handler->getHeight();
-	
+
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,rect);

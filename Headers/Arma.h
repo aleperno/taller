@@ -13,7 +13,6 @@ class Arma
 		float _ancho_log;
 		int _zIndex;
 		float _factor_escala;
-		void setBoundingBox();
 		int getHeight(Ventana* ventana, float alto_log_capa);
 		int getWidth(Ventana* ventana, float ancho_log_capa);
 		int get_x_px();
@@ -21,6 +20,7 @@ class Arma
 
 	public:
 		SDL_Rect boundingBox;
+		void setBoundingBox();
 		float _pos_x;
 		float _pos_y;
 		bool _orientacion;
