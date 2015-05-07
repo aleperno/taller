@@ -85,11 +85,12 @@ bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 
 void Personaje::lanzarArma()
 {
-	if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
-	{
+	//TODO: Chequear lanzamiento en salto y agachado
+	//if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+	//{
 		this->_isThrowing = true;
 		this->resetearArma();
-	}
+	//}
 }
 
 void Personaje::resetearArma()
@@ -565,6 +566,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 {
 	float new_x;
 	float new_x_arma = arma->_pos_x;
+	SDL_Rect between_frames;
 	if ( this->isFalling() )
 	{
 		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
@@ -651,7 +653,6 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		{
 			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
-			//TODO: Verificar cuando pasa de un lado a otro, el algoritmo no está pulido
 			if ((new_x_arma >= this->_escenario.ancho) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
@@ -662,7 +663,11 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				new_x_arma += ARMA_SPEED;
 				if((arma->_pos_x <= otherPers->_pos_x) && (new_x_arma >= otherPers->_pos_x))
 				{
-					if((!otherPers->_isJumping) && (!otherPers->_isJumpingRight) && (!otherPers->_isJumpingLeft) && (!otherPers->_isDucking))
+					between_frames.x = arma->_pos_x;
+					between_frames.y = arma->_pos_y;
+					between_frames.h = arma->_alto_px;
+					between_frames.w = new_x_arma - arma->_pos_x;
+					if(this->hayColision(otherPers->boundingBox, between_frames))
 					{
 						//Hay hit entre 2 frames
 						this->_isThrowing = false;
@@ -691,7 +696,11 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				new_x_arma -= ARMA_SPEED;
 				if((arma->_pos_x >= otherPers->_pos_x) && (new_x_arma <= otherPers->_pos_x))
 				{
-					if((!otherPers->_isJumping) && (!otherPers->_isJumpingRight) && (!otherPers->_isJumpingLeft) && (!otherPers->_isDucking))
+					between_frames.x = new_x_arma;
+					between_frames.y = arma->_pos_y;
+					between_frames.h = arma->_alto_px;
+					between_frames.w = arma->_pos_x - new_x_arma;
+					if(this->hayColision(otherPers->boundingBox, between_frames))
 					{
 						//Hay hit entre 2 frames
 						this->_isThrowing = false;

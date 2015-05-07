@@ -25,7 +25,7 @@ using namespace std;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
-#define ARMA_SPEED 2;
+#define ARMA_SPEED 2.5;
 
 #define POS_FILA_WALK		0
 #define POS_FILA_IDLE		1
