@@ -99,7 +99,7 @@ void Personaje::resetearArma()
 		arma->_pos_x = this->_pos_x + this->_ancho_log/2;
 	else
 		arma->_pos_x = this->_pos_x;
-	arma->_pos_y = this->_pos_y + this->_alto_log /1.75f;
+	arma->_pos_y = this->_pos_y + this->_alto_log / 2;
 	arma->_orientacion = this->_orientacion;
 	arma->setBoundingBox();
 }
@@ -107,9 +107,24 @@ void Personaje::resetearArma()
 void Personaje::setBoundingBox()
 {
 	boundingBox.x = this->get_x_px();
-	boundingBox.y = this->get_y_px();
-	boundingBox.w = this->_ancho_px;
-	boundingBox.h = this->_alto_px;
+	boundingBox.y = this->get_y_px() * 1.2;
+	boundingBox.w = this->_ancho_px / 1.2;
+	boundingBox.h = this->_alto_px / 1.2;
+
+	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight))
+	{
+		boundingBox.y = boundingBox.y * 1.35;
+		boundingBox.h = boundingBox.h / 2;
+	}
+
+	if(this->_isJumping)
+	{
+		boundingBox.y = boundingBox.y * 1.35;
+		boundingBox.h = boundingBox.h / 2;
+	}
+
+	//Renderiza el boundingbox - solo para pruebas
+	SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
@@ -631,10 +646,12 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 	}
 	else if(this->_isThrowing)
 	{
+		printf("%.0f ", new_x_arma);
 		if(!this->_orientacion)
 		{
 			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
+			//TODO: Verificar cuando pasa de un lado a otro, el algoritmo no está pulido
 			if ((new_x_arma >= this->_escenario.ancho) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
@@ -645,9 +662,16 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				new_x_arma += ARMA_SPEED;
 				if((arma->_pos_x <= otherPers->_pos_x) && (new_x_arma >= otherPers->_pos_x))
 				{
-					//Hay hit entre 2 frames
-					this->_isThrowing = false;
-					this->resetearArma();
+					if((!otherPers->_isJumping) && (!otherPers->_isJumpingRight) && (!otherPers->_isJumpingLeft) && (!otherPers->_isDucking))
+					{
+						//Hay hit entre 2 frames
+						this->_isThrowing = false;
+						this->resetearArma();
+					}
+					else
+					{
+						arma->_pos_x = new_x_arma;
+					}
 				}
 				else
 				{
@@ -667,9 +691,16 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				new_x_arma -= ARMA_SPEED;
 				if((arma->_pos_x >= otherPers->_pos_x) && (new_x_arma <= otherPers->_pos_x))
 				{
-					//Hay hit entre 2 frames
-					this->_isThrowing = false;
-					this->resetearArma();
+					if((!otherPers->_isJumping) && (!otherPers->_isJumpingRight) && (!otherPers->_isJumpingLeft) && (!otherPers->_isDucking))
+					{
+						//Hay hit entre 2 frames
+						this->_isThrowing = false;
+						this->resetearArma();
+					}
+					else
+					{
+						arma->_pos_x = new_x_arma;
+					}
 				}
 				else
 				{
