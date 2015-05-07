@@ -19,12 +19,12 @@
 		"alto": 	50,
 		"nombre":	"liukang",
 
-		"golpe-alto":	0,
-		"golpe-bajo":	1,
-		"patada-alta":	2,
-		"patada-baja":	3,
-		"defensa":	4,
-		"arrojar":	5	},
+		"golpe-alto":	2,
+		"golpe-bajo":	3,
+		"patada-alta":	4,
+		"patada-baja":	5,
+		"defensa":	6,
+		"arrojar":	7	},
 
 "personaje2": {	"ancho": 	30,
 		"alto": 	50,
