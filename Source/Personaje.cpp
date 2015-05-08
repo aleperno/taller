@@ -42,6 +42,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
 	this->_isBlocking = false;
 	this->_isDizzy = false;
+	this->_canMove = true;
 
 	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
@@ -51,6 +52,10 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	//TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
 	this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
 	//cout << _pos_x << endl;
+}
+
+PersonajeData* Personaje::getData() {
+	return &this->_data;
 }
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
@@ -221,6 +226,18 @@ void Personaje::view(Personaje* otherPlayer)
 	//_handler->renderCut(x,y,_ancho_px,_alto_px);
 		//_handler->render(0,0);
 		//cout << "Se intenta dibujar capa " << endl;
+}
+
+bool Personaje::canMove() {
+	return this->_canMove;
+}
+
+void Personaje::freeze() {
+	this->_canMove = false;
+}
+
+void Personaje::unFreeze() {
+	this->_canMove = true;
 }
 
 bool Personaje::isJumping()
@@ -476,6 +493,47 @@ bool Personaje::isLeftMargin()
 	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE);
 }
 
+//Se llama una vez que la vida de uno de los dos personajes llega a cero
+void Personaje::winingPosition() {
+
+}
+
+void Personaje::golpeBajo() {
+
+}
+
+void Personaje::golpeAlto() {
+
+}
+
+void Personaje::patadaBaja() {
+
+}
+
+void Personaje::patadaAlta() {
+
+}
+void Personaje::evaluarAccion(int accion) {
+	if (accion == this->getData()->getAR()) {
+		this->arrojarArma();
+	}
+	else if (accion == this->getData()->getGA()) {
+		this->golpeAlto();
+	}
+	else if (accion == this->getData()->getGB()) {
+		this->golpeBajo();
+	}
+	else if (accion == this->getData()->getPA()) {
+		this->patadaAlta();
+	}
+	else if (accion == this->getData()->getPB()) {
+		this->patadaBaja();
+	}
+}
+
+void Personaje::arrojarArma() {
+
+}
 void Personaje::duck()
 {
 	if (  !this->isFalling() && !this->isJumping()  )
@@ -741,6 +799,9 @@ bool Personaje::isJumpingLeft()
 	return (_isJumpingLeft || _isFallingLeft);
 }
 
+bool Personaje::isDucking() {
+	return this->_isDucking;
+}
 void Personaje::moveRight(float factor)
 {
 	this->_isDucking = false;

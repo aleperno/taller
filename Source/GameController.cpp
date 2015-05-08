@@ -174,60 +174,33 @@ void GameController::setEndOfGame(bool value) {
 void GameController::actualizarGanador() {
 	if (this->_personaje1->healthPoints <= 0) {
 		Logger::Instance()->log(WARNING,"Gano personaje 2.");
+		this->_personaje1->freeze();
+		this->_personaje2->freeze();
+		this->_personaje2->winingPosition();
+		//Imprimir cartel de Press Start
+		//Quedarse en loop infinito hasta que se presione start
 		this->reloadConfig();
 	} else {
 		if (this->_personaje2->healthPoints <= 0) {
 			Logger::Instance()->log(WARNING,"Gano personaje 1.");
+			this->_personaje1->freeze();
+			this->_personaje2->freeze();
+			this->_personaje1->winingPosition();
+			//Imprimir cartel de Press Start
+			//Quedarse en loop infinito hasta que se presione start
 			this->reloadConfig();
 		}
 	}
 }
 
+
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
-		if (e->jdevice.which == 0) {
-		switch (e->jbutton.button) {
-		case 0 :
-			cout << "Player 1 apreto 0" << endl;
-			break;
-		case 1 :
-			cout << "Player 1 apreto 1" << endl;
-			break;
-		case 2 :
-			cout << "Player 1 apreto 2" << endl;
-			break;
-		case 3 :
-			cout << "Player 1 apreto 3" << endl;
-			break;
-		case 4 :
-			cout << "Player 1 apreto 4" << endl;
-			break;
-		case 5 :
-			cout << "Player 1 apreto 5" << endl;
-			break;
-		}
+	if (e->jdevice.which == 0) {
+			this->_personaje1->evaluarAccion(e->jbutton.button);
 	}
 	else if (e->jdevice.which == 1) {
-		switch (e->jbutton.button) {
-				case 0 :
-					cout << "Player 2 apreto 0" << endl;
-					break;
-				case 1 :
-					cout << "Player 2 apreto 1" << endl;
-					break;
-				case 2 :
-					cout << "Player 2 apreto 2" << endl;
-					break;
-				case 3 :
-					cout << "Player 2 apreto 3" << endl;
-					break;
-				case 4 :
-					cout << "Player 2 apreto 4" << endl;
-					break;
-				case 5 :
-					cout << "Player 2 apreto 5" << endl;
-					break;
-				}
+			this->_personaje2->evaluarAccion(e->jbutton.button);
 	}
 }
 
@@ -260,8 +233,16 @@ void GameController::procesarMovimientoJoystick() {
 	if (this->hayPlayer1()) {
 		const Sint16 AXSP1 = SDL_JoystickGetAxis(this->_joystickOne,0);
 		const Sint16 AYSP1 = SDL_JoystickGetAxis(this->_joystickOne,1);
+		const Uint8 BLBTP1 = SDL_JoystickGetButton(this->_joystickOne,this->_personaje1->getData()->defensa);
 
-		if (AXSP1 < 0 && AYSP1 < 0) {
+		if (BLBTP1 == 1) {
+			if (this->_personaje1->isDucking()) {
+				this->_personaje1->blockDuck();
+			} else {
+				this->_personaje1->block();
+			}
+		}
+		else if (AXSP1 < 0 && AYSP1 < 0) {
 			this->_personaje1->jumpLeft(JMP_FACTOR);
  		}
 		else if (AXSP1 > 0 && AYSP1 < 0) {
@@ -289,7 +270,16 @@ void GameController::procesarMovimientoJoystick() {
 	if (this->hayPlayer2()) {
 		const Sint16 AXSP2 = SDL_JoystickGetAxis(this->_joystickTwo,0);
 		const Sint16 AYSP2 = SDL_JoystickGetAxis(this->_joystickTwo,1);
-		if (AXSP2 < 0 && AYSP2 < 0) {
+		const Uint8 BLBTP2 = SDL_JoystickGetButton(this->_joystickTwo,this->_personaje2->getData()->defensa);
+
+		if (BLBTP2 == 1) {
+			if (this->_personaje2->isDucking()) {
+				this->_personaje2->blockDuck();
+			} else {
+				this->_personaje2->block();
+			}
+		}
+		else if (AXSP2 < 0 && AYSP2 < 0) {
 			this->_personaje2->jumpLeft(JMP_FACTOR);
 		}
 		else if (AXSP2 > 0 && AYSP2 < 0) {
@@ -335,13 +325,13 @@ void GameController::run(int sleep_time)
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
 	while (!this->_end_of_game)
 	{
-		if (minimizado)		SDL_Delay(sleep_time);
+		if (this->minimizado)	SDL_Delay(sleep_time);
 		while( SDL_PollEvent(&e) != 0 )
 		{
 			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 			this->procesarEventos(&e);
 		}
-		if (!minimizado) {
+		if (!this->minimizado) {
 			this->procesarMovimientoJoystick();
  			this->getKeys();
 			_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
@@ -528,7 +518,6 @@ void GameController::getKeysPlayer1() {
 * Se mantiene el Keyboard scan para testing, en caso de no tener Joystick
 * Solo se mapean acciones de Player1
 */
-
 void GameController::getKeys()
 {
 	this->getKeysPlayer1();

@@ -70,6 +70,7 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
+		bool _canMove;
 
 		bool _isThrowing;
 
@@ -105,6 +106,12 @@ class Personaje
 		void block();
 		void blockDuck();
 		void dizzy();
+		void winingPosition();
+		void arrojarArma();
+		void golpeBajo();
+		void golpeAlto();
+		void patadaBaja();
+		void patadaAlta();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isLeftMargin();
@@ -115,6 +122,12 @@ class Personaje
 		bool isWalking();
 		bool isJumpingRight();
 		bool isJumpingLeft();
+		bool isDucking();
+		void evaluarAccion (int accion);
+		bool canMove();
+		void freeze();
+		void unFreeze();
+		PersonajeData* getData();
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;

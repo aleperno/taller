@@ -46,6 +46,12 @@ class PersonajeData
 
 
 		string imgPath;
+		int getGB() { return this->golpe_bajo;}
+		int getGA() { return this->golpe_alto;}
+		int getPB() { return this->patada_baja;}
+		int getPA() { return this->patada_alta;}
+		int getBL() { return this->defensa;}
+		int getAR() { return this->arrojar;}
 };
 
 
