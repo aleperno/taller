@@ -37,6 +37,7 @@ void GameController::KillController()
 
 GameController::GameController(Parser* parser)
 {
+	minimizado = false;
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -155,59 +156,8 @@ void GameController::printLayers()
 
 	this->_hud->printHUD();
 
-	//Solo para pruebas
-	/*SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje1->boundingBox );
-    SDL_RenderDrawRect( _ventana->_gRenderer, &_personaje2->boundingBox );
-	
-	SDL_Rect wall;
-    wall.x = 300;
-    wall.y = 300;
-    wall.w = 100;
-    wall.h = 100;
-	SDL_RenderDrawRect( _ventana->_gRenderer, &wall );
-
-	bool colisiona = hayColision(_personaje1->boundingBox, wall);
-	if(colisiona)
-	{
-		//Pruebo colision en una accion
-		if(_personaje1->_isJumping)
-			printf("X ");
-	}*/
-	//Fin solo para pruebas
-
-
 	//ActualizoPantalla
 	this->_ventana->updateScreen();
-}
-
-bool GameController::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
-{
-	float factor_cercania = 0.25f;
-	bool colision = true;
-
-	//Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
-    int izqBB1 = boundingBox_1.x;
-	int izqBB2 = boundingBox_2.x;
-    int rgtBB1 = boundingBox_1.x + boundingBox_1.w;
-	int rgtBB2 = boundingBox_2.x + boundingBox_2.w;;
-    
-	int upBB1 = boundingBox_1.y;
-	int upBB2 = boundingBox_2.y;
-	int downBB1 = boundingBox_1.y + boundingBox_1.h;
-    int downBB2 = boundingBox_2.y + boundingBox_2.h;
-
-	//Chequeo las condiciones de no-colision
-    if( downBB1 <= upBB2 + factor_cercania * boundingBox_2.h )
-        colision = false;
-    if( upBB1 + factor_cercania * boundingBox_2.h >= downBB2 )
-        colision = false;
-    if( rgtBB1 <= izqBB2 + factor_cercania * boundingBox_2.w )
-        colision = false;
-    if( izqBB1 + factor_cercania * boundingBox_2.w >= rgtBB2 )
-        colision = false;
-
-	//Si no se da ninguna condicion de no-colision, entonces hay colision
-    return colision;
 }
 
 void GameController::viewWindowPosition()
@@ -224,60 +174,33 @@ void GameController::setEndOfGame(bool value) {
 void GameController::actualizarGanador() {
 	if (this->_personaje1->healthPoints <= 0) {
 		Logger::Instance()->log(WARNING,"Gano personaje 2.");
+		this->_personaje1->freeze();
+		this->_personaje2->freeze();
+		this->_personaje2->winingPosition();
+		//Imprimir cartel de Press Start
+		//Quedarse en loop infinito hasta que se presione start
 		this->reloadConfig();
 	} else {
 		if (this->_personaje2->healthPoints <= 0) {
 			Logger::Instance()->log(WARNING,"Gano personaje 1.");
+			this->_personaje1->freeze();
+			this->_personaje2->freeze();
+			this->_personaje1->winingPosition();
+			//Imprimir cartel de Press Start
+			//Quedarse en loop infinito hasta que se presione start
 			this->reloadConfig();
 		}
 	}
 }
 
+
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
-		if (e->jdevice.which == 0) {
-		switch (e->jbutton.button) {
-		case 0 :
-			cout << "Player 1 apreto 0" << endl;
-			break;
-		case 1 :
-			cout << "Player 1 apreto 1" << endl;
-			break;
-		case 2 :
-			cout << "Player 1 apreto 2" << endl;
-			break;
-		case 3 :
-			cout << "Player 1 apreto 3" << endl;
-			break;
-		case 4 :
-			cout << "Player 1 apreto 4" << endl;
-			break;
-		case 5 :
-			cout << "Player 1 apreto 5" << endl;
-			break;
-		}
+	if (e->jdevice.which == 0) {
+			this->_personaje1->evaluarAccion(e->jbutton.button);
 	}
 	else if (e->jdevice.which == 1) {
-		switch (e->jbutton.button) {
-				case 0 :
-					cout << "Player 2 apreto 0" << endl;
-					break;
-				case 1 :
-					cout << "Player 2 apreto 1" << endl;
-					break;
-				case 2 :
-					cout << "Player 2 apreto 2" << endl;
-					break;
-				case 3 :
-					cout << "Player 2 apreto 3" << endl;
-					break;
-				case 4 :
-					cout << "Player 2 apreto 4" << endl;
-					break;
-				case 5 :
-					cout << "Player 2 apreto 5" << endl;
-					break;
-				}
+			this->_personaje2->evaluarAccion(e->jbutton.button);
 	}
 }
 
@@ -299,15 +222,27 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
 			break;
- 	}
+		case SDL_WINDOWEVENT:
+			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+			break;
+		}
 }
 
 void GameController::procesarMovimientoJoystick() {
 	if (this->hayPlayer1()) {
 		const Sint16 AXSP1 = SDL_JoystickGetAxis(this->_joystickOne,0);
 		const Sint16 AYSP1 = SDL_JoystickGetAxis(this->_joystickOne,1);
+		const Uint8 BLBTP1 = SDL_JoystickGetButton(this->_joystickOne,this->_personaje1->getData()->defensa);
 
-		if (AXSP1 < 0 && AYSP1 < 0) {
+		if (BLBTP1 == 1) {
+			if (this->_personaje1->isDucking()) {
+				this->_personaje1->blockDuck();
+			} else {
+				this->_personaje1->block();
+			}
+		}
+		else if (AXSP1 < 0 && AYSP1 < 0) {
 			this->_personaje1->jumpLeft(JMP_FACTOR);
  		}
 		else if (AXSP1 > 0 && AYSP1 < 0) {
@@ -335,7 +270,16 @@ void GameController::procesarMovimientoJoystick() {
 	if (this->hayPlayer2()) {
 		const Sint16 AXSP2 = SDL_JoystickGetAxis(this->_joystickTwo,0);
 		const Sint16 AYSP2 = SDL_JoystickGetAxis(this->_joystickTwo,1);
-		if (AXSP2 < 0 && AYSP2 < 0) {
+		const Uint8 BLBTP2 = SDL_JoystickGetButton(this->_joystickTwo,this->_personaje2->getData()->defensa);
+
+		if (BLBTP2 == 1) {
+			if (this->_personaje2->isDucking()) {
+				this->_personaje2->blockDuck();
+			} else {
+				this->_personaje2->block();
+			}
+		}
+		else if (AXSP2 < 0 && AYSP2 < 0) {
 			this->_personaje2->jumpLeft(JMP_FACTOR);
 		}
 		else if (AXSP2 > 0 && AYSP2 < 0) {
@@ -381,19 +325,22 @@ void GameController::run(int sleep_time)
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
 	while (!this->_end_of_game)
 	{
+		if (this->minimizado)	SDL_Delay(sleep_time);
 		while( SDL_PollEvent(&e) != 0 )
 		{
 			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 			this->procesarEventos(&e);
 		}
-		this->procesarMovimientoJoystick();
- 		this->getKeys();
-		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
-		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
-		this->moveLayers(_personaje1,_personaje2);
-		this->moveLayers(_personaje2,_personaje1);
-		this->actualizarGanador();
-		this->printLayers();
+		if (!this->minimizado) {
+			this->procesarMovimientoJoystick();
+ 			this->getKeys();
+			_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
+			_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
+			this->moveLayers(_personaje1,_personaje2);
+			this->moveLayers(_personaje2,_personaje1);
+			this->actualizarGanador();
+			this->printLayers();
+		}
 	}
 	this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
@@ -571,7 +518,6 @@ void GameController::getKeysPlayer1() {
 * Se mantiene el Keyboard scan para testing, en caso de no tener Joystick
 * Solo se mapean acciones de Player1
 */
-
 void GameController::getKeys()
 {
 	this->getKeysPlayer1();

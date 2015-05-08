@@ -30,7 +30,7 @@
 				"duck" :		[76,3,4],
 				"block":		[76,3,4],
 				"blockDuck":	[76,3,4],
-				"dizzy":		[76,9,7],
+				"dizzy":		[76,8,7],
 				"imgSrc" : "Images/characters/subzero.png",
 				"color-alternativo": {
 							"h-inicial": 180,

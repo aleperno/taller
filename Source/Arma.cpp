@@ -24,11 +24,13 @@ void Arma::setBoundingBox()
 
 void Arma::viewLanzar()
 {
+	this->setBoundingBox();
+
 	SDL_Rect* rect = new SDL_Rect();
-	rect->x = this->_pos_x;
-	rect->y = this->_pos_y;
-	rect->w = _ancho_px;
-	rect->h = _alto_px;
+	rect->x = 0;
+	rect->y = 0;
+	rect->w = this->_handler->getWidth();
+	rect->h = this->_handler->getHeight();
 
 	int x = get_x_px();
 	int y = get_y_px();

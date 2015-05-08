@@ -42,6 +42,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
 	this->_isBlocking = false;
 	this->_isDizzy = false;
+	this->_canMove = true;
 
 	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
@@ -53,27 +54,83 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	//cout << _pos_x << endl;
 }
 
+PersonajeData* Personaje::getData() {
+	return &this->_data;
+}
+
+bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
+{
+	float factor_cercania = 0.25f;
+	bool colision = true;
+
+	//Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
+    int izqBB1 = boundingBox_1.x;
+	int izqBB2 = boundingBox_2.x;
+    int rgtBB1 = boundingBox_1.x + boundingBox_1.w;
+	int rgtBB2 = boundingBox_2.x + boundingBox_2.w;;
+    
+	int upBB1 = boundingBox_1.y;
+	int upBB2 = boundingBox_2.y;
+	int downBB1 = boundingBox_1.y + boundingBox_1.h;
+    int downBB2 = boundingBox_2.y + boundingBox_2.h;
+
+	//Chequeo las condiciones de no-colision
+    if( downBB1 <= upBB2 + factor_cercania * boundingBox_2.h )
+        colision = false;
+    if( upBB1 + factor_cercania * boundingBox_2.h >= downBB2 )
+        colision = false;
+    if( rgtBB1 <= izqBB2 + factor_cercania * boundingBox_2.w )
+        colision = false;
+    if( izqBB1 + factor_cercania * boundingBox_2.w >= rgtBB2 )
+        colision = false;
+
+	//Si no se da ninguna condicion de no-colision, entonces hay colision
+    return colision;
+}
+
 void Personaje::lanzarArma()
 {
-	if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
-	{
+	//TODO: Chequear lanzamiento en salto y agachado
+	//if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+	//{
 		this->_isThrowing = true;
+		this->resetearArma();
+	//}
+}
 
-		//Seteo la posción inicial del arma y la orientación
-		//TODO: Acomodar la posición de salida de forma correcta
+void Personaje::resetearArma()
+{
+	//Seteo la posción inicial del arma y la orientación
+	if(!this->_orientacion)
+		arma->_pos_x = this->_pos_x + this->_ancho_log/2;
+	else
 		arma->_pos_x = this->_pos_x;
-		arma->_pos_y = this->_pos_y;
-		arma->_orientacion = this->_orientacion;
-	}
+	arma->_pos_y = this->_pos_y + this->_alto_log / 2;
+	arma->_orientacion = this->_orientacion;
+	arma->setBoundingBox();
 }
 
 void Personaje::setBoundingBox()
 {
 	boundingBox.x = this->get_x_px();
+	boundingBox.y = this->get_y_px() * 1.2;
+	boundingBox.w = this->_ancho_px / 1.2;
+	boundingBox.h = this->_alto_px / 1.2;
 
-	boundingBox.y = this->get_y_px();
-	boundingBox.w = this->_ancho_px;
-	boundingBox.h = this->_alto_px;
+	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight))
+	{
+		boundingBox.y = boundingBox.y * 1.35;
+		boundingBox.h = boundingBox.h / 2;
+	}
+
+	if(this->_isJumping)
+	{
+		boundingBox.y = boundingBox.y * 1.35;
+		boundingBox.h = boundingBox.h / 2;
+	}
+
+	//Renderiza el boundingbox - solo para pruebas
+	SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
@@ -169,6 +226,18 @@ void Personaje::view(Personaje* otherPlayer)
 	//_handler->renderCut(x,y,_ancho_px,_alto_px);
 		//_handler->render(0,0);
 		//cout << "Se intenta dibujar capa " << endl;
+}
+
+bool Personaje::canMove() {
+	return this->_canMove;
+}
+
+void Personaje::freeze() {
+	this->_canMove = false;
+}
+
+void Personaje::unFreeze() {
+	this->_canMove = true;
 }
 
 bool Personaje::isJumping()
@@ -424,6 +493,47 @@ bool Personaje::isLeftMargin()
 	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE);
 }
 
+//Se llama una vez que la vida de uno de los dos personajes llega a cero
+void Personaje::winingPosition() {
+
+}
+
+void Personaje::golpeBajo() {
+
+}
+
+void Personaje::golpeAlto() {
+
+}
+
+void Personaje::patadaBaja() {
+
+}
+
+void Personaje::patadaAlta() {
+
+}
+void Personaje::evaluarAccion(int accion) {
+	if (accion == this->getData()->getAR()) {
+		this->arrojarArma();
+	}
+	else if (accion == this->getData()->getGA()) {
+		this->golpeAlto();
+	}
+	else if (accion == this->getData()->getGB()) {
+		this->golpeBajo();
+	}
+	else if (accion == this->getData()->getPA()) {
+		this->patadaAlta();
+	}
+	else if (accion == this->getData()->getPB()) {
+		this->patadaBaja();
+	}
+}
+
+void Personaje::arrojarArma() {
+
+}
 void Personaje::duck()
 {
 	if (  !this->isFalling() && !this->isJumping()  )
@@ -514,6 +624,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 {
 	float new_x;
 	float new_x_arma = arma->_pos_x;
+	SDL_Rect between_frames;
 	if ( this->isFalling() )
 	{
 		Logger::Instance()->log(DEBUG,"El personaje esta cayendo");
@@ -595,31 +706,73 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 	}
 	else if(this->_isThrowing)
 	{
+		printf("%.0f ", new_x_arma);
 		if(!this->_orientacion)
 		{
-			//TODO: Falta chequear colision contra el otro player
-			if (new_x_arma >= _escenario.ancho)
+			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
+			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
+			if ((new_x_arma >= this->_escenario.ancho) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
-				//printf("X ");
+				this->resetearArma();
 			}
 			else
 			{
-				new_x_arma += 4;
-				arma->_pos_x = new_x_arma;
+				new_x_arma += ARMA_SPEED;
+				if((arma->_pos_x <= otherPers->_pos_x) && (new_x_arma >= otherPers->_pos_x))
+				{
+					between_frames.x = arma->_pos_x;
+					between_frames.y = arma->_pos_y;
+					between_frames.h = arma->_alto_px;
+					between_frames.w = new_x_arma - arma->_pos_x;
+					if(this->hayColision(otherPers->boundingBox, between_frames))
+					{
+						//Hay hit entre 2 frames
+						this->_isThrowing = false;
+						this->resetearArma();
+					}
+					else
+					{
+						arma->_pos_x = new_x_arma;
+					}
+				}
+				else
+				{
+					arma->_pos_x = new_x_arma;
+				}
 			}
 		}
 		else
 		{
-			if (new_x_arma <= 0)
+			if ((new_x_arma <= 0) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;	
-				//printf("X ");
+				this->resetearArma();
 			}
 			else
 			{
-				new_x_arma -= 4;
-				arma->_pos_x = new_x_arma;
+				new_x_arma -= ARMA_SPEED;
+				if((arma->_pos_x >= otherPers->_pos_x) && (new_x_arma <= otherPers->_pos_x))
+				{
+					between_frames.x = new_x_arma;
+					between_frames.y = arma->_pos_y;
+					between_frames.h = arma->_alto_px;
+					between_frames.w = arma->_pos_x - new_x_arma;
+					if(this->hayColision(otherPers->boundingBox, between_frames))
+					{
+						//Hay hit entre 2 frames
+						this->_isThrowing = false;
+						this->resetearArma();
+					}
+					else
+					{
+						arma->_pos_x = new_x_arma;
+					}
+				}
+				else
+				{
+					arma->_pos_x = new_x_arma;
+				}
 			}
 		}
 	}
@@ -646,6 +799,9 @@ bool Personaje::isJumpingLeft()
 	return (_isJumpingLeft || _isFallingLeft);
 }
 
+bool Personaje::isDucking() {
+	return this->_isDucking;
+}
 void Personaje::moveRight(float factor)
 {
 	this->_isDucking = false;

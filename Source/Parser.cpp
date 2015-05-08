@@ -188,7 +188,7 @@ void Parser::setearParseoDeSprite() {
 
 }
 
-bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[6], Value persValue, int num, string valueString, string botonString) {
+bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[8], Value persValue, int num, string valueString, string botonString) {
 	try	{	*boton = persValue.get(valueString,-1).asInt();	}
 		catch(const exception &e) {
 			string str(e.what());
@@ -196,7 +196,7 @@ bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[6], Value persValue, 
 			Logger::Instance()->log(ERROR,str + msg);
 			return false;
 		}
-		if ((*boton < 0) || (*boton > 5)) {
+		if ((*boton < 0) || (*boton > 7)) {
 			string msg = "Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + " es invalido o no definido.";
 			Logger::Instance()->log(WARNING,msg);
 			return false;
@@ -212,7 +212,7 @@ bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[6], Value persValue, 
 		}
 }
 
-void Parser::corregirBoton(int* boton, bool (&teclasUsadas)[6], int num, string botonString){
+void Parser::corregirBoton(int* boton, bool (&teclasUsadas)[8], int num, string botonString){
 		int k = 0;
 		while (teclasUsadas[k]){
 			k++;
@@ -264,9 +264,9 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 		}
 
 	//-----joyconfig-----
-	//Teclas validas: 0, 1, 2, 3, 4, 5
+	//Teclas validas: 0, 1, 2, 3, 4, 5, 6, 7
 	//Primero asigna todos valores validos. Luego a los que son invalidos les pone teclas desocupadas en orden creciente.
-	bool teclasUsadas[6] = { false };
+	bool teclasUsadas[8] = { false };
 
 	bool BotonGolpeAlto = asignarBoton(&(personaje->golpe_alto), teclasUsadas, persValue, num, "golpe-alto", "golpe alto");
 	bool BotonGolpeBajo = asignarBoton(&(personaje->golpe_bajo), teclasUsadas, persValue, num, "golpe-bajo", "golpe bajo");

@@ -7,20 +7,21 @@ class Arma
 	private:
 		TextureHandler* _handler;
 		Ventana* _ventana;
-		SDL_Rect boundingBox;
-		float _alto_px;
-		float _ancho_px;
+
 		float _alto_log;
 		float _ancho_log;
 		int _zIndex;
 		float _factor_escala;
-		void setBoundingBox();
 		int getHeight(Ventana* ventana, float alto_log_capa);
 		int getWidth(Ventana* ventana, float ancho_log_capa);
 		int get_x_px();
 		int get_y_px();
 
 	public:
+		float _alto_px;
+		float _ancho_px;
+		SDL_Rect boundingBox;
+		void setBoundingBox();
 		float _pos_x;
 		float _pos_y;
 		bool _orientacion;

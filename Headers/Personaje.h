@@ -25,6 +25,7 @@ using namespace std;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
+#define ARMA_SPEED 2.5;
 
 #define POS_FILA_WALK		0
 #define POS_FILA_IDLE		1
@@ -69,6 +70,7 @@ class Personaje
 		bool _isFalling;
 		bool _isFallingRight;
 		bool _isFallingLeft;
+		bool _canMove;
 
 		bool _isThrowing;
 
@@ -85,6 +87,8 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void setBoundingBox();
+		void resetearArma();
+		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 
 	public:
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
@@ -102,6 +106,12 @@ class Personaje
 		void block();
 		void blockDuck();
 		void dizzy();
+		void winingPosition();
+		void arrojarArma();
+		void golpeBajo();
+		void golpeAlto();
+		void patadaBaja();
+		void patadaAlta();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isLeftMargin();
@@ -112,6 +122,12 @@ class Personaje
 		bool isWalking();
 		bool isJumpingRight();
 		bool isJumpingLeft();
+		bool isDucking();
+		void evaluarAccion (int accion);
+		bool canMove();
+		void freeze();
+		void unFreeze();
+		PersonajeData* getData();
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
