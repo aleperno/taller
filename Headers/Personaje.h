@@ -36,11 +36,11 @@ using namespace std;
 #define POS_FILA_BLOCK			6
 #define POS_FILA_BLOCKDUCK		7
 #define POS_FILA_DIZZY			8
-#define POS_FILA_HITTED_DUCK 		9
+#define POS_FILA_HITTED_DUCK 	9
 #define POS_FILA_HITTED 		10
-#define POS_FILA_HIKICK_DUCK 		11
+#define POS_FILA_HIKICK_DUCK 	11
 #define POS_FILA_HIKICK 		12
-#define POS_FILA_LOKICK_DUCK		13
+#define POS_FILA_LOKICK_DUCK	13
 #define POS_FILA_LOKICK			14
 #define POS_FILA_AIRKICK		15
 #define POS_FILA_HIPUNCH		16
@@ -48,6 +48,9 @@ using namespace std;
 #define POS_FILA_AIRPUNCH		18
 #define POS_FILA_FALLDEAD		19
 #define POS_FILA_FALL			20
+#define POS_FILA_GANCHO			21
+#define POS_FILA_BARRIDO		22
+#define POS_FILA_ARMA			23
 
 class Personaje
 {
@@ -91,7 +94,6 @@ class Personaje
 		bool _isDizzy;
 
 		int pos_last_action;
-		bool _beingHit;
 
 		void viewWalking();
 		void viewDuck();
@@ -102,7 +104,6 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void viewHiKick();
-		void viewHit();
 		void setBoundingBox();
 		void resetearArma();
 
@@ -131,7 +132,6 @@ class Personaje
 		void golpeAlto();
 		void patadaBaja();
 		void patadaAlta();
-		void hit();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isBlocking();

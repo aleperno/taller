@@ -129,6 +129,18 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->cantSprites.push_back(persValue["falling"][1].asInt());
 	personaje->anchoSprites.push_back(persValue["falling"][0].asInt());
 
+	personaje->velSprites.push_back(persValue["gancho"][2].asInt());
+	personaje->cantSprites.push_back(persValue["gancho"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["gancho"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["barrido"][2].asInt());
+	personaje->cantSprites.push_back(persValue["barrido"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["barrido"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["arma"][2].asInt());
+	personaje->cantSprites.push_back(persValue["arma"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["arma"][0].asInt());
+
 	/*
 	for(int j = 0; j < i; j++)
 	{
