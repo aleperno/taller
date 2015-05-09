@@ -36,6 +36,10 @@ using namespace std;
 #define POS_FILA_BLOCK		6
 #define POS_FILA_BLOCKDUCK	7
 #define POS_FILA_DIZZY		8
+#define POS_FILA_HITTED_DUCK 9
+#define POS_FILA_HITTED 10
+#define POS_FILA_HIKICK_DUCK 11
+#define POS_FILA_HIKICK 12
 
 class Personaje
 {
@@ -71,11 +75,14 @@ class Personaje
 		bool _isFallingRight;
 		bool _isFallingLeft;
 		bool _canMove;
+		bool _isHiKicking;
 
 		bool _isThrowing;
 
 		bool _isBlocking;
 		bool _isDizzy;
+
+		int pos_last_action;
 
 		bool _orientacion;
 		void viewWalking();
@@ -86,6 +93,7 @@ class Personaje
 		void viewJump();
 		void viewJumpRight();
 		void viewJumpLeft();
+		void viewHiKick();
 		void setBoundingBox();
 		void resetearArma();
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );

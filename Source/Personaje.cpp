@@ -43,6 +43,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isBlocking = false;
 	this->_isDizzy = false;
 	this->_canMove = true;
+	this->_isHiKicking = false;
+
+	this->pos_last_action = 0;
 
 	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
@@ -189,6 +192,9 @@ void Personaje::view(Personaje* otherPlayer)
 	else if (this->_isDucking && this->_isBlocking)
 	{
 		this->viewBlockDuck();
+	}else if (this->_isDucking && this->_isHiKicking)
+	{
+		this->viewHiKick();
 	}
 	else if (this->_isDucking)
 	{
@@ -212,6 +218,10 @@ void Personaje::view(Personaje* otherPlayer)
 		this->arma->viewLanzar();
 		//TODO: Hay que poner el personaje en posición de tiro - renderizo en idle para prueba, sino desaparece el personaje por no renderizarlo
 		this->showIdle();
+	}
+	else if (this->_isHiKicking)
+	{
+		this->viewHiKick();
 	}
 	else
 	{
@@ -255,7 +265,7 @@ void Personaje::showIdle()
 	int delay = _data.velSprites[POS_FILA_IDLE];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_IDLE] )
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_IDLE] || pos_last_action != POS_FILA_IDLE)
 	{
 		_lastFrame = 0;
 	}
@@ -265,6 +275,7 @@ void Personaje::showIdle()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_IDLE;
 }
 
 void Personaje::viewWalking()
@@ -272,7 +283,7 @@ void Personaje::viewWalking()
 	int delay = _data.velSprites[POS_FILA_WALK];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_WALK] )
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_WALK] || pos_last_action != POS_FILA_WALK)
 	{
 		_lastFrame = 0;
 	}
@@ -282,6 +293,7 @@ void Personaje::viewWalking()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_WALK;
 }
 
 void Personaje::viewDuck()
@@ -290,7 +302,7 @@ void Personaje::viewDuck()
 	++_lastFrame;
 	int aux = _lastFrame / delay;
 	int frame = aux;
-	if ( aux < 0 )
+	if ( aux < 0 || pos_last_action != POS_FILA_DUCK)
 	{
 		_lastFrame = 0;
 	}else if(aux >= _data.cantSprites[POS_FILA_DUCK])
@@ -302,6 +314,7 @@ void Personaje::viewDuck()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_DUCK;
 }
 
 void Personaje::viewDizzy()
@@ -309,7 +322,7 @@ void Personaje::viewDizzy()
 	int delay = _data.velSprites[POS_FILA_DIZZY];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_DIZZY] )
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_DIZZY] || pos_last_action != POS_FILA_DIZZY )
 	{
 		_lastFrame = 0;
 	}
@@ -319,6 +332,34 @@ void Personaje::viewDizzy()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_DIZZY;
+}
+
+void Personaje::viewHiKick()
+{
+	int accion = 0;
+	if (this->_isDucking){
+		accion = POS_FILA_HIKICK_DUCK;
+	}else{
+		accion = POS_FILA_HIKICK;
+	}
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		this->_isHiKicking = false;
+	}
+	pos_last_action = accion;
 }
 
 void Personaje::viewBlock()
@@ -327,7 +368,7 @@ void Personaje::viewBlock()
 	++_lastFrame;
 	int aux = _lastFrame / delay;
 	int frame = aux;
-	if ( aux < 0 )
+	if ( aux < 0 || pos_last_action != POS_FILA_BLOCK)
 	{
 		_lastFrame = 0;
 	}
@@ -340,6 +381,7 @@ void Personaje::viewBlock()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_BLOCK ;
 }
 
 void Personaje::viewBlockDuck()
@@ -348,7 +390,7 @@ void Personaje::viewBlockDuck()
 	++_lastFrame;
 	int aux = _lastFrame / delay;
 	int frame = aux;
-	if ( aux < 0 )
+	if ( aux < 0 || pos_last_action != POS_FILA_BLOCKDUCK)
 	{
 		_lastFrame = 0;
 	}
@@ -361,6 +403,7 @@ void Personaje::viewBlockDuck()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_BLOCKDUCK;
 }
 
 void Personaje::viewJump()
@@ -368,7 +411,7 @@ void Personaje::viewJump()
 	int delay = _data.velSprites[POS_FILA_JUMP];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JUMP])
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[POS_FILA_JUMP] || pos_last_action != POS_FILA_JUMP)
 	{
 		_lastFrame = 0;
 	}
@@ -378,6 +421,7 @@ void Personaje::viewJump()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = POS_FILA_JUMP;
 }
 
 void Personaje::viewJumpRight()
@@ -511,8 +555,9 @@ void Personaje::patadaBaja() {
 }
 
 void Personaje::patadaAlta() {
-
+	this->_isHiKicking = true;
 }
+
 void Personaje::evaluarAccion(int accion) {
 	if (accion == this->getData()->getAR()) {
 		this->arrojarArma();
