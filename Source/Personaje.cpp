@@ -63,7 +63,7 @@ PersonajeData* Personaje::getData() {
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 {
-	float factor_cercania = 0.25f;
+	float factor_cercania = 0.12f;
 	bool colision = true;
 
 	//Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
@@ -253,6 +253,11 @@ void Personaje::unFreeze() {
 bool Personaje::isJumping()
 {
 	return ( this->_isJumping || this->_isJumpingRight || this->_isJumpingLeft );
+}
+
+bool Personaje::isBlocking()
+{
+	return (this->_isBlocking);
 }
 
 bool Personaje::isFalling()
