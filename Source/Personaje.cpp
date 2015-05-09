@@ -94,10 +94,13 @@ bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 void Personaje::lanzarArma()
 {
 	//TODO: Chequear lanzamiento en salto y agachado
-	if (!this->_isThrowing)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+	if ( !this->_isBlocking && !this->_isHiKicking ) // TODO: Agregar otras acciones.
 	{
-		this->_isThrowing = true;
-		this->resetearArma();
+		if (!this->_isThrowing)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+		{
+			this->_isThrowing = true;
+			this->resetearArma();
+		}
 	}
 }
 
@@ -115,9 +118,13 @@ void Personaje::resetearArma()
 
 void Personaje::setBoundingBox()
 {
-	boundingBox.x = this->get_x_px();
+	float factor_centrado = 50;
+	if(!this->_orientacion)
+		factor_centrado = -factor_centrado;
+
+	boundingBox.x = this->get_x_px() + 50;
 	boundingBox.y = this->get_y_px() * 1.2;
-	boundingBox.w = this->_ancho_px / 1.2;
+	boundingBox.w = this->_ancho_px / 1.8;
 	boundingBox.h = this->_alto_px / 1.2;
 
 	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight))
@@ -130,6 +137,12 @@ void Personaje::setBoundingBox()
 	{
 		boundingBox.y = boundingBox.y * 1.35;
 		boundingBox.h = boundingBox.h / 2;
+	}
+
+	if((this->_isHiKicking) && (!this->_isDucking))
+	{
+		boundingBox.w = this->_ancho_px / 1.4;
+		boundingBox.h = boundingBox.h / 3;
 	}
 
 	//Renderiza el boundingbox - solo para pruebas
@@ -172,7 +185,26 @@ void Personaje::view(Personaje* otherPlayer)
 	this->setBoundingBox();
 	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
-	if ( this->isJumping() || this->isFalling() )
+	if ( this->_isThrowing )
+	{
+		if ( this->_isDucking )
+		{
+			// TODO: Mostrar disparo agachado
+			this->viewDizzy();
+		}
+		else if ( this->_isJumping || this->_isFalling)
+		{
+			// TODO: Mostrar disparo en el aire
+			this->viewDizzy();
+		}
+		else
+		{
+			// TODO: Mostrar disparo parado
+			this->viewDizzy();
+		}
+		this->arma->viewLanzar();
+	}
+	else if ( this->isJumping() || this->isFalling() )
 	{
 		if ( this->_isJumpingRight || this->_isFallingRight)
 		{
@@ -211,13 +243,6 @@ void Personaje::view(Personaje* otherPlayer)
 	else if (this->_isWalking)
 	{
 		this->viewWalking();
-	}
-	else if(this->_isThrowing)
-	{
-		//Lanzar arma
-		this->arma->viewLanzar();
-		//TODO: Hay que poner el personaje en posición de tiro - renderizo en idle para prueba, sino desaparece el personaje por no renderizarlo
-		this->showIdle();
 	}
 	else if (this->_isHiKicking)
 	{
@@ -586,6 +611,7 @@ void Personaje::evaluarAccion(int accion) {
 void Personaje::arrojarArma() {
 
 }
+
 void Personaje::duck()
 {
 	if (  !this->isFalling() && !this->isJumping()  )
@@ -756,13 +782,14 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				_pos_x = 0;
 		}
 	}
-	else if(this->_isThrowing)
+
+	if(this->_isThrowing)
 	{
 		if(!arma->_orientacion)
 		{
 			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
-			if ((new_x_arma >= this->_escenario.ancho) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
+			if ((new_x_arma >= this->_escenario.ancho ) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
 				this->resetearArma();
@@ -797,7 +824,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		{
 			if ((new_x_arma <= 0) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
-				this->_isThrowing = false;	
+				this->_isThrowing = false;
 				this->resetearArma();
 			}
 			else

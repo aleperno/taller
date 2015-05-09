@@ -221,6 +221,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_v) this->_ventana->toggleShake();
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
+			//DEBUGEAR PERSONAJE CON TECLADO
+			else if (e->key.keysym.sym == SDLK_u) this->_personaje1->patadaBaja();
+			else if (e->key.keysym.sym == SDLK_j) this->_personaje1->patadaAlta();
+			else if (e->key.keysym.sym == SDLK_i) this->_personaje1->golpeBajo();
+			else if (e->key.keysym.sym == SDLK_k) this->_personaje1->golpeAlto();
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
@@ -314,7 +319,7 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 	{
 		if(pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking())
+			if(!otherPers->isBlocking() && !pers->isLeftMargin())
 				otherPers->moveLeft(MOV_FACTOR2);
 			else
 				return false;
@@ -331,7 +336,7 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	{
 		if(!pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking())
+			if(!otherPers->isBlocking() && !pers->isRightMargin())
 				otherPers->moveRight(MOV_FACTOR2);
 			else
 				return false;
@@ -502,7 +507,7 @@ void GameController::getKeysPlayer1() {
 	//Prueba de lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_L ])
 	{
-		this->_personaje1->lanzarArma();
+		this->_personaje2->lanzarArma();
 	}
 	//Fin prueba lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
