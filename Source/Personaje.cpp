@@ -115,9 +115,13 @@ void Personaje::resetearArma()
 
 void Personaje::setBoundingBox()
 {
-	boundingBox.x = this->get_x_px();
+	float factor_centrado = 50;
+	if(!this->_orientacion)
+		factor_centrado = -factor_centrado;
+
+	boundingBox.x = this->get_x_px() + 50;
 	boundingBox.y = this->get_y_px() * 1.2;
-	boundingBox.w = this->_ancho_px / 1.2;
+	boundingBox.w = this->_ancho_px / 1.8;
 	boundingBox.h = this->_alto_px / 1.2;
 
 	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight))
@@ -130,6 +134,12 @@ void Personaje::setBoundingBox()
 	{
 		boundingBox.y = boundingBox.y * 1.35;
 		boundingBox.h = boundingBox.h / 2;
+	}
+
+	if((this->_isHiKicking) && (!this->_isDucking))
+	{
+		boundingBox.w = this->_ancho_px / 1.4;
+		boundingBox.h = boundingBox.h / 3;
 	}
 
 	//Renderiza el boundingbox - solo para pruebas
