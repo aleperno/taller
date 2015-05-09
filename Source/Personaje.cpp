@@ -441,7 +441,7 @@ void Personaje::viewJumpRight()
 	++_lastFrame;
 	int aux = _lastFrame / delay;
 
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[pos_fil])
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[pos_fil] || pos_last_action != pos_fil)
 	{
 		_lastFrame = 0;
 	}
@@ -451,6 +451,7 @@ void Personaje::viewJumpRight()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = pos_fil;
 }
 
 void Personaje::viewJumpLeft()
@@ -464,7 +465,7 @@ void Personaje::viewJumpLeft()
 	int delay = _data.velSprites[pos_fil];
 	++_lastFrame;
 	int aux = _lastFrame / delay;
-	if ( aux < 0 || aux >= this->_personajeData.cantSprites[pos_fil])
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[pos_fil] || pos_last_action != pos_fil)
 	{
 		_lastFrame = 0;
 	}
@@ -474,6 +475,7 @@ void Personaje::viewJumpLeft()
 	int x = get_x_px();
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	pos_last_action = pos_fil;
 }
 
 int Personaje::get_x_px()
