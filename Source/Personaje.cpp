@@ -824,7 +824,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		{
 			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
-			if ((new_x_arma >= this->_escenario.ancho ) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
+			if ((new_x_arma >= (this->_ventana->_pos_log_x + this->_ventana->_ancho_log) ) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
 				this->resetearArma();
@@ -857,7 +857,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		}
 		else
 		{
-			if ((new_x_arma <= 0) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
+			if ((new_x_arma <= this->_ventana->_pos_log_x) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
 				this->_isThrowing = false;
 				this->resetearArma();
