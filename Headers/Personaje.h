@@ -94,6 +94,7 @@ class Personaje
 		bool _isDizzy;
 
 		int pos_last_action;
+		bool _beingHit;
 
 		void viewWalking();
 		void viewDuck();
@@ -104,6 +105,7 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void viewHiKick();
+		void viewHit();
 		void setBoundingBox();
 		void resetearArma();
 
@@ -132,6 +134,7 @@ class Personaje
 		void golpeAlto();
 		void patadaBaja();
 		void patadaAlta();
+		void hit();
 		unsigned int _zIndex;
 		void showIdle();
 		bool isBlocking();
