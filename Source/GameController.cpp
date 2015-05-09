@@ -221,6 +221,9 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_v) this->_ventana->toggleShake();
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
+			//DEBUGEAR PERSONAJE CON TECLADO
+			else if (e->key.keysym.sym == SDLK_u) this->_personaje1->patadaBaja();
+			else if (e->key.keysym.sym == SDLK_j) this->_personaje1->patadaAlta();
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
