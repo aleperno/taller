@@ -13,6 +13,8 @@
 				"dizzy":		[150,9,7],
 				"duckHiKick":	[150,3,4],
 				"hiKick":		[150,6,4],
+				"hittedDuck": 	[150,3,4],
+				"hitted": 		[150,3,4],
 				"imgSrc" : "Images/characters/liukang2.png",
 				"color-alternativo": {
 							"h-inicial": -20,
