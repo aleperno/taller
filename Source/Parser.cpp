@@ -97,6 +97,38 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	personaje->cantSprites.push_back(persValue["hiKick"][1].asInt());
 	personaje->anchoSprites.push_back(persValue["hiKick"][0].asInt());
 
+	personaje->velSprites.push_back(persValue["duckLoKick"][2].asInt());
+	personaje->cantSprites.push_back(persValue["duckLoKick"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["duckLoKick"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["loKick"][2].asInt());
+	personaje->cantSprites.push_back(persValue["loKick"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["loKick"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["airKick"][2].asInt());
+	personaje->cantSprites.push_back(persValue["airKick"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["airKick"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["hiPunch"][2].asInt());
+	personaje->cantSprites.push_back(persValue["hiPunch"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["hiPunch"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["loPunch"][2].asInt());
+	personaje->cantSprites.push_back(persValue["loPunch"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["loPunch"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["airPunch"][2].asInt());
+	personaje->cantSprites.push_back(persValue["airPunch"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["airPunch"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["fallDead"][2].asInt());
+	personaje->cantSprites.push_back(persValue["fallDead"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["fallDead"][0].asInt());
+
+	personaje->velSprites.push_back(persValue["falling"][2].asInt());
+	personaje->cantSprites.push_back(persValue["falling"][1].asInt());
+	personaje->anchoSprites.push_back(persValue["falling"][0].asInt());
+
 	/*
 	for(int j = 0; j < i; j++)
 	{
