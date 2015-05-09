@@ -84,7 +84,6 @@ class Personaje
 
 		int pos_last_action;
 
-		bool _orientacion;
 		void viewWalking();
 		void viewDuck();
 		void viewDizzy();
