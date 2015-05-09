@@ -507,7 +507,7 @@ void GameController::getKeysPlayer1() {
 	//Prueba de lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_L ])
 	{
-		this->_personaje1->lanzarArma();
+		this->_personaje2->lanzarArma();
 	}
 	//Fin prueba lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
