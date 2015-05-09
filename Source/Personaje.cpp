@@ -91,11 +91,11 @@ bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 void Personaje::lanzarArma()
 {
 	//TODO: Chequear lanzamiento en salto y agachado
-	//if ( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
-	//{
+	if (!this->_isThrowing)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+	{
 		this->_isThrowing = true;
 		this->resetearArma();
-	//}
+	}
 }
 
 void Personaje::resetearArma()
@@ -706,8 +706,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 	}
 	else if(this->_isThrowing)
 	{
-		printf("%.0f ", new_x_arma);
-		if(!this->_orientacion)
+		if(!arma->_orientacion)
 		{
 			//TODO: Está en el #define la velocidad del arma -> hay que entrar por json
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
