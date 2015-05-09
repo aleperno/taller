@@ -245,6 +245,11 @@ bool Personaje::isJumping()
 	return ( this->_isJumping || this->_isJumpingRight || this->_isJumpingLeft );
 }
 
+bool Personaje::isBlocking()
+{
+	return (this->_isBlocking);
+}
+
 bool Personaje::isFalling()
 {
 	return ( this->_isFalling || this->_isFallingRight || this->_isFallingLeft );

@@ -313,7 +313,12 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 	if(otherPers->hayColision(otherPers->boundingBox, pers->boundingBox))
 	{
 		if(pers->_orientacion)
-			return false;	
+		{	
+			if(!otherPers->isBlocking())
+				otherPers->moveLeft(MOV_FACTOR2);
+			else
+				return false;
+		}
 	}
 	return true;
 }
@@ -325,11 +330,15 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	if(otherPers->hayColision(otherPers->boundingBox, pers->boundingBox))
 	{
 		if(!pers->_orientacion)
-			return false;
+		{	
+			if(!otherPers->isBlocking())
+				otherPers->moveRight(MOV_FACTOR2);
+			else
+				return false;
+		}
 	}
 	return true;
 }
-
 
 void GameController::run(int sleep_time)
 {

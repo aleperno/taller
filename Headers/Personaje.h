@@ -74,9 +74,9 @@ class Personaje
 
 		bool _isThrowing;
 
-		bool _isBlocking;
+		
 		bool _isDizzy;
-
+		bool _isBlocking;
 		
 		void viewWalking();
 		void viewDuck();
@@ -91,6 +91,7 @@ class Personaje
 		
 
 	public:
+		
 		bool _orientacion;
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
@@ -116,6 +117,7 @@ class Personaje
 		void patadaAlta();
 		unsigned int _zIndex;
 		void showIdle();
+		bool isBlocking();
 		bool isLeftMargin();
 		bool isRightMargin();
 		bool isJumping();
