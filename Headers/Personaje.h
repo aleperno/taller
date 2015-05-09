@@ -77,7 +77,7 @@ class Personaje
 		bool _isBlocking;
 		bool _isDizzy;
 
-		bool _orientacion;
+		
 		void viewWalking();
 		void viewDuck();
 		void viewDizzy();
@@ -88,9 +88,11 @@ class Personaje
 		void viewJumpLeft();
 		void setBoundingBox();
 		void resetearArma();
-		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
+		
 
 	public:
+		bool _orientacion;
+		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
 		~Personaje();
 		int healthPoints;
