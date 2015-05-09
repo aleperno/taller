@@ -27,19 +27,27 @@ using namespace std;
 #define JMP_SPEED_X 3;
 #define ARMA_SPEED 2.5;
 
-#define POS_FILA_WALK		0
-#define POS_FILA_IDLE		1
-#define POS_FILA_JUMP		2
-#define POS_FILA_JMPF		3
-#define POS_FILA_JMPB		4
-#define POS_FILA_DUCK		5
-#define POS_FILA_BLOCK		6
-#define POS_FILA_BLOCKDUCK	7
-#define POS_FILA_DIZZY		8
-#define POS_FILA_HITTED_DUCK 9
-#define POS_FILA_HITTED 10
-#define POS_FILA_HIKICK_DUCK 11
-#define POS_FILA_HIKICK 12
+#define POS_FILA_WALK			0
+#define POS_FILA_IDLE			1
+#define POS_FILA_JUMP			2
+#define POS_FILA_JMPF			3
+#define POS_FILA_JMPB			4
+#define POS_FILA_DUCK			5
+#define POS_FILA_BLOCK			6
+#define POS_FILA_BLOCKDUCK		7
+#define POS_FILA_DIZZY			8
+#define POS_FILA_HITTED_DUCK 		9
+#define POS_FILA_HITTED 		10
+#define POS_FILA_HIKICK_DUCK 		11
+#define POS_FILA_HIKICK 		12
+#define POS_FILA_LOKICK_DUCK		13
+#define POS_FILA_LOKICK			14
+#define POS_FILA_AIRKICK		15
+#define POS_FILA_HIPUNCH		16
+#define POS_FILA_LOPUNCH		17
+#define POS_FILA_AIRPUNCH		18
+#define POS_FILA_FALLDEAD		19
+#define POS_FILA_FALL			20
 
 class Personaje
 {
