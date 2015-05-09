@@ -319,7 +319,7 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 	{
 		if(pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking())
+			if(!otherPers->isBlocking() && !pers->isLeftMargin())
 				otherPers->moveLeft(MOV_FACTOR2);
 			else
 				return false;
@@ -336,7 +336,7 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	{
 		if(!pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking())
+			if(!otherPers->isBlocking() && !pers->isRightMargin())
 				otherPers->moveRight(MOV_FACTOR2);
 			else
 				return false;
