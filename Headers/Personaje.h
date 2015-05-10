@@ -121,6 +121,7 @@ class Personaje
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
 		~Personaje();
 		int healthPoints;
+		void downLife(int cantidad);
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
 		void moveLeft(float factor);

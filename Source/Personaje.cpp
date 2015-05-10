@@ -115,7 +115,10 @@ void Personaje::resetearArma()
 		arma->_pos_x = this->_pos_x + this->_ancho_log/2;
 	else
 		arma->_pos_x = this->_pos_x;
-	arma->_pos_y = this->_pos_y + this->_alto_log / 2;
+	if (this->_isDucking)
+		arma->_pos_y = this->_pos_y + this->_alto_log * 0.25;
+	else
+		arma->_pos_y = this->_pos_y + this->_alto_log * 0.5;
 	arma->_orientacion = this->_orientacion;
 	arma->setBoundingBox();
 }
@@ -765,6 +768,11 @@ void Personaje::jumpLeft(float factor){
 	}
 }
 
+void Personaje::downLife(int cantidad)
+{
+	this->healthPoints -= cantidad;
+}
+
 void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherPers)
 {
 	float new_x;
@@ -858,6 +866,11 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
 			if ((new_x_arma >= (this->_ventana->_pos_log_x + this->_ventana->_ancho_log) ) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
+				if (this->hayColision(otherPers->boundingBox, arma->boundingBox))
+				{
+					// TODO: Quizas debería estar en otro lado, por ahora funciona
+					this->downLife(10);
+				}
 				this->_weaponInAir = false;
 				this->resetearArma();
 			}
@@ -891,6 +904,11 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		{
 			if ((new_x_arma <= this->_ventana->_pos_log_x) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
+				if (this->hayColision(otherPers->boundingBox, arma->boundingBox))
+				{
+					// TODO: Quizas debería estar en otro lado, por ahora funciona
+					this->downLife(10);
+				}
 				this->_weaponInAir = false;
 				this->resetearArma();
 			}
