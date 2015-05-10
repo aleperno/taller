@@ -52,6 +52,10 @@ using namespace std;
 #define POS_FILA_BARRIDO		22
 #define POS_FILA_ARMA			23
 
+// TODO: AGREGAR SPRITES DE PIÑA ALTA Y BAJA ESTANDO AGACHADO
+#define POS_FILA_HIPUNCH_DUCK	24
+#define POS_FILA_LOPUNCH_DUCK	25
+
 class Personaje
 {
 	private:
@@ -76,7 +80,8 @@ class Personaje
 		float getBeta(float factor);	
 		vector<SDL_Rect*> vectorSprites;
 		vector<SDL_Rect*> loadVectorMedia(PersonajeData data);
-		int _lastFrame;		
+		int _lastFrame;
+
 		bool _isWalking;
 		bool _isDucking;
 		bool _isJumping;
@@ -87,15 +92,17 @@ class Personaje
 		bool _isFallingLeft;
 		bool _canMove;
 		bool _isHiKicking;
+		bool _isLoKicking;
+		bool _isHiPunching;
+		bool _isLoPunching;
+		bool _isBlocking;
+		bool _isDizzy;
+		
 
 		// For throwable weapon.
 		bool _isThrowing;
 		bool _weaponInAir;
 		int _timesThrow;
-
-
-		bool _isBlocking;
-		bool _isDizzy;
 
 		int pos_last_action;
 		bool _beingHit;
@@ -109,6 +116,11 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void viewHiKick();
+		void viewHiPunch();
+		void viewLoKick();
+		void viewLoPunch();
+		void viewPunchAir();
+		void viewKickAir();
 		void viewHit();
 		void viewShotWeapon(size_t posicion);
 		void setBoundingBox();
@@ -124,8 +136,10 @@ class Personaje
 		void downLife(int cantidad);
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
+
 		void moveLeft(float factor);
 		void moveRight(float factor);
+
 		void duck();
 		void jump(float factor);
 		void jumpRight(float factor);
@@ -141,8 +155,10 @@ class Personaje
 		void patadaBaja();
 		void patadaAlta();
 		void hit();
+
 		unsigned int _zIndex;
 		void showIdle();
+
 		bool isBlocking();
 		bool isLeftMargin();
 		bool isRightMargin();
@@ -153,10 +169,13 @@ class Personaje
 		bool isJumpingRight();
 		bool isJumpingLeft();
 		bool isDucking();
+		bool isHitting();
+
 		void evaluarAccion (int accion);
 		bool canMove();
 		void freeze();
 		void unFreeze();
+
 		PersonajeData* getData();
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);

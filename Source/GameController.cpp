@@ -491,10 +491,18 @@ void GameController::getKeysPlayer1() {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
 	{
+		if ( currentKeyStates[ SDL_SCANCODE_J ] ) this->_personaje1->patadaAlta();
+		else if ( currentKeyStates[ SDL_SCANCODE_U ] ) this->_personaje1->patadaBaja();
+		else if ( currentKeyStates[ SDL_SCANCODE_I ] ) this->_personaje1->golpeBajo();
+		else if ( currentKeyStates[ SDL_SCANCODE_K ] ) this->_personaje1->golpeAlto();
 		this->_personaje1->jumpLeft(JMP_FACTOR);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_RIGHT ])
 	{
+		if ( currentKeyStates[ SDL_SCANCODE_J ] ) this->_personaje1->patadaAlta();
+		else if ( currentKeyStates[ SDL_SCANCODE_U ] ) this->_personaje1->patadaBaja();
+		else if ( currentKeyStates[ SDL_SCANCODE_I ] ) this->_personaje1->golpeBajo();
+		else if ( currentKeyStates[ SDL_SCANCODE_K ] ) this->_personaje1->golpeAlto();
 		this->_personaje1->jumpRight(JMP_FACTOR);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_0 ])
@@ -503,6 +511,10 @@ void GameController::getKeysPlayer1() {
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
+		if ( currentKeyStates[ SDL_SCANCODE_J ] ) this->_personaje1->patadaAlta();
+		else if ( currentKeyStates[ SDL_SCANCODE_U ] ) this->_personaje1->patadaBaja();
+		else if ( currentKeyStates[ SDL_SCANCODE_I ] ) this->_personaje1->golpeBajo();
+		else if ( currentKeyStates[ SDL_SCANCODE_K ] ) this->_personaje1->golpeAlto();
 		this->_personaje1->jump(JMP_FACTOR);
 	}
 	//Prueba de lanzamiento
@@ -517,11 +529,28 @@ void GameController::getKeysPlayer1() {
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ])
 	{
+		if ( currentKeyStates[ SDL_SCANCODE_J ] ) this->_personaje1->patadaAlta();
 		this->_personaje1->duck();
 	}
-	else if(currentKeyStates[ SDL_SCANCODE_B ])
+	else if(currentKeyStates[ SDL_SCANCODE_B ] )
 	{
 		this->_personaje1->block();
+	}
+	else if(currentKeyStates[ SDL_SCANCODE_J ] )
+	{
+		this->_personaje1->patadaAlta();
+	}
+	else if ( currentKeyStates[ SDL_SCANCODE_U ] )
+	{
+		this->_personaje1->patadaBaja();
+	}
+	else if ( currentKeyStates[ SDL_SCANCODE_I ] )
+	{
+		this->_personaje1->golpeBajo();
+	}
+	else if ( currentKeyStates[ SDL_SCANCODE_K ] )
+	{
+		this->_personaje1->golpeAlto();
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
