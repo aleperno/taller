@@ -39,6 +39,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFallingLeft = false;
 	
 	this->_isThrowing = false;
+	this->_weaponInAir = false;
+	this->_timesThrow = 0;
 
 	this->_isBlocking = false;
 	this->_isDizzy = false;
@@ -97,9 +99,10 @@ void Personaje::lanzarArma()
 	//TODO: Chequear lanzamiento en salto y agachado
 	if ( !this->_isBlocking && !this->_isHiKicking ) // TODO: Agregar otras acciones.
 	{
-		if (!this->_isThrowing)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+		if (!this->_weaponInAir)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
 		{
 			this->_isThrowing = true;
+			this->_weaponInAir = true;
 			this->resetearArma();
 		}
 	}
@@ -186,81 +189,101 @@ void Personaje::view(Personaje* otherPlayer)
 	this->setBoundingBox();
 	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
+	if ( this->_weaponInAir ) this->arma->viewLanzar();
 	if ( this->_isThrowing )
 	{
 		if ( this->_isDucking )
 		{
 			// TODO: Mostrar disparo agachado
-			this->viewDizzy();
+			this->viewShotWeapon(0);
+			this->_timesThrow ++;
+			if ( this->_timesThrow >= 10)
+			{
+				this->_isThrowing = false;
+				this->_timesThrow = 0;
+			}
 		}
 		else if ( this->_isJumping || this->_isFalling)
 		{
 			// TODO: Mostrar disparo en el aire
-			this->viewDizzy();
+			this->viewShotWeapon(2);
+			this->_timesThrow ++;
+			if ( this->_timesThrow >= 10)
+			{
+				this->_isThrowing = false;
+				this->_timesThrow = 0;
+			}
 		}
 		else
 		{
 			// TODO: Mostrar disparo parado
-			this->viewDizzy();
+			this->viewShotWeapon(1);
+			this->_timesThrow ++;
+			if ( this->_timesThrow >= 10)
+			{
+				this->_isThrowing = false;
+				this->_timesThrow = 0;
+			}
 		}
-		this->arma->viewLanzar();
-	}
-	else if ( this->isJumping() || this->isFalling() )
-	{
-		if ( this->_isJumpingRight || this->_isFallingRight)
-		{
-			//cout << "SALTO DERECHA" << endl;
-			this->viewJumpRight();
-		}
-		else if ( this->_isJumpingLeft || this->_isFallingLeft)
-		{
-			//cout << "SALTO IZQUIERDA" << endl;
-			this->viewJumpLeft();
-		}
-		else
-		{
-			this->viewJump();
-		}
-	}
-	else if (this->_isDucking && this->_isBlocking)
-	{
-		this->viewBlockDuck();
-	}else if (this->_isDucking && this->_isHiKicking)
-	{
-		this->viewHiKick();
-	}else if (this->_isDucking && this->_beingHit)
-	{
-		this->viewHit();
-	}
-	else if (this->_isDucking)
-	{
-		this->viewDuck();
-	}
-	else if (this->_isDizzy)
-	{
-		this->viewDizzy();
-	}
-	else if (this->_isBlocking)
-	{
-		this->viewBlock();
-	}
-	else if (this->_isWalking)
-	{
-		this->viewWalking();
-	}
-	else if (this->_isHiKicking)
-	{
-		this->viewHiKick();
-	}
-	else if (this->_beingHit)
-	{
-			this->viewHit();
 	}
 	else
 	{
-		this->showIdle();
+		if ( this->isJumping() || this->isFalling() )
+		{
+			if ( this->_isJumpingRight || this->_isFallingRight)
+			{
+				//cout << "SALTO DERECHA" << endl;
+				this->viewJumpRight();
+			}
+			else if ( this->_isJumpingLeft || this->_isFallingLeft)
+			{
+				//cout << "SALTO IZQUIERDA" << endl;
+				this->viewJumpLeft();
+			}
+			else
+			{
+				this->viewJump();
+			}
+		}
+		else if (this->_isDucking && this->_isBlocking)
+		{
+			this->viewBlockDuck();
+		}else if (this->_isDucking && this->_isHiKicking)
+		{
+			this->viewHiKick();
+		}else if (this->_isDucking && this->_beingHit)
+		{
+			this->viewHit();
+		}
+		else if (this->_isDucking)
+		{
+			this->viewDuck();
+		}
+		else if (this->_isDizzy)
+		{
+			this->viewDizzy();
+		}
+		else if (this->_isBlocking)
+		{
+			this->viewBlock();
+		}
+		else if (this->_isWalking)
+		{
+			this->viewWalking();
+		}
+		else if (this->_isHiKicking)
+		{
+			this->viewHiKick();
+		}
+		else if (this->_beingHit)
+		{
+				this->viewHit();
+		}
+		else
+		{
+			this->showIdle();
+		}
 	}
-	
 	//int x = get_x_px();
 	//int y = get_y_px();
 		//cout << "La posicion logica en x es " << _pos_x << " y en px es " << x << endl;
@@ -536,6 +559,15 @@ void Personaje::viewJumpLeft()
 	int y = get_y_px();
 	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 	pos_last_action = pos_fil;
+}
+
+void Personaje::viewShotWeapon(size_t posicion)
+{
+	SDL_Rect* currentClip = &(this->vectorSprites[POS_FILA_ARMA][posicion]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	cout << "X = " << x << " Y = ;" << y << "- Ancho px = " << _ancho_px << ", Alto px = " << _alto_px << endl;
 }
 
 int Personaje::get_x_px()
@@ -818,7 +850,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		}
 	}
 
-	if(this->_isThrowing)
+	if(this->_weaponInAir)
 	{
 		if(!arma->_orientacion)
 		{
@@ -826,7 +858,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			//TODO: Hay que cambiar los límites del arma para que no haya error - _escenario.ancho y 0 no van
 			if ((new_x_arma >= (this->_ventana->_pos_log_x + this->_ventana->_ancho_log) ) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
-				this->_isThrowing = false;
+				this->_weaponInAir = false;
 				this->resetearArma();
 			}
 			else
@@ -841,7 +873,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 					if(this->hayColision(otherPers->boundingBox, between_frames))
 					{
 						//Hay hit entre 2 frames
-						this->_isThrowing = false;
+						this->_weaponInAir = false;
 						this->resetearArma();
 					}
 					else
@@ -859,7 +891,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 		{
 			if ((new_x_arma <= this->_ventana->_pos_log_x) || (this->hayColision(otherPers->boundingBox, arma->boundingBox)))
 			{
-				this->_isThrowing = false;
+				this->_weaponInAir = false;
 				this->resetearArma();
 			}
 			else
@@ -874,7 +906,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 					if(this->hayColision(otherPers->boundingBox, between_frames))
 					{
 						//Hay hit entre 2 frames
-						this->_isThrowing = false;
+						this->_weaponInAir = false;
 						this->resetearArma();
 					}
 					else
@@ -915,6 +947,7 @@ bool Personaje::isJumpingLeft()
 bool Personaje::isDucking() {
 	return this->_isDucking;
 }
+
 void Personaje::moveRight(float factor)
 {
 	this->_isDucking = false;

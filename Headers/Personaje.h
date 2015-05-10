@@ -88,7 +88,11 @@ class Personaje
 		bool _canMove;
 		bool _isHiKicking;
 
+		// For throwable weapon.
 		bool _isThrowing;
+		bool _weaponInAir;
+		int _timesThrow;
+
 
 		bool _isBlocking;
 		bool _isDizzy;
@@ -106,6 +110,7 @@ class Personaje
 		void viewJumpLeft();
 		void viewHiKick();
 		void viewHit();
+		void viewShotWeapon(size_t posicion);
 		void setBoundingBox();
 		void resetearArma();
 
