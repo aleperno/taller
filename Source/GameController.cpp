@@ -519,7 +519,7 @@ void GameController::getKeysPlayer1() {
 	{
 		this->_personaje1->duck();
 	}
-	else if(currentKeyStates[ SDL_SCANCODE_B ])
+	else if(currentKeyStates[ SDL_SCANCODE_B ] )
 	{
 		this->_personaje1->block();
 	}

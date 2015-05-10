@@ -36,11 +36,11 @@ using namespace std;
 #define POS_FILA_BLOCK			6
 #define POS_FILA_BLOCKDUCK		7
 #define POS_FILA_DIZZY			8
-#define POS_FILA_HITTED_DUCK 		9
+#define POS_FILA_HITTED_DUCK 	9
 #define POS_FILA_HITTED 		10
-#define POS_FILA_HIKICK_DUCK 		11
+#define POS_FILA_HIKICK_DUCK 	11
 #define POS_FILA_HIKICK 		12
-#define POS_FILA_LOKICK_DUCK		13
+#define POS_FILA_LOKICK_DUCK	13
 #define POS_FILA_LOKICK			14
 #define POS_FILA_AIRKICK		15
 #define POS_FILA_HIPUNCH		16
@@ -48,6 +48,13 @@ using namespace std;
 #define POS_FILA_AIRPUNCH		18
 #define POS_FILA_FALLDEAD		19
 #define POS_FILA_FALL			20
+#define POS_FILA_GANCHO			21
+#define POS_FILA_BARRIDO		22
+#define POS_FILA_ARMA			23
+
+// TODO: AGREGAR SPRITES DE PIÑA ALTA Y BAJA ESTANDO AGACHADO
+#define POS_FILA_HIPUNCH_DUCK	24
+#define POS_FILA_LOPUNCH_DUCK	25
 
 class Personaje
 {
@@ -73,7 +80,8 @@ class Personaje
 		float getBeta(float factor);	
 		vector<SDL_Rect*> vectorSprites;
 		vector<SDL_Rect*> loadVectorMedia(PersonajeData data);
-		int _lastFrame;		
+		int _lastFrame;
+
 		bool _isWalking;
 		bool _isDucking;
 		bool _isJumping;
@@ -84,11 +92,17 @@ class Personaje
 		bool _isFallingLeft;
 		bool _canMove;
 		bool _isHiKicking;
-
-		bool _isThrowing;
-
+		bool _isLoKicking;
+		bool _isHiPunching;
+		bool _isLoPunching;
 		bool _isBlocking;
 		bool _isDizzy;
+		
+
+		// For throwable weapon.
+		bool _isThrowing;
+		bool _weaponInAir;
+		int _timesThrow;
 
 		int pos_last_action;
 		bool _beingHit;
@@ -102,7 +116,13 @@ class Personaje
 		void viewJumpRight();
 		void viewJumpLeft();
 		void viewHiKick();
+		void viewHiPunch();
+		void viewLoKick();
+		void viewLoPunch();
+		void viewPunchAir();
+		void viewKickAir();
 		void viewHit();
+		void viewShotWeapon(size_t posicion);
 		void setBoundingBox();
 		void resetearArma();
 
@@ -113,10 +133,13 @@ class Personaje
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
 		~Personaje();
 		int healthPoints;
+		void downLife(int cantidad);
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
+
 		void moveLeft(float factor);
 		void moveRight(float factor);
+
 		void duck();
 		void jump(float factor);
 		void jumpRight(float factor);
@@ -132,8 +155,10 @@ class Personaje
 		void patadaBaja();
 		void patadaAlta();
 		void hit();
+
 		unsigned int _zIndex;
 		void showIdle();
+
 		bool isBlocking();
 		bool isLeftMargin();
 		bool isRightMargin();
@@ -144,10 +169,13 @@ class Personaje
 		bool isJumpingRight();
 		bool isJumpingLeft();
 		bool isDucking();
+		bool isHitting();
+
 		void evaluarAccion (int accion);
 		bool canMove();
 		void freeze();
 		void unFreeze();
+
 		PersonajeData* getData();
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);
 		void setOrientacion(bool orientacion);
