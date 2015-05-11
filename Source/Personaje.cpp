@@ -482,7 +482,7 @@ void Personaje::viewHiPunch()
 {
 	int accion = 0;
 	if (this->_isDucking){
-		accion = POS_FILA_HIPUNCH_DUCK;
+		accion = POS_FILA_GANCHO;
 	}else{
 		accion = POS_FILA_HIPUNCH;
 	}
