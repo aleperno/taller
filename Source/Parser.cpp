@@ -234,6 +234,7 @@ void Parser::setearParseoDeSprite() {
 	if (persValue.empty())
 	{
 		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje1.nombre + "\" (sprites) no existe. Se usa uno por defecto.");
+		this->personaje1.nombre = "liukang";
 		persValue = root["liukang"];
 	}
 	parsearSpritePersonaje(&(this->personaje1), persValue);
@@ -242,6 +243,7 @@ void Parser::setearParseoDeSprite() {
 	if (persValue.empty())
 	{
 		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje2.nombre + "\" (sprites) no existe. Se usa uno por defecto.");
+		this->personaje2.nombre = "liukang";
 		persValue = root["liukang"];
 	}
 	parsearSpritePersonaje(&(this->personaje2), persValue);
