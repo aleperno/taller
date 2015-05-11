@@ -856,7 +856,7 @@ void Personaje::patadaAlta() {
 
 void Personaje::evaluarAccion(int accion) {
 	if (accion == this->getData()->getAR()) {
-		this->arrojarArma();
+		this->lanzarArma();
 	}
 	else if (accion == this->getData()->getGA()) {
 		this->golpeAlto();
