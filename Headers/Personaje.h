@@ -124,7 +124,9 @@ class Personaje
 		void resetearArma();
 
 	public:
-		
+		bool isMaxPushLeft();
+		bool isMaxPushRight();
+
 		bool _orientacion;
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);

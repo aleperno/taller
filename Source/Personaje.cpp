@@ -816,6 +816,17 @@ bool Personaje::isLeftMargin()
 	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE);
 }
 
+bool Personaje::isMaxPushLeft()
+{
+	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE + 20);
+}
+
+bool Personaje::isMaxPushRight()
+{
+	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE + 20);
+}
+
+
 //Se llama una vez que la vida de uno de los dos personajes llega a cero
 void Personaje::winingPosition() {
 
@@ -983,6 +994,15 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			this->_isFalling = false;
 			this->_isFallingRight = false;
 			this->_isFallingLeft = false;
+
+			//Si hay colisión en la caída, muevo el personaje un poco para atrás
+			if(this->hayColision(this->boundingBox, otherPers->boundingBox))
+			{
+				if(!this->_orientacion)
+					this->_pos_x = this->_pos_x - 10;
+				else
+					this->_pos_x = this->_pos_x + 10;
+			}
 		}
 		else
 		{

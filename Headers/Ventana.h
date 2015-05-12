@@ -21,7 +21,7 @@ using namespace std;
 
 #define SHAKE_INTENSITY 20
 #define SHAKE_LENGTH 20
-#define WINDOW_MARGIN_TOLERANCE 10
+#define WINDOW_MARGIN_TOLERANCE 5
 
 class Ventana
 {
