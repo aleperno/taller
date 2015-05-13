@@ -254,11 +254,25 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if ( this->_isHiKicking || this->_isLoKicking )
 				{
-					this->viewKickAir();
+					if(this->viewKickAir())
+					{
+						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+						{
+							otherPlayer->downLife(3);
+							otherPlayer->hit();
+						}
+					}
 				}
 				else
 				{
-					this->viewPunchAir();
+					if (this->viewPunchAir())
+					{
+						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+						{
+							otherPlayer->downLife(3);
+							otherPlayer->hit();
+						}
+					}
 				}
 			}
 			else
@@ -288,7 +302,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewHiKick())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -300,7 +314,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewHiPunch())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(3);
 					otherPlayer->fall();
@@ -312,7 +326,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewLoPunch())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -324,7 +338,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewLoKick())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -356,7 +370,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewHiKick())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -368,7 +382,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewHiPunch())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -380,7 +394,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewLoKick())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -392,7 +406,7 @@ void Personaje::view(Personaje* otherPlayer)
 			if(this->viewLoPunch())
 			// TODO: SACAR ESTO DE ACÁ.
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
@@ -407,7 +421,7 @@ void Personaje::view(Personaje* otherPlayer)
 		{
 			if(this->viewBarrido())
 			{
-				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox))
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					otherPlayer->downLife(1);
 					otherPlayer->hit();
