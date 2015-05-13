@@ -25,9 +25,10 @@
 		"airPunch":	[150,3,4],
 		"fallDead":	[150,8,4],
 		"falling":	[150,12,4],
-		"gancho":	[150,6,4],
+		"gancho":	[150,5,4],
 		"barrido":	[150,8,4],
 		"arma":		[150,3,4],
+		"duckLoPunch":	[150,3,4],
 		"imgSrc":	"Images/characters/liukang2.png",
 		"color-alternativo": {
 					"h-inicial": -20,
@@ -62,9 +63,10 @@
 		"airPunch":	[150,3,4],
 		"fallDead":	[150,6,4],
 		"falling":	[150,13,4],
-		"gancho":	[150,6,4],
+		"gancho":	[150,5,4],
 		"barrido":	[150,8,4],
 		"arma":		[150,3,4],
+		"duckLoPunch":	[150,3,4],
 		"imgSrc":	"Images/characters/scorpion.png",
 		"color-alternativo": {
 					"h-inicial": 40,
