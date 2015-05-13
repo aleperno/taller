@@ -37,6 +37,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+	this->_isHitFalling = false;
+	this->_isBarriendo = false;
 	
 	this->_isThrowing = false;
 	this->_weaponInAir = false;
@@ -503,12 +505,46 @@ bool Personaje::viewDead()
 
 void Personaje::viewFall()
 {
-
+	int accion = POS_FILA_FALL;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		this->_isHitFalling = false;
+	}
+	pos_last_action = accion;
 }
 
 void Personaje::viewBarrido()
 {
-
+	int accion = POS_FILA_BARRIDO;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		this->_isBarriendo = false;
+	}
+	pos_last_action = accion;
 }
 
 void Personaje::viewHiPunch()
@@ -865,9 +901,32 @@ void Personaje::winingPosition() {
 
 }
 
+void Personaje::fall()
+{
+	if ( !this->_isBlocking && !this->isHitting() )
+	{
+		this->_isHitFalling = true;
+		this->_isWalking = false;
+	}
+}
+
+void Personaje::dead()
+{
+	this->healthPoints = 0;
+}
+
+void Personaje::barrer()
+{
+	if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isLoPunching )
+	{
+		this->_isBarriendo = true;
+		this->_isWalking = false;
+	}
+}
+
 void Personaje::golpeBajo() {
 
-	if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking ) 
+	if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isBarriendo )
 	{
 		this->_isLoPunching = true;
 		this->_isWalking = false;
@@ -875,7 +934,7 @@ void Personaje::golpeBajo() {
 }
 
 void Personaje::golpeAlto() {
-	if ( !this->_isLoPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking )
+	if ( !this->_isLoPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isBarriendo )
 	{ 
 		this->_isHiPunching = true;
 		this->_isWalking = false;
@@ -883,7 +942,7 @@ void Personaje::golpeAlto() {
 }
 
 void Personaje::patadaBaja() {
-	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isHiKicking && !this->_isBlocking )
+	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isHiKicking && !this->_isBlocking && !this->_isBarriendo )
 	{
 		this->_isLoKicking = true;
 		this->_isWalking = false;
@@ -891,7 +950,7 @@ void Personaje::patadaBaja() {
 }
 
 void Personaje::patadaAlta() {
-	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isLoKicking && !this->_isBlocking )
+	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isLoKicking && !this->_isBlocking && !this->_isBarriendo )
 	{
 		this->_isHiKicking = true;
 		this->_isWalking = false;
@@ -1215,7 +1274,7 @@ bool Personaje::isDucking() {
 
 bool Personaje::isHitting()
 {
-	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking);
+	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling);
 }
 
 void Personaje::moveRight(float factor)

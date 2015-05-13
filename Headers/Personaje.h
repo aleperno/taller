@@ -92,8 +92,10 @@ class Personaje
 		bool _isLoKicking;
 		bool _isHiPunching;
 		bool _isLoPunching;
+		bool _isBarriendo;
 		bool _isBlocking;
 		bool _isDizzy;
+		bool _isHitFalling;
 		
 
 		// For throwable weapon.
@@ -151,6 +153,9 @@ class Personaje
 		void dizzy();
 		void winingPosition();
 		void arrojarArma();
+		void fall();
+		void dead();
+		void barrer();
 		void golpeBajo();
 		void golpeAlto();
 		void patadaBaja();
