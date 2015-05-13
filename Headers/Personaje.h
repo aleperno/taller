@@ -114,15 +114,17 @@ class Personaje
 		void viewJump();
 		void viewJumpRight();
 		void viewJumpLeft();
-		void viewHiKick();
-		void viewHiPunch();
-		void viewLoKick();
-		void viewLoPunch();
-		void viewPunchAir();
-		void viewKickAir();
+
+		bool viewHiKick();
+		bool viewHiPunch();
+		bool viewLoKick();
+		bool viewLoPunch();
+		bool viewPunchAir();
+		bool viewKickAir();
+		bool viewBarrido();
+
 		void viewHit();
 		void viewFall();
-		void viewBarrido();
 		void viewShotWeapon(size_t posicion);
 		void setBoundingBox();
 		void resetearArma();

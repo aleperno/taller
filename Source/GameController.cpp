@@ -204,7 +204,6 @@ void GameController::actualizarGanador() {
 	}
 }
 
-
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
 	if (e->jdevice.which == 0) {
@@ -238,6 +237,8 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_i) this->_personaje1->golpeBajo();
 			else if (e->key.keysym.sym == SDLK_k) this->_personaje1->golpeAlto();
 			else if (e->key.keysym.sym == SDLK_h) this->_personaje1->hit();
+			else if (e->key.keysym.sym == SDLK_f) this->_personaje1->fall();
+			else if (e->key.keysym.sym == SDLK_t) this->_personaje1->barrer();
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
