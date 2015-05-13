@@ -6,7 +6,11 @@
  */
 #include <Personaje.h>
 
-#define OFFSET_SPRITE_GOLPE 2
+#define OFFSET_SPRITE_GOLPE 1
+
+#define LIFE_MAX 5
+#define LIFE_MED 3
+#define LIFE_MIN 1
 
 Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor)
 {
@@ -258,7 +262,7 @@ void Personaje::view(Personaje* otherPlayer)
 					{
 						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 						{
-							otherPlayer->downLife(3);
+							otherPlayer->downLife(LIFE_MED);
 							otherPlayer->hit();
 						}
 					}
@@ -269,7 +273,7 @@ void Personaje::view(Personaje* otherPlayer)
 					{
 						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 						{
-							otherPlayer->downLife(3);
+							otherPlayer->downLife(LIFE_MED);
 							otherPlayer->hit();
 						}
 					}
@@ -304,7 +308,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -316,7 +320,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(3);
+					otherPlayer->downLife(LIFE_MED);
 					otherPlayer->fall();
 				}
 			}
@@ -328,7 +332,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -340,7 +344,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -372,7 +376,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -384,7 +388,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -396,7 +400,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -408,7 +412,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -423,7 +427,7 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(1);
+					otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit();
 				}
 			}
@@ -1317,9 +1321,9 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				{
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
 					if (!otherPers->isBlocking()) {
-						otherPers->downLife(10);
+						otherPers->downLife(LIFE_MAX);
 					} else {
-						otherPers->downLife(3);
+						otherPers->downLife(LIFE_MIN);
 					}
 				}
 				this->_weaponInAir = false;
@@ -1359,9 +1363,9 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				{
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
 					if (!otherPers->isBlocking()) {
-						otherPers->downLife(10);
+						otherPers->downLife(LIFE_MAX);
 					} else {
-						otherPers->downLife(3);
+						otherPers->downLife(LIFE_MIN);
 					}
 				}
 				this->_weaponInAir = false;

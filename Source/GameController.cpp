@@ -173,7 +173,7 @@ void GameController::setEndOfGame(bool value) {
 
 bool GameController::actualizarGanador() {
 	bool flag = false;
-	if (this->_personaje1->healthPoints <= 10) {
+	if (this->_personaje1->healthPoints <= 5) {
 		this->_personaje1->freeze();
 		this->_personaje1->dizzy();
 		if (this->_personaje1->healthPoints <= 0) {
@@ -184,7 +184,7 @@ bool GameController::actualizarGanador() {
 			flag = true;
 		}
 	} else {
-		if (this->_personaje2->healthPoints <= 10) {
+		if (this->_personaje2->healthPoints <= 5) {
 			this->_personaje2->freeze();
 			this->_personaje2->dizzy();
 			if (this->_personaje2->healthPoints <= 0) {
