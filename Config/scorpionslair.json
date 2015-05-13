@@ -34,7 +34,7 @@
 
 "personaje2": {	"ancho": 	30,
 		"alto": 	50,
-		"nombre":	"subzero",
+		"nombre":	"scorpion",
 		"arma_speed": 2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
