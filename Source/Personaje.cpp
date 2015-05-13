@@ -1337,7 +1337,7 @@ void Personaje::idle()
 	this->_isBlocking = false;
 	this->_isDucking = false;
 	this->_isWalking = false;
-	this->_isDizzy = false;
+	//this->_isDizzy = false;
 }
 
 void Personaje::hit()
