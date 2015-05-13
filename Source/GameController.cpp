@@ -320,7 +320,7 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 	{
 		if(pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking() && !pers->isLeftMargin())
+			if(!otherPers->isBlocking() && !pers->isMaxPushLeft())
 				otherPers->moveLeft(MOV_FACTOR2);
 			else
 				return false;
@@ -337,7 +337,7 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	{
 		if(!pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking() && !pers->isRightMargin())
+			if(!otherPers->isBlocking() && !pers->isMaxPushRight())
 				otherPers->moveRight(MOV_FACTOR2);
 			else
 				return false;
@@ -460,6 +460,10 @@ void GameController::getKeysPlayer2() {
 	{
 		this->_personaje2->blockDuck();
 	}
+	else if(currentKeyStates[ SDL_SCANCODE_O ])
+	{
+		this->_personaje2->lanzarArma();
+	}
 	else if(currentKeyStates[ SDL_SCANCODE_S ])
 	{
 		this->_personaje2->duck();
@@ -505,12 +509,10 @@ void GameController::getKeysPlayer1() {
 	{
 		this->_personaje1->jump(JMP_FACTOR);
 	}
-	//Prueba de lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_L ])
 	{
-		this->_personaje2->lanzarArma();
+		this->_personaje1->lanzarArma();
 	}
-	//Fin prueba lanzamiento
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
 	{
 		this->_personaje1->blockDuck();
