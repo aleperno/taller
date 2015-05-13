@@ -478,6 +478,39 @@ void Personaje::viewHiKick()
 	pos_last_action = accion;
 }
 
+bool Personaje::viewDead()
+{
+	int accion = POS_FILA_FALLDEAD;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		return true;
+	}
+	pos_last_action = accion;
+	return false;
+}
+
+void Personaje::viewFall()
+{
+
+}
+
+void Personaje::viewBarrido()
+{
+
+}
+
 void Personaje::viewHiPunch()
 {
 	int accion = 0;
