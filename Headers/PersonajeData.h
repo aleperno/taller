@@ -44,6 +44,7 @@ class PersonajeData
 		vector<int> anchoSprites;
 		vector<int> velSprites;
 
+		float arma_speed;
 
 		string imgPath;
 		int getGB() { return this->golpe_bajo;}

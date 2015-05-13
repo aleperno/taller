@@ -21,7 +21,7 @@ void Parser::setearPersonajePorDefecto(PersonajeData* personaje,Value defPersona
 	personaje->ancho = defPersonaje.get("ancho",-1).asFloat();
 	personaje->alto = defPersonaje.get("alto",-1).asFloat();
 	personaje->nombre = defPersonaje.get("nombre",1).asString();
-
+	personaje->arma_speed = defPersonaje.get("arma_speed",-1).asFloat();
 	personaje->golpe_alto = defPersonaje.get("golpe-alto",-1).asInt();
 	personaje->golpe_bajo = defPersonaje.get("golpe-bajo",-1).asInt();
 	personaje->patada_alta = defPersonaje.get("patada-alta",-1).asInt();
@@ -327,6 +327,20 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 			string msg =  " Se usara personaje (sprites) " + to_string(static_cast<long double>(num)) + " por defecto.";
 			Logger::Instance()->log(ERROR,str + " Se usara personaje (sprites) por defecto.");
 			personaje->nombre = persDef.get("nombre",-1).asString();
+		}
+
+	//-----arma_speed-----
+	try {	personaje->arma_speed = persValue.get("arma_speed",-1).asFloat();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto para la velocidad del arma del personaje " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			personaje->arma_speed = persDef.get("arma_speed",-1).asFloat();
+		}
+		if (personaje->arma_speed < 0) {
+			personaje->arma_speed = persDef.get("arma_speed",-1).asFloat();
+			string msg = "Velocidad del arma del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+			Logger::Instance()->log(WARNING,msg);
 		}
 
 	//-----joyconfig-----

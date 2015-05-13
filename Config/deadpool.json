@@ -18,7 +18,7 @@
 "personaje1": {	"ancho": 	50,
 		"alto": 	50,
 		"nombre":	"scorpion",
-
+		"arma_speed": 2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,
@@ -29,7 +29,7 @@
 "personaje2": {	"ancho": 	50,
 		"alto": 	50,
 		"nombre":	"liukang",
-
+		"arma_speed": 2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,

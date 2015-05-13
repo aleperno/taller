@@ -25,7 +25,7 @@ using namespace std;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
-#define ARMA_SPEED 2.5;
+//#define ARMA_SPEED 2.5;
 
 #define POS_FILA_WALK			0	// OK
 #define POS_FILA_IDLE			1	// OK
@@ -62,6 +62,7 @@ class Personaje
 		EscenarioData _escenario;
 		PersonajeData _data;
 		Arma* arma;
+		float arma_speed;
 		float _alto_log;
 		float _ancho_log;
 		float _pos_x;

@@ -20,6 +20,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_alto_log = data.alto;
 	this->_ancho_log = data.ancho;
 	string path = data.imgPath;
+	this->arma_speed = data.arma_speed;
 	this->_handler->loadFromFile(path,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
@@ -1332,7 +1333,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			}
 			else
 			{
-				new_x_arma += ARMA_SPEED;
+				new_x_arma += this->arma_speed;
 				if((arma->_pos_x <= otherPers->_pos_x) && (new_x_arma >= otherPers->_pos_x))
 				{
 					between_frames.x = arma->_pos_x;
@@ -1374,7 +1375,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			}
 			else
 			{
-				new_x_arma -= ARMA_SPEED;
+				new_x_arma -= this->arma_speed;
 				if((arma->_pos_x >= otherPers->_pos_x) && (new_x_arma <= otherPers->_pos_x))
 				{
 					between_frames.x = new_x_arma;
