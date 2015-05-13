@@ -196,28 +196,7 @@ bool GameController::actualizarGanador() {
 			}
 		}
 	}
-		return flag;
-/*
-	if (this->_personaje1->healthPoints <= 0) {
-		Logger::Instance()->log(WARNING,"Gano personaje 2.");
-		this->_personaje1->freeze();
-		this->_personaje2->freeze();
-		this->_personaje2->winingPosition();
-		//Imprimir cartel de Press Start
-		//Quedarse en loop infinito hasta que se presione start
-		this->reloadConfig();
-	} else {
-		if (this->_personaje2->healthPoints <= 0) {
-			Logger::Instance()->log(WARNING,"Gano personaje 1.");
-			this->_personaje1->freeze();
-			this->_personaje2->freeze();
-			this->_personaje1->winingPosition();
-			//Imprimir cartel de Press Start
-			//Quedarse en loop infinito hasta que se presione start
-			this->reloadConfig();
-		}
-	}
-*/	
+		return flag;	
 }
 
 
