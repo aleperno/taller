@@ -27,31 +27,31 @@ using namespace std;
 #define JMP_SPEED_X 3;
 #define ARMA_SPEED 2.5;
 
-#define POS_FILA_WALK			0
-#define POS_FILA_IDLE			1
-#define POS_FILA_JUMP			2
-#define POS_FILA_JMPF			3
-#define POS_FILA_JMPB			4
-#define POS_FILA_DUCK			5
-#define POS_FILA_BLOCK			6
-#define POS_FILA_BLOCKDUCK		7
-#define POS_FILA_DIZZY			8
-#define POS_FILA_HITTED_DUCK 	9
-#define POS_FILA_HITTED 		10
-#define POS_FILA_HIKICK_DUCK 	11
-#define POS_FILA_HIKICK 		12
-#define POS_FILA_LOKICK_DUCK	13
-#define POS_FILA_LOKICK			14
-#define POS_FILA_AIRKICK		15
-#define POS_FILA_HIPUNCH		16
-#define POS_FILA_LOPUNCH		17
-#define POS_FILA_AIRPUNCH		18
+#define POS_FILA_WALK			0	// OK
+#define POS_FILA_IDLE			1	// OK
+#define POS_FILA_JUMP			2	// OK
+#define POS_FILA_JMPF			3	// OK
+#define POS_FILA_JMPB			4	// OK
+#define POS_FILA_DUCK			5	// OK
+#define POS_FILA_BLOCK			6	// OK
+#define POS_FILA_BLOCKDUCK		7	// OK
+#define POS_FILA_DIZZY			8	// OK
+#define POS_FILA_HITTED_DUCK 	9	// OK
+#define POS_FILA_HITTED 		10	// OK
+#define POS_FILA_HIKICK_DUCK 	11	// OK
+#define POS_FILA_HIKICK 		12	// OK
+#define POS_FILA_LOKICK_DUCK	13	// OK
+#define POS_FILA_LOKICK			14	// OK
+#define POS_FILA_AIRKICK		15	// OK
+#define POS_FILA_HIPUNCH		16	// OK
+#define POS_FILA_LOPUNCH		17	// OK
+#define POS_FILA_AIRPUNCH		18	// OK
 #define POS_FILA_FALLDEAD		19
 #define POS_FILA_FALL			20
-#define POS_FILA_GANCHO			21
+#define POS_FILA_GANCHO			21	// OK
 #define POS_FILA_BARRIDO		22
-#define POS_FILA_ARMA			23
-#define POS_FILA_LOPUNCH_DUCK	24
+#define POS_FILA_ARMA			23	// OK
+#define POS_FILA_LOPUNCH_DUCK	24	// OK
 
 class Personaje
 {
@@ -119,6 +119,8 @@ class Personaje
 		void viewPunchAir();
 		void viewKickAir();
 		void viewHit();
+		void viewFall();
+		void viewBarrido();
 		void viewShotWeapon(size_t posicion);
 		void setBoundingBox();
 		void resetearArma();
@@ -157,7 +159,7 @@ class Personaje
 
 		unsigned int _zIndex;
 		void showIdle();
-
+		bool viewDead();
 		bool isBlocking();
 		bool isLeftMargin();
 		bool isRightMargin();
