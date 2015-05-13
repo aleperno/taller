@@ -247,7 +247,11 @@ void Personaje::view(Personaje* otherPlayer)
 	{
 		if ( this->isJumping() || this->isFalling() )
 		{
-			if ( this->isHitting() )
+			if ( this->_isHitFalling )
+			{
+				this->viewFall();
+			}
+			else if ( this->isHitting() )
 			{
 				if ( this->_isHiKicking || this->_isLoKicking )
 				{
@@ -903,10 +907,15 @@ void Personaje::winingPosition() {
 
 void Personaje::fall()
 {
-	if ( !this->_isBlocking && !this->isHitting() )
+	if ( !this->isBlocking() && !this->isHitting() )
 	{
+		if (!this->_isJumping) this->_lastFrame = 0;
 		this->_isHitFalling = true;
+		this->_isJumping = true;
 		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
 	}
 }
 
