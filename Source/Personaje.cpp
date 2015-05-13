@@ -1175,7 +1175,11 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				if (this->hayColision(otherPers->boundingBox, arma->boundingBox))
 				{
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
-					if (!otherPers->isBlocking()) otherPers->downLife(10);
+					if (!otherPers->isBlocking()) {
+						otherPers->downLife(10);
+					} else {
+						otherPers->downLife(3);
+					}
 				}
 				this->_weaponInAir = false;
 				this->resetearArma();
@@ -1213,7 +1217,11 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				if (this->hayColision(otherPers->boundingBox, arma->boundingBox))
 				{
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
-					if (!otherPers->isBlocking()) otherPers->downLife(10);
+					if (!otherPers->isBlocking()) {
+						otherPers->downLife(10);
+					} else {
+						otherPers->downLife(3);
+					}
 				}
 				this->_weaponInAir = false;
 				this->resetearArma();
