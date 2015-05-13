@@ -144,7 +144,7 @@ void Personaje::setBoundingBox()
 
 	boundingBox.x = this->get_x_px() + 50;
 	boundingBox.y = this->get_y_px() * 1.2;
-	boundingBox.w = this->_ancho_px / 1.8;
+	boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
 	boundingBox.h = this->_alto_px / 1.2;
 
 	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight) || (this->_isFallingLeft) || (this->_isFallingRight))
@@ -322,7 +322,8 @@ void Personaje::view(Personaje* otherPlayer)
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
 					//otherPlayer->downLife(LIFE_MED);
-					otherPlayer->fall(LIFE_MED);
+					otherPlayer->fall(LIFE_MAX);
+					this->_ventana->toggleShake();
 				}
 			}
 		}
