@@ -155,14 +155,14 @@ class Personaje
 		void dizzy();
 		void winingPosition();
 		void arrojarArma();
-		void fall();
+		void fall(int life);
 		void dead();
 		void barrer();
 		void golpeBajo();
 		void golpeAlto();
 		void patadaBaja();
 		void patadaAlta();
-		void hit();
+		void hit(int life);
 
 		unsigned int _zIndex;
 		void showIdle();

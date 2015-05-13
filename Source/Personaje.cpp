@@ -262,8 +262,8 @@ void Personaje::view(Personaje* otherPlayer)
 					{
 						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 						{
-							otherPlayer->downLife(LIFE_MED);
-							otherPlayer->hit();
+							//otherPlayer->downLife(LIFE_MED);
+							otherPlayer->hit(LIFE_MED);
 						}
 					}
 				}
@@ -273,8 +273,8 @@ void Personaje::view(Personaje* otherPlayer)
 					{
 						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 						{
-							otherPlayer->downLife(LIFE_MED);
-							otherPlayer->hit();
+							//otherPlayer->downLife(LIFE_MED);
+							otherPlayer->hit(LIFE_MED);
 						}
 					}
 				}
@@ -308,8 +308,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -320,8 +320,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MED);
-					otherPlayer->fall();
+					//otherPlayer->downLife(LIFE_MED);
+					otherPlayer->fall(LIFE_MED);
 				}
 			}
 		}
@@ -332,8 +332,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -344,8 +344,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -376,8 +376,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -388,8 +388,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -400,8 +400,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -412,8 +412,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -427,8 +427,8 @@ void Personaje::view(Personaje* otherPlayer)
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
 				{
-					otherPlayer->downLife(LIFE_MIN);
-					otherPlayer->hit();
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
 				}
 			}
 		}
@@ -1040,10 +1040,11 @@ void Personaje::winingPosition() {
 
 }
 
-void Personaje::fall()
+void Personaje::fall(int life)
 {
 	if ( !this->isBlocking() && !this->isHitting() )
 	{
+		this->healthPoints -= life;
 		if (!this->_isJumping) this->_lastFrame = 0;
 		this->_isHitFalling = true;
 		this->_isJumping = true;
@@ -1476,7 +1477,8 @@ void Personaje::idle()
 	//this->_isDizzy = false;
 }
 
-void Personaje::hit()
+void Personaje::hit(int life)
 {
+	this->healthPoints -= life;
 	this->_beingHit = true;
 }
