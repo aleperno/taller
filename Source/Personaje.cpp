@@ -138,52 +138,53 @@ void Personaje::resetearArma()
 
 void Personaje::setBoundingBox()
 {
-	float factor_centrado = 50;
-	if(!this->_orientacion)
-		factor_centrado = -factor_centrado;
+    float factor_centrado = 50;
+    if(!this->_orientacion)
+                    factor_centrado = -factor_centrado;
 
-	boundingBox.x = this->get_x_px() + this->_ancho_log;
-	boundingBox.y = this->get_y_px() * 1.2;
-	boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
-	boundingBox.h = this->_alto_px / 1.2;
+    boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+    boundingBox.y = this->get_y_px() * 1.2;
+    boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+    boundingBox.h = this->_alto_px / 1.2;
 
-	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight) || (this->_isFallingLeft) || (this->_isFallingRight))
-	{
-		boundingBox.y = boundingBox.y * 1.35;
-		boundingBox.h = boundingBox.h / 2;
-	}
+    if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight) || (this->_isFallingLeft) || (this->_isFallingRight))
+    {
+                    boundingBox.y = boundingBox.y * 1.35;
+                    boundingBox.h = boundingBox.h / 2;
+    }
 
-	if((this->_isJumping || this->_isFalling) && !(this->_isLoKicking || this->_isHiKicking ||this->_isLoPunching || this->_isHiPunching))
-	{
-		boundingBox.y = boundingBox.y * 1.35;
-		boundingBox.h = boundingBox.h / 2;
-	}
+    if((this->_isJumping || this->_isFalling) && !(this->_isLoKicking || this->_isHiKicking ||this->_isLoPunching || this->_isHiPunching))
+    {
+                    boundingBox.y = boundingBox.y * 1.35;
+                    boundingBox.h = boundingBox.h / 2;
+    }
 
-	/*if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
-	{
-		// TODO: Alargar bounding box, el pie queda afuera
-		boundingBox.w = this->_ancho_px / 1.4;
-		boundingBox.h = boundingBox.h / 3;
-	}*/
+    /*if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
+    {
+                    // TODO: Alargar bounding box, el pie queda afuera
+                    boundingBox.w = this->_ancho_px / 1.4;
+                    boundingBox.h = boundingBox.h / 3;
+    }*/
 
-	/*if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
-	{
-		// TODO: Alargar bounding box, el pie queda afuera
-		boundingBox.w = this->_ancho_px / 1.4;
-		boundingBox.h = boundingBox.h / 3;
-	}*/
+    /*if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
+    {
+                    // TODO: Alargar bounding box, el pie queda afuera
+                    boundingBox.w = this->_ancho_px / 1.4;
+                    boundingBox.h = boundingBox.h / 3;
+    }*/
 
-	if((this->_isHiPunching ) && (this->_isDucking))
-	{
-		boundingBox.x = this->get_x_px() + 50;
-		boundingBox.y = this->get_y_px() * 1.2;
-		boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
-		boundingBox.h = this->_alto_px / 1.2;
-	}
+    if((this->_isHiPunching ) && (this->_isDucking))
+    {
+                    boundingBox.x = this->get_x_px() + 50;
+                    boundingBox.y = this->get_y_px() * 1.2;
+                    boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+                    boundingBox.h = this->_alto_px / 1.2;
+    }
 
-	//Renderiza el boundingbox - solo para pruebas
-	SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+    //Renderiza el boundingbox - solo para pruebas
+    SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
+
 
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
