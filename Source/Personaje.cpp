@@ -153,9 +153,7 @@ void Personaje::setBoundingBox()
 		boundingBox.h = boundingBox.h / 2;
 	}
 
-	if((this->_isJumping || this->_isFalling)
-			&& !(this->_isLoKicking || this->_isHiKicking ||
-					this->_isLoPunching || this->_isHiPunching))
+	if((this->_isJumping || this->_isFalling) && !(this->_isLoKicking || this->_isHiKicking ||this->_isLoPunching || this->_isHiPunching))
 	{
 		boundingBox.y = boundingBox.y * 1.35;
 		boundingBox.h = boundingBox.h / 2;
@@ -330,6 +328,7 @@ void Personaje::view(Personaje* otherPlayer)
 			// TODO: SACAR ESTO DE ACÁ.
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking() && !otherPlayer->isDucking())
+
 				{
 					//otherPlayer->downLife(LIFE_MED);
 					otherPlayer->fall(LIFE_MAX);
@@ -387,6 +386,7 @@ void Personaje::view(Personaje* otherPlayer)
 			// TODO: SACAR ESTO DE ACÁ.
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking() && !otherPlayer->isDucking())
+
 				{
 					//otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit(LIFE_MIN);
@@ -399,6 +399,7 @@ void Personaje::view(Personaje* otherPlayer)
 			// TODO: SACAR ESTO DE ACÁ.
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
+
 				{
 					//otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit(LIFE_MIN);
@@ -411,6 +412,7 @@ void Personaje::view(Personaje* otherPlayer)
 			// TODO: SACAR ESTO DE ACÁ.
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
+
 				{
 					//otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit(LIFE_MIN);
@@ -423,6 +425,7 @@ void Personaje::view(Personaje* otherPlayer)
 			// TODO: SACAR ESTO DE ACÁ.
 			{
 				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
+
 				{
 					//otherPlayer->downLife(LIFE_MIN);
 					otherPlayer->hit(LIFE_MIN);
@@ -1338,6 +1341,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
 					if (!otherPers->isBlocking()) {
 						otherPers->hit(LIFE_MAX);
+
 					} else {
 						otherPers->downLife(LIFE_MIN);
 					}

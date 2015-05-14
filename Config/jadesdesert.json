@@ -32,7 +32,7 @@
 
 "personaje2": {	"ancho": 	50,
 		"alto": 	50,
-		"nombre":	"abcdNik",
+		"nombre":	"scorpion",
 		"arma_speed": 2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
