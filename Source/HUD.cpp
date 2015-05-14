@@ -11,8 +11,11 @@ Hud::~Hud()
 {
 	delete this->hud1.nombreTexture;
 	delete this->hud2.nombreTexture;
-	TTF_CloseFont( font );
-	font = NULL;
+	delete this->hudTiempo.timeTexture;
+	TTF_CloseFont( fontNombres );
+	fontNombres = NULL;
+	TTF_CloseFont( fontTimer );
+	fontTimer = NULL;
 	TTF_Quit();
 }
 
@@ -163,7 +166,7 @@ void Hud::printHUD() {
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.nombre) );
 
 	this->hud1.nombreTexture->render(0,this->hud1.externo.h);
-	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth() ,this->hud2.externo.h);
+	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth(), this->hud2.externo.h);
 
 }
 
@@ -177,7 +180,6 @@ void Hud::printHUD(int time) {
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorInterno.r, colorInterno.g, colorInterno.b, colorInterno.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.interno) );
 
-	this->hudTiempo.timeTexture->free();
-	this->hudTiempo.timeTexture->loadFromRenderedText(StringUtil::int2string(300), colorTexto, fontTimer);
-
+	this->hudTiempo.timeTexture->loadFromRenderedText(StringUtil::int2string(time), colorTexto, fontTimer);
+	this->hudTiempo.timeTexture->render(_ventana->_ancho_px/2 - this->hudTiempo.timeTexture->getWidth()/2, this->hudTiempo.interno.y);
 }

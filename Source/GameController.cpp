@@ -154,7 +154,8 @@ void GameController::printLayers()
 		this->_personaje2->view(_personaje1);
 	}
 
-	this->_hud->printHUD();
+	//cout << clock() << endl;
+	this->_hud->printHUD(tiempoRemanente);
 
 	//ActualizoPantalla
 	this->_ventana->updateScreen();
@@ -173,30 +174,45 @@ void GameController::setEndOfGame(bool value) {
 
 bool GameController::actualizarGanador() {
 	bool flag = false;
-	if (this->_personaje1->healthPoints <= 5) {
-		this->_personaje1->freeze();
-		this->_personaje1->dizzy();
-		if (this->_personaje1->healthPoints <= 0) {
+	if (tiempoRemanente <= 0) {
+		if (_personaje1->healthPoints < _personaje2->healthPoints) {
 			Logger::Instance()->log(WARNING,"Gano personaje 2.");
-			this->_personaje2->freeze();
-			this->_personaje2->winingPosition();
-			//personaje1->viewDead();
 			flag = true;
-		}
-	} else {
-		if (this->_personaje2->healthPoints <= 5) {
-			this->_personaje2->freeze();
-			this->_personaje2->dizzy();
-			if (this->_personaje2->healthPoints <= 0) {
+		} else {
+			if (_personaje1->healthPoints > _personaje2->healthPoints) {
 				Logger::Instance()->log(WARNING,"Gano personaje 1.");
-				this->_personaje1->freeze();
-				this->_personaje1->winingPosition();
-				//personaje2->viewDead();
+				flag = true;
+			} else {
+				Logger::Instance()->log(WARNING,"Empate!");
 				flag = true;
 			}
 		}
+	} else {
+		if (this->_personaje1->healthPoints <= 5) {
+			this->_personaje1->freeze();
+			this->_personaje1->dizzy();
+			if (this->_personaje1->healthPoints <= 0) {
+				Logger::Instance()->log(WARNING,"Gano personaje 2.");
+				this->_personaje2->freeze();
+				this->_personaje2->winingPosition();
+				//personaje1->viewDead();
+				flag = true;
+			}
+		} else {
+			if (this->_personaje2->healthPoints <= 5) {
+				this->_personaje2->freeze();
+				this->_personaje2->dizzy();
+				if (this->_personaje2->healthPoints <= 0) {
+					Logger::Instance()->log(WARNING,"Gano personaje 1.");
+					this->_personaje1->freeze();
+					this->_personaje1->winingPosition();
+					//personaje2->viewDead();
+					flag = true;
+				}
+			}
+		}
 	}
-		return flag;	
+	return flag;	
 }
 
 void GameController::procesarBotones(SDL_Event* e) {
@@ -234,8 +250,13 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_t) this->_personaje1->barrer();
 			break;
 		case SDL_WINDOWEVENT:
-			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) {
+				minimizado = true;
+				pauseTime = clock();
+			} else if (e->window.event == SDL_WINDOWEVENT_RESTORED) {
+				minimizado = false;
+				pauseAccumulator = pauseAccumulator + (clock() - pauseTime);
+			}
 			break;
 		}
 }
@@ -360,6 +381,8 @@ void GameController::run(int sleep_time)
 {
 	SDL_Event e;
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
+	startTime = clock();
+	pauseAccumulator = 0;
 	while (!this->_end_of_game)
 	{
 		if (this->minimizado)	SDL_Delay(sleep_time);
@@ -375,6 +398,7 @@ void GameController::run(int sleep_time)
 			_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 			this->moveLayers(_personaje1,_personaje2);
 			this->moveLayers(_personaje2,_personaje1);
+			tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
 			if (this->actualizarGanador()) {
 				this->reloadConfig();		
 			}
@@ -447,6 +471,8 @@ void GameController::reloadConfig()
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
+	startTime = clock();
+	pauseAccumulator = 0;
 }
 
 void GameController::getKeysPlayer2() {

@@ -26,7 +26,7 @@ using namespace std;
 
 
 #define DEF_SLEEP_TIME 20
-#define FIGHT_TIME_COUNTDOWN 600
+#define FIGHT_TIME_COUNTDOWN 200
 
 
 //Analog joystick dead zone
@@ -55,6 +55,10 @@ class GameController
 		bool _hayPlayer2;
 		Hud* _hud;
 		bool minimizado;
+		clock_t startTime;
+		clock_t pauseTime;
+		clock_t pauseAccumulator;
+		int tiempoRemanente;
 
 		//Metodos
 		static GameController* _instance;
