@@ -26,6 +26,7 @@ using namespace std;
 
 
 #define DEF_SLEEP_TIME 20
+#define FIGHT_TIME_COUNTDOWN 600
 
 
 //Analog joystick dead zone

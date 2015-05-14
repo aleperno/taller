@@ -18,6 +18,22 @@ Hud::~Hud()
 
 Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
 {
+	SDL_Color colorExterno = { 0x99, 0x99, 0x99, 0xFF };
+	this->colorExterno = colorExterno;
+
+	SDL_Color colorExternoIlum = { 0xBB, 0xBB, 0xBB, 0xFF };
+	this->colorExternoIlum = colorExternoIlum;
+
+	SDL_Color colorInterno = { 0x00, 0x00, 0x00, 0xFF };
+	this->colorInterno = colorInterno;
+	
+	SDL_Color colorVida = { 0xCC, 0x00, 0x00, 0xFF };
+	this->colorVida = colorVida;
+	this->colorTexto = colorVida;
+
+	SDL_Color colorVidaIlum = { 0xFF, 0x00, 0x00, 0xFF };
+	this->colorVidaIlum = colorVidaIlum;
+
 	this-> _personaje1 = personaje1;
 	this-> _personaje2 = personaje2;
 	this-> _ventana = ventana;
@@ -72,12 +88,13 @@ Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
 
 	TTF_Init();
 
-	this-> font = TTF_OpenFont(FONT_PATH,hudExternH);
-	SDL_Color textColor = { 0xCC, 0, 0 };
+	this-> fontNombres = TTF_OpenFont(FONT_PATH,hudExternH);
+	this-> fontTimer = TTF_OpenFont(FONT_PATH,hudInternH);
 	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
-	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, textColor, font);
-	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, textColor, font);
+	this->hudTiempo.timeTexture = new TextureHandler( _ventana->_gRenderer );
+	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, colorTexto, fontNombres);
+	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, colorTexto, fontNombres);
 
 	this->hud1.nombre.h = this->hud1.nombreTexture->getHeight();
 	this->hud1.nombre.w = this->hud1.nombreTexture->getWidth();
@@ -88,6 +105,22 @@ Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
 	this->hud2.nombre.w = this->hud2.nombreTexture->getWidth();
 	this->hud2.nombre.x = _ventana->_ancho_px - this->hud2.nombreTexture->getWidth();
 	this->hud2.nombre.y = hudExternH;
+
+	this->hudTiempo.externo.h = hudExternH;
+	this->hudTiempo.externo.w = _ventana->_ancho_px/10;
+	this->hudTiempo.externo.x = _ventana->_ancho_px/2 - (this->hudTiempo.externo.w)/2;
+	this->hudTiempo.externo.y = 0;
+
+	this->hudTiempo.externoIlum.h = hudExternH/2;
+	this->hudTiempo.externoIlum.w = this->hudTiempo.externo.w;
+	this->hudTiempo.externoIlum.x = this->hudTiempo.externo.x;
+	this->hudTiempo.externoIlum.y = 0;
+
+	this->hudTiempo.interno.h = hudInternH;
+	this->hudTiempo.interno.w = this->hudTiempo.externo.w - (hudExternW - hudInternW);
+	this->hudTiempo.interno.x = (_ventana->_ancho_px)/2 - (this->hudTiempo.interno.w)/2;
+	this->hudTiempo.interno.y = (hudExternH-hudInternH)/2;
+
 }
 
 void Hud::actualizarHealthbars() {
@@ -103,32 +136,48 @@ void Hud::actualizarHealthbars() {
 
 void Hud::printHUD() {
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExterno.r, colorExterno.g, colorExterno.b, colorExterno.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externo) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externo) );
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xBB, 0xBB, 0xBB, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExternoIlum.r, colorExternoIlum.g, colorExternoIlum.b, colorExternoIlum.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.externoIlum) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.externoIlum) );
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorInterno.r, colorInterno.g, colorInterno.b, colorInterno.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.interno) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.interno) );
 
 	this->actualizarHealthbars();
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xCC, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorVida.r, colorVida.g, colorVida.b, colorVida.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.health) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.health) );
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0xFF, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorVidaIlum.r, colorVidaIlum.g, colorVidaIlum.b, colorVidaIlum.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.healthIlum) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.healthIlum) );
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExterno.r, colorExterno.g, colorExterno.b, colorExterno.a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud1.nombre) );
 	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hud2.nombre) );
 
 	this->hud1.nombreTexture->render(0,this->hud1.externo.h);
 	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth() ,this->hud2.externo.h);
+
+}
+
+void Hud::printHUD(int time) {
+	printHUD();
+
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExterno.r, colorExterno.g, colorExterno.b, colorExterno.a );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.externo) );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExternoIlum.r, colorExternoIlum.g, colorExternoIlum.b, colorExternoIlum.a );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.externoIlum) );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorInterno.r, colorInterno.g, colorInterno.b, colorInterno.a );
+	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.interno) );
+
+	this->hudTiempo.timeTexture->free();
+	this->hudTiempo.timeTexture->loadFromRenderedText(StringUtil::int2string(300), colorTexto, fontTimer);
+
 }
