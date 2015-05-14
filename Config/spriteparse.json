@@ -25,7 +25,7 @@
 		"airPunch":		[150,5,4],
 		"fallDead":		[150,8,4],
 		"falling":		[150,12,4],
-		"gancho":		[150,7,4],
+		"gancho":		[150,7,3],
 		"barrido":		[150,8,4],
 		"arma":			[150,3,4],
 		"duckLoPunch":	[150,5,4],
@@ -63,7 +63,7 @@
 				"airPunch":		[150,5,4],
 				"fallDead":		[150,6,4],
 				"falling":		[150,13,4],
-				"gancho":		[150,7,4],
+				"gancho":		[150,7,3],
 				"barrido":		[150,8,4],
 				"arma":			[150,3,4],
 				"duckLoPunch":	[150,5,4],
@@ -71,7 +71,7 @@
 				"color-alternativo": {
 							"h-inicial": 40,
 							"h-final": 80,
-							"desplazamiento": 120
+							"desplazamiento": 120.5
 							}
 	}
 }

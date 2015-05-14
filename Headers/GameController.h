@@ -72,7 +72,7 @@ class GameController
 		void moveLayers(Personaje* pers, Personaje* otherPers);
 		bool iniciarSDL();
 		void setEndOfGame(bool value);
-		void actualizarGanador();
+		bool actualizarGanador();
 		void procesarEventos(SDL_Event* e);
 		void procesarBotones(SDL_Event* e);
 		void procesarMovimientoJoystick();

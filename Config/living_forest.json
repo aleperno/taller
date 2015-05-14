@@ -18,7 +18,7 @@
 "personaje1": {	"ancho": 	30,
 		"alto": 	50,
 		"nombre":	"subzero",
-
+		"arma_speed": 2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,
@@ -28,8 +28,8 @@
 
 "personaje2": {	"ancho": 	30,
 		"alto": 	50,
-		"nombre":	"subzero",
-
+		"nombre":	"scorpion",
+		"arma_speed": 2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,

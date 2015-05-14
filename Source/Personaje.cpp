@@ -6,6 +6,12 @@
  */
 #include <Personaje.h>
 
+#define OFFSET_SPRITE_GOLPE 1
+
+#define LIFE_MAX 5
+#define LIFE_MED 3
+#define LIFE_MIN 1
+
 Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor)
 {
 	Logger::Instance()->log(DEBUG,"Se crea personaje");
@@ -14,6 +20,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_alto_log = data.alto;
 	this->_ancho_log = data.ancho;
 	string path = data.imgPath;
+	this->arma_speed = data.arma_speed;
 	this->_handler->loadFromFile(path,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
@@ -37,6 +44,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_isFalling = false;
 	this->_isFallingRight = false;
 	this->_isFallingLeft = false;
+	this->_isHitFalling = false;
+	this->_isBarriendo = false;
 	
 	this->_isThrowing = false;
 	this->_weaponInAir = false;
@@ -133,35 +142,45 @@ void Personaje::setBoundingBox()
 	if(!this->_orientacion)
 		factor_centrado = -factor_centrado;
 
-	boundingBox.x = this->get_x_px() + 50;
+	boundingBox.x = this->get_x_px() + this->_ancho_log;
 	boundingBox.y = this->get_y_px() * 1.2;
-	boundingBox.w = this->_ancho_px / 1.8;
+	boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
 	boundingBox.h = this->_alto_px / 1.2;
 
-	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight))
+	if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight) || (this->_isFallingLeft) || (this->_isFallingRight))
 	{
 		boundingBox.y = boundingBox.y * 1.35;
 		boundingBox.h = boundingBox.h / 2;
 	}
 
-	if(this->_isJumping)
+	if((this->_isJumping || this->_isFalling)
+			&& !(this->_isLoKicking || this->_isHiKicking ||
+					this->_isLoPunching || this->_isHiPunching))
 	{
 		boundingBox.y = boundingBox.y * 1.35;
 		boundingBox.h = boundingBox.h / 2;
 	}
 
-	if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
+	/*if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
 	{
 		// TODO: Alargar bounding box, el pie queda afuera
 		boundingBox.w = this->_ancho_px / 1.4;
 		boundingBox.h = boundingBox.h / 3;
-	}
+	}*/
 
-	if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
+	/*if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
 	{
 		// TODO: Alargar bounding box, el pie queda afuera
 		boundingBox.w = this->_ancho_px / 1.4;
 		boundingBox.h = boundingBox.h / 3;
+	}*/
+
+	if((this->_isHiPunching ) && (this->_isDucking))
+	{
+		boundingBox.x = this->get_x_px() + 50;
+		boundingBox.y = this->get_y_px() * 1.2;
+		boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+		boundingBox.h = this->_alto_px / 1.2;
 	}
 
 	//Renderiza el boundingbox - solo para pruebas
@@ -209,7 +228,6 @@ void Personaje::view(Personaje* otherPlayer)
 	{
 		if ( this->_isDucking )
 		{
-			// TODO: Mostrar disparo agachado
 			this->viewShotWeapon(0);
 			this->_timesThrow ++;
 			if ( this->_timesThrow >= 10)
@@ -220,7 +238,6 @@ void Personaje::view(Personaje* otherPlayer)
 		}
 		else if ( this->_isJumping || this->_isFalling)
 		{
-			// TODO: Mostrar disparo en el aire
 			this->viewShotWeapon(2);
 			this->_timesThrow ++;
 			if ( this->_timesThrow >= 10)
@@ -231,7 +248,6 @@ void Personaje::view(Personaje* otherPlayer)
 		}
 		else
 		{
-			// TODO: Mostrar disparo parado
 			this->viewShotWeapon(1);
 			this->_timesThrow ++;
 			if ( this->_timesThrow >= 10)
@@ -245,15 +261,33 @@ void Personaje::view(Personaje* otherPlayer)
 	{
 		if ( this->isJumping() || this->isFalling() )
 		{
-			if ( this->isHitting() )
+			if ( this->_isHitFalling )
+			{
+				this->viewFall();
+			}
+			else if ( this->isHitting() )
 			{
 				if ( this->_isHiKicking || this->_isLoKicking )
 				{
-					this->viewKickAir();
+					if(this->viewKickAir())
+					{
+						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+						{
+							//otherPlayer->downLife(LIFE_MED);
+							otherPlayer->hit(LIFE_MED);
+						}
+					}
 				}
 				else
 				{
-					this->viewPunchAir();
+					if (this->viewPunchAir())
+					{
+						if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+						{
+							//otherPlayer->downLife(LIFE_MED);
+							otherPlayer->hit(LIFE_MED);
+						}
+					}
 				}
 			}
 			else
@@ -280,19 +314,52 @@ void Personaje::view(Personaje* otherPlayer)
 		}
 		else if (this->_isDucking && this->_isHiKicking)
 		{
-			this->viewHiKick();
+			if(this->viewHiKick())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_isDucking && this->_isHiPunching)
 		{
-			this->viewHiPunch();
+			if(this->viewHiPunch())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking() && !otherPlayer->isDucking())
+				{
+					//otherPlayer->downLife(LIFE_MED);
+					otherPlayer->fall(LIFE_MAX);
+					this->_ventana->toggleShake();
+				}
+			}
 		}
 		else if (this->_isDucking && this->_isLoPunching)
 		{
-			this->viewLoPunch();
+			if(this->viewLoPunch())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_isDucking && this->_isLoKicking)
 		{
-			this->viewLoKick();
+			if(this->viewLoKick())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_isDucking && this->_beingHit)
 		{
@@ -316,23 +383,66 @@ void Personaje::view(Personaje* otherPlayer)
 		}
 		else if (this->_isHiKicking)
 		{
-			this->viewHiKick();
+			if(this->viewHiKick())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking() && !otherPlayer->isDucking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_isHiPunching)
 		{
-			this->viewHiPunch();
+			if(this->viewHiPunch())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_isLoKicking)
 		{
-			this->viewLoKick();
+			if(this->viewLoKick())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_isLoPunching)
 		{
-			this->viewLoPunch();
+			if(this->viewLoPunch())
+			// TODO: SACAR ESTO DE ACÁ.
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else if (this->_beingHit)
 		{
-				this->viewHit();
+			this->viewHit();
+		}
+		else if (this->_isBarriendo)
+		{
+			if(this->viewBarrido())
+			{
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+				{
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->hit(LIFE_MIN);
+				}
+			}
 		}
 		else
 		{
@@ -451,9 +561,10 @@ void Personaje::viewDizzy()
 	pos_last_action = POS_FILA_DIZZY;
 }
 
-void Personaje::viewHiKick()
+bool Personaje::viewHiKick()
 {
 	int accion = 0;
+	bool flag = false;
 	if (this->_isDucking){
 		accion = POS_FILA_HIKICK_DUCK;
 	}else{
@@ -475,11 +586,90 @@ void Personaje::viewHiKick()
 	if (aux == this->_personajeData.cantSprites[accion]){
 		this->_isHiKicking = false;
 	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
+	pos_last_action = accion;
+	return flag;
+}
+
+bool Personaje::viewDead()
+{
+	int accion = POS_FILA_FALLDEAD;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		return true;
+	}
+	pos_last_action = accion;
+	return false;
+}
+
+void Personaje::viewFall()
+{
+	int accion = POS_FILA_FALL;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		this->_isHitFalling = false;
+	}
 	pos_last_action = accion;
 }
 
-void Personaje::viewHiPunch()
+bool Personaje::viewBarrido()
 {
+	bool flag = false;
+	int accion = POS_FILA_BARRIDO;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+	if (aux == this->_personajeData.cantSprites[accion]){
+		this->_isBarriendo = false;
+	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
+	pos_last_action = accion;
+	return flag;
+}
+
+bool Personaje::viewHiPunch()
+{
+	bool flag = false;
 	int accion = 0;
 	if (this->_isDucking){
 		accion = POS_FILA_GANCHO;
@@ -502,12 +692,18 @@ void Personaje::viewHiPunch()
 	if (aux == this->_personajeData.cantSprites[accion]){
 		this->_isHiPunching = false;
 	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
 	pos_last_action = accion;
+	return flag;
 }
 
-void Personaje::viewLoKick()
+bool Personaje::viewLoKick()
 {
 	int accion = 0;
+	bool flag = false;
 	if (this->_isDucking){
 		accion = POS_FILA_LOKICK_DUCK;
 	}else{
@@ -529,11 +725,17 @@ void Personaje::viewLoKick()
 	if (aux == this->_personajeData.cantSprites[accion]){
 		this->_isLoKicking = false;
 	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
 	pos_last_action = accion;
+	return flag;
 }
 
-void Personaje::viewLoPunch()
+bool Personaje::viewLoPunch()
 {
+	bool flag = false;
 	int accion = 0;
 	if (this->_isDucking){
 		accion = POS_FILA_LOPUNCH_DUCK;
@@ -556,11 +758,17 @@ void Personaje::viewLoPunch()
 	if (aux == this->_personajeData.cantSprites[accion]){
 		this->_isLoPunching = false;
 	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
 	pos_last_action = accion;
+	return flag;
 }
 
-void Personaje::viewPunchAir()
+bool Personaje::viewPunchAir()
 {
+	bool flag = false;
 	int accion = POS_FILA_AIRPUNCH;
 	int delay = _data.velSprites[accion];
 	++_lastFrame;
@@ -579,10 +787,17 @@ void Personaje::viewPunchAir()
 		this->_isLoPunching = false;
 		this->_isHiPunching = false;
 	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
 	pos_last_action = accion;
+	return flag;
 }
 
-void Personaje::viewKickAir(){
+bool Personaje::viewKickAir()
+{
+	bool flag = false;
 	int accion = POS_FILA_AIRKICK;
 	int delay = _data.velSprites[accion];
 	++_lastFrame;
@@ -601,7 +816,12 @@ void Personaje::viewKickAir(){
 		this->_isLoKicking = false;
 		this->_isHiKicking = false;
 	}
+	else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+	{
+		flag = true;
+	}
 	pos_last_action = accion;
+	return flag;
 }
 
 void Personaje::viewHit()
@@ -832,9 +1052,38 @@ void Personaje::winingPosition() {
 
 }
 
+void Personaje::fall(int life)
+{
+	if ( !this->isBlocking() && !this->isHitting() )
+	{
+		this->healthPoints -= life;
+		if (!this->_isJumping) this->_lastFrame = 0;
+		this->_isHitFalling = true;
+		this->_isJumping = true;
+		this->_isWalking = false;
+		this->_isDucking = false;
+		this->_isBlocking = false;
+		this->_isDizzy = false;
+	}
+}
+
+void Personaje::dead()
+{
+	this->healthPoints = 0;
+}
+
+void Personaje::barrer()
+{
+	if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isLoPunching )
+	{
+		this->_isBarriendo = true;
+		this->_isWalking = false;
+	}
+}
+
 void Personaje::golpeBajo() {
 
-	if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking ) 
+	if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isBarriendo )
 	{
 		this->_isLoPunching = true;
 		this->_isWalking = false;
@@ -842,7 +1091,7 @@ void Personaje::golpeBajo() {
 }
 
 void Personaje::golpeAlto() {
-	if ( !this->_isLoPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking )
+	if ( !this->_isLoPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isBarriendo )
 	{ 
 		this->_isHiPunching = true;
 		this->_isWalking = false;
@@ -850,7 +1099,7 @@ void Personaje::golpeAlto() {
 }
 
 void Personaje::patadaBaja() {
-	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isHiKicking && !this->_isBlocking )
+	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isHiKicking && !this->_isBlocking && !this->_isBarriendo )
 	{
 		this->_isLoKicking = true;
 		this->_isWalking = false;
@@ -858,7 +1107,7 @@ void Personaje::patadaBaja() {
 }
 
 void Personaje::patadaAlta() {
-	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isLoKicking && !this->_isBlocking )
+	if ( !this->_isLoPunching && !this->_isHiPunching && !this->_isLoKicking && !this->_isBlocking && !this->_isBarriendo )
 	{
 		this->_isHiKicking = true;
 		this->_isWalking = false;
@@ -880,6 +1129,9 @@ void Personaje::evaluarAccion(int accion) {
 	}
 	else if (accion == this->getData()->getPB()) {
 		this->patadaBaja();
+	}
+	else if (accion == 9) {
+		this->barrer();
 	}
 }
 
@@ -994,6 +1246,7 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			this->_isFalling = false;
 			this->_isFallingRight = false;
 			this->_isFallingLeft = false;
+			this->_isHitFalling = false;
 
 			//Si hay colisión en la caída, muevo el personaje un poco para atrás
 			if(this->hayColision(this->boundingBox, otherPers->boundingBox))
@@ -1083,14 +1336,18 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				if (this->hayColision(otherPers->boundingBox, arma->boundingBox))
 				{
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
-					if (!otherPers->isBlocking()) otherPers->downLife(10);
+					if (!otherPers->isBlocking()) {
+						otherPers->hit(LIFE_MAX);
+					} else {
+						otherPers->downLife(LIFE_MIN);
+					}
 				}
 				this->_weaponInAir = false;
 				this->resetearArma();
 			}
 			else
 			{
-				new_x_arma += ARMA_SPEED;
+				new_x_arma += this->arma_speed;
 				if((arma->_pos_x <= otherPers->_pos_x) && (new_x_arma >= otherPers->_pos_x))
 				{
 					between_frames.x = arma->_pos_x;
@@ -1121,14 +1378,18 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 				if (this->hayColision(otherPers->boundingBox, arma->boundingBox))
 				{
 					// TODO: Quizas debería estar en otro lado, por ahora funciona
-					if (!otherPers->isBlocking()) otherPers->downLife(10);
+					if (!otherPers->isBlocking()) {
+						otherPers->hit(LIFE_MAX);
+					} else {
+						otherPers->downLife(LIFE_MIN);
+					}
 				}
 				this->_weaponInAir = false;
 				this->resetearArma();
 			}
 			else
 			{
-				new_x_arma -= ARMA_SPEED;
+				new_x_arma -= this->arma_speed;
 				if((arma->_pos_x >= otherPers->_pos_x) && (new_x_arma <= otherPers->_pos_x))
 				{
 					between_frames.x = new_x_arma;
@@ -1182,7 +1443,7 @@ bool Personaje::isDucking() {
 
 bool Personaje::isHitting()
 {
-	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking);
+	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling);
 }
 
 void Personaje::moveRight(float factor)
@@ -1228,10 +1489,11 @@ void Personaje::idle()
 	this->_isBlocking = false;
 	this->_isDucking = false;
 	this->_isWalking = false;
-	this->_isDizzy = false;
+	//this->_isDizzy = false;
 }
 
-void Personaje::hit()
+void Personaje::hit(int life)
 {
+	this->healthPoints -= life;
 	this->_beingHit = true;
 }

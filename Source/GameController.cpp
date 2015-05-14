@@ -171,35 +171,40 @@ void GameController::setEndOfGame(bool value) {
 	 this->_end_of_game = value;
 }
 
-void GameController::actualizarGanador() {
-	if (this->_personaje1->healthPoints <= 0) {
-		Logger::Instance()->log(WARNING,"Gano personaje 2.");
+bool GameController::actualizarGanador() {
+	bool flag = false;
+	if (this->_personaje1->healthPoints <= 5) {
 		this->_personaje1->freeze();
-		this->_personaje2->freeze();
-		this->_personaje2->winingPosition();
-		//Imprimir cartel de Press Start
-		//Quedarse en loop infinito hasta que se presione start
-		this->reloadConfig();
-	} else {
-		if (this->_personaje2->healthPoints <= 0) {
-			Logger::Instance()->log(WARNING,"Gano personaje 1.");
-			this->_personaje1->freeze();
+		this->_personaje1->dizzy();
+		if (this->_personaje1->healthPoints <= 0) {
+			Logger::Instance()->log(WARNING,"Gano personaje 2.");
 			this->_personaje2->freeze();
-			this->_personaje1->winingPosition();
-			//Imprimir cartel de Press Start
-			//Quedarse en loop infinito hasta que se presione start
-			this->reloadConfig();
+			this->_personaje2->winingPosition();
+			//personaje1->viewDead();
+			flag = true;
+		}
+	} else {
+		if (this->_personaje2->healthPoints <= 5) {
+			this->_personaje2->freeze();
+			this->_personaje2->dizzy();
+			if (this->_personaje2->healthPoints <= 0) {
+				Logger::Instance()->log(WARNING,"Gano personaje 1.");
+				this->_personaje1->freeze();
+				this->_personaje1->winingPosition();
+				//personaje2->viewDead();
+				flag = true;
+			}
 		}
 	}
+		return flag;	
 }
-
 
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
-	if (e->jdevice.which == 0) {
+	if (e->jdevice.which == 0 && this->_personaje1->canMove()) {
 			this->_personaje1->evaluarAccion(e->jbutton.button);
 	}
-	else if (e->jdevice.which == 1) {
+	else if (e->jdevice.which == 1 && this->_personaje2->canMove()) {
 			this->_personaje2->evaluarAccion(e->jbutton.button);
 	}
 }
@@ -226,7 +231,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_j) this->_personaje1->patadaAlta();
 			else if (e->key.keysym.sym == SDLK_i) this->_personaje1->golpeBajo();
 			else if (e->key.keysym.sym == SDLK_k) this->_personaje1->golpeAlto();
-			else if (e->key.keysym.sym == SDLK_h) this->_personaje1->hit();
+			else if (e->key.keysym.sym == SDLK_t) this->_personaje1->barrer();
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
@@ -237,6 +242,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 
 void GameController::procesarMovimientoJoystick() {
 	if (this->hayPlayer1()) {
+		if (this->_personaje1->canMove()) {
 		const Sint16 AXSP1 = SDL_JoystickGetAxis(this->_joystickOne,0);
 		const Sint16 AYSP1 = SDL_JoystickGetAxis(this->_joystickOne,1);
 		const Uint8 BLBTP1 = SDL_JoystickGetButton(this->_joystickOne,this->_personaje1->getData()->defensa);
@@ -272,8 +278,11 @@ void GameController::procesarMovimientoJoystick() {
 		} else {
 			this->_personaje1->idle();
 		}
+		}
 	}
+	
 	if (this->hayPlayer2()) {
+		if (this->_personaje2->canMove()) {
 		const Sint16 AXSP2 = SDL_JoystickGetAxis(this->_joystickTwo,0);
 		const Sint16 AYSP2 = SDL_JoystickGetAxis(this->_joystickTwo,1);
 		const Uint8 BLBTP2 = SDL_JoystickGetButton(this->_joystickTwo,this->_personaje2->getData()->defensa);
@@ -308,6 +317,7 @@ void GameController::procesarMovimientoJoystick() {
 			}
 		} else {
 			this->_personaje2->idle();
+		}
 		}
  	}
 }
@@ -365,7 +375,9 @@ void GameController::run(int sleep_time)
 			_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 			this->moveLayers(_personaje1,_personaje2);
 			this->moveLayers(_personaje2,_personaje1);
-			this->actualizarGanador();
+			if (this->actualizarGanador()) {
+				this->reloadConfig();		
+			}
 			this->printLayers();
 		}
 	}
@@ -448,10 +460,7 @@ void GameController::getKeysPlayer2() {
 	{
 		this->_personaje2->jumpRight(JMP_FACTOR);
 	}
-	else if(currentKeyStates[ SDL_SCANCODE_9 ])
-	{
-		this->_personaje2->dizzy();
-	}
+
 	else if(currentKeyStates[ SDL_SCANCODE_W ])
 	{
 		this->_personaje2->jump(JMP_FACTOR);
@@ -501,10 +510,6 @@ void GameController::getKeysPlayer1() {
 	{
 		this->_personaje1->jumpRight(JMP_FACTOR);
 	}
-	else if(currentKeyStates[ SDL_SCANCODE_0 ])
-	{
-		this->_personaje1->dizzy();
-	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
 		this->_personaje1->jump(JMP_FACTOR);
@@ -549,8 +554,8 @@ void GameController::getKeysPlayer1() {
 */
 void GameController::getKeys()
 {
-	this->getKeysPlayer1();
-	this->getKeysPlayer2();
+	if (this->_personaje1->canMove()) this->getKeysPlayer1();
+	if (this->_personaje2->canMove()) this->getKeysPlayer2();
 }
 
 void GameController::moveLayers(Personaje* pers, Personaje* otherPers)
