@@ -24,6 +24,8 @@ GameController* GameController::Instance(Parser* parser)
 
 void GameController::KillController()
 {
+	delete this->_mainScreen;
+	_mainScreen = NULL;
 	delete this->_ventana;
 	_ventana = NULL;
 	delete this->_personaje1;
@@ -32,12 +34,14 @@ void GameController::KillController()
 	_personaje2 = NULL;
 	delete _instance;
 	_instance = NULL;
+	TTF_Quit();
 	Logger::Instance()->log(DEBUG,"Se destruye instancia de GameController");
 }
 
 GameController::GameController(Parser* parser)
 {
 	minimizado = false;
+	enMainScreen = true;
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -48,6 +52,7 @@ GameController::GameController(Parser* parser)
 	} else {
 		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
 	}
+	TTF_Init();
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
@@ -55,6 +60,7 @@ GameController::GameController(Parser* parser)
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
 	_end_of_game = false;
+	_mainScreen = new MainScreen(_ventana);
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
 
@@ -225,6 +231,19 @@ void GameController::procesarBotones(SDL_Event* e) {
 	}
 }
 
+void GameController::procesarEventosMainScreen(SDL_Event* e) {
+	switch (e->type) {
+		case SDL_KEYDOWN:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_m) this->enMainScreen = false;
+			break;
+		case SDL_WINDOWEVENT:
+			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+	}
+}
+
+
 void GameController::procesarEventos(SDL_Event* e) {
 		switch (e->type) {
 		case SDL_JOYBUTTONDOWN:
@@ -381,28 +400,37 @@ void GameController::run(int sleep_time)
 {
 	SDL_Event e;
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
-	startTime = clock();
 	pauseAccumulator = 0;
 	while (!this->_end_of_game)
 	{
-		if (this->minimizado)	SDL_Delay(sleep_time);
-		while( SDL_PollEvent(&e) != 0 )
-		{
-			if( e.type == SDL_QUIT ) this->setEndOfGame(true);
-			this->procesarEventos(&e);
-		}
-		if (!this->minimizado) {
-			this->procesarMovimientoJoystick();
- 			this->getKeys();
-			_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
-			_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
-			this->moveLayers(_personaje1,_personaje2);
-			this->moveLayers(_personaje2,_personaje1);
-			tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
-			if (this->actualizarGanador()) {
-				this->reloadConfig();		
+		if (enMainScreen) {
+			this->_mainScreen->showIntro();
+			while( SDL_PollEvent(&e) != 0 )
+			{
+				if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+				this->procesarEventosMainScreen(&e);
 			}
-			this->printLayers();
+			startTime = clock();
+		} else {
+			if (this->minimizado)	SDL_Delay(sleep_time);
+			while( SDL_PollEvent(&e) != 0 )
+			{
+				if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+				this->procesarEventos(&e);
+			}
+			if (!this->minimizado) {
+				this->procesarMovimientoJoystick();
+ 				this->getKeys();
+				_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
+				_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
+				this->moveLayers(_personaje1,_personaje2);
+				this->moveLayers(_personaje2,_personaje1);
+				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
+				if (this->actualizarGanador()) {
+					this->reloadConfig();		
+				}
+				this->printLayers();
+			}
 		}
 	}
 	this->close();

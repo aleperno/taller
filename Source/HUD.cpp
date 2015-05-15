@@ -16,7 +16,6 @@ Hud::~Hud()
 	fontNombres = NULL;
 	TTF_CloseFont( fontTimer );
 	fontTimer = NULL;
-	TTF_Quit();
 }
 
 Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
@@ -110,8 +109,6 @@ Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
 
 	this->hud1.health = this->hud1.interno;
 	this->hud2.health = this->hud2.interno;
-
-	TTF_Init();
 
 	this-> fontNombres = TTF_OpenFont(FONT_PATH,hudInternH);
 	this-> fontTimer = TTF_OpenFont(FONT_PATH,hudInternH);

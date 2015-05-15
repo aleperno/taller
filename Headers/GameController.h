@@ -23,6 +23,7 @@ using namespace std;
 #include <Personaje.h>
 #include <StringUtil.h>
 #include <HUD.h>
+#include <MainScreen.h>
 
 
 #define DEF_SLEEP_TIME 20
@@ -40,6 +41,7 @@ class GameController
 		GameController(Parser* parser);
 	private:
 		//Atributos
+		MainScreen* _mainScreen;
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		vector<Capa*> _capas;
@@ -55,6 +57,7 @@ class GameController
 		bool _hayPlayer2;
 		Hud* _hud;
 		bool minimizado;
+		bool enMainScreen;
 		clock_t startTime;
 		clock_t pauseTime;
 		clock_t pauseAccumulator;
@@ -79,6 +82,7 @@ class GameController
 		void setEndOfGame(bool value);
 		bool actualizarGanador();
 		void procesarEventos(SDL_Event* e);
+		void procesarEventosMainScreen(SDL_Event* e);
 		void procesarBotones(SDL_Event* e);
 		void procesarMovimientoJoystick();
 		bool hayPlayer1();
