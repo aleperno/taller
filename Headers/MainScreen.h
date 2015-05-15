@@ -28,8 +28,10 @@ public:
 	int gateSpeed;
 	int titleSpeed;
 	int pressStartSpeed;
+	int margin;
 
 	TextureHandler* title;
+	TextureHandler* titleShadow;
 	TextureHandler* pressStart;
 };
 

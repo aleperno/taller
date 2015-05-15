@@ -8,31 +8,36 @@ MainScreen::~MainScreen()
 	fontSmall = NULL;
 
 	delete this->title;
+	delete this->titleShadow;
 	delete this->pressStart;
 }
 
 MainScreen::MainScreen(Ventana* ventana) {
 	this->_ventana = ventana;
-	this-> fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/5);
+	this-> fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);
 	this-> fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/20);
 
 	title = new TextureHandler( _ventana->_gRenderer );
 	pressStart = new TextureHandler( _ventana->_gRenderer );
+	titleShadow = new TextureHandler( _ventana->_gRenderer );
 
-	SDL_Color colorTitle = { 0xCC, 0x00, 0x00, 0xFF };
 	gateSpeed = 80;
 	titleSpeed = 140;
 	pressStartSpeed = 140;
+	margin = 10;
 
-	this->title->loadFromRenderedText("JOAKIN PUTO", colorTitle, fontBig);
-	this->pressStart->loadFromRenderedText("insert coin (m)", colorTitle, fontSmall);
+	SDL_Color colorTitle = { 0xCC, 0x00, 0x00, 0xFF };
+	this->title->loadFromRenderedText("MORTAL TALLER", colorTitle, fontBig);
+	this->pressStart->loadFromRenderedText("press m", colorTitle, fontSmall);
+	SDL_Color colorTitleShadow = { 0x00, 0x00, 0x00, 0xFF };
+	this->titleShadow->loadFromRenderedText("MORTAL TALLER", colorTitleShadow, fontBig);
 
 	titleX = _ventana->_ancho_px/2 - title->getWidth()/2;
 	titleY = -title->getHeight();
 	pressStartX = _ventana->_ancho_px/2 - pressStart->getWidth()/2;
 	pressStartY = _ventana->_alto_px;
 
-	int gateAncho = _ventana->_ancho_px/2;
+	int gateAncho = _ventana->_ancho_px/2 + margin;
 	int gateAlto = _ventana->_alto_px;
 
 	gateLeft.x = -gateAncho;
@@ -48,7 +53,7 @@ MainScreen::MainScreen(Ventana* ventana) {
 }
 
 void MainScreen::actualizarPosiciones() {
-	if (gateLeft.x < 0) {
+	if (gateLeft.x < -margin) {
 		gateLeft.x = gateLeft.x + gateLeft.w/gateSpeed;
 		gateRight.x = gateRight.x - gateRight.w/gateSpeed;
 	}
@@ -69,6 +74,7 @@ void MainScreen::showIntro() {
 	SDL_RenderFillRect( _ventana->_gRenderer, &gateLeft );
 	SDL_RenderFillRect( _ventana->_gRenderer, &gateRight );
 
+	this->titleShadow->render(titleX + _ventana->_ancho_px/300, titleY + _ventana->_alto_px/300);
 	this->title->render(titleX, titleY);
 	this->pressStart->render(pressStartX, pressStartY);
 
