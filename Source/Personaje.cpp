@@ -5,6 +5,7 @@
  *      Author: neo
  */
 #include <Personaje.h>
+#include <math.h>
 
 #define OFFSET_SPRITE_GOLPE 1
 
@@ -218,7 +219,8 @@ Personaje::~Personaje()
 
 void Personaje::view(Personaje* otherPlayer)
 {
-	this->_orientacion = (this->_pos_x > otherPlayer->_pos_x );
+	this->_orientacion = (this->_pos_x + this->_ancho_log / 2 > otherPlayer->_pos_x + otherPlayer->_ancho_log / 2);
+	//ORIGINAL: this->_orientacion = (this->_pos_x > otherPlayer->_pos_x);
 	this->setBoundingBox();
 	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
@@ -1035,6 +1037,16 @@ void Personaje::moveLeft(float factor)
 	}
 }
 
+bool Personaje::isRightMargin()
+{
+	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE);
+}
+
+bool Personaje::isMaxPushRight()
+{
+	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE + 20);
+}
+
 bool Personaje::isLeftMargin()
 {
 	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE);
@@ -1044,12 +1056,6 @@ bool Personaje::isMaxPushLeft()
 {
 	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE + 20);
 }
-
-bool Personaje::isMaxPushRight()
-{
-	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE + 20);
-}
-
 
 //Se llama una vez que la vida de uno de los dos personajes llega a cero
 void Personaje::winingPosition() {
@@ -1472,11 +1478,6 @@ void Personaje::moveRight(float factor)
 			_pos_x = this->_escenario.ancho - this->_ancho_log;
 		}
 	}
-}
-
-bool Personaje::isRightMargin()
-{
-	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE);
 }
 
 float Personaje::getBeta(float factor)
