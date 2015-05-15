@@ -404,15 +404,17 @@ void GameController::run(int sleep_time)
 	while (!this->_end_of_game)
 	{
 		if (enMainScreen) {
-			this->_mainScreen->showIntro();
 			while( SDL_PollEvent(&e) != 0 )
 			{
 				if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 				this->procesarEventosMainScreen(&e);
 			}
 			startTime = clock();
+			if (!this->minimizado) {
+				this->_mainScreen->showIntro();
+			} else { SDL_Delay(sleep_time); }
+
 		} else {
-			if (this->minimizado)	SDL_Delay(sleep_time);
 			while( SDL_PollEvent(&e) != 0 )
 			{
 				if( e.type == SDL_QUIT ) this->setEndOfGame(true);
@@ -430,7 +432,7 @@ void GameController::run(int sleep_time)
 					this->reloadConfig();		
 				}
 				this->printLayers();
-			}
+			} else { SDL_Delay(sleep_time); }
 		}
 	}
 	this->close();
