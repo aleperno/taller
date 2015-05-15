@@ -29,8 +29,9 @@ using namespace std;
 #define DEF_SLEEP_TIME 20
 #define FIGHT_TIME_COUNTDOWN 200
 
-#define MAINSCREEN_INTRO 0
-#define MAINSCREEN_MODE_SELECT 1
+#define NO_MAINSCREEN 0
+#define MAINSCREEN_INTRO 1
+#define MAINSCREEN_MODE_SELECT 2
 
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
@@ -84,17 +85,22 @@ class GameController
 		bool iniciarSDL();
 		void setEndOfGame(bool value);
 		bool actualizarGanador();
+
 		void procesarEventos(SDL_Event* e);
-		void procesarEventosMainScreen(SDL_Event* e);
+		void procesarEventosMainScreenIntro(SDL_Event* e);
+		void procesarEventosMainScreenModeSelect(SDL_Event* e);
 		void procesarBotones(SDL_Event* e);
 		void procesarMovimientoJoystick();
+
 		bool hayPlayer1();
 		bool hayPlayer2();
 		void setPlayer1(bool value);
 		void setPlayer2(bool value);
 		void getKeysPlayer1();
 		void getKeysPlayer2();
+
 		void procesamientoMainScreenIntro(int spleep_time);
+		void procesamientoMainScreenModeSelect(int spleep_time);
 		//Testing
 		void viewWindowPosition();
 		bool canMoveRight(Personaje* pers, Personaje* otherPers);

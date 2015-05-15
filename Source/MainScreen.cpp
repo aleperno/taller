@@ -81,3 +81,9 @@ void MainScreen::showIntro() {
 	this->_ventana->updateScreen();
 
 }
+
+void MainScreen::showModeSelect() {
+	this->_ventana->clearScreen();
+	this->pressStart->render(pressStartX, pressStartY);
+	this->_ventana->updateScreen();
+}

@@ -232,11 +232,11 @@ void GameController::procesarBotones(SDL_Event* e) {
 	}
 }
 
-void GameController::procesarEventosMainScreen(SDL_Event* e) {
+void GameController::procesarEventosMainScreenIntro(SDL_Event* e) {
 	switch (e->type) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_m) this->enMainScreen = false;
+			else if (e->key.keysym.sym == SDLK_m) this->screen = MAINSCREEN_MODE_SELECT;
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
@@ -244,6 +244,20 @@ void GameController::procesarEventosMainScreen(SDL_Event* e) {
 	}
 }
 
+void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
+	switch (e->type) {
+		case SDL_KEYDOWN:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_m) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+			}
+			break;
+		case SDL_WINDOWEVENT:
+			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+	}
+}
 
 void GameController::procesarEventos(SDL_Event* e) {
 		switch (e->type) {
@@ -402,13 +416,29 @@ void GameController::procesamientoMainScreenIntro(int sleep_time) {
 	while( SDL_PollEvent(&e) != 0 )
 	{
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
-		this->procesarEventosMainScreen(&e);
+		this->procesarEventosMainScreenIntro(&e);
 	}
 
 	startTime = clock();
 
 	if (!this->minimizado)
 		this->_mainScreen->showIntro();
+	else
+		SDL_Delay(sleep_time);
+}
+
+void GameController::procesamientoMainScreenModeSelect(int sleep_time) {
+	SDL_Event e;
+	while( SDL_PollEvent(&e) != 0 )
+	{
+		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+		this->procesarEventosMainScreenModeSelect(&e);
+	}
+
+	startTime = clock();
+
+	if (!this->minimizado)
+		this->_mainScreen->showModeSelect();
 	else
 		SDL_Delay(sleep_time);
 }
@@ -424,6 +454,9 @@ void GameController::run(int sleep_time)
 			switch (screen) {
 			case MAINSCREEN_INTRO:
 				procesamientoMainScreenIntro(sleep_time);
+				break;
+			case MAINSCREEN_MODE_SELECT:
+				procesamientoMainScreenModeSelect(sleep_time);
 				break;
 			}
 

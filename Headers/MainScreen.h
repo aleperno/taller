@@ -14,6 +14,7 @@ public:
 	~MainScreen();
 	void actualizarPosiciones();
 	void showIntro();
+	void showModeSelect();
 
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
