@@ -29,6 +29,8 @@ using namespace std;
 #define DEF_SLEEP_TIME 20
 #define FIGHT_TIME_COUNTDOWN 200
 
+#define MAINSCREEN_INTRO 0
+#define MAINSCREEN_MODE_SELECT 1
 
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
@@ -58,6 +60,7 @@ class GameController
 		Hud* _hud;
 		bool minimizado;
 		bool enMainScreen;
+		int screen;
 		clock_t startTime;
 		clock_t pauseTime;
 		clock_t pauseAccumulator;
@@ -91,6 +94,7 @@ class GameController
 		void setPlayer2(bool value);
 		void getKeysPlayer1();
 		void getKeysPlayer2();
+		void procesamientoMainScreenIntro(int spleep_time);
 		//Testing
 		void viewWindowPosition();
 		bool canMoveRight(Personaje* pers, Personaje* otherPers);

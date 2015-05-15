@@ -42,6 +42,7 @@ GameController::GameController(Parser* parser)
 {
 	minimizado = false;
 	enMainScreen = true;
+	screen = MAINSCREEN_INTRO;
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -396,6 +397,22 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	return true;
 }
 
+void GameController::procesamientoMainScreenIntro(int sleep_time) {
+	SDL_Event e;
+	while( SDL_PollEvent(&e) != 0 )
+	{
+		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+		this->procesarEventosMainScreen(&e);
+	}
+
+	startTime = clock();
+
+	if (!this->minimizado)
+		this->_mainScreen->showIntro();
+	else
+		SDL_Delay(sleep_time);
+}
+
 void GameController::run(int sleep_time)
 {
 	SDL_Event e;
@@ -404,15 +421,11 @@ void GameController::run(int sleep_time)
 	while (!this->_end_of_game)
 	{
 		if (enMainScreen) {
-			while( SDL_PollEvent(&e) != 0 )
-			{
-				if( e.type == SDL_QUIT ) this->setEndOfGame(true);
-				this->procesarEventosMainScreen(&e);
+			switch (screen) {
+			case MAINSCREEN_INTRO:
+				procesamientoMainScreenIntro(sleep_time);
+				break;
 			}
-			startTime = clock();
-			if (!this->minimizado) {
-				this->_mainScreen->showIntro();
-			} else { SDL_Delay(sleep_time); }
 
 		} else {
 			while( SDL_PollEvent(&e) != 0 )
