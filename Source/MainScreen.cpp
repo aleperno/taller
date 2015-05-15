@@ -10,16 +10,23 @@ MainScreen::~MainScreen()
 	delete this->title;
 	delete this->titleShadow;
 	delete this->pressStart;
+	delete this->modePVP;
+	delete this->modePVE;
+	delete this->modeTraining;
 }
 
 MainScreen::MainScreen(Ventana* ventana) {
 	this->_ventana = ventana;
 	this-> fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);
 	this-> fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/20);
+	this-> fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
 
 	title = new TextureHandler( _ventana->_gRenderer );
 	pressStart = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
+	modePVP = new TextureHandler( _ventana->_gRenderer );
+	modePVE = new TextureHandler( _ventana->_gRenderer );
+	modeTraining = new TextureHandler( _ventana->_gRenderer );
 
 	shakeCount = SHAKE_COUNT;
 	randomX = 0;
@@ -28,6 +35,10 @@ MainScreen::MainScreen(Ventana* ventana) {
 	SDL_Color colorTitle = { 0xCC, 0x00, 0x00, 0xFF };
 	this->title->loadFromRenderedText("MORTAL TALLER", colorTitle, fontBig);
 	this->pressStart->loadFromRenderedText("press m", colorTitle, fontSmall);
+	this->modePVP->loadFromRenderedText("2 players", colorTitle, fontMenu);
+	this->modePVE->loadFromRenderedText("1 player", colorTitle, fontMenu);
+	this->modeTraining->loadFromRenderedText("training", colorTitle, fontMenu);
+
 	SDL_Color colorTitleShadow = { 0x00, 0x00, 0x00, 0xFF };
 	this->titleShadow->loadFromRenderedText("MORTAL TALLER", colorTitleShadow, fontBig);
 
@@ -69,7 +80,7 @@ void MainScreen::actualizarPosiciones() {
 	if (titleY < _ventana->_alto_px/5)
 		titleY = titleY + _ventana->_alto_px/TITLE_SPEED;
 
-	if (pressStartY > _ventana->_alto_px/2)
+	if (pressStartY > _ventana->_alto_px*4/5)
 		pressStartY = pressStartY - _ventana->_alto_px/PRESS_START_SPEED;
 }
 
@@ -92,6 +103,10 @@ void MainScreen::showIntro() {
 
 void MainScreen::showModeSelect() {
 	this->_ventana->clearScreen();
+	this->modePVP->render(_ventana->_ancho_px/2 - modePVP->getWidth()/2, _ventana->_alto_px*1/5);
+	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*2/5);
+	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*3/5);
+
 	this->pressStart->render(pressStartX, pressStartY);
 	this->_ventana->updateScreen();
 }

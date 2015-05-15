@@ -11,7 +11,7 @@
 //Parametros constantes
 #define GATE_SPEED 80
 #define TITLE_SPEED 140
-#define PRESS_START_SPEED 140
+#define PRESS_START_SPEED 210
 #define MARGIN 10
 #define SHAKE_FACTOR 40
 #define SHAKE_COUNT 20
@@ -26,6 +26,7 @@ public:
 
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
+	TTF_Font* fontMenu;
 	Ventana* _ventana;
 	SDL_Rect gateLeft;
 	SDL_Rect gateRight;
@@ -41,6 +42,9 @@ public:
 	TextureHandler* title;
 	TextureHandler* titleShadow;
 	TextureHandler* pressStart;
+	TextureHandler* modePVP;
+	TextureHandler* modePVE;
+	TextureHandler* modeTraining;
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */
