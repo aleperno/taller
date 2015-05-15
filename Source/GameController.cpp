@@ -419,8 +419,6 @@ void GameController::procesamientoMainScreenIntro(int sleep_time) {
 		this->procesarEventosMainScreenIntro(&e);
 	}
 
-	startTime = clock();
-
 	if (!this->minimizado)
 		this->_mainScreen->showIntro();
 	else

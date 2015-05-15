@@ -8,6 +8,14 @@
 
 #define FONT_PATH "Images/ardestine.ttf"
 
+//Parametros constantes
+#define GATE_SPEED 80
+#define TITLE_SPEED 140
+#define PRESS_START_SPEED 140
+#define MARGIN 10
+#define SHAKE_FACTOR 40
+#define SHAKE_COUNT 20
+
 class MainScreen {
 public:
 	MainScreen(Ventana* ventana);
@@ -26,10 +34,9 @@ public:
 	int pressStartX;
 	int pressStartY;
 
-	int gateSpeed;
-	int titleSpeed;
-	int pressStartSpeed;
-	int margin;
+	int shakeCount;
+	int randomX;
+	int randomY;
 
 	TextureHandler* title;
 	TextureHandler* titleShadow;

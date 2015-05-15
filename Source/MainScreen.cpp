@@ -21,10 +21,9 @@ MainScreen::MainScreen(Ventana* ventana) {
 	pressStart = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
 
-	gateSpeed = 80;
-	titleSpeed = 140;
-	pressStartSpeed = 140;
-	margin = 10;
+	shakeCount = SHAKE_COUNT;
+	randomX = 0;
+	randomY = 0;
 
 	SDL_Color colorTitle = { 0xCC, 0x00, 0x00, 0xFF };
 	this->title->loadFromRenderedText("MORTAL TALLER", colorTitle, fontBig);
@@ -37,7 +36,7 @@ MainScreen::MainScreen(Ventana* ventana) {
 	pressStartX = _ventana->_ancho_px/2 - pressStart->getWidth()/2;
 	pressStartY = _ventana->_alto_px;
 
-	int gateAncho = _ventana->_ancho_px/2 + margin;
+	int gateAncho = _ventana->_ancho_px/2 + MARGIN;
 	int gateAlto = _ventana->_alto_px;
 
 	gateLeft.x = -gateAncho;
@@ -53,16 +52,25 @@ MainScreen::MainScreen(Ventana* ventana) {
 }
 
 void MainScreen::actualizarPosiciones() {
-	if (gateLeft.x < -margin) {
-		gateLeft.x = gateLeft.x + gateLeft.w/gateSpeed;
-		gateRight.x = gateRight.x - gateRight.w/gateSpeed;
+	if (gateLeft.x < -MARGIN) {
+		gateLeft.x = gateLeft.x + gateLeft.w/GATE_SPEED;
+		gateRight.x = gateRight.x - gateRight.w/GATE_SPEED;
+	} else {
+		if (shakeCount != 0) {
+			shakeCount--;
+			randomX = rand() % (_ventana->_ancho_px/SHAKE_FACTOR) - _ventana->_ancho_px/SHAKE_FACTOR/2;
+			randomY = rand() % (_ventana->_alto_px/SHAKE_FACTOR) - _ventana->_alto_px/SHAKE_FACTOR/2;
+		} else {
+			randomX = 0;
+			randomY = 0;
+		}
 	}
 
 	if (titleY < _ventana->_alto_px/5)
-		titleY = titleY + _ventana->_alto_px/titleSpeed;
+		titleY = titleY + _ventana->_alto_px/TITLE_SPEED;
 
 	if (pressStartY > _ventana->_alto_px/2)
-		pressStartY = pressStartY - _ventana->_alto_px/pressStartSpeed;
+		pressStartY = pressStartY - _ventana->_alto_px/PRESS_START_SPEED;
 }
 
 void MainScreen::showIntro() {
@@ -74,9 +82,9 @@ void MainScreen::showIntro() {
 	SDL_RenderFillRect( _ventana->_gRenderer, &gateLeft );
 	SDL_RenderFillRect( _ventana->_gRenderer, &gateRight );
 
-	this->titleShadow->render(titleX + _ventana->_ancho_px/300, titleY + _ventana->_alto_px/300);
-	this->title->render(titleX, titleY);
-	this->pressStart->render(pressStartX, pressStartY);
+	this->titleShadow->render(titleX + _ventana->_ancho_px/300 + randomX, titleY + _ventana->_alto_px/300 + randomY);
+	this->title->render(titleX + randomX, titleY + randomY);
+	this->pressStart->render(pressStartX + randomX, pressStartY + randomY);
 
 	this->_ventana->updateScreen();
 
