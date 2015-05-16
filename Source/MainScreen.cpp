@@ -19,6 +19,9 @@ MainScreen::~MainScreen()
 	delete this->thisIsPVP;
 	delete this->thisIsPVE;
 	delete this->thisIsTraining;
+
+	delete this->liukangface;
+	delete this->scorpionface;
 }
 
 MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
@@ -60,7 +63,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 
 	this->thisIsPVP->loadFromRenderedText("PVP: [b] back, [g] game", textColor, fontSmall);
 	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
-	this->thisIsTraining->loadFromRenderedText("Training: [b] back, [g] game", textColor, fontSmall);
+	this->thisIsTraining->loadFromRenderedText("Training: [b] back, [Enter] game", textColor, fontSmall);
 	
 	//parametros del intro
 	shakeCount = SHAKE_COUNT;
@@ -86,7 +89,25 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	gateRight.h = gateAlto;
 
 	//perSelect
+	liukangface = new TextureHandler( _ventana->_gRenderer );
+	scorpionface = new TextureHandler( _ventana->_gRenderer );
+	liukangface->loadFromFile(LIUKANG_FACE_PATH,false,0,0,0,true);
+	scorpionface->loadFromFile(SCORPION_FACE_PATH,false,0,0,0,true);
+	prepararPerSelect();
+}
 
+void MainScreen::prepararPerSelect() {
+	faceH = _ventana->_alto_px/5;
+	faceW = _ventana->_ancho_px/8;
+	topLeftX = _ventana->_ancho_px/2 - (faceW * _perSelect->at(0).size())/2;
+	topLeftY = _ventana->_alto_px/15;
+
+	for (unsigned int fila=0; fila<_perSelect->size(); fila++) {
+		vector< pair<int, int> > vectorLocal(_perSelect->at(fila).size());
+		for (unsigned int columna=0; columna<_perSelect->at(fila).size(); columna++)
+			vectorLocal.at(columna) = make_pair(topLeftX + columna*faceW, topLeftY + fila*faceH);
+		posicionesCaras.push_back(vectorLocal);
+	}
 }
 
 void MainScreen::actualizarPosiciones() {
@@ -177,7 +198,29 @@ void MainScreen::showPVE() {
 
 void MainScreen::showTraining(int fila, int columna) {
 	this->_ventana->clearScreen();
-	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*1/5);
+
+	for (unsigned int i=0; i<posicionesCaras.size(); i++) {
+		for (unsigned int j=0; j<posicionesCaras.at(i).size(); j++) {
+			switch (_perSelect->at(i).at(j)) {
+			case LIUKANG:
+				this->liukangface->renderScaled(posicionesCaras.at(i).at(j).first,posicionesCaras.at(i).at(j).second,faceW,faceH);
+				break;
+			case SCORPION:
+				this->scorpionface->renderScaled(posicionesCaras.at(i).at(j).first,posicionesCaras.at(i).at(j).second,faceW,faceH);
+				break;
+			}
+		}
+	}
+	int selectedX = topLeftX + columna*faceW;
+	int selectedY = topLeftY + fila*faceH;
+	SDL_Rect selected1 = { selectedX, selectedY, faceW, faceH };
+	SDL_Rect selected2 = { selectedX+1, selectedY+1, faceW-2, faceH-2 };
+	SDL_Rect selected3 = { selectedX+2, selectedY+2, faceW-4, faceH-4 };
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0x22 );
+	SDL_RenderDrawRect( _ventana->_gRenderer, &selected1 );
+	SDL_RenderDrawRect( _ventana->_gRenderer, &selected2 );
+	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );
+
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, pressStartY);
 	this->_ventana->updateScreen();
 }

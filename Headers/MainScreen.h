@@ -7,6 +7,8 @@
 #include <SDL_ttf.h>
 
 #define FONT_PATH "Images/ardestine.ttf"
+#define LIUKANG_FACE_PATH "Images/characters/liukangface.png"
+#define SCORPION_FACE_PATH "Images/characters/scorpionface.png"
 
 //Modo seleccionado en screen correspondiente
 #define SELECTED_PVP 0
@@ -30,6 +32,7 @@ public:
 	MainScreen(Ventana* ventana, vector< vector<int> >* perSelect);
 	~MainScreen();
 	void actualizarPosiciones();
+	void prepararPerSelect();
 	void showIntro();
 	void showModeSelect(int modeSelected);
 	void showPVP();
@@ -41,6 +44,7 @@ public:
 	TTF_Font* fontMenu;
 	Ventana* _ventana;
 	vector< vector<int> >* _perSelect;
+	vector< vector< pair<int, int> > > posicionesCaras; //x,y por cada una
 	SDL_Rect gateLeft;
 	SDL_Rect gateRight;
 	int titleX;
@@ -64,6 +68,14 @@ public:
 	TextureHandler* thisIsPVP;
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
+
+	TextureHandler* liukangface;
+	TextureHandler* scorpionface;
+
+	int topLeftX;
+	int topLeftY;
+	int faceH;
+	int faceW;
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */

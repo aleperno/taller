@@ -38,8 +38,6 @@ using namespace std;
 
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
-//Font path
-
 
 class GameController
 {
