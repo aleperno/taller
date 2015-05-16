@@ -341,8 +341,8 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 
 					//testing
 					switch (perSelect.at(filaP1).at(columnaP1)) {
-					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es " << nombreP1 << endl; break;
-					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es " << nombreP1 << endl; break;
+					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
 					}
 				}
 				break;
@@ -371,8 +371,8 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 
 					//testing
 					switch (perSelect.at(filaP1).at(columnaP1)) {
-					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es " << nombreP1 << endl; break;
-					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es " << nombreP1 << endl; break;
+					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
 					}
 				}
 				break;

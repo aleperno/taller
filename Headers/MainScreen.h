@@ -44,6 +44,10 @@ public:
 	void showPVE();
 	void showTraining(int fila, int columna, int textFocus, string nombre);
 
+	int viewName(string nombre);
+	void viewNameBoxFocus(int x);
+	void viewNameBoxNoFocus(int x);
+
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
 	TTF_Font* fontMenu;
@@ -61,6 +65,10 @@ public:
 	int randomX;
 	int randomY;
 
+	int descriptionY;
+
+	SDL_Color textColor;
+
 	TextureHandler* title;
 	TextureHandler* titleShadow;
 	TextureHandler* pressStart;
@@ -77,10 +85,14 @@ public:
 	TextureHandler* liukangface;
 	TextureHandler* scorpionface;
 
+	TextureHandler* nombreP1;
+
 	int topLeftX;
 	int topLeftY;
 	int faceH;
 	int faceW;
+
+	int nombreY;
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */

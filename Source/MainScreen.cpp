@@ -31,7 +31,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 
 	//fuentes
 	this-> fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);
-	this-> fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/20);
+	this-> fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/25);
 	this-> fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
 
 	//texturas de texto: news
@@ -50,6 +50,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 
 	//texturas de texto: loads
 	SDL_Color textColor = { 0xCC, 0x00, 0x00, 0xFF };
+	this->textColor = textColor;
 	SDL_Color shadowColor = { 0x00, 0x00, 0x00, 0xFF };
 
 	this->title->loadFromRenderedText("MORTAL TALLER", textColor, fontBig);
@@ -63,7 +64,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 
 	this->thisIsPVP->loadFromRenderedText("PVP: [b] back, [g] game", textColor, fontSmall);
 	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
-	this->thisIsTraining->loadFromRenderedText("Training: [b] back, [Enter] game", textColor, fontSmall);
+	this->thisIsTraining->loadFromRenderedText("Seleccion: [b], [Enter], [Tab]. Nombre: [BS], [Enter], [Tab].", textColor, fontSmall);
 	
 	//parametros del intro
 	shakeCount = SHAKE_COUNT;
@@ -94,6 +95,13 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	liukangface->loadFromFile(LIUKANG_FACE_PATH,false,0,0,0,true);
 	scorpionface->loadFromFile(SCORPION_FACE_PATH,false,0,0,0,true);
 	prepararPerSelect();
+
+	//Extras
+	descriptionY = _ventana->_alto_px*9/10;
+	nombreY = _ventana->_alto_px*8/10;
+
+	//Nombres
+	nombreP1 = new TextureHandler( _ventana->_gRenderer );
 }
 
 void MainScreen::prepararPerSelect() {
@@ -178,22 +186,41 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*2/5);
 	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*3/5);
 
-	this->press->render(_ventana->_ancho_px/2 - press->getWidth()/2, pressStartY);
+	this->press->render(_ventana->_ancho_px/2 - press->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
 
 void MainScreen::showPVP() {
 	this->_ventana->clearScreen();
 	this->modePVP->render(_ventana->_ancho_px/2 - modePVP->getWidth()/2, _ventana->_alto_px*1/5);
-	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, pressStartY);
+	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
 
 void MainScreen::showPVE() {
 	this->_ventana->clearScreen();
 	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*1/5);
-	this->thisIsPVE->render(_ventana->_ancho_px/2 - thisIsPVE->getWidth()/2, pressStartY);
+	this->thisIsPVE->render(_ventana->_ancho_px/2 - thisIsPVE->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
+}
+
+int MainScreen::viewName(string nombre) {
+	nombreP1->loadFromRenderedText(nombre.c_str(), textColor, fontSmall);
+	int nombreP1X = _ventana->_ancho_px/2 - nombreP1->getWidth()/2;
+	nombreP1->render(nombreP1X, nombreY);
+	return nombreP1X;
+}
+
+void MainScreen::viewNameBoxFocus(int x) {
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0xFF );
+	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
+	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
+}
+
+void MainScreen::viewNameBoxNoFocus(int x) {
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x44, 0x00, 0xFF );
+	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
+	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
 
 void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre) {
@@ -216,11 +243,19 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	SDL_Rect selected1 = { selectedX, selectedY, faceW, faceH };
 	SDL_Rect selected2 = { selectedX+1, selectedY+1, faceW-2, faceH-2 };
 	SDL_Rect selected3 = { selectedX+2, selectedY+2, faceW-4, faceH-4 };
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0x22 );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0xFF );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected1 );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected2 );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );
 
-	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, pressStartY);
+	if (nombre.length() > 0) {
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(viewName(nombre));
+		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(viewName(nombre));
+	} else {
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(viewName(" "));
+		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(viewName(" "));
+	}
+
+	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
