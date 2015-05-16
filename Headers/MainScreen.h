@@ -23,6 +23,9 @@ public:
 	void actualizarPosiciones();
 	void showIntro();
 	void showModeSelect();
+	void showPVP();
+	void showPVE();
+	void showTraining();
 
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;

@@ -411,7 +411,7 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	return true;
 }
 
-void GameController::procesamientoMainScreenIntro(int sleep_time) {
+void GameController::procesamientoMainScreenIntro() {
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 )
 	{
@@ -422,10 +422,10 @@ void GameController::procesamientoMainScreenIntro(int sleep_time) {
 	if (!this->minimizado)
 		this->_mainScreen->showIntro();
 	else
-		SDL_Delay(sleep_time);
+		SDL_Delay(DEF_SLEEP_TIME);
 }
 
-void GameController::procesamientoMainScreenModeSelect(int sleep_time) {
+void GameController::procesamientoMainScreenModeSelect() {
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 )
 	{
@@ -438,10 +438,10 @@ void GameController::procesamientoMainScreenModeSelect(int sleep_time) {
 	if (!this->minimizado)
 		this->_mainScreen->showModeSelect();
 	else
-		SDL_Delay(sleep_time);
+		SDL_Delay(DEF_SLEEP_TIME);
 }
 
-void GameController::run(int sleep_time)
+void GameController::run()
 {
 	SDL_Event e;
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
@@ -451,10 +451,10 @@ void GameController::run(int sleep_time)
 		if (enMainScreen) {
 			switch (screen) {
 			case MAINSCREEN_INTRO:
-				procesamientoMainScreenIntro(sleep_time);
+				procesamientoMainScreenIntro();
 				break;
 			case MAINSCREEN_MODE_SELECT:
-				procesamientoMainScreenModeSelect(sleep_time);
+				procesamientoMainScreenModeSelect();
 				break;
 			}
 
@@ -476,7 +476,7 @@ void GameController::run(int sleep_time)
 					this->reloadConfig();		
 				}
 				this->printLayers();
-			} else { SDL_Delay(sleep_time); }
+			} else { SDL_Delay(DEF_SLEEP_TIME); }
 		}
 	}
 	this->close();

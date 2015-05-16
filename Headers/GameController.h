@@ -32,6 +32,9 @@ using namespace std;
 #define NO_MAINSCREEN 0
 #define MAINSCREEN_INTRO 1
 #define MAINSCREEN_MODE_SELECT 2
+#define MAINSCREEN_PVP 3
+#define MAINSCREEN_PVE 4
+#define MAINSCREEN_TRAINING 5
 
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
@@ -86,9 +89,13 @@ class GameController
 		void setEndOfGame(bool value);
 		bool actualizarGanador();
 
-		void procesarEventos(SDL_Event* e);
 		void procesarEventosMainScreenIntro(SDL_Event* e);
 		void procesarEventosMainScreenModeSelect(SDL_Event* e);
+		void procesarEventosMainScreenPVP(SDL_Event* e);
+		void procesarEventosMainScreenPVE(SDL_Event* e);
+		void procesarEventosMainScreenTraining(SDL_Event* e);
+
+		void procesarEventos(SDL_Event* e);
 		void procesarBotones(SDL_Event* e);
 		void procesarMovimientoJoystick();
 
@@ -99,8 +106,12 @@ class GameController
 		void getKeysPlayer1();
 		void getKeysPlayer2();
 
-		void procesamientoMainScreenIntro(int spleep_time);
-		void procesamientoMainScreenModeSelect(int spleep_time);
+		void procesamientoMainScreenIntro();
+		void procesamientoMainScreenModeSelect();
+		void procesamientoMainScreenPVP();
+		void procesamientoMainScreenPVE();
+		void procesamientoMainScreenTraining();
+
 		//Testing
 		void viewWindowPosition();
 		bool canMoveRight(Personaje* pers, Personaje* otherPers);
@@ -108,7 +119,7 @@ class GameController
 
 	public:
 		static GameController* Instance(Parser* parser = 0);
-		void run(int sleep_time = DEF_SLEEP_TIME);
+		void run();
 		void KillController(); //Destructor
 };
 
