@@ -19,6 +19,11 @@
 #define LIUKANG 0
 #define SCORPION 1
 
+//Foco en texto
+#define TEXT_NO_FOCUS 0
+#define TEXT_FOCUS_P1 1
+#define TEXT_FOCUS_P2 2
+
 //Parametros constantes
 #define GATE_SPEED 80
 #define TITLE_SPEED 140
@@ -37,7 +42,7 @@ public:
 	void showModeSelect(int modeSelected);
 	void showPVP();
 	void showPVE();
-	void showTraining(int fila, int columna);
+	void showTraining(int fila, int columna, int textFocus, string nombre);
 
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;

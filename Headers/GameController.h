@@ -112,6 +112,10 @@ class GameController
 		int columnaP1;
 		int filaP2;
 		int columnaP2;
+		int textFocus;
+
+		string nombreP1;
+		string nombreP2;
 
 		void procesamientoMainScreenIntro();
 		void procesamientoMainScreenModeSelect();

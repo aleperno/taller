@@ -196,7 +196,7 @@ void MainScreen::showPVE() {
 	this->_ventana->updateScreen();
 }
 
-void MainScreen::showTraining(int fila, int columna) {
+void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre) {
 	this->_ventana->clearScreen();
 
 	for (unsigned int i=0; i<posicionesCaras.size(); i++) {
