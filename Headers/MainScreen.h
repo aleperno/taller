@@ -45,9 +45,15 @@ public:
 	TextureHandler* title;
 	TextureHandler* titleShadow;
 	TextureHandler* pressStart;
+
 	TextureHandler* modePVP;
 	TextureHandler* modePVE;
 	TextureHandler* modeTraining;
+	TextureHandler* press;
+
+	TextureHandler* thisIsPVP;
+	TextureHandler* thisIsPVE;
+	TextureHandler* thisIsTraining;
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */

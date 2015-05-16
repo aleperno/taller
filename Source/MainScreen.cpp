@@ -10,9 +10,15 @@ MainScreen::~MainScreen()
 	delete this->title;
 	delete this->titleShadow;
 	delete this->pressStart;
+
 	delete this->modePVP;
 	delete this->modePVE;
 	delete this->modeTraining;
+	delete this->press;
+
+	delete this->thisIsPVP;
+	delete this->thisIsPVE;
+	delete this->thisIsTraining;
 }
 
 MainScreen::MainScreen(Ventana* ventana) {
@@ -22,26 +28,39 @@ MainScreen::MainScreen(Ventana* ventana) {
 	this-> fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
 
 	title = new TextureHandler( _ventana->_gRenderer );
-	pressStart = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
+	pressStart = new TextureHandler( _ventana->_gRenderer );
+
+
 	modePVP = new TextureHandler( _ventana->_gRenderer );
 	modePVE = new TextureHandler( _ventana->_gRenderer );
 	modeTraining = new TextureHandler( _ventana->_gRenderer );
+	press = new TextureHandler( _ventana->_gRenderer );
+
+	thisIsPVP = new TextureHandler( _ventana->_gRenderer );
+	thisIsPVE = new TextureHandler( _ventana->_gRenderer );
+	thisIsTraining = new TextureHandler( _ventana->_gRenderer );
 
 	shakeCount = SHAKE_COUNT;
 	randomX = 0;
 	randomY = 0;
 
-	SDL_Color colorTitle = { 0xCC, 0x00, 0x00, 0xFF };
-	this->title->loadFromRenderedText("MORTAL TALLER", colorTitle, fontBig);
-	this->pressStart->loadFromRenderedText("press m", colorTitle, fontSmall);
-	this->modePVP->loadFromRenderedText("2 players", colorTitle, fontMenu);
-	this->modePVE->loadFromRenderedText("1 player", colorTitle, fontMenu);
-	this->modeTraining->loadFromRenderedText("training", colorTitle, fontMenu);
+	SDL_Color textColor = { 0xCC, 0x00, 0x00, 0xFF };
+	SDL_Color shadowColor = { 0x00, 0x00, 0x00, 0xFF };
 
-	SDL_Color colorTitleShadow = { 0x00, 0x00, 0x00, 0xFF };
-	this->titleShadow->loadFromRenderedText("MORTAL TALLER", colorTitleShadow, fontBig);
+	this->title->loadFromRenderedText("MORTAL TALLER", textColor, fontBig);
+	this->titleShadow->loadFromRenderedText("MORTAL TALLER", shadowColor, fontBig);
+	this->pressStart->loadFromRenderedText("press m", textColor, fontSmall);
 
+	this->modePVP->loadFromRenderedText("2 players", textColor, fontMenu);
+	this->modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
+	this->modeTraining->loadFromRenderedText("training", textColor, fontMenu);
+	this->press->loadFromRenderedText("[2] PVP, [1] PVE, [t] Training", textColor, fontSmall);
+
+	this->thisIsPVP->loadFromRenderedText("PVP: [b] back, [g] game", textColor, fontSmall);
+	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
+	this->thisIsTraining->loadFromRenderedText("Training: [b] back, [g] game", textColor, fontSmall);
+	
 	titleX = _ventana->_ancho_px/2 - title->getWidth()/2;
 	titleY = -title->getHeight();
 	pressStartX = _ventana->_ancho_px/2 - pressStart->getWidth()/2;
@@ -107,6 +126,27 @@ void MainScreen::showModeSelect() {
 	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*2/5);
 	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*3/5);
 
-	this->pressStart->render(pressStartX, pressStartY);
+	this->press->render(_ventana->_ancho_px/2 - press->getWidth()/2, pressStartY);
+	this->_ventana->updateScreen();
+}
+
+void MainScreen::showPVP() {
+	this->_ventana->clearScreen();
+	this->modePVP->render(_ventana->_ancho_px/2 - modePVP->getWidth()/2, _ventana->_alto_px*1/5);
+	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, pressStartY);
+	this->_ventana->updateScreen();
+}
+
+void MainScreen::showPVE() {
+	this->_ventana->clearScreen();
+	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*1/5);
+	this->thisIsPVE->render(_ventana->_ancho_px/2 - thisIsPVE->getWidth()/2, pressStartY);
+	this->_ventana->updateScreen();
+}
+
+void MainScreen::showTraining() {
+	this->_ventana->clearScreen();
+	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*1/5);
+	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, pressStartY);
 	this->_ventana->updateScreen();
 }
