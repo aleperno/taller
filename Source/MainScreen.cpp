@@ -55,7 +55,7 @@ MainScreen::MainScreen(Ventana* ventana) {
 	this->modePVP->loadFromRenderedText("2 players", textColor, fontMenu);
 	this->modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
 	this->modeTraining->loadFromRenderedText("training", textColor, fontMenu);
-	this->press->loadFromRenderedText("[2] PVP, [1] PVE, [t] Training", textColor, fontSmall);
+	this->press->loadFromRenderedText("Up, Down and Enter", textColor, fontSmall);
 
 	this->thisIsPVP->loadFromRenderedText("PVP: [b] back, [g] game", textColor, fontSmall);
 	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
@@ -120,8 +120,31 @@ void MainScreen::showIntro() {
 
 }
 
-void MainScreen::showModeSelect() {
+void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->clearScreen();
+	SDL_Rect highlight;
+	highlight.h = modePVP->getHeight();
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0xFF );
+
+	switch (modeSelected) {
+	case SELECTED_PVP:
+		highlight.w = modePVP->getWidth();
+		highlight.x = _ventana->_ancho_px/2 - modePVP->getWidth()/2;
+		highlight.y = _ventana->_alto_px*1/5;
+		break;
+	case SELECTED_PVE:
+		highlight.w = modePVE->getWidth();
+		highlight.x = _ventana->_ancho_px/2 - modePVE->getWidth()/2;
+		highlight.y = _ventana->_alto_px*2/5;
+		break;
+	case SELECTED_TRAINING:
+		highlight.w = modeTraining->getWidth();
+		highlight.x = _ventana->_ancho_px/2 - modeTraining->getWidth()/2;
+		highlight.y = _ventana->_alto_px*3/5;
+		break;
+	}
+	SDL_RenderFillRect( _ventana->_gRenderer, &highlight );
+
 	this->modePVP->render(_ventana->_ancho_px/2 - modePVP->getWidth()/2, _ventana->_alto_px*1/5);
 	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*2/5);
 	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*3/5);

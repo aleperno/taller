@@ -43,6 +43,7 @@ GameController::GameController(Parser* parser)
 	minimizado = false;
 	enMainScreen = true;
 	screen = MAINSCREEN_INTRO;
+	modeSelected = 0;
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -248,9 +249,21 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 	switch (e->type) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_2) this->screen = MAINSCREEN_PVP;
-			else if (e->key.keysym.sym == SDLK_1) this->screen = MAINSCREEN_PVE;
-			else if (e->key.keysym.sym == SDLK_t) this->screen = MAINSCREEN_TRAINING;
+			else if (e->key.keysym.sym == SDLK_DOWN) this->modeSelected = (modeSelected + 1) % 3;
+			else if (e->key.keysym.sym == SDLK_UP) this->modeSelected = (modeSelected + 2) % 3;
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				switch (modeSelected) {
+				case SELECTED_PVP:
+					this->screen = MAINSCREEN_PVP;
+					break;
+				case SELECTED_PVE:
+					this->screen = MAINSCREEN_PVE;
+					break;
+				case SELECTED_TRAINING:
+					this->screen = MAINSCREEN_TRAINING;
+					break;
+				}
+			}
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
@@ -481,7 +494,7 @@ void GameController::procesamientoMainScreenModeSelect() {
 	}
 
 	if (!this->minimizado)
-		this->_mainScreen->showModeSelect();
+		this->_mainScreen->showModeSelect(modeSelected);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }

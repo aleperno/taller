@@ -65,6 +65,7 @@ class GameController
 		bool minimizado;
 		bool enMainScreen;
 		int screen;
+		int modeSelected;
 		clock_t startTime;
 		clock_t pauseTime;
 		clock_t pauseAccumulator;

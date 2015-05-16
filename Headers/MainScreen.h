@@ -8,6 +8,10 @@
 
 #define FONT_PATH "Images/ardestine.ttf"
 
+#define SELECTED_PVP 0
+#define SELECTED_PVE 1
+#define SELECTED_TRAINING 2
+
 //Parametros constantes
 #define GATE_SPEED 80
 #define TITLE_SPEED 140
@@ -22,7 +26,7 @@ public:
 	~MainScreen();
 	void actualizarPosiciones();
 	void showIntro();
-	void showModeSelect();
+	void showModeSelect(int modeSelected);
 	void showPVP();
 	void showPVE();
 	void showTraining();
