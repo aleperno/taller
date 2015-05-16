@@ -62,7 +62,8 @@ GameController::GameController(Parser* parser)
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
 	_end_of_game = false;
-	_mainScreen = new MainScreen(_ventana);
+	iniciarEstructuraPerSelect();
+	_mainScreen = new MainScreen(_ventana,&perSelect);
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
 
@@ -90,6 +91,19 @@ bool GameController::iniciarSDL() {
 				}
 			}
 	return flag;
+}
+
+void GameController::iniciarEstructuraPerSelect() {
+	for (int i=0; i<3; i++) {
+		vector<int> vectorLocal(2);
+		vectorLocal.at(0) = LIUKANG;
+		vectorLocal.at(1) = SCORPION;
+		this->perSelect.push_back(vectorLocal);
+	}
+	filaP1 = 0;
+	columnaP1 = 0;
+	filaP2 = 0;
+	columnaP2 = 0;
 }
 
 Hud* GameController::getHud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
@@ -308,9 +322,19 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
 			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-			else if (e->key.keysym.sym == SDLK_g) {
+			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
+			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
+			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
+			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 1)) columnaP1++;
+			else if (e->key.keysym.sym == SDLK_RETURN) {
 				this->screen = NO_MAINSCREEN;
 				this->enMainScreen = false;
+
+				//testing
+				switch (perSelect.at(filaP1).at(columnaP1)) {
+				case LIUKANG:	cout << "se selecciono liukang" << endl; break;
+				case SCORPION:	cout << "se selecciono scorpion" << endl; break;
+				}
 			}
 			break;
 		case SDL_WINDOWEVENT:
@@ -542,7 +566,7 @@ void GameController::procesamientoMainScreenTraining() {
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showTraining();
+		this->_mainScreen->showTraining(filaP1,columnaP1);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }

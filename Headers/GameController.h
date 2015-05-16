@@ -45,8 +45,10 @@ class GameController
 {
 	protected:
 		GameController(Parser* parser);
+
 	private:
 		//Atributos
+		static GameController* _instance;
 		MainScreen* _mainScreen;
 		Ventana* _ventana;
 		EscenarioData _escenario;
@@ -66,13 +68,13 @@ class GameController
 		bool enMainScreen;
 		int screen;
 		int modeSelected;
+		vector< vector<int> > perSelect;
 		clock_t startTime;
 		clock_t pauseTime;
 		clock_t pauseAccumulator;
 		int tiempoRemanente;
 
 		//Metodos
-		static GameController* _instance;
 		static Ventana* getVentana(Parser* parser);
 		static EscenarioData getEscenario(Parser* parser);
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
@@ -87,6 +89,7 @@ class GameController
 		void moveLayersLeft(float factor);
 		void moveLayers(Personaje* pers, Personaje* otherPers);
 		bool iniciarSDL();
+		void iniciarEstructuraPerSelect();
 		void setEndOfGame(bool value);
 		bool actualizarGanador();
 
@@ -106,6 +109,11 @@ class GameController
 		void setPlayer2(bool value);
 		void getKeysPlayer1();
 		void getKeysPlayer2();
+
+		int filaP1;
+		int columnaP1;
+		int filaP2;
+		int columnaP2;
 
 		void procesamientoMainScreenIntro();
 		void procesamientoMainScreenModeSelect();

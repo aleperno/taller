@@ -8,9 +8,14 @@
 
 #define FONT_PATH "Images/ardestine.ttf"
 
+//Modo seleccionado en screen correspondiente
 #define SELECTED_PVP 0
 #define SELECTED_PVE 1
 #define SELECTED_TRAINING 2
+
+//Personajes
+#define LIUKANG 0
+#define SCORPION 1
 
 //Parametros constantes
 #define GATE_SPEED 80
@@ -22,19 +27,20 @@
 
 class MainScreen {
 public:
-	MainScreen(Ventana* ventana);
+	MainScreen(Ventana* ventana, vector< vector<int> >* perSelect);
 	~MainScreen();
 	void actualizarPosiciones();
 	void showIntro();
 	void showModeSelect(int modeSelected);
 	void showPVP();
 	void showPVE();
-	void showTraining();
+	void showTraining(int fila, int columna);
 
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
 	TTF_Font* fontMenu;
 	Ventana* _ventana;
+	vector< vector<int> >* _perSelect;
 	SDL_Rect gateLeft;
 	SDL_Rect gateRight;
 	int titleX;

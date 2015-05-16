@@ -21,17 +21,21 @@ MainScreen::~MainScreen()
 	delete this->thisIsTraining;
 }
 
-MainScreen::MainScreen(Ventana* ventana) {
+MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
+	//atributos pasados como parametro
 	this->_ventana = ventana;
+	this->_perSelect = perSelect;
+
+	//fuentes
 	this-> fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);
 	this-> fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/20);
 	this-> fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
 
+	//texturas de texto: news
 	title = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
 	pressStart = new TextureHandler( _ventana->_gRenderer );
-
-
+	
 	modePVP = new TextureHandler( _ventana->_gRenderer );
 	modePVE = new TextureHandler( _ventana->_gRenderer );
 	modeTraining = new TextureHandler( _ventana->_gRenderer );
@@ -41,10 +45,7 @@ MainScreen::MainScreen(Ventana* ventana) {
 	thisIsPVE = new TextureHandler( _ventana->_gRenderer );
 	thisIsTraining = new TextureHandler( _ventana->_gRenderer );
 
-	shakeCount = SHAKE_COUNT;
-	randomX = 0;
-	randomY = 0;
-
+	//texturas de texto: loads
 	SDL_Color textColor = { 0xCC, 0x00, 0x00, 0xFF };
 	SDL_Color shadowColor = { 0x00, 0x00, 0x00, 0xFF };
 
@@ -61,6 +62,11 @@ MainScreen::MainScreen(Ventana* ventana) {
 	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
 	this->thisIsTraining->loadFromRenderedText("Training: [b] back, [g] game", textColor, fontSmall);
 	
+	//parametros del intro
+	shakeCount = SHAKE_COUNT;
+	randomX = 0;
+	randomY = 0;
+
 	titleX = _ventana->_ancho_px/2 - title->getWidth()/2;
 	titleY = -title->getHeight();
 	pressStartX = _ventana->_ancho_px/2 - pressStart->getWidth()/2;
@@ -78,6 +84,8 @@ MainScreen::MainScreen(Ventana* ventana) {
 	gateRight.y = 0;
 	gateRight.w = gateAncho;
 	gateRight.h = gateAlto;
+
+	//perSelect
 
 }
 
@@ -167,7 +175,7 @@ void MainScreen::showPVE() {
 	this->_ventana->updateScreen();
 }
 
-void MainScreen::showTraining() {
+void MainScreen::showTraining(int fila, int columna) {
 	this->_ventana->clearScreen();
 	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*1/5);
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, pressStartY);
