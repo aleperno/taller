@@ -212,13 +212,13 @@ int MainScreen::viewName(string nombre) {
 }
 
 void MainScreen::viewNameBoxFocus(int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0xFF, 0xFF );
 	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
 	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
 
 void MainScreen::viewNameBoxNoFocus(int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x44, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
 	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
 	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
@@ -243,7 +243,7 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	SDL_Rect selected1 = { selectedX, selectedY, faceW, faceH };
 	SDL_Rect selected2 = { selectedX+1, selectedY+1, faceW-2, faceH-2 };
 	SDL_Rect selected3 = { selectedX+2, selectedY+2, faceW-4, faceH-4 };
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0xFF, 0xFF );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected1 );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected2 );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );

@@ -103,7 +103,7 @@ void GameController::iniciarEstructuraPerSelect() {
 	filaP1 = 0;
 	columnaP1 = 0;
 	filaP2 = 0;
-	columnaP2 = 0;
+	columnaP2 = 1;
 	textFocus = TEXT_NO_FOCUS;
 }
 
@@ -287,18 +287,128 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
-	switch (e->type) {
-		case SDL_KEYDOWN:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-			else if (e->key.keysym.sym == SDLK_g) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-			}
-			break;
-		case SDL_WINDOWEVENT:
-			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+	switch (textFocus) {
+	case TEXT_NO_FOCUS:
+		switch (e->type) {
+			case SDL_KEYDOWN:
+				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+				else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
+				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
+				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
+				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
+				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 1)) columnaP1++;
+				else if ((e->key.keysym.sym == SDLK_PAGEDOWN) && (filaP2 < 2)) filaP2++;
+				else if ((e->key.keysym.sym == SDLK_PAGEUP) && (filaP2 > 0)) filaP2--;
+				else if ((e->key.keysym.sym == SDLK_INSERT) && (columnaP2 > 0)) columnaP2--;
+				else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 1)) columnaP2++;
+				else if (e->key.keysym.sym == SDLK_F1) {
+					textFocus = TEXT_FOCUS_P1;
+					SDL_StartTextInput();
+				}
+				else if (e->key.keysym.sym == SDLK_F2) {
+					textFocus = TEXT_FOCUS_P2;
+					SDL_StartTextInput();
+				}
+				else if (e->key.keysym.sym == SDLK_RETURN) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+
+					//testing
+					switch (perSelect.at(filaP1).at(columnaP1)) {
+					case LIUKANG:	cout << "P1 selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+					case SCORPION:	cout << "P1 selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+					}
+					switch (perSelect.at(filaP2).at(columnaP2)) {
+					case LIUKANG:	cout << "P2 selecciono 'liukang' y el nombre es '" << nombreP2 << "'" << endl; break;
+					case SCORPION:	cout << "P2 selecciono 'scorpion' y el nombre es '" << nombreP2 << "'" << endl; break;
+					}
+				}
+				break;
+			case SDL_WINDOWEVENT:
+				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+		}
+		break;
+
+	case TEXT_FOCUS_P1:
+		switch (e->type) {
+			case SDL_TEXTINPUT:
+				nombreP1 += e->text.text;
+				break;
+			case SDL_KEYDOWN:
+				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+				else if ((e->key.keysym.sym == SDLK_PAGEDOWN) && (filaP2 < 2)) filaP2++;
+				else if ((e->key.keysym.sym == SDLK_PAGEUP) && (filaP2 > 0)) filaP2--;
+				else if ((e->key.keysym.sym == SDLK_INSERT) && (columnaP2 > 0)) columnaP2--;
+				else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 1)) columnaP2++;
+				else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
+				else if (e->key.keysym.sym == SDLK_F1) {
+					textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				}
+				else if (e->key.keysym.sym == SDLK_RETURN) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+
+					//testing
+					switch (perSelect.at(filaP1).at(columnaP1)) {
+					case LIUKANG:	cout << "P1 selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+					case SCORPION:	cout << "P1 selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+					}
+					switch (perSelect.at(filaP2).at(columnaP2)) {
+					case LIUKANG:	cout << "P2 selecciono 'liukang' y el nombre es '" << nombreP2 << "'" << endl; break;
+					case SCORPION:	cout << "P2 selecciono 'scorpion' y el nombre es '" << nombreP2 << "'" << endl; break;
+					}
+				}
+				break;
+			case SDL_WINDOWEVENT:
+				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+		}
+		break;
+
+	case TEXT_FOCUS_P2:
+		switch (e->type) {
+			case SDL_TEXTINPUT:
+				nombreP2 += e->text.text;
+				break;
+			case SDL_KEYDOWN:
+				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
+				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
+				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
+				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 1)) columnaP1++;
+				else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP2.length() > 0)) nombreP2.pop_back();
+				else if (e->key.keysym.sym == SDLK_F2) {
+					textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				}
+				else if (e->key.keysym.sym == SDLK_RETURN) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+
+					//testing
+					switch (perSelect.at(filaP1).at(columnaP1)) {
+					case LIUKANG:	cout << "P1 selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+					case SCORPION:	cout << "P1 selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+					}
+					switch (perSelect.at(filaP2).at(columnaP2)) {
+					case LIUKANG:	cout << "P2 selecciono 'liukang' y el nombre es '" << nombreP2 << "'" << endl; break;
+					case SCORPION:	cout << "P2 selecciono 'scorpion' y el nombre es '" << nombreP2 << "'" << endl; break;
+					}
+				}
+				break;
+			case SDL_WINDOWEVENT:
+				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+		}
+		break;
 	}
 }
 
