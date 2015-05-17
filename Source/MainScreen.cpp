@@ -139,8 +139,8 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 }
 
 void MainScreen::prepararPerSelect() {
-	faceH = _ventana->_alto_px/5;
-	faceW = _ventana->_ancho_px/8;
+	faceH = _ventana->_alto_px/6;
+	faceW = _ventana->_ancho_px/9;
 	topLeftX = _ventana->_ancho_px/2 - (faceW * _perSelect->at(0).size())/2;
 	topLeftY = _ventana->_alto_px/15;
 

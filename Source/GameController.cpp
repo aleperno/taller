@@ -95,15 +95,17 @@ bool GameController::iniciarSDL() {
 
 void GameController::iniciarEstructuraPerSelect() {
 	for (int i=0; i<3; i++) {
-		vector<int> vectorLocal(2);
+		vector<int> vectorLocal(4);
 		vectorLocal.at(0) = LIUKANG;
 		vectorLocal.at(1) = SCORPION;
+		vectorLocal.at(2) = LIUKANG;
+		vectorLocal.at(3) = SCORPION;
 		this->perSelect.push_back(vectorLocal);
 	}
 	filaP1 = 0;
 	columnaP1 = 0;
 	filaP2 = 0;
-	columnaP2 = 1;
+	columnaP2 = 3;
 	textFocus = TEXT_NO_FOCUS;
 }
 
@@ -296,11 +298,11 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
 				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
 				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 1)) columnaP1++;
+				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
 				else if ((e->key.keysym.sym == SDLK_PAGEDOWN) && (filaP2 < 2)) filaP2++;
 				else if ((e->key.keysym.sym == SDLK_PAGEUP) && (filaP2 > 0)) filaP2--;
 				else if ((e->key.keysym.sym == SDLK_INSERT) && (columnaP2 > 0)) columnaP2--;
-				else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 1)) columnaP2++;
+				else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 3)) columnaP2++;
 				else if (e->key.keysym.sym == SDLK_F1) {
 					textFocus = TEXT_FOCUS_P1;
 					SDL_StartTextInput();
@@ -342,7 +344,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				else if ((e->key.keysym.sym == SDLK_PAGEDOWN) && (filaP2 < 2)) filaP2++;
 				else if ((e->key.keysym.sym == SDLK_PAGEUP) && (filaP2 > 0)) filaP2--;
 				else if ((e->key.keysym.sym == SDLK_INSERT) && (columnaP2 > 0)) columnaP2--;
-				else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 1)) columnaP2++;
+				else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 3)) columnaP2++;
 				else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
 				else if (e->key.keysym.sym == SDLK_F1) {
 					textFocus = TEXT_NO_FOCUS;
@@ -381,7 +383,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
 				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
 				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 1)) columnaP1++;
+				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
 				else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP2.length() > 0)) nombreP2.pop_back();
 				else if (e->key.keysym.sym == SDLK_F2) {
 					textFocus = TEXT_NO_FOCUS;
@@ -438,7 +440,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
 				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
 				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 1)) columnaP1++;
+				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
 				else if (e->key.keysym.sym == SDLK_TAB) {
 					textFocus = TEXT_FOCUS_P1;
 					SDL_StartTextInput();
