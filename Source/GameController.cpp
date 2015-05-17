@@ -43,7 +43,7 @@ GameController::GameController(Parser* parser)
 	minimizado = false;
 	enMainScreen = true;
 	screen = MAINSCREEN_INTRO;
-	modeSelected = 0;
+	modeSelected = SELECTED_PVP;
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
