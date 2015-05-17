@@ -277,20 +277,58 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1c );
 	}
 
-	if (nombre1.length() > 0) {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
-		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1,nombre1,nombre1EjeX));
-	} else {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(nombreP1, viewName(nombreP1," ",nombre1EjeX) );
-		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1," ",nombre1EjeX) );
-	}
+	if ((nombre1.length() > 0) && (nombre2.length() > 0)) {
 
-	if (nombre2.length() > 0) {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
-		else if (textFocus == TEXT_FOCUS_P2) viewNameBoxFocus(nombreP2, &selected2Color, viewName(nombreP2,nombre2,nombre2EjeX));
+		if (textFocus == TEXT_NO_FOCUS) {	//Ambos no nulos y no en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+		} else if (textFocus == TEXT_FOCUS_P1) {	//Ambos no nulos, 1-ro en foco
+			viewNameBoxFocus( nombreP1, &selected1Color, viewName(nombreP1,nombre1,nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+		} else {	//Ambos no nulos, 2-do en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
+			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2,nombre2,nombre2EjeX) );
+		}
+
+	} else if ((nombre1.length() > 0) && (nombre2.length() == 0)) {
+
+		if (textFocus == TEXT_NO_FOCUS) {	//2-do nulo, nadie en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+		} else if (textFocus == TEXT_FOCUS_P1) {	//2-do nulo, 1-ro en foco
+			viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1,nombre1,nombre1EjeX));
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+		} else {	//2-do nulo, 2-do en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
+			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2," ",nombre2EjeX) );
+		}
+	
+	} else if ((nombre1.length() == 0) && (nombre2.length() > 0)) {
+
+		if (textFocus == TEXT_NO_FOCUS) {	//1-ro nulo, nadie en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+		} else if (textFocus == TEXT_FOCUS_P1) {	//1-ro nulo, 1-ro en foco
+			viewNameBoxFocus( nombreP1, &selected1Color, viewName(nombreP1," ",nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+		} else {	//1-ro nulo, 2-do en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
+			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2,nombre2,nombre2EjeX) );
+		}
+
 	} else {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(nombreP2, viewName(nombreP2," ",nombre2EjeX) );
-		else if (textFocus == TEXT_FOCUS_P2) viewNameBoxFocus(nombreP2, &selected2Color, viewName(nombreP2," ",nombre2EjeX) );
+
+		if (textFocus == TEXT_NO_FOCUS) {	//ambos nulos, nadie en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+		} else if (textFocus == TEXT_FOCUS_P1) {	//ambos nulos, 1-ro en foco
+			viewNameBoxFocus( nombreP1, &selected1Color, viewName(nombreP1," ",nombre1EjeX) );
+			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+		} else {	//ambos nulos, 2-do en foco
+			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
+			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2," ",nombre2EjeX) );
+		}
+
 	}
 
 	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
