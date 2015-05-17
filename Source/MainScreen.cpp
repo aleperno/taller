@@ -14,7 +14,7 @@ MainScreen::~MainScreen()
 	delete this->modePVP;
 	delete this->modePVE;
 	delete this->modeTraining;
-	delete this->press;
+	delete this->thisIsMenu;
 
 	delete this->thisIsPVP;
 	delete this->thisIsPVE;
@@ -22,6 +22,9 @@ MainScreen::~MainScreen()
 
 	delete this->liukangface;
 	delete this->scorpionface;
+
+	delete this->nombreP1;
+	delete this->nombreP2;
 }
 
 MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
@@ -30,29 +33,36 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	this->_perSelect = perSelect;
 
 	//fuentes
-	this-> fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);
-	this-> fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/25);
-	this-> fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
+	this->fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);	//Titulo
+	this->fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/25);	//Descripciones
+	this->fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
+
+	//colores
+	textColor.r = 0xCC;
+	textColor.g = 0x00;
+	textColor.b = 0x00;
+	textColor.a = 0xFF;
+
+	shadowColor.r = 0x00;
+	shadowColor.g = 0x00;
+	shadowColor.b = 0x00;
+	shadowColor.a = 0xFF;
 
 	//texturas de texto: news
 	title = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
 	pressStart = new TextureHandler( _ventana->_gRenderer );
 	
-	modePVP = new TextureHandler( _ventana->_gRenderer );
-	modePVE = new TextureHandler( _ventana->_gRenderer );
-	modeTraining = new TextureHandler( _ventana->_gRenderer );
-	press = new TextureHandler( _ventana->_gRenderer );
+	modePVP = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
+	modePVE = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
+	modeTraining = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
+	thisIsMenu = new TextureHandler( _ventana->_gRenderer );	//Descripcion en menu modo
 
-	thisIsPVP = new TextureHandler( _ventana->_gRenderer );
-	thisIsPVE = new TextureHandler( _ventana->_gRenderer );
-	thisIsTraining = new TextureHandler( _ventana->_gRenderer );
+	thisIsPVP = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVP
+	thisIsPVE = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVE
+	thisIsTraining = new TextureHandler( _ventana->_gRenderer );	//Descripcion en Training
 
 	//texturas de texto: loads
-	SDL_Color textColor = { 0xCC, 0x00, 0x00, 0xFF };
-	this->textColor = textColor;
-	SDL_Color shadowColor = { 0x00, 0x00, 0x00, 0xFF };
-
 	this->title->loadFromRenderedText("MORTAL TALLER", textColor, fontBig);
 	this->titleShadow->loadFromRenderedText("MORTAL TALLER", shadowColor, fontBig);
 	this->pressStart->loadFromRenderedText("press m", textColor, fontSmall);
@@ -60,9 +70,9 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	this->modePVP->loadFromRenderedText("2 players", textColor, fontMenu);
 	this->modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
 	this->modeTraining->loadFromRenderedText("training", textColor, fontMenu);
-	this->press->loadFromRenderedText("Up, Down and Enter", textColor, fontSmall);
+	this->thisIsMenu->loadFromRenderedText("[Up], [Down], [Enter]", textColor, fontSmall);
 
-	this->thisIsPVP->loadFromRenderedText("PVP: [b] back, [g] game", textColor, fontSmall);
+	this->thisIsPVP->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [F1], [PGup,PGdown,Ins,Del], [F2]", textColor, fontSmall);
 	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
 	this->thisIsTraining->loadFromRenderedText("Seleccion: [b], [Enter], [Tab]. Nombre: [BS], [Enter], [Tab].", textColor, fontSmall);
 	
@@ -96,12 +106,13 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	scorpionface->loadFromFile(SCORPION_FACE_PATH,false,0,0,0,true);
 	prepararPerSelect();
 
+	//Nombres
+	nombreP1 = new TextureHandler( _ventana->_gRenderer );
+	nombreP2 = new TextureHandler( _ventana->_gRenderer );
+
 	//Extras
 	descriptionY = _ventana->_alto_px*9/10;
 	nombreY = _ventana->_alto_px*8/10;
-
-	//Nombres
-	nombreP1 = new TextureHandler( _ventana->_gRenderer );
 }
 
 void MainScreen::prepararPerSelect() {
@@ -186,7 +197,7 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*2/5);
 	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*3/5);
 
-	this->press->render(_ventana->_ancho_px/2 - press->getWidth()/2, descriptionY);
+	this->thisIsMenu->render(_ventana->_ancho_px/2 - thisIsMenu->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
 

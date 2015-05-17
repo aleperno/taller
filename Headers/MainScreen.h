@@ -36,11 +36,57 @@ class MainScreen {
 public:
 	MainScreen(Ventana* ventana, vector< vector<int> >* perSelect);
 	~MainScreen();
-	void actualizarPosiciones();
+
+	//Globales
+	Ventana* _ventana;
+	vector< vector<int> >* _perSelect;
+	int descriptionY;
+	SDL_Color textColor;
+	SDL_Color shadowColor;
+	TTF_Font* fontBig;
+	TTF_Font* fontSmall;
+	TTF_Font* fontMenu;
+	vector< vector< pair<int, int> > > posicionesCaras; //x,y por cada una
+	TextureHandler* liukangface;
+	TextureHandler* scorpionface;
+	TextureHandler* nombreP1;
+	TextureHandler* nombreP2;
+	int topLeftX;
+	int topLeftY;
+	int faceH;
+	int faceW;
 	void prepararPerSelect();
+
+	//Intro
+	SDL_Rect gateLeft;
+	SDL_Rect gateRight;
+	int titleX;
+	int titleY;
+	int pressStartX;
+	int pressStartY;
+	int shakeCount;
+	int randomX;
+	int randomY;
+	TextureHandler* title;
+	TextureHandler* titleShadow;
+	TextureHandler* pressStart;
 	void showIntro();
+	void actualizarPosiciones();
+
+	//Mode
+	TextureHandler* modePVP;
+	TextureHandler* modePVE;
+	TextureHandler* modeTraining;
+	TextureHandler* thisIsMenu;
 	void showModeSelect(int modeSelected);
+
+	//PvP
+	TextureHandler* thisIsPVP;
 	void showPVP();
+
+	//PvE & Training
+	TextureHandler* thisIsPVE;
+	TextureHandler* thisIsTraining;
 	void showPVE();
 	void showTraining(int fila, int columna, int textFocus, string nombre);
 
@@ -48,49 +94,8 @@ public:
 	void viewNameBoxFocus(int x);
 	void viewNameBoxNoFocus(int x);
 
-	TTF_Font* fontBig;
-	TTF_Font* fontSmall;
-	TTF_Font* fontMenu;
-	Ventana* _ventana;
-	vector< vector<int> >* _perSelect;
-	vector< vector< pair<int, int> > > posicionesCaras; //x,y por cada una
-	SDL_Rect gateLeft;
-	SDL_Rect gateRight;
-	int titleX;
-	int titleY;
-	int pressStartX;
-	int pressStartY;
 
-	int shakeCount;
-	int randomX;
-	int randomY;
 
-	int descriptionY;
-
-	SDL_Color textColor;
-
-	TextureHandler* title;
-	TextureHandler* titleShadow;
-	TextureHandler* pressStart;
-
-	TextureHandler* modePVP;
-	TextureHandler* modePVE;
-	TextureHandler* modeTraining;
-	TextureHandler* press;
-
-	TextureHandler* thisIsPVP;
-	TextureHandler* thisIsPVE;
-	TextureHandler* thisIsTraining;
-
-	TextureHandler* liukangface;
-	TextureHandler* scorpionface;
-
-	TextureHandler* nombreP1;
-
-	int topLeftX;
-	int topLeftY;
-	int faceH;
-	int faceW;
 
 	int nombreY;
 };
