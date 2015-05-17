@@ -415,19 +415,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
-	switch (e->type) {
-		case SDL_KEYDOWN:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-			else if (e->key.keysym.sym == SDLK_g) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-			}
-			break;
-		case SDL_WINDOWEVENT:
-			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
-	}
+	procesarEventosMainScreenTraining(e);
 }
 
 void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
@@ -703,7 +691,7 @@ void GameController::procesamientoMainScreenPVE() {
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showPVE();
+		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }

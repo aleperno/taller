@@ -92,9 +92,9 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	this->modeTraining->loadFromRenderedText("training", textColor, fontMenu);
 	this->thisIsMenu->loadFromRenderedText("[Up], [Down], [Enter]", textColor, fontSmall);
 
-	this->thisIsPVP->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [F1], [PGup,PGdown,Ins,Del], [F2]", textColor, fontSmall);
-	this->thisIsPVE->loadFromRenderedText("PVE: [b] back, [g] game", textColor, fontSmall);
-	this->thisIsTraining->loadFromRenderedText("Seleccion: [b], [Enter], [Tab]. Nombre: [BS], [Enter], [Tab].", textColor, fontSmall);
+	this->thisIsPVP->loadFromRenderedText("[b], [Enter], [Arrows], [F1], [PGup,PGdown,Ins,Del], [F2], [BS]", textColor, fontSmall);
+	this->thisIsPVE->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
+	this->thisIsTraining->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
 	
 	//parametros del intro
 	shakeCount = SHAKE_COUNT;
@@ -335,11 +335,8 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 	this->_ventana->updateScreen();
 }
 
-void MainScreen::showPVE() {
-	this->_ventana->clearScreen();
-	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*1/5);
-	this->thisIsPVE->render(_ventana->_ancho_px/2 - thisIsPVE->getWidth()/2, descriptionY);
-	this->_ventana->updateScreen();
+void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre) {
+	showTraining(fila,columna,textFocus,nombre);
 }
 
 int MainScreen::viewName(TextureHandler* nombreTexture, string nombre, int ejeX) {

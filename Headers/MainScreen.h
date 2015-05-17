@@ -99,7 +99,7 @@ public:
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
 	int nombreEjeX;
-	void showPVE();
+	void showPVE(int fila, int columna, int textFocus, string nombre);
 	void showTraining(int fila, int columna, int textFocus, string nombre);
 };
 
