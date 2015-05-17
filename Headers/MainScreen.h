@@ -43,6 +43,10 @@ public:
 	int descriptionY;
 	SDL_Color textColor;
 	SDL_Color shadowColor;
+	SDL_Color selected1Color;
+	SDL_Color selected2Color;
+	SDL_Color selectedBothColor;
+	SDL_Color notSelected;
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
 	TTF_Font* fontMenu;
@@ -55,7 +59,9 @@ public:
 	int topLeftY;
 	int faceH;
 	int faceW;
+	int nombreY;
 	void prepararPerSelect();
+	void veiwFaces();
 
 	//Intro
 	SDL_Rect gateLeft;
@@ -82,22 +88,16 @@ public:
 
 	//PvP
 	TextureHandler* thisIsPVP;
-	void showPVP();
+	void showPVP(int fila1, int columna1, int fila2, int columna2, int textFocus, string nombre1, string nombre2);
 
 	//PvE & Training
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
-	void showPVE();
-	void showTraining(int fila, int columna, int textFocus, string nombre);
-
 	int viewName(string nombre);
 	void viewNameBoxFocus(int x);
 	void viewNameBoxNoFocus(int x);
-
-
-
-
-	int nombreY;
+	void showPVE();
+	void showTraining(int fila, int columna, int textFocus, string nombre);
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */

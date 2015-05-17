@@ -48,6 +48,26 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	shadowColor.b = 0x00;
 	shadowColor.a = 0xFF;
 
+	selected1Color.r = 0x00;
+	selected1Color.g = 0x00;
+	selected1Color.b = 0x99;
+	selected1Color.a = 0xFF;
+
+	selected2Color.r = 0x00;
+	selected2Color.g = 0x99;
+	selected2Color.b = 0x00;
+	selected2Color.a = 0xFF;
+
+	selectedBothColor.r = 0x00;
+	selectedBothColor.g = 0x99;
+	selectedBothColor.b = 0x99;
+	selectedBothColor.a = 0xFF;
+
+	notSelected.r = 0x99;
+	notSelected.g = 0x99;
+	notSelected.b = 0x99;
+	notSelected.a = 0xFF;
+
 	//texturas de texto: news
 	title = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
@@ -172,7 +192,7 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->clearScreen();
 	SDL_Rect highlight;
 	highlight.h = modePVP->getHeight();
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x44, 0x99, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
 
 	switch (modeSelected) {
 	case SELECTED_PVP:
@@ -201,9 +221,59 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->updateScreen();
 }
 
-void MainScreen::showPVP() {
+void MainScreen::veiwFaces() {
+	for (unsigned int i=0; i<posicionesCaras.size(); i++) {
+		for (unsigned int j=0; j<posicionesCaras.at(i).size(); j++) {
+			switch (_perSelect->at(i).at(j)) {
+			case LIUKANG:
+				this->liukangface->renderScaled(posicionesCaras.at(i).at(j).first,posicionesCaras.at(i).at(j).second,faceW,faceH);
+				break;
+			case SCORPION:
+				this->scorpionface->renderScaled(posicionesCaras.at(i).at(j).first,posicionesCaras.at(i).at(j).second,faceW,faceH);
+				break;
+			}
+		}
+	}
+}
+
+void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int textFocus, string nombre1, string nombre2) {
 	this->_ventana->clearScreen();
-	this->modePVP->render(_ventana->_ancho_px/2 - modePVP->getWidth()/2, _ventana->_alto_px*1/5);
+
+	veiwFaces();
+
+	if ((fila1 != fila2) || (columna1 != columna2)) {
+		int selected1X = topLeftX + columna1*faceW;
+		int selected1Y = topLeftY + fila1*faceH;
+		SDL_Rect selected1a = { selected1X, selected1Y, faceW, faceH };
+		SDL_Rect selected1b = { selected1X+1, selected1Y+1, faceW-2, faceH-2 };
+		SDL_Rect selected1c = { selected1X+2, selected1Y+2, faceW-4, faceH-4 };
+		SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1a );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1b );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1c );
+
+		int selected2X = topLeftX + columna2*faceW;
+		int selected2Y = topLeftY + fila2*faceH;
+		SDL_Rect selected2a = { selected2X, selected2Y, faceW, faceH };
+		SDL_Rect selected2b = { selected2X+1, selected2Y+1, faceW-2, faceH-2 };
+		SDL_Rect selected2c = { selected2X+2, selected2Y+2, faceW-4, faceH-4 };
+		SDL_SetRenderDrawColor( _ventana->_gRenderer, selected2Color.r, selected2Color.g, selected2Color.b, selected2Color.a );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected2a );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected2b );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected2c );
+
+	} else {
+		int selected1X = topLeftX + columna1*faceW;
+		int selected1Y = topLeftY + fila1*faceH;
+		SDL_Rect selected1a = { selected1X, selected1Y, faceW, faceH };
+		SDL_Rect selected1b = { selected1X+1, selected1Y+1, faceW-2, faceH-2 };
+		SDL_Rect selected1c = { selected1X+2, selected1Y+2, faceW-4, faceH-4 };
+		SDL_SetRenderDrawColor( _ventana->_gRenderer, selectedBothColor.r, selectedBothColor.g, selectedBothColor.b, selectedBothColor.a );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1a );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1b );
+		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1c );
+	}
+
 	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
@@ -223,13 +293,13 @@ int MainScreen::viewName(string nombre) {
 }
 
 void MainScreen::viewNameBoxFocus(int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0xFF, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
 	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
 	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
 
 void MainScreen::viewNameBoxNoFocus(int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x99, 0x99, 0x99, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, notSelected.r, notSelected.g, notSelected.b, notSelected.a );
 	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
 	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
@@ -237,24 +307,14 @@ void MainScreen::viewNameBoxNoFocus(int x) {
 void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre) {
 	this->_ventana->clearScreen();
 
-	for (unsigned int i=0; i<posicionesCaras.size(); i++) {
-		for (unsigned int j=0; j<posicionesCaras.at(i).size(); j++) {
-			switch (_perSelect->at(i).at(j)) {
-			case LIUKANG:
-				this->liukangface->renderScaled(posicionesCaras.at(i).at(j).first,posicionesCaras.at(i).at(j).second,faceW,faceH);
-				break;
-			case SCORPION:
-				this->scorpionface->renderScaled(posicionesCaras.at(i).at(j).first,posicionesCaras.at(i).at(j).second,faceW,faceH);
-				break;
-			}
-		}
-	}
+	veiwFaces();
+
 	int selectedX = topLeftX + columna*faceW;
 	int selectedY = topLeftY + fila*faceH;
 	SDL_Rect selected1 = { selectedX, selectedY, faceW, faceH };
 	SDL_Rect selected2 = { selectedX+1, selectedY+1, faceW-2, faceH-2 };
 	SDL_Rect selected3 = { selectedX+2, selectedY+2, faceW-4, faceH-4 };
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x00, 0x00, 0xFF, 0xFF );
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected1 );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected2 );
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );

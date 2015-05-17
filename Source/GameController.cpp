@@ -685,7 +685,7 @@ void GameController::procesamientoMainScreenPVP() {
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showPVP();
+		this->_mainScreen->showPVP(filaP1,columnaP1,filaP2,columnaP2,textFocus,nombreP1,nombreP2);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }
