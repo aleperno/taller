@@ -133,6 +133,9 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	//Extras
 	descriptionY = _ventana->_alto_px*9/10;
 	nombreY = _ventana->_alto_px*8/10;
+	nombreEjeX = _ventana->_ancho_px/2;
+	nombre1EjeX = _ventana->_ancho_px/4;
+	nombre2EjeX = _ventana->_ancho_px*3/4;
 }
 
 void MainScreen::prepararPerSelect() {
@@ -274,6 +277,22 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1c );
 	}
 
+	if (nombre1.length() > 0) {
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
+		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1,nombre1,nombre1EjeX));
+	} else {
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(nombreP1, viewName(nombreP1," ",nombre1EjeX) );
+		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1," ",nombre1EjeX) );
+	}
+
+	if (nombre2.length() > 0) {
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+		else if (textFocus == TEXT_FOCUS_P2) viewNameBoxFocus(nombreP2, &selected2Color, viewName(nombreP2,nombre2,nombre2EjeX));
+	} else {
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+		else if (textFocus == TEXT_FOCUS_P2) viewNameBoxFocus(nombreP2, &selected2Color, viewName(nombreP2," ",nombre2EjeX) );
+	}
+
 	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
@@ -285,22 +304,22 @@ void MainScreen::showPVE() {
 	this->_ventana->updateScreen();
 }
 
-int MainScreen::viewName(string nombre) {
-	nombreP1->loadFromRenderedText(nombre.c_str(), textColor, fontSmall);
-	int nombreP1X = _ventana->_ancho_px/2 - nombreP1->getWidth()/2;
-	nombreP1->render(nombreP1X, nombreY);
-	return nombreP1X;
+int MainScreen::viewName(TextureHandler* nombreTexture, string nombre, int ejeX) {
+	nombreTexture->loadFromRenderedText(nombre.c_str(), textColor, fontSmall);
+	int nombreX = ejeX - nombreTexture->getWidth()/2;
+	nombreTexture->render(nombreX, nombreY);
+	return nombreX;
 }
 
-void MainScreen::viewNameBoxFocus(int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
-	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
+void MainScreen::viewNameBoxFocus(TextureHandler* nombre, SDL_Color* color, int x) {
+	SDL_SetRenderDrawColor( _ventana->_gRenderer, color->r, color->g, color->b, color->a );
+	SDL_Rect textBounds = { x-1, nombreY-1, nombre->getWidth()+2, nombre->getHeight()+2 };
 	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
 
-void MainScreen::viewNameBoxNoFocus(int x) {
+void MainScreen::viewNameBoxNoFocus(TextureHandler* nombre, int x) {
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, notSelected.r, notSelected.g, notSelected.b, notSelected.a );
-	SDL_Rect textBounds = { x-1, nombreY-1, nombreP1->getWidth()+2, nombreP1->getHeight()+2 };
+	SDL_Rect textBounds = { x-1, nombreY-1, nombre->getWidth()+2, nombre->getHeight()+2 };
 	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
 }
 
@@ -320,11 +339,11 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );
 
 	if (nombre.length() > 0) {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(viewName(nombre));
-		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(viewName(nombre));
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre,nombreEjeX) );
+		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1,nombre,nombreEjeX));
 	} else {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(viewName(" "));
-		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(viewName(" "));
+		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(nombreP1, viewName(nombreP1," ",nombreEjeX) );
+		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1," ",nombreEjeX) );
 	}
 
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, descriptionY);

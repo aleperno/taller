@@ -62,6 +62,9 @@ public:
 	int nombreY;
 	void prepararPerSelect();
 	void veiwFaces();
+	int viewName(TextureHandler* nombreTexture, string nombre, int ejeX);
+	void viewNameBoxFocus(TextureHandler* nombre, SDL_Color* color, int x);
+	void viewNameBoxNoFocus(TextureHandler* nombre, int x);
 
 	//Intro
 	SDL_Rect gateLeft;
@@ -88,14 +91,14 @@ public:
 
 	//PvP
 	TextureHandler* thisIsPVP;
+	int nombre1EjeX;
+	int nombre2EjeX;
 	void showPVP(int fila1, int columna1, int fila2, int columna2, int textFocus, string nombre1, string nombre2);
 
 	//PvE & Training
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
-	int viewName(string nombre);
-	void viewNameBoxFocus(int x);
-	void viewNameBoxNoFocus(int x);
+	int nombreEjeX;
 	void showPVE();
 	void showTraining(int fila, int columna, int textFocus, string nombre);
 };
