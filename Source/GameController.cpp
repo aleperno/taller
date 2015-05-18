@@ -256,9 +256,13 @@ void GameController::procesarEventosMainScreenIntro(SDL_Event* e) {
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
 			else if (e->key.keysym.sym == SDLK_m) this->screen = MAINSCREEN_MODE_SELECT;
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			this->screen = MAINSCREEN_MODE_SELECT;
+			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
 			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+			break;
 	}
 }
 
@@ -285,6 +289,7 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
 			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+			break;
 	}
 }
 

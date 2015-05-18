@@ -11,9 +11,9 @@ MainScreen::~MainScreen()
 	delete this->titleShadow;
 	delete this->pressStart;
 
-	delete this->modePVP;
-	delete this->modePVE;
-	delete this->modeTraining;
+	delete this->modePVP_boton;
+	delete this->modePVE_boton;
+	delete this->modeTraining_boton;
 	delete this->thisIsMenu;
 
 	delete this->thisIsPVP;
@@ -23,8 +23,8 @@ MainScreen::~MainScreen()
 	delete this->liukangface;
 	delete this->scorpionface;
 
-	delete this->nombreP1;
-	delete this->nombreP2;
+	delete this->nombreP1_boton;
+	delete this->nombreP2_boton;
 }
 
 MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
@@ -63,40 +63,23 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	selectedBothColor.b = 0x99;
 	selectedBothColor.a = 0xFF;
 
-	notSelected.r = 0x99;
-	notSelected.g = 0x99;
-	notSelected.b = 0x99;
-	notSelected.a = 0xFF;
+	notSelectedColor.r = 0x99;
+	notSelectedColor.g = 0x99;
+	notSelectedColor.b = 0x99;
+	notSelectedColor.a = 0xFF;
 
-	//texturas de texto: news
+	//otro
+	descriptionY = _ventana->_alto_px*9/10;
+
+	//showIntro
 	title = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
 	pressStart = new TextureHandler( _ventana->_gRenderer );
-	
-	modePVP = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
-	modePVE = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
-	modeTraining = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
-	thisIsMenu = new TextureHandler( _ventana->_gRenderer );	//Descripcion en menu modo
 
-	thisIsPVP = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVP
-	thisIsPVE = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVE
-	thisIsTraining = new TextureHandler( _ventana->_gRenderer );	//Descripcion en Training
-
-	//texturas de texto: loads
 	this->title->loadFromRenderedText("MORTAL TALLER", textColor, fontBig);
 	this->titleShadow->loadFromRenderedText("MORTAL TALLER", shadowColor, fontBig);
 	this->pressStart->loadFromRenderedText("press m", textColor, fontSmall);
 
-	this->modePVP->loadFromRenderedText("2 players", textColor, fontMenu);
-	this->modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
-	this->modeTraining->loadFromRenderedText("training", textColor, fontMenu);
-	this->thisIsMenu->loadFromRenderedText("[Up], [Down], [Enter]", textColor, fontSmall);
-
-	this->thisIsPVP->loadFromRenderedText("[b], [Enter], [Arrows], [F1], [PGup,PGdown,Ins,Del], [F2], [BS]", textColor, fontSmall);
-	this->thisIsPVE->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
-	this->thisIsTraining->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
-	
-	//parametros del intro
 	shakeCount = SHAKE_COUNT;
 	randomX = 0;
 	randomY = 0;
@@ -118,24 +101,50 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	gateRight.y = 0;
 	gateRight.w = gateAncho;
 	gateRight.h = gateAlto;
+	
+	//modeSelect
+	TextureHandler* modePVP = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
+	TextureHandler* modePVE = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
+	TextureHandler* modeTraining = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
 
+	modePVP->loadFromRenderedText("2 players", textColor, fontMenu);
+	modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
+	modeTraining->loadFromRenderedText("training", textColor, fontMenu);
+
+	this->modePVP_boton = new Boton(this->_ventana, modePVP, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*1/5);
+	this->modePVE_boton = new Boton(this->_ventana, modePVE, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*2/5);
+	this->modeTraining_boton = new Boton(this->_ventana, modeTraining, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*3/5);
+
+	thisIsMenu = new TextureHandler( _ventana->_gRenderer );	//Descripcion en menu modo
+	thisIsMenu->loadFromRenderedText("[Up], [Down], [Enter]", textColor, fontSmall);
+	
 	//perSelect
 	liukangface = new TextureHandler( _ventana->_gRenderer );
 	scorpionface = new TextureHandler( _ventana->_gRenderer );
 	liukangface->loadFromFile(LIUKANG_FACE_PATH,false,0,0,0,true);
 	scorpionface->loadFromFile(SCORPION_FACE_PATH,false,0,0,0,true);
 	prepararPerSelect();
+	
+	//PVP
+	thisIsPVP = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVP
+	this->thisIsPVP->loadFromRenderedText("[b], [Enter], [Arrows], [F1], [PGup,PGdown,Ins,Del], [F2], [BS]", textColor, fontSmall);
 
-	//Nombres
-	nombreP1 = new TextureHandler( _ventana->_gRenderer );
-	nombreP2 = new TextureHandler( _ventana->_gRenderer );
+	//PVE
+	thisIsPVE = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVE
+	this->thisIsPVE->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
 
-	//Extras
-	descriptionY = _ventana->_alto_px*9/10;
-	nombreY = _ventana->_alto_px*8/10;
-	nombreEjeX = _ventana->_ancho_px/2;
-	nombre1EjeX = _ventana->_ancho_px/4;
-	nombre2EjeX = _ventana->_ancho_px*3/4;
+	//Training
+	thisIsTraining = new TextureHandler( _ventana->_gRenderer );	//Descripcion en Training
+	this->thisIsTraining->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
+
+	//nombres
+	TextureHandler* nombreP1 = new TextureHandler( _ventana->_gRenderer );
+	TextureHandler* nombreP2 = new TextureHandler( _ventana->_gRenderer );
+	nombreP1->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
+	nombreP2->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
+	nombreP1_boton = new Boton(this->_ventana, nombreP1, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
+	nombreP2_boton = new Boton(this->_ventana, nombreP2, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
+
 }
 
 void MainScreen::prepararPerSelect() {
@@ -188,37 +197,26 @@ void MainScreen::showIntro() {
 	this->pressStart->render(pressStartX + randomX, pressStartY + randomY);
 
 	this->_ventana->updateScreen();
-
 }
 
 void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->clearScreen();
-	SDL_Rect highlight;
-	highlight.h = modePVP->getHeight();
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
 
 	switch (modeSelected) {
 	case SELECTED_PVP:
-		highlight.w = modePVP->getWidth();
-		highlight.x = _ventana->_ancho_px/2 - modePVP->getWidth()/2;
-		highlight.y = _ventana->_alto_px*1/5;
+		this->modePVP_boton->viewHighlight(&selected1Color);
 		break;
 	case SELECTED_PVE:
-		highlight.w = modePVE->getWidth();
-		highlight.x = _ventana->_ancho_px/2 - modePVE->getWidth()/2;
-		highlight.y = _ventana->_alto_px*2/5;
+		this->modePVE_boton->viewHighlight(&selected1Color);
 		break;
 	case SELECTED_TRAINING:
-		highlight.w = modeTraining->getWidth();
-		highlight.x = _ventana->_ancho_px/2 - modeTraining->getWidth()/2;
-		highlight.y = _ventana->_alto_px*3/5;
+		this->modeTraining_boton->viewHighlight(&selected1Color);
 		break;
 	}
-	SDL_RenderFillRect( _ventana->_gRenderer, &highlight );
 
-	this->modePVP->render(_ventana->_ancho_px/2 - modePVP->getWidth()/2, _ventana->_alto_px*1/5);
-	this->modePVE->render(_ventana->_ancho_px/2 - modePVE->getWidth()/2, _ventana->_alto_px*2/5);
-	this->modeTraining->render(_ventana->_ancho_px/2 - modeTraining->getWidth()/2, _ventana->_alto_px*3/5);
+	this->modePVP_boton->view();
+	this->modePVE_boton->view();
+	this->modeTraining_boton->view();
 
 	this->thisIsMenu->render(_ventana->_ancho_px/2 - thisIsMenu->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
@@ -280,53 +278,53 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 	if ((nombre1.length() > 0) && (nombre2.length() > 0)) {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//Ambos no nulos y no en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+			viewName( nombreP1_boton, nombre1, &notSelectedColor );
+			viewName( nombreP2_boton, nombre2, &notSelectedColor );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//Ambos no nulos, 1-ro en foco
-			viewNameBoxFocus( nombreP1, &selected1Color, viewName(nombreP1,nombre1,nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+			viewName( nombreP1_boton, nombre1, &selected1Color );
+			viewName( nombreP2_boton, nombre2, &notSelectedColor );
 		} else {	//Ambos no nulos, 2-do en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
-			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2,nombre2,nombre2EjeX) );
+			viewName( nombreP1_boton, nombre1, &notSelectedColor );
+			viewName( nombreP2_boton, nombre2, &selected2Color );
 		}
 
 	} else if ((nombre1.length() > 0) && (nombre2.length() == 0)) {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//2-do nulo, nadie en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+			viewName( nombreP1_boton, nombre1, &notSelectedColor );
+			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//2-do nulo, 1-ro en foco
-			viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1,nombre1,nombre1EjeX));
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+			viewName( nombreP1_boton, nombre1, &selected1Color );
+			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
 		} else {	//2-do nulo, 2-do en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre1,nombre1EjeX) );
-			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2," ",nombre2EjeX) );
+			viewName( nombreP1_boton, nombre1, &notSelectedColor );
+			viewName( nombreP2_boton, NOMBRE_VACIO, &selected2Color );
 		}
 	
 	} else if ((nombre1.length() == 0) && (nombre2.length() > 0)) {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//1-ro nulo, nadie en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP2_boton, nombre2, &notSelectedColor );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//1-ro nulo, 1-ro en foco
-			viewNameBoxFocus( nombreP1, &selected1Color, viewName(nombreP1," ",nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2,nombre2,nombre2EjeX) );
+			viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
+			viewName( nombreP2_boton, nombre2, &notSelectedColor );
 		} else {	//1-ro nulo, 2-do en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
-			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2,nombre2,nombre2EjeX) );
+			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP2_boton, nombre2, &selected2Color );
 		}
 
 	} else {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//ambos nulos, nadie en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//ambos nulos, 1-ro en foco
-			viewNameBoxFocus( nombreP1, &selected1Color, viewName(nombreP1," ",nombre1EjeX) );
-			viewNameBoxNoFocus( nombreP2, viewName(nombreP2," ",nombre2EjeX) );
+			viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
+			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
 		} else {	//ambos nulos, 2-do en foco
-			viewNameBoxNoFocus( nombreP1, viewName(nombreP1," ",nombre1EjeX) );
-			viewNameBoxFocus( nombreP2, &selected2Color, viewName(nombreP2," ",nombre2EjeX) );
+			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP2_boton, NOMBRE_VACIO, &selected2Color );
 		}
 
 	}
@@ -339,23 +337,10 @@ void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre) {
 	showTraining(fila,columna,textFocus,nombre);
 }
 
-int MainScreen::viewName(TextureHandler* nombreTexture, string nombre, int ejeX) {
-	nombreTexture->loadFromRenderedText(nombre.c_str(), textColor, fontSmall);
-	int nombreX = ejeX - nombreTexture->getWidth()/2;
-	nombreTexture->render(nombreX, nombreY);
-	return nombreX;
-}
-
-void MainScreen::viewNameBoxFocus(TextureHandler* nombre, SDL_Color* color, int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, color->r, color->g, color->b, color->a );
-	SDL_Rect textBounds = { x-1, nombreY-1, nombre->getWidth()+2, nombre->getHeight()+2 };
-	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
-}
-
-void MainScreen::viewNameBoxNoFocus(TextureHandler* nombre, int x) {
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, notSelected.r, notSelected.g, notSelected.b, notSelected.a );
-	SDL_Rect textBounds = { x-1, nombreY-1, nombre->getWidth()+2, nombre->getHeight()+2 };
-	SDL_RenderDrawRect( _ventana->_gRenderer, &textBounds );
+void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
+	nombreBoton->texture->loadFromRenderedText(nombre.c_str(), textColor, fontSmall);
+	nombreBoton->view();
+	nombreBoton->viewExternBox(color);
 }
 
 void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre) {
@@ -374,11 +359,11 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );
 
 	if (nombre.length() > 0) {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus( nombreP1, viewName(nombreP1,nombre,nombreEjeX) );
-		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1,nombre,nombreEjeX));
+		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, nombre, &notSelectedColor );
+		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, nombre, &selected1Color );
 	} else {
-		if (textFocus == TEXT_NO_FOCUS) viewNameBoxNoFocus(nombreP1, viewName(nombreP1," ",nombreEjeX) );
-		else if (textFocus == TEXT_FOCUS_P1) viewNameBoxFocus(nombreP1, &selected1Color, viewName(nombreP1," ",nombreEjeX) );
+		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
+		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
 	}
 
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, descriptionY);

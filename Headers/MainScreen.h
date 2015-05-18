@@ -2,6 +2,7 @@
 #define HEADERS_MAINSCREEN_H_
 
 #include <Ventana.h>
+#include <Boton.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -9,6 +10,8 @@
 #define FONT_PATH "Images/ardestine.ttf"
 #define LIUKANG_FACE_PATH "Images/characters/liukangface.png"
 #define SCORPION_FACE_PATH "Images/characters/scorpionface.png"
+
+#define NOMBRE_VACIO " "
 
 //Modo seleccionado en screen correspondiente
 #define SELECTED_PVP 0
@@ -40,31 +43,34 @@ public:
 	//Globales
 	Ventana* _ventana;
 	vector< vector<int> >* _perSelect;
+	vector< vector< pair<int, int> > > posicionesCaras; //x,y por cada una
+
 	int descriptionY;
 	SDL_Color textColor;
 	SDL_Color shadowColor;
 	SDL_Color selected1Color;
 	SDL_Color selected2Color;
 	SDL_Color selectedBothColor;
-	SDL_Color notSelected;
+	SDL_Color notSelectedColor;
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
 	TTF_Font* fontMenu;
-	vector< vector< pair<int, int> > > posicionesCaras; //x,y por cada una
+
 	TextureHandler* liukangface;
 	TextureHandler* scorpionface;
 	TextureHandler* nombreP1;
 	TextureHandler* nombreP2;
+	Boton* nombreP1_boton;
+	Boton* nombreP2_boton;
+
 	int topLeftX;
 	int topLeftY;
 	int faceH;
 	int faceW;
-	int nombreY;
+
 	void prepararPerSelect();
 	void veiwFaces();
-	int viewName(TextureHandler* nombreTexture, string nombre, int ejeX);
-	void viewNameBoxFocus(TextureHandler* nombre, SDL_Color* color, int x);
-	void viewNameBoxNoFocus(TextureHandler* nombre, int x);
+	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
 
 	//Intro
 	SDL_Rect gateLeft;
@@ -82,23 +88,20 @@ public:
 	void showIntro();
 	void actualizarPosiciones();
 
-	//Mode
-	TextureHandler* modePVP;
-	TextureHandler* modePVE;
-	TextureHandler* modeTraining;
+	//Mode select
+	Boton* modePVP_boton;
+	Boton* modePVE_boton;
+	Boton* modeTraining_boton;
 	TextureHandler* thisIsMenu;
 	void showModeSelect(int modeSelected);
 
 	//PvP
 	TextureHandler* thisIsPVP;
-	int nombre1EjeX;
-	int nombre2EjeX;
 	void showPVP(int fila1, int columna1, int fila2, int columna2, int textFocus, string nombre1, string nombre2);
 
 	//PvE & Training
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
-	int nombreEjeX;
 	void showPVE(int fila, int columna, int textFocus, string nombre);
 	void showTraining(int fila, int columna, int textFocus, string nombre);
 };
