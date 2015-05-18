@@ -267,6 +267,7 @@ void GameController::procesarEventosMainScreenIntro(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
+	int mode;
 	switch (e->type) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
@@ -288,7 +289,23 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 			break;
 
 		case SDL_MOUSEMOTION:
-			this->_mainScreen->mouseOverMode(&modeSelected);
+			mode = this->_mainScreen->mouseOverMode();
+			if (mode != NOT_SELECTED)	this->modeSelected = mode;
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			mode = this->_mainScreen->mouseOverMode();
+			switch (mode) {
+			case SELECTED_PVP:
+				this->screen = MAINSCREEN_PVP;
+				break;
+			case SELECTED_PVE:
+				this->screen = MAINSCREEN_PVE;
+				break;
+			case SELECTED_TRAINING:
+				this->screen = MAINSCREEN_TRAINING;
+				break;
+			}
 			break;
 
 		case SDL_WINDOWEVENT:

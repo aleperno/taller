@@ -14,6 +14,7 @@
 #define NOMBRE_VACIO " "
 
 //Modo seleccionado en screen correspondiente
+#define NOT_SELECTED -1
 #define SELECTED_PVP 0
 #define SELECTED_PVE 1
 #define SELECTED_TRAINING 2
@@ -92,7 +93,7 @@ public:
 	Boton* modePVE_boton;
 	Boton* modeTraining_boton;
 	TextureHandler* thisIsMenu;
-	void mouseOverMode(int* modeSelected);
+	int mouseOverMode();
 	void showModeSelect(int modeSelected);
 
 	//PvP
