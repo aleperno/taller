@@ -220,7 +220,7 @@ Personaje::~Personaje()
 void Personaje::view(Personaje* otherPlayer)
 {
 	this->_orientacion = (this->_pos_x + this->_ancho_log / 2 > otherPlayer->_pos_x + otherPlayer->_ancho_log / 2);
-	//ORIGINAL: this->_orientacion = (this->_pos_x > otherPlayer->_pos_x);
+	//this->_orientacion = (this->_pos_x > otherPlayer->_pos_x);
 	this->setBoundingBox();
 	//printf("El personaje esta en %0.2f\n",_pos_x);
 	//cout << this->_pos_y << endl;
@@ -1262,9 +1262,9 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			if(this->hayColision(this->boundingBox, otherPers->boundingBox))
 			{
 				if(!this->_orientacion)
-					this->_pos_x = this->_pos_x - 10;
+					this->_pos_x = this->_pos_x - this->_ancho_log / 10;
 				else
-					this->_pos_x = this->_pos_x + 10;
+					this->_pos_x = this->_pos_x + this->_ancho_log / 10;
 			}
 		}
 		else
