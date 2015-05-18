@@ -286,6 +286,11 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 				}
 			}
 			break;
+
+		case SDL_MOUSEMOTION:
+			this->_mainScreen->mouseOverMode(&modeSelected);
+			break;
+
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
 			else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;

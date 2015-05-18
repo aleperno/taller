@@ -21,6 +21,7 @@ public:
 	void view();
 	void viewExternBox(SDL_Color* c);
 	void viewHighlight(SDL_Color* c);
+	bool mouseOver();
 };
 
 

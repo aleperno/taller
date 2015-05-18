@@ -58,8 +58,7 @@ public:
 
 	TextureHandler* liukangface;
 	TextureHandler* scorpionface;
-	TextureHandler* nombreP1;
-	TextureHandler* nombreP2;
+
 	Boton* nombreP1_boton;
 	Boton* nombreP2_boton;
 
@@ -93,6 +92,7 @@ public:
 	Boton* modePVE_boton;
 	Boton* modeTraining_boton;
 	TextureHandler* thisIsMenu;
+	void mouseOverMode(int* modeSelected);
 	void showModeSelect(int modeSelected);
 
 	//PvP

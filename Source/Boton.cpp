@@ -28,3 +28,9 @@ void Boton::viewHighlight(SDL_Color* c) {
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, c->r, c->g, c->b, c->a );
 	SDL_RenderFillRect( _ventana->_gRenderer, &highlight );
 }
+
+bool Boton::mouseOver() {
+	int x,y;
+	SDL_GetMouseState(&x, &y);
+	return ((x >= this->x) && (x <= this->x + this->texture->getWidth()) && (y >= this->y) && (y <= this->y + this->texture->getHeight()));
+}

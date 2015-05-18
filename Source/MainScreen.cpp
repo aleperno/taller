@@ -199,6 +199,12 @@ void MainScreen::showIntro() {
 	this->_ventana->updateScreen();
 }
 
+void MainScreen::mouseOverMode(int* modeSelected) {
+	if (this->modePVP_boton->mouseOver()) (*modeSelected) = SELECTED_PVP;
+	if (this->modePVE_boton->mouseOver()) (*modeSelected) = SELECTED_PVE;
+	if (this->modeTraining_boton->mouseOver()) (*modeSelected) = SELECTED_TRAINING;
+}
+
 void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->clearScreen();
 
