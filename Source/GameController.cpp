@@ -638,7 +638,13 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 		if(pers->_orientacion)
 		{	
 			if(!otherPers->isBlocking() && !otherPers->isMaxPushLeft())
+			{
 				otherPers->moveLeft(MOV_FACTOR2);
+				if(otherPers->isLeftMargin())
+				{
+					this->moveLayersRight(MOV_FACTOR2);
+				}
+			}
 			else
 				return false;
 		}
@@ -658,7 +664,13 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 		if(!pers->_orientacion)
 		{	
 			if(!otherPers->isBlocking() && !otherPers->isMaxPushRight())
+			{
 				otherPers->moveRight(MOV_FACTOR2);
+				if(otherPers->isRightMargin())
+				{
+					this->moveLayersLeft(MOV_FACTOR2);
+				}
+			}
 			else
 			{
 				//cout << "No me puedo mover mas2" << endl;
