@@ -216,6 +216,12 @@ int MainScreen::mouseOverMode() {
 	else return NOT_SELECTED;
 }
 
+int MainScreen::mouseOverBackOrPlay() {
+	if (this->back_boton->mouseOver()) return BACK_BOTON;
+	else if (this->play_boton->mouseOver()) return PLAY_BOTON;
+	else return NINGUNO_DE_LOS_DOS;
+}
+
 void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->clearScreen();
 
@@ -353,8 +359,8 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 	this->_ventana->updateScreen();
 }
 
-void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre) {
-	showTraining(fila,columna,textFocus,nombre);
+void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre, int boton) {
+	showTraining(fila,columna,textFocus,nombre, boton);
 }
 
 void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
@@ -363,7 +369,7 @@ void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
 	nombreBoton->viewExternBox(color);
 }
 
-void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre) {
+void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre, int boton) {
 	this->_ventana->clearScreen();
 
 	veiwFaces();
@@ -386,6 +392,10 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
 	}
 
+	if (boton == BACK_BOTON)
+		this->back_boton->viewHighlight(&selected1Color);
+	if (boton == PLAY_BOTON)
+		this->play_boton->viewHighlight(&selected1Color);
 	this->back_boton->view();
 	this->play_boton->view();
 

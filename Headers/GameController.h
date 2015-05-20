@@ -113,6 +113,7 @@ class GameController
 		int filaP2;
 		int columnaP2;
 		int textFocus;
+		int botonSeleccionadoEnModo;
 
 		string nombreP1;
 		string nombreP2;

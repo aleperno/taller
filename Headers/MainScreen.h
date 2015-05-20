@@ -20,8 +20,9 @@
 #define SELECTED_TRAINING 2
 
 //Botones 'back' y 'play'
-#define BACK_BOTON "back"
-#define PLAY_BOTON "play"
+#define NINGUNO_DE_LOS_DOS -1
+#define BACK_BOTON 0
+#define PLAY_BOTON 1
 
 //Personajes
 #define LIUKANG 0
@@ -78,6 +79,7 @@ public:
 	void prepararPerSelect();
 	void veiwFaces();
 	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
+	int mouseOverBackOrPlay();
 
 	//Intro
 	SDL_Rect gateLeft;
@@ -110,8 +112,8 @@ public:
 	//PvE & Training
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
-	void showPVE(int fila, int columna, int textFocus, string nombre);
-	void showTraining(int fila, int columna, int textFocus, string nombre);
+	void showPVE(int fila, int columna, int textFocus, string nombre, int boton);
+	void showTraining(int fila, int columna, int textFocus, string nombre, int boton);
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */

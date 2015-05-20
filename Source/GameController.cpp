@@ -44,6 +44,8 @@ GameController::GameController(Parser* parser)
 	enMainScreen = true;
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
+	botonSeleccionadoEnModo = BACK_BOTON;
+
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -446,11 +448,17 @@ void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
+	int backORplay;
 	switch (e->type) {
 
 	case SDL_WINDOWEVENT:
 		if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
 		else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+		break;
+		
+	case SDL_MOUSEMOTION:
+		backORplay = this->_mainScreen->mouseOverBackOrPlay();
+		if (backORplay != NINGUNO_DE_LOS_DOS)	this->botonSeleccionadoEnModo = backORplay;
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
@@ -740,7 +748,7 @@ void GameController::procesamientoMainScreenPVE() {
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1);
+		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }
@@ -757,7 +765,7 @@ void GameController::procesamientoMainScreenTraining() {
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showTraining(filaP1,columnaP1,textFocus,nombreP1);
+		this->_mainScreen->showTraining(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }
