@@ -25,6 +25,9 @@ MainScreen::~MainScreen()
 
 	delete this->nombreP1_boton;
 	delete this->nombreP2_boton;
+
+	delete this->back_boton;
+	delete this->play_boton;
 }
 
 MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
@@ -142,9 +145,16 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	TextureHandler* nombreP2 = new TextureHandler( _ventana->_gRenderer );
 	nombreP1->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
 	nombreP2->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
-	nombreP1_boton = new Boton(this->_ventana, nombreP1, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
-	nombreP2_boton = new Boton(this->_ventana, nombreP2, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
+	nombreP1_boton = new Boton(this->_ventana, nombreP1, _ventana->_ancho_px*1/4, _ventana->_alto_px*7/10);
+	nombreP2_boton = new Boton(this->_ventana, nombreP2, _ventana->_ancho_px*3/4, _ventana->_alto_px*7/10);
 
+	//botones 'back' y 'play'
+	TextureHandler* back = new TextureHandler( _ventana->_gRenderer );
+	TextureHandler* play = new TextureHandler( _ventana->_gRenderer );
+	back->loadFromRenderedText("back", textColor, fontMenu);
+	play->loadFromRenderedText("play", textColor, fontMenu);
+	back_boton = new Boton(this->_ventana, back, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
+	play_boton = new Boton(this->_ventana, play, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
 }
 
 void MainScreen::prepararPerSelect() {
@@ -336,6 +346,9 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 
 	}
 
+	this->back_boton->view();
+	this->play_boton->view();
+
 	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
@@ -372,6 +385,9 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
 		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
 	}
+
+	this->back_boton->view();
+	this->play_boton->view();
 
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();

@@ -19,6 +19,10 @@
 #define SELECTED_PVE 1
 #define SELECTED_TRAINING 2
 
+//Botones 'back' y 'play'
+#define BACK_BOTON "back"
+#define PLAY_BOTON "play"
+
 //Personajes
 #define LIUKANG 0
 #define SCORPION 1
@@ -62,6 +66,9 @@ public:
 
 	Boton* nombreP1_boton;
 	Boton* nombreP2_boton;
+
+	Boton* back_boton;
+	Boton* play_boton;
 
 	int topLeftX;
 	int topLeftY;
