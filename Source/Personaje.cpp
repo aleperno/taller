@@ -1044,7 +1044,8 @@ bool Personaje::isRightMargin()
 
 bool Personaje::isMaxPushRight()
 {
-	return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE + 20);
+	//return (_ventana->_pos_log_x + _ventana->_ancho_log - (_pos_x + this->_ancho_log) <= WINDOW_MARGIN_TOLERANCE + 20);
+	return this->_pos_x + this->_ancho_log + WINDOW_MARGIN_TOLERANCE >= this->_escenario.ancho;
 }
 
 bool Personaje::isLeftMargin()
@@ -1054,7 +1055,8 @@ bool Personaje::isLeftMargin()
 
 bool Personaje::isMaxPushLeft()
 {
-	return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE + 20);
+	//return (_pos_x - _ventana->_pos_log_x <= WINDOW_MARGIN_TOLERANCE + 20);
+	return this->_pos_x - WINDOW_MARGIN_TOLERANCE <= 0;
 }
 
 //Se llama una vez que la vida de uno de los dos personajes llega a cero

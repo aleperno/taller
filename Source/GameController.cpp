@@ -637,7 +637,7 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 	{
 		if(pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking() && !pers->isMaxPushLeft())
+			if(!otherPers->isBlocking() && !otherPers->isMaxPushLeft())
 				otherPers->moveLeft(MOV_FACTOR2);
 			else
 				return false;
@@ -649,15 +649,21 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 {
 	if(otherPers->isLeftMargin() && pers->isRightMargin())
+	{
+		//cout << "No me puedo mover mas" << endl;
 		return false;
+	}
 	if(otherPers->hayColision(otherPers->boundingBox, pers->boundingBox))
 	{
 		if(!pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking() && !pers->isMaxPushRight())
+			if(!otherPers->isBlocking() && !otherPers->isMaxPushRight())
 				otherPers->moveRight(MOV_FACTOR2);
 			else
+			{
+				//cout << "No me puedo mover mas2" << endl;
 				return false;
+			}
 		}
 	}
 	return true;
@@ -778,7 +784,7 @@ void GameController::run()
 				_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 				this->moveLayers(_personaje1,_personaje2);
 				this->moveLayers(_personaje2,_personaje1);
-				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
+				//tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
 				if (this->actualizarGanador()) {
 					this->reloadConfig();		
 				}
@@ -970,6 +976,7 @@ void GameController::moveLayers(Personaje* pers, Personaje* otherPers)
 	//Veo si debo mover las capas
 	if( pers->isRightMargin() && pers->isWalking() && !otherPers->isLeftMargin() )
 	{
+		//cout << "Muevo camara a la derecha" << endl;
 		this->moveLayersLeft(MOV_FACTOR2);
 	}
 	else if ( pers->isRightMargin() && pers->isJumpingRight() && !otherPers->isLeftMargin() )

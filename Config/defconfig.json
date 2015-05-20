@@ -30,7 +30,7 @@
 		"defensa":	4,
 		"arrojar":	5	},
 
-"personaje2": {	"ancho": 	5,
+"personaje2": {	"ancho": 	50,
 		"alto": 	50,
 		"nombre":	"scorpion",
 		"arma_speed": 2.5,
