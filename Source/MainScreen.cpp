@@ -219,7 +219,31 @@ int MainScreen::mouseOverMode() {
 int MainScreen::mouseOverBackOrPlay() {
 	if (this->back_boton->mouseOver()) return BACK_BOTON;
 	else if (this->play_boton->mouseOver()) return PLAY_BOTON;
-	else return NINGUNO_DE_LOS_DOS;
+	else return NINGUNO;
+}
+
+int MainScreen::clickOnTextCamp() {
+	if (this->nombreP1_boton->mouseOver()) return TEXT_FOCUS_P1;
+	else if (this->nombreP2_boton->mouseOver()) return TEXT_FOCUS_P2;
+	else return TEXT_NO_FOCUS;
+}
+
+pair<int,int> MainScreen::faceSelected() {
+	int x,y;
+	SDL_GetMouseState(&x, &y);
+	pair<int,int> seleccionado = make_pair(-1,-1);
+
+	for (unsigned int fila=0; fila<_perSelect->size(); fila++) {
+		for (unsigned int columna=0; columna<_perSelect->at(fila).size(); columna++)
+			if ((x >= posicionesCaras.at(fila).at(columna).first) &&
+				(x <= posicionesCaras.at(fila).at(columna).first + faceW) &&
+				(y >= posicionesCaras.at(fila).at(columna).second) &&
+				(y <= posicionesCaras.at(fila).at(columna).second + faceH)) {
+					seleccionado.first = fila;
+					seleccionado.second = columna;
+			}
+	}
+	return seleccionado;
 }
 
 void MainScreen::showModeSelect(int modeSelected) {

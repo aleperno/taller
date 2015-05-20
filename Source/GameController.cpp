@@ -44,7 +44,7 @@ GameController::GameController(Parser* parser)
 	enMainScreen = true;
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
-	botonSeleccionadoEnModo = BACK_BOTON;
+	botonSeleccionadoEnModo = PLAY_BOTON;
 
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
@@ -443,6 +443,13 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 	}
 }
 
+void GameController::nameSelectPVPandTraining() {
+	switch (perSelect.at(filaP1).at(columnaP1)) {
+	case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+	case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+	}
+}
+
 void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 	procesarEventosMainScreenTraining(e);
 }
@@ -458,7 +465,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 		
 	case SDL_MOUSEMOTION:
 		backORplay = this->_mainScreen->mouseOverBackOrPlay();
-		if (backORplay != NINGUNO_DE_LOS_DOS)	this->botonSeleccionadoEnModo = backORplay;
+		if (backORplay != NINGUNO)	this->botonSeleccionadoEnModo = backORplay;
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
@@ -474,7 +481,22 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
+
+			//testing
+			nameSelectPVPandTraining();
 			break;
+		case NINGUNO:
+			if (this->_mainScreen->clickOnTextCamp() == TEXT_FOCUS_P1) {
+				textFocus = TEXT_FOCUS_P1;
+				SDL_StartTextInput();
+			} else {
+				textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+				if ((this->_mainScreen->faceSelected().first >= 0) && (this->_mainScreen->faceSelected().second >= 0)) {
+					this->filaP1 = this->_mainScreen->faceSelected().first;
+					this->columnaP1 = this->_mainScreen->faceSelected().second;
+				}
+			}
 		}
 		break;
 
@@ -501,10 +523,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 				this->enMainScreen = false;
 
 				//testing
-				switch (perSelect.at(filaP1).at(columnaP1)) {
-				case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-				case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-				}
+				nameSelectPVPandTraining();
 			}
 		break;
 
@@ -522,10 +541,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 				SDL_StopTextInput();
 
 				//testing
-				switch (perSelect.at(filaP1).at(columnaP1)) {
-				case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-				case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-				}
+				nameSelectPVPandTraining();
 			}
 		break;
 		}

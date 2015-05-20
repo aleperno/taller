@@ -20,7 +20,7 @@
 #define SELECTED_TRAINING 2
 
 //Botones 'back' y 'play'
-#define NINGUNO_DE_LOS_DOS -1
+#define NINGUNO -1
 #define BACK_BOTON 0
 #define PLAY_BOTON 1
 
@@ -80,6 +80,8 @@ public:
 	void veiwFaces();
 	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
 	int mouseOverBackOrPlay();
+	int clickOnTextCamp();
+	pair<int,int> faceSelected();	//x,y
 
 	//Intro
 	SDL_Rect gateLeft;
