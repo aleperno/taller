@@ -446,68 +446,68 @@ void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
-	switch (textFocus) {
-	case TEXT_NO_FOCUS:
-		switch (e->type) {
-			case SDL_KEYDOWN:
-				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-				else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
-				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
-				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
-				else if (e->key.keysym.sym == SDLK_TAB) {
-					textFocus = TEXT_FOCUS_P1;
-					SDL_StartTextInput();
-				}
-				else if (e->key.keysym.sym == SDLK_RETURN) {
-					this->screen = NO_MAINSCREEN;
-					this->enMainScreen = false;
-					this->textFocus = TEXT_NO_FOCUS;
-					SDL_StopTextInput();
+	switch (e->type) {
 
-					//testing
-					switch (perSelect.at(filaP1).at(columnaP1)) {
-					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-					}
-				}
-				break;
-			case SDL_WINDOWEVENT:
-				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
-		}
+	case SDL_WINDOWEVENT:
+		if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+		else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
 		break;
-	case TEXT_FOCUS_P1:
-		switch (e->type) {
-			case SDL_TEXTINPUT:
-				nombreP1 += e->text.text;
-				break;
-			case SDL_KEYDOWN:
-				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-				else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
-				else if (e->key.keysym.sym == SDLK_TAB) {
-					textFocus = TEXT_NO_FOCUS;
-					SDL_StopTextInput();
-				}
-				else if (e->key.keysym.sym == SDLK_RETURN) {
-					this->screen = NO_MAINSCREEN;
-					this->enMainScreen = false;
-					this->textFocus = TEXT_NO_FOCUS;
-					SDL_StopTextInput();
 
-					//testing
-					switch (perSelect.at(filaP1).at(columnaP1)) {
-					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-					}
-				}
-				break;
-			case SDL_WINDOWEVENT:
-				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
-		}
+	case SDL_MOUSEBUTTONDOWN:
 		break;
+
+	case SDL_TEXTINPUT:
+		if (textFocus == TEXT_FOCUS_P1)		nombreP1 += e->text.text;
+		break;
+
+	case SDL_KEYDOWN:
+		switch (textFocus) {
+
+		case TEXT_NO_FOCUS:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
+			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
+			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
+			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
+			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
+			else if (e->key.keysym.sym == SDLK_TAB) {
+				textFocus = TEXT_FOCUS_P1;
+				SDL_StartTextInput();
+			}
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+
+				//testing
+				switch (perSelect.at(filaP1).at(columnaP1)) {
+				case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+				case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+				}
+			}
+		break;
+
+		case TEXT_FOCUS_P1:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
+			else if (e->key.keysym.sym == SDLK_TAB) {
+				textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+			}
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+				this->textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+
+				//testing
+				switch (perSelect.at(filaP1).at(columnaP1)) {
+				case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+				case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+				}
+			}
+		break;
+		}
+	break;
 	}
 }
 
