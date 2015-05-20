@@ -462,6 +462,20 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
+		backORplay = this->_mainScreen->mouseOverBackOrPlay();
+		switch (backORplay) {
+		case BACK_BOTON:
+			this->screen = MAINSCREEN_MODE_SELECT;
+			this->textFocus = TEXT_NO_FOCUS;
+			SDL_StopTextInput();
+			break;
+		case PLAY_BOTON:
+			this->screen = NO_MAINSCREEN;
+			this->enMainScreen = false;
+			this->textFocus = TEXT_NO_FOCUS;
+			SDL_StopTextInput();
+			break;
+		}
 		break;
 
 	case SDL_TEXTINPUT:
