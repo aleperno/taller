@@ -52,6 +52,4 @@ class Hud{
 		hudPersonaje hud2;
 };
 
-
-
 #endif /* HEADERS_HUD_H_ */

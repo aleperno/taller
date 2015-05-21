@@ -24,6 +24,7 @@ using namespace std;
 #include <StringUtil.h>
 #include <HUD.h>
 #include <MainScreen.h>
+#include <Temporizador.h>
 
 
 #define DEF_SLEEP_TIME 20
@@ -67,9 +68,7 @@ class GameController
 		int screen;
 		int modeSelected;
 		vector< vector<int> > perSelect;
-		Uint32 startTime;
-		Uint32 pauseTime;
-		Uint32 pauseAccumulator;
+		Temporizador* _fightTimer;
 		int tiempoRemanente;
 
 		//Metodos
