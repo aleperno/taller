@@ -67,9 +67,9 @@ class GameController
 		int screen;
 		int modeSelected;
 		vector< vector<int> > perSelect;
-		clock_t startTime;
-		clock_t pauseTime;
-		clock_t pauseAccumulator;
+		Uint32 startTime;
+		Uint32 pauseTime;
+		Uint32 pauseAccumulator;
 		int tiempoRemanente;
 
 		//Metodos

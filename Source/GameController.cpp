@@ -181,7 +181,7 @@ void GameController::printLayers()
 		this->_personaje2->view(_personaje1);
 	}
 
-	//cout << clock() << endl;
+	//cout << SDL_GetTicks() << endl;
 	this->_hud->printHUD(tiempoRemanente);
 
 	//ActualizoPantalla
@@ -577,11 +577,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) {
 				minimizado = true;
 				//momento de pausar
-				pauseTime = clock();
+				pauseTime = SDL_GetTicks();
 			} else if (e->window.event == SDL_WINDOWEVENT_RESTORED) {
 				minimizado = false;
 				//acumula sumando diferencia entre momento actual y cuando se minimizo
-				pauseAccumulator = pauseAccumulator + (clock() - pauseTime);
+				pauseAccumulator = pauseAccumulator + (SDL_GetTicks() - pauseTime);
 			}
 			break;
 		}
@@ -758,7 +758,7 @@ void GameController::procesamientoMainScreenPVP() {
 	}
 	//esa linea marca instante cuando arranco la partida
 	//no tiene que estar aca, pero primero hay que reformar run
-	startTime = clock();
+	startTime = SDL_GetTicks();
 
 	if (!this->minimizado)
 		this->_mainScreen->showPVP(filaP1,columnaP1,filaP2,columnaP2,textFocus,nombreP1,nombreP2);
@@ -775,7 +775,7 @@ void GameController::procesamientoMainScreenPVE() {
 	}
 	//esa linea marca instante cuando arranco la partida
 	//no tiene que estar aca, pero primero hay que reformar run
-	startTime = clock();
+	startTime = SDL_GetTicks();
 
 	if (!this->minimizado)
 		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
@@ -792,7 +792,7 @@ void GameController::procesamientoMainScreenTraining() {
 	}
 	//esa linea marca instante cuando arranco la partida
 	//no tiene que estar aca, pero primero hay que reformar run
-	startTime = clock();
+	startTime = SDL_GetTicks();
 
 	if (!this->minimizado)
 		this->_mainScreen->showTraining(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
@@ -841,7 +841,7 @@ void GameController::run()
 				this->moveLayers(_personaje1,_personaje2);
 				this->moveLayers(_personaje2,_personaje1);
 				//tiempo remanente = (tiempo dedicado[s] - (momento actual - tiempo de partida - tiempo pausado)[s])
-				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
+				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)SDL_GetTicks() - startTime - pauseAccumulator)/1000);
 				if (this->actualizarGanador()) {
 					this->reloadConfig();		
 				}
@@ -916,7 +916,7 @@ void GameController::reloadConfig()
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
 	//reiniciar el timer
-	startTime = clock();
+	startTime = SDL_GetTicks();
 	pauseAccumulator = 0;
 }
 
