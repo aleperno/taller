@@ -284,8 +284,13 @@ void MainScreen::veiwFaces() {
 	}
 }
 
-void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int textFocus, string nombre1, string nombre2) {
+void MainScreen::showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus, string nombre1, string nombre2, int boton) {
 	this->_ventana->clearScreen();
+
+	int fila1 = pair1.first;
+	int columna1 = pair1.second;
+	int fila2 = pair2.first;
+	int columna2 = pair2.second;
 
 	veiwFaces();
 
@@ -376,6 +381,10 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 
 	}
 
+	if (boton == BACK_BOTON)
+		this->back_boton->viewHighlight(&selected1Color);
+	if (boton == PLAY_BOTON)
+		this->play_boton->viewHighlight(&selected1Color);
 	this->back_boton->view();
 	this->play_boton->view();
 

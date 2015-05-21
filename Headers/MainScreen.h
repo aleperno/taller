@@ -109,7 +109,7 @@ public:
 
 	//PvP
 	TextureHandler* thisIsPVP;
-	void showPVP(int fila1, int columna1, int fila2, int columna2, int textFocus, string nombre1, string nombre2);
+	void showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus, string nombre1, string nombre2, int boton);
 
 	//PvE & Training
 	TextureHandler* thisIsPVE;
