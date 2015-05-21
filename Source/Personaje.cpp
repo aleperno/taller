@@ -176,8 +176,10 @@ void Personaje::setBoundingBox()
 
     if((this->_isHiPunching ) && (this->_isDucking))
     {
-                    boundingBox.x = this->get_x_px() + 50;
-                    boundingBox.y = this->get_y_px() * 1.2;
+    				//cout << "SARASAAA" << endl;
+                    //boundingBox.x = this->get_x_px() + this->_ancho_log;
+    				boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+    				boundingBox.y = this->get_y_px() * 1.2;
                     boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
                     boundingBox.h = this->_alto_px / 1.2;
     }

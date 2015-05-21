@@ -796,9 +796,9 @@ void GameController::run()
 				_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 				this->moveLayers(_personaje1,_personaje2);
 				this->moveLayers(_personaje2,_personaje1);
-				//tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
+				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/100000);
 				//TODO revisar esto
-				tiempoRemanente = 10;
+				//tiempoRemanente = 10;
 				if (this->actualizarGanador()) {
 					this->reloadConfig();		
 				}
