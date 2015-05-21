@@ -113,6 +113,7 @@ class GameController
 		int filaP2;
 		int columnaP2;
 		int textFocus;
+		int botonSeleccionadoEnModo;
 
 		string nombreP1;
 		string nombreP2;
@@ -124,6 +125,7 @@ class GameController
 		void procesamientoMainScreenTraining();
 
 		//Testing
+		void nameSelectPVPandTraining();
 		void viewWindowPosition();
 		bool canMoveRight(Personaje* pers, Personaje* otherPers);
 		bool canMoveLeft(Personaje* pers, Personaje* otherPers);

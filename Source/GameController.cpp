@@ -44,6 +44,8 @@ GameController::GameController(Parser* parser)
 	enMainScreen = true;
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
+	botonSeleccionadoEnModo = PLAY_BOTON;
+
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
@@ -441,73 +443,109 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 	}
 }
 
+void GameController::nameSelectPVPandTraining() {
+	switch (perSelect.at(filaP1).at(columnaP1)) {
+	case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
+	case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
+	}
+}
+
 void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 	procesarEventosMainScreenTraining(e);
 }
 
 void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
-	switch (textFocus) {
-	case TEXT_NO_FOCUS:
-		switch (e->type) {
-			case SDL_KEYDOWN:
-				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-				else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-				else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
-				else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
-				else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-				else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
-				else if (e->key.keysym.sym == SDLK_TAB) {
-					textFocus = TEXT_FOCUS_P1;
-					SDL_StartTextInput();
-				}
-				else if (e->key.keysym.sym == SDLK_RETURN) {
-					this->screen = NO_MAINSCREEN;
-					this->enMainScreen = false;
-					this->textFocus = TEXT_NO_FOCUS;
-					SDL_StopTextInput();
+	int backORplay;
+	switch (e->type) {
 
-					//testing
-					switch (perSelect.at(filaP1).at(columnaP1)) {
-					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-					}
+	case SDL_WINDOWEVENT:
+		if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+		else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+		break;
+		
+	case SDL_MOUSEMOTION:
+		backORplay = this->_mainScreen->mouseOverBackOrPlay();
+		if (backORplay != NINGUNO)	this->botonSeleccionadoEnModo = backORplay;
+		break;
+
+	case SDL_MOUSEBUTTONDOWN:
+		backORplay = this->_mainScreen->mouseOverBackOrPlay();
+		switch (backORplay) {
+		case BACK_BOTON:
+			this->screen = MAINSCREEN_MODE_SELECT;
+			this->textFocus = TEXT_NO_FOCUS;
+			SDL_StopTextInput();
+			break;
+		case PLAY_BOTON:
+			this->screen = NO_MAINSCREEN;
+			this->enMainScreen = false;
+			this->textFocus = TEXT_NO_FOCUS;
+			SDL_StopTextInput();
+
+			//testing
+			nameSelectPVPandTraining();
+			break;
+		case NINGUNO:
+			if (this->_mainScreen->clickOnTextCamp() == TEXT_FOCUS_P1) {
+				textFocus = TEXT_FOCUS_P1;
+				SDL_StartTextInput();
+			} else {
+				textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+				if ((this->_mainScreen->faceSelected().first >= 0) && (this->_mainScreen->faceSelected().second >= 0)) {
+					this->filaP1 = this->_mainScreen->faceSelected().first;
+					this->columnaP1 = this->_mainScreen->faceSelected().second;
 				}
-				break;
-			case SDL_WINDOWEVENT:
-				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+			}
 		}
 		break;
-	case TEXT_FOCUS_P1:
-		switch (e->type) {
-			case SDL_TEXTINPUT:
-				nombreP1 += e->text.text;
-				break;
-			case SDL_KEYDOWN:
-				if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-				else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
-				else if (e->key.keysym.sym == SDLK_TAB) {
-					textFocus = TEXT_NO_FOCUS;
-					SDL_StopTextInput();
-				}
-				else if (e->key.keysym.sym == SDLK_RETURN) {
-					this->screen = NO_MAINSCREEN;
-					this->enMainScreen = false;
-					this->textFocus = TEXT_NO_FOCUS;
-					SDL_StopTextInput();
 
-					//testing
-					switch (perSelect.at(filaP1).at(columnaP1)) {
-					case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-					case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-					}
-				}
-				break;
-			case SDL_WINDOWEVENT:
-				if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
-				else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
-		}
+	case SDL_TEXTINPUT:
+		if (textFocus == TEXT_FOCUS_P1)		nombreP1 += e->text.text;
 		break;
+
+	case SDL_KEYDOWN:
+		switch (textFocus) {
+
+		case TEXT_NO_FOCUS:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
+			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
+			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
+			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
+			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
+			else if (e->key.keysym.sym == SDLK_TAB) {
+				textFocus = TEXT_FOCUS_P1;
+				SDL_StartTextInput();
+			}
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+
+				//testing
+				nameSelectPVPandTraining();
+			}
+		break;
+
+		case TEXT_FOCUS_P1:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
+			else if (e->key.keysym.sym == SDLK_TAB) {
+				textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+			}
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+				this->textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+
+				//testing
+				nameSelectPVPandTraining();
+			}
+		break;
+		}
+	break;
 	}
 }
 
@@ -538,9 +576,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) {
 				minimizado = true;
+				//momento de pausar
 				pauseTime = clock();
 			} else if (e->window.event == SDL_WINDOWEVENT_RESTORED) {
 				minimizado = false;
+				//acumula sumando diferencia entre momento actual y cuando se minimizo
 				pauseAccumulator = pauseAccumulator + (clock() - pauseTime);
 			}
 			break;
@@ -716,7 +756,8 @@ void GameController::procesamientoMainScreenPVP() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventosMainScreenPVP(&e);
 	}
-
+	//esa linea marca instante cuando arranco la partida
+	//no tiene que estar aca, pero primero hay que reformar run
 	startTime = clock();
 
 	if (!this->minimizado)
@@ -732,11 +773,12 @@ void GameController::procesamientoMainScreenPVE() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventosMainScreenPVE(&e);
 	}
-
+	//esa linea marca instante cuando arranco la partida
+	//no tiene que estar aca, pero primero hay que reformar run
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1);
+		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }
@@ -748,11 +790,12 @@ void GameController::procesamientoMainScreenTraining() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventosMainScreenTraining(&e);
 	}
-
+	//esa linea marca instante cuando arranco la partida
+	//no tiene que estar aca, pero primero hay que reformar run
 	startTime = clock();
 
 	if (!this->minimizado)
-		this->_mainScreen->showTraining(filaP1,columnaP1,textFocus,nombreP1);
+		this->_mainScreen->showTraining(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
 	else
 		SDL_Delay(DEF_SLEEP_TIME);
 }
@@ -761,6 +804,7 @@ void GameController::run()
 {
 	SDL_Event e;
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
+	//ese tampoco tiene que estar aca, pero hay que cambiar run
 	pauseAccumulator = 0;
 	while (!this->_end_of_game)
 	{
@@ -796,9 +840,8 @@ void GameController::run()
 				_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 				this->moveLayers(_personaje1,_personaje2);
 				this->moveLayers(_personaje2,_personaje1);
-				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/100000);
-				//TODO revisar esto
-				//tiempoRemanente = 10;
+				//tiempo remanente = (tiempo dedicado[s] - (momento actual - tiempo de partida - tiempo pausado)[s])
+				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)clock() - startTime - pauseAccumulator)/1000);
 				if (this->actualizarGanador()) {
 					this->reloadConfig();		
 				}
@@ -872,6 +915,7 @@ void GameController::reloadConfig()
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
 	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
+	//reiniciar el timer
 	startTime = clock();
 	pauseAccumulator = 0;
 }

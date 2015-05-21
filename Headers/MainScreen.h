@@ -19,6 +19,11 @@
 #define SELECTED_PVE 1
 #define SELECTED_TRAINING 2
 
+//Botones 'back' y 'play'
+#define NINGUNO -1
+#define BACK_BOTON 0
+#define PLAY_BOTON 1
+
 //Personajes
 #define LIUKANG 0
 #define SCORPION 1
@@ -63,6 +68,9 @@ public:
 	Boton* nombreP1_boton;
 	Boton* nombreP2_boton;
 
+	Boton* back_boton;
+	Boton* play_boton;
+
 	int topLeftX;
 	int topLeftY;
 	int faceH;
@@ -71,6 +79,9 @@ public:
 	void prepararPerSelect();
 	void veiwFaces();
 	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
+	int mouseOverBackOrPlay();
+	int clickOnTextCamp();
+	pair<int,int> faceSelected();	//x,y
 
 	//Intro
 	SDL_Rect gateLeft;
@@ -103,8 +114,8 @@ public:
 	//PvE & Training
 	TextureHandler* thisIsPVE;
 	TextureHandler* thisIsTraining;
-	void showPVE(int fila, int columna, int textFocus, string nombre);
-	void showTraining(int fila, int columna, int textFocus, string nombre);
+	void showPVE(int fila, int columna, int textFocus, string nombre, int boton);
+	void showTraining(int fila, int columna, int textFocus, string nombre, int boton);
 };
 
 #endif /* HEADERS_MAINSCREEN_H_ */

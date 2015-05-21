@@ -1266,9 +1266,9 @@ void Personaje::continueAction(float factor_x, float factor_y, Personaje* otherP
 			if(this->hayColision(this->boundingBox, otherPers->boundingBox))
 			{
 				if(!this->_orientacion)
-					this->_pos_x = this->_pos_x - this->_ancho_log / 10;
+					this->_pos_x = this->_pos_x - this->_ancho_log / 5;
 				else
-					this->_pos_x = this->_pos_x + this->_ancho_log / 10;
+					this->_pos_x = this->_pos_x + this->_ancho_log / 5;
 			}
 		}
 		else

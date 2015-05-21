@@ -25,6 +25,9 @@ MainScreen::~MainScreen()
 
 	delete this->nombreP1_boton;
 	delete this->nombreP2_boton;
+
+	delete this->back_boton;
+	delete this->play_boton;
 }
 
 MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
@@ -142,9 +145,16 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
 	TextureHandler* nombreP2 = new TextureHandler( _ventana->_gRenderer );
 	nombreP1->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
 	nombreP2->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
-	nombreP1_boton = new Boton(this->_ventana, nombreP1, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
-	nombreP2_boton = new Boton(this->_ventana, nombreP2, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
+	nombreP1_boton = new Boton(this->_ventana, nombreP1, _ventana->_ancho_px*1/4, _ventana->_alto_px*7/10);
+	nombreP2_boton = new Boton(this->_ventana, nombreP2, _ventana->_ancho_px*3/4, _ventana->_alto_px*7/10);
 
+	//botones 'back' y 'play'
+	TextureHandler* back = new TextureHandler( _ventana->_gRenderer );
+	TextureHandler* play = new TextureHandler( _ventana->_gRenderer );
+	back->loadFromRenderedText("back", textColor, fontMenu);
+	play->loadFromRenderedText("play", textColor, fontMenu);
+	back_boton = new Boton(this->_ventana, back, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
+	play_boton = new Boton(this->_ventana, play, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
 }
 
 void MainScreen::prepararPerSelect() {
@@ -204,6 +214,36 @@ int MainScreen::mouseOverMode() {
 	else if (this->modePVE_boton->mouseOver()) return SELECTED_PVE;
 	else if (this->modeTraining_boton->mouseOver()) return SELECTED_TRAINING;
 	else return NOT_SELECTED;
+}
+
+int MainScreen::mouseOverBackOrPlay() {
+	if (this->back_boton->mouseOver()) return BACK_BOTON;
+	else if (this->play_boton->mouseOver()) return PLAY_BOTON;
+	else return NINGUNO;
+}
+
+int MainScreen::clickOnTextCamp() {
+	if (this->nombreP1_boton->mouseOver()) return TEXT_FOCUS_P1;
+	else if (this->nombreP2_boton->mouseOver()) return TEXT_FOCUS_P2;
+	else return TEXT_NO_FOCUS;
+}
+
+pair<int,int> MainScreen::faceSelected() {
+	int x,y;
+	SDL_GetMouseState(&x, &y);
+	pair<int,int> seleccionado = make_pair(-1,-1);
+
+	for (unsigned int fila=0; fila<_perSelect->size(); fila++) {
+		for (unsigned int columna=0; columna<_perSelect->at(fila).size(); columna++)
+			if ((x >= posicionesCaras.at(fila).at(columna).first) &&
+				(x <= posicionesCaras.at(fila).at(columna).first + faceW) &&
+				(y >= posicionesCaras.at(fila).at(columna).second) &&
+				(y <= posicionesCaras.at(fila).at(columna).second + faceH)) {
+					seleccionado.first = fila;
+					seleccionado.second = columna;
+			}
+	}
+	return seleccionado;
 }
 
 void MainScreen::showModeSelect(int modeSelected) {
@@ -336,12 +376,15 @@ void MainScreen::showPVP(int fila1, int columna1, int fila2, int columna2, int t
 
 	}
 
+	this->back_boton->view();
+	this->play_boton->view();
+
 	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
 
-void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre) {
-	showTraining(fila,columna,textFocus,nombre);
+void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre, int boton) {
+	showTraining(fila,columna,textFocus,nombre, boton);
 }
 
 void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
@@ -350,7 +393,7 @@ void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
 	nombreBoton->viewExternBox(color);
 }
 
-void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre) {
+void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre, int boton) {
 	this->_ventana->clearScreen();
 
 	veiwFaces();
@@ -372,6 +415,13 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
 		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
 	}
+
+	if (boton == BACK_BOTON)
+		this->back_boton->viewHighlight(&selected1Color);
+	if (boton == PLAY_BOTON)
+		this->play_boton->viewHighlight(&selected1Color);
+	this->back_boton->view();
+	this->play_boton->view();
 
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
