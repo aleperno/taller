@@ -31,25 +31,20 @@ class Hud{
 		Ventana* _ventana;
 		Personaje* _personaje1;
 		Personaje* _personaje2;
-		//SDL_Color colorExterno;
-		//SDL_Color colorExternoIlum;
+		SDL_Color colorExterno;
 		SDL_Color colorInterno;
 		SDL_Color colorVida;
 		SDL_Color colorVidaIlum;
-		SDL_Color colorTexto;
+		SDL_Color colorNombres;
+		SDL_Color colorTimer;
 		struct hudPersonaje {
-			//SDL_Rect externo;
-			//SDL_Rect externoIlum;
+			SDL_Rect externo;
 			SDL_Rect interno;
 			SDL_Rect healthIlum;
 			SDL_Rect health;
 			TextureHandler* nombreTexture;
-			//SDL_Rect nombre;
 		};
 		struct hudTime {
-			//SDL_Rect externo;
-			//SDL_Rect externoIlum;
-			//SDL_Rect interno;
 			TextureHandler* timeTexture;
 		};
 		hudTime hudTiempo;
