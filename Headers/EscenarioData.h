@@ -5,8 +5,8 @@
  *      Author: neo
  */
 
-#ifndef HEADERS_ESCRITORIO_H_
-#define HEADERS_ESCRITORIO_H_
+#ifndef HEADERS_ESCENARIODATA_H_
+#define HEADERS_ESCENARIODATA_H_
 
 class EscenarioData
 {
@@ -17,4 +17,4 @@ class EscenarioData
 		int	z_index;
 };
 
-#endif /* HEADERS_ESCRITORIO_H_ */
+#endif /* HEADERS_ESCENARIODATA_H_ */

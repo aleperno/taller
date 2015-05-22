@@ -4,8 +4,8 @@
  *  Created on: Mar 28, 2015
  *      Author: neo
  */
-#ifndef HEADERS_CAPA_H_
-#define HEADERS_CAPA_H_
+#ifndef HEADERS_CAPADATA_H_
+#define HEADERS_CAPADATA_H_
 #include <string>
 using namespace std;
 #include <Logger.h>
@@ -23,4 +23,4 @@ class CapaData
 
 
 
-#endif /* HEADERS_CAPA_H_ */
+#endif /* HEADERS_CAPADATA_H_ */

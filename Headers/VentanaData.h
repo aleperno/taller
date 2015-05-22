@@ -5,8 +5,8 @@
  *      Author: neo
  */
 
-#ifndef HEADERS_VENTANA_H_
-#define HEADERS_VENTANA_H_
+#ifndef HEADERS_VENTANADATA_H_
+#define HEADERS_VENTANADATA_H_
 
 #include <string>
 using namespace std;
@@ -20,4 +20,4 @@ class VentanaData
 		float ancho;
 };
 
-#endif /* HEADERS_VENTANA_H_ */
+#endif /* HEADERS_VENTANADATA_H_ */
