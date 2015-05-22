@@ -839,9 +839,39 @@ void GameController::procesamientoMainScreenTraining() {
 		SDL_Delay(DEF_SLEEP_TIME);
 }
 
-void GameController::run()
-{
+void GameController::runPVP() {
 	SDL_Event e;
+	while( SDL_PollEvent(&e) != 0 ) {
+		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+		this->procesarEventos(&e);
+	}
+
+	if (!this->minimizado) {
+
+		this->procesarMovimientoJoystick();
+ 		this->getKeys();
+		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
+		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
+		this->moveLayers(_personaje1,_personaje2);
+		this->moveLayers(_personaje2,_personaje1);
+		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
+		if (this->actualizarGanador())
+			this->reloadConfig();		
+		this->printLayers();
+
+	} else	SDL_Delay(DEF_SLEEP_TIME);
+}
+
+void GameController::runPVE() {
+	runPVP();
+}
+
+void GameController::runTraining() {
+	runPVP();
+}
+
+
+void GameController::run() {
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
 	while (!this->_end_of_game)
 	{
@@ -865,24 +895,17 @@ void GameController::run()
 			}
 
 		} else {
-			while( SDL_PollEvent(&e) != 0 )
-			{
-				if( e.type == SDL_QUIT ) this->setEndOfGame(true);
-				this->procesarEventos(&e);
+			switch (modeSelected) {
+			case SELECTED_PVP:
+				runPVP();
+				break;
+			case SELECTED_PVE:
+				runPVE();
+				break;
+			case SELECTED_TRAINING:
+				runTraining();
+				break;
 			}
-			if (!this->minimizado) {
-				this->procesarMovimientoJoystick();
- 				this->getKeys();
-				_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
-				_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
-				this->moveLayers(_personaje1,_personaje2);
-				this->moveLayers(_personaje2,_personaje1);
-				tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-				if (this->actualizarGanador()) {
-					this->reloadConfig();		
-				}
-				this->printLayers();
-			} else { SDL_Delay(DEF_SLEEP_TIME); }
 		}
 	}
 	this->close();
