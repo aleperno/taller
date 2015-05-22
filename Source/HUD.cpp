@@ -89,14 +89,14 @@ Hud::Hud(Ventana* ventana)
 	this->fontTimer = TTF_OpenFont(FONT_PATH,hudInternoH);
 	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
+	this->hudTiempo.timeTexture = new TextureHandler( _ventana->_gRenderer );
 
 }
 
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
 	this->_personaje1 = personaje1;
 	this->_personaje2 = personaje2;
-		
-	this->hudTiempo.timeTexture = new TextureHandler( _ventana->_gRenderer );
+
 	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, colorNombres, fontNombres);
 	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, colorNombres, fontNombres);
 }
