@@ -5,16 +5,20 @@
  *      Author: neo
  */
 
-#ifndef HEADERS_PERSONAJE_H_
-#define HEADERS_PERSONAJE_H_
+#ifndef HEADERS_PERSONAJEDATA_H_
+#define HEADERS_PERSONAJEDATA_H_
 
-#define CANTIDAD_MAXIMA_SPRITES 20
+#include <string>
+#include <JugadorData.h>
+#include <CaracterData.h>
 
 using namespace std;
 
 class PersonajeData
 {
 	public:
+		void llenarDatos(JugadorData* jugador, CaracterData* caracter);
+
 		float ancho;
 		float alto;
 		bool orientacion;
@@ -38,8 +42,6 @@ class PersonajeData
 		int width;
 		int size;
 
-		// [ spritesWalk , spritesIdle , spritesJumpUp , spritesJumpFwd ,
-		//   spritesJumpBwd , spritesDuck ]
 		vector<int> cantSprites;
 		vector<int> anchoSprites;
 		vector<int> velSprites;
@@ -55,7 +57,4 @@ class PersonajeData
 		int getAR() { return this->arrojar;}
 };
 
-
-
-
-#endif /* HEADERS_PERSONAJE_H_ */
+#endif /* HEADERS_PERSONAJEDATA_H_ */
