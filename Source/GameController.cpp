@@ -42,30 +42,30 @@ void GameController::KillController()
 
 GameController::GameController(Parser* parser)
 {
+	_end_of_game = false;
 	minimizado = false;
 	enMainScreen = true;
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
-
+	
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
 	this->_hayPlayer1 = false;
 	this->_hayPlayer2 = false;
-	if(!iniciarSDL()) {
+	if(!iniciarSDL())
 		Logger::Instance()->log(ERROR,"SDL could not initialize!");
-		Logger::Instance()->log(ERROR,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
-	} else {
-		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
-	}
+	Logger::Instance()->log(ERROR,"Joysticks detectados: " + StringUtil::int2string(this->_numJoysticks));
+
 	TTF_Init();
+
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
-	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
-	_end_of_game = false;
+	_hud = new Hud(_ventana);
+
 	iniciarEstructuraPerSelect();
 	_mainScreen = new MainScreen(_ventana,&perSelect);
 	_fightTimer = new Temporizador();
@@ -112,12 +112,6 @@ void GameController::iniciarEstructuraPerSelect() {
 	filaP2 = 0;
 	columnaP2 = 3;
 	textFocus = TEXT_NO_FOCUS;
-}
-
-Hud* GameController::getHud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
-{
-	Hud* hud = new Hud(ventana, personaje1, personaje2);
-	return hud;
 }
 
 Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, bool pers_ppal)
@@ -840,6 +834,8 @@ void GameController::procesamientoMainScreenTraining() {
 }
 
 void GameController::runPVP() {
+	_hud->setearPersonajes(_personaje1, _personaje2);
+	
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 ) {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
@@ -863,10 +859,12 @@ void GameController::runPVP() {
 }
 
 void GameController::runPVE() {
+	//TODO: los modos son distintos
 	runPVP();
 }
 
 void GameController::runTraining() {
+	//TODO: los modos son distintos
 	runPVP();
 }
 
@@ -973,7 +971,8 @@ void GameController::reloadConfig()
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
-	_hud = GameController::getHud(_ventana, _personaje1, _personaje2);
+	_hud = new Hud(_ventana);
+	_hud->setearPersonajes(_personaje1, _personaje2);
 	//reiniciar el timer
 	this->_fightTimer->reset();
 }

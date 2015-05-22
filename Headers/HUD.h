@@ -19,8 +19,9 @@
 
 class Hud{
 	public:
-		Hud(Ventana* ventana, Personaje* _personaje1, Personaje* _personaje2);
+		Hud(Ventana* ventana);
 		~Hud();
+		void setearPersonajes(Personaje* personaje1, Personaje* personaje2);
 		void prepararHUD();
 		void actualizarHealthbars();
 		void printHUD();

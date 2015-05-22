@@ -18,7 +18,7 @@ Hud::~Hud()
 	fontTimer = NULL;
 }
 
-Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
+Hud::Hud(Ventana* ventana)
 {
 	this->colorExterno.r = 0x99;
 	this->colorExterno.g = 0x99;
@@ -47,8 +47,6 @@ Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
 
 	this->colorTimer = colorVida;
 
-	this->_personaje1 = personaje1;
-	this->_personaje2 = personaje2;
 	this->_ventana = ventana;
 
 	int hudInternoH = _ventana->_alto_px/25;
@@ -91,10 +89,18 @@ Hud::Hud(Ventana* ventana, Personaje* personaje1, Personaje* personaje2)
 	this->fontTimer = TTF_OpenFont(FONT_PATH,hudInternoH);
 	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
+
+}
+
+void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
+	this->_personaje1 = personaje1;
+	this->_personaje2 = personaje2;
+		
 	this->hudTiempo.timeTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, colorNombres, fontNombres);
 	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, colorNombres, fontNombres);
 }
+
 
 void Hud::actualizarHealthbars() {
 	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
@@ -105,7 +111,6 @@ void Hud::actualizarHealthbars() {
 	this->hud2.health.x = _ventana->_ancho_px - this->hud2.interno.h/2 - this->hud2.health.w;
 	this->hud2.healthIlum.x = _ventana->_ancho_px - this->hud2.interno.h/2 - this->hud2.health.w;
 }
-
 
 void Hud::printHUD() {
 
