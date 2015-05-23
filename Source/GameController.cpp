@@ -408,7 +408,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
-			actualizarPersonajes();
 		break;
 
 		case NINGUNO:
@@ -471,9 +470,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_RETURN) {
 				this->screen = NO_MAINSCREEN;
 				this->enMainScreen = false;
-				this->textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-				actualizarPersonajes();
 			}
 		break;
 
@@ -493,7 +489,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-				actualizarPersonajes();
 			}
 		break;
 
@@ -513,7 +508,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-				actualizarPersonajes();
 			}
 		break;
 		}
@@ -554,7 +548,6 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
-			actualizarPersonajes();
 		break;
 
 		case NINGUNO:
@@ -594,7 +587,6 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_RETURN) {
 				this->screen = NO_MAINSCREEN;
 				this->enMainScreen = false;
-				actualizarPersonajes();
 			}
 		break;
 
@@ -610,7 +602,6 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-				actualizarPersonajes();
 			}
 		break;
 		}
@@ -868,11 +859,8 @@ void GameController::procesamientoMainScreenTraining() {
 }
 
 void GameController::runPVP() {
-	_hud->setearPersonajes(_personaje1, _personaje2);
-	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
-	if (this->nombreP2.length() == 0)	this->nombreP2 = _personaje2->getData()->nombre;
-	_hud->recargarNombres();
-	
+	prepararPartida();
+
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 ) {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
@@ -905,6 +893,14 @@ void GameController::runTraining() {
 	runPVP();
 }
 
+void GameController::prepararPartida() {
+	actualizarPersonajes();
+
+	_hud->setearPersonajes(_personaje1, _personaje2);
+	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
+	if (this->nombreP2.length() == 0)	this->nombreP2 = _personaje2->getData()->nombre;
+	_hud->recargarNombres();
+}
 
 void GameController::run() {
 	Logger::Instance()->log(DEBUG,"Comienzo ciclo de Juego");
@@ -943,7 +939,6 @@ void GameController::run() {
 			}
 		}
 	}
-	//this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
 }
 
@@ -972,57 +967,6 @@ void GameController::toMainScreen() {
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
 }
-
-/*void GameController::close()
-{
-	if (hayPlayer1()) {
-		SDL_JoystickClose(this->_joystickOne);
-		this->_joystickOne = NULL;
-		this->setPlayer1(false);
-	}
-	if (hayPlayer2()) {
-		SDL_JoystickClose(this->_joystickTwo);
-		this->_joystickTwo = NULL;
-		this->setPlayer2(false);
-	}
-
-	delete(_hud);
-
-	delete this->_ventana;
-	this->_ventana = NULL;
-	
-	delete this->_personaje1;
-	this->_personaje1 = NULL;
-	delete this->_personaje2;
-	this->_personaje2 = NULL;
-
-	for(std::size_t i=0; i<this->_capas.size(); ++i) {
-		delete this->_capas[i];
-	}
-	_capas.clear();
-}
-
-void GameController::reloadConfig()
-{
-	Logger::Instance()->log(DEBUG,"Se recarga la Configuracion");
-	Parser::Instance()->reload();
-	Parser* parser = Parser::Instance();
-	this->close();
-
-	if(!iniciarSDL())
-		Logger::Instance()->log(ERROR,"SDL could not initialize!");
-	else
-		Logger::Instance()->log(DEBUG,"Joysticks detectados: " + StringUtil::int2string(SDL_NumJoysticks()));
-	_ventana = GameController::getVentana(parser);
-	_escenario = GameController::getEscenario(parser);
-	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje1->resetear(true);
-	_personaje2->resetear(false);
-	_hud = new Hud(_ventana,&nombreP1,&nombreP2);
-	_hud->setearPersonajes(_personaje1, _personaje2);
-	//reiniciar el timer
-	this->_fightTimer->reset();
-}*/
 
 void GameController::getKeysPlayer2() {
 
