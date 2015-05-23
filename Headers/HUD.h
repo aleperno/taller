@@ -19,9 +19,10 @@
 
 class Hud{
 	public:
-		Hud(Ventana* ventana);
+		Hud(Ventana* ventana, string* nombreP1, string* nombreP2);
 		~Hud();
 		void setearPersonajes(Personaje* personaje1, Personaje* personaje2);
+		void recargarNombres();
 		void prepararHUD();
 		void actualizarHealthbars();
 		void printHUD();
@@ -30,6 +31,8 @@ class Hud{
 		TTF_Font* fontNombres;
 		TTF_Font* fontTimer;
 		Ventana* _ventana;
+		string* _nombreP1;
+		string* _nombreP2;
 		Personaje* _personaje1;
 		Personaje* _personaje2;
 		SDL_Color colorExterno;

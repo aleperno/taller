@@ -18,8 +18,11 @@ Hud::~Hud()
 	fontTimer = NULL;
 }
 
-Hud::Hud(Ventana* ventana)
+Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 {
+	this->_nombreP1 = nombreP1;
+	this->_nombreP2 = nombreP2;
+
 	this->colorExterno.r = 0x99;
 	this->colorExterno.g = 0x99;
 	this->colorExterno.b = 0x99;
@@ -96,11 +99,12 @@ Hud::Hud(Ventana* ventana)
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
 	this->_personaje1 = personaje1;
 	this->_personaje2 = personaje2;
-
-	this->hud1.nombreTexture->loadFromRenderedText(_personaje1->_personajeData.nombre, colorNombres, fontNombres);
-	this->hud2.nombreTexture->loadFromRenderedText(_personaje2->_personajeData.nombre, colorNombres, fontNombres);
 }
 
+void Hud::recargarNombres() {
+	this->hud1.nombreTexture->loadFromRenderedText(*_nombreP1, colorNombres, fontNombres);
+	this->hud2.nombreTexture->loadFromRenderedText(*_nombreP2, colorNombres, fontNombres);
+}
 
 void Hud::actualizarHealthbars() {
 	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / 100;

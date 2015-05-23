@@ -64,7 +64,7 @@ GameController::GameController(Parser* parser)
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
-	_hud = new Hud(_ventana);
+	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
 
 	iniciarEstructuraPerSelect();
 	_mainScreen = new MainScreen(_ventana,&perSelect);
@@ -835,6 +835,9 @@ void GameController::procesamientoMainScreenTraining() {
 
 void GameController::runPVP() {
 	_hud->setearPersonajes(_personaje1, _personaje2);
+	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
+	if (this->nombreP2.length() == 0)	this->nombreP2 = _personaje2->getData()->nombre;
+	_hud->recargarNombres();
 	
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 ) {
@@ -971,7 +974,7 @@ void GameController::reloadConfig()
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
 	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
-	_hud = new Hud(_ventana);
+	_hud = new Hud(_ventana,&nombreP1,&nombreP2);
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	//reiniciar el timer
 	this->_fightTimer->reset();
