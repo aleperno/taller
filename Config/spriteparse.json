@@ -29,7 +29,7 @@
 		"barrido":		[150,8,4],
 		"arma":			[150,3,4],
 		"duckLoPunch":	[150,5,4],
-		"imgSrc":	"Images/characters/liukang2.png",
+		"imgSrc":	"Images/characters/liukang.png",
 		"color-alternativo": {
 					"h-inicial": -20,
 					"h-final": 10,
