@@ -11,6 +11,21 @@
 #define MOVE_P_FACTOR 1
 #define JMP_FACTOR 2
 
+#define IDLE "I"
+#define UP_LEFT "UL"
+#define UP_RIGHT "UR"
+#define UP "U"
+#define DUCK "D"
+#define DUCK_BLOCK "DB"
+#define LEFT "L"
+#define RIGHT "R"
+#define FIRE "F"
+#define BLOCK "B"
+#define HIGH_PUNCH "HP"
+#define LOW_PUNCH "LP"
+#define HIGH_KICK "HK"
+#define LOW_KICK "LK"
+
 GameController* GameController::_instance = 0;
 
 GameController* GameController::Instance(Parser* parser)
@@ -993,7 +1008,7 @@ void GameController::getKeysPlayer2() {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if(currentKeyStates[ SDL_SCANCODE_W ] && currentKeyStates[ SDL_SCANCODE_A ])
 	{
-		this->_personaje2->jumpLeft(JMP_FACTOR);
+		this->_personaje2->jumpLeft(JMP_FACTOR);		
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_W ] && currentKeyStates[ SDL_SCANCODE_D ])
 	{
@@ -1040,40 +1055,68 @@ void GameController::getKeysPlayer2() {
 
 void GameController::getKeysPlayer1() {
 
+	//Actualizo la lista de movimientos - Si tiene 50 elementos elimino el primero
+	if(this->_personaje1->track_movimientos.size() >= 50)
+		this->_personaje1->track_movimientos.erase(this->_personaje1->track_movimientos.begin(), this->_personaje1->track_movimientos.begin() + 1);
+
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_LEFT ])
 	{
 		this->_personaje1->jumpLeft(JMP_FACTOR);
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(UP_LEFT);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ] && currentKeyStates[ SDL_SCANCODE_RIGHT ])
 	{
 		this->_personaje1->jumpRight(JMP_FACTOR);
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(UP_RIGHT);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_UP ])
 	{
 		this->_personaje1->jump(JMP_FACTOR);
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(UP);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_L ])
 	{
 		this->_personaje1->lanzarArma();
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(FIRE);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ] && currentKeyStates[ SDL_SCANCODE_B ])
 	{
 		this->_personaje1->blockDuck();
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(DUCK_BLOCK);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_DOWN ])
 	{
 		this->_personaje1->duck();
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(DUCK);
 	}
 	else if(currentKeyStates[ SDL_SCANCODE_B ] )
 	{
 		this->_personaje1->block();
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(BLOCK);
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
 	{
 		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveLeft(_personaje1,_personaje2) )
 		{
 			this->_personaje1->moveLeft(MOV_FACTOR2);
+
+			//Actualizo la lista de movimientos
+			this->_personaje1->track_movimientos.push_back(LEFT);
 		}
 	}
 	else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
@@ -1081,9 +1124,14 @@ void GameController::getKeysPlayer1() {
 		if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveRight(_personaje1,_personaje2))
 		{
 			this->_personaje1->moveRight(MOV_FACTOR2);
+			//Actualizo la lista de movimientos
+			this->_personaje1->track_movimientos.push_back(RIGHT);
 		}
 	} else 	{
 		if (!this->hayPlayer1())_personaje1->idle();
+
+		//Actualizo la lista de movimientos
+		this->_personaje1->track_movimientos.push_back(IDLE);
 	}
 }
 
