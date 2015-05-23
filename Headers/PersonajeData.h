@@ -21,7 +21,6 @@ class PersonajeData
 
 		float ancho;
 		float alto;
-		bool orientacion;
 		string nombre;
 
 		//color alternativo

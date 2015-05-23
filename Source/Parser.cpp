@@ -369,9 +369,7 @@ Parser::Parser(Value defRoot) {
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
 	setearPersonajePorDefecto(&(this->personaje1),defRoot["personaje1"]);
-	this->personaje1.orientacion = false;	//presonaje 1 es el que aparece al lado izquierdo, mirando a la derecha
 	setearPersonajePorDefecto(&(this->personaje2),defRoot["personaje2"]);
-	this->personaje2.orientacion = true;	// [ P1->		<-P2 ]
 	setearCapasPorDefecto(defRoot["capas"]);
 
 	setearParseoDeSprite();
@@ -528,13 +526,11 @@ Parser::Parser(Value root, Value defRoot){
 	if (hayPersonaje1) {
 		setearDatosPersonaje(&(this->personaje1), personaje1, defPersonaje1, 1);
 	}
-	this->personaje1.orientacion = false;
 
 	//Personaje2
 	if (hayPersonaje2) {
 		setearDatosPersonaje(&(this->personaje2), personaje2, defPersonaje2, 2);
 	}
-	this->personaje2.orientacion = true;
 
 	setearParseoDeSprite();
 

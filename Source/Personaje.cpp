@@ -26,10 +26,13 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this-> _escenario = escenario;
 	this-> _factor_escala = escenario.ancho / this->_ancho_log;
 	this->_pos_y = escenario.y_piso;
-	if (pers_ppal)
+	if (pers_ppal) {
 		this->_pos_x = (escenario.ancho - _ancho_log) /2 - (ventana->_ancho_log/4);
-	else
+		this->_orientacion = false;
+	} else {
 		this->_pos_x = (escenario.ancho - _ancho_log) /2 + (ventana->_ancho_log/4);
+		this->_orientacion = true;
+	}
 	this->_ancho_px = Personaje::getWidth(ventana,_ancho_log);
 	this->_alto_px = Personaje::getHeight(ventana,_alto_log);
 	this->_zIndex = escenario.z_index;
@@ -63,7 +66,6 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
 	this->pos_last_action = 0;
 
-	this->_orientacion = _personajeData.orientacion;
 	this->setBoundingBox();
 
 	this-> _data = data;
