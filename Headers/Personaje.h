@@ -135,6 +135,7 @@ class Personaje
 		bool isMaxPushRight();
 
 		bool _orientacion;
+		bool pers_ppal;
 		bool hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 );
 		Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor);
 		~Personaje();
@@ -143,7 +144,8 @@ class Personaje
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
 
-		void resetear(bool pers_ppal);
+		void posicionarParaMain();
+		void resetear();
 
 		void moveLeft(float factor);
 		void moveRight(float factor);

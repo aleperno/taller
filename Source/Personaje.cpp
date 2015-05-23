@@ -70,6 +70,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->setBoundingBox();
 
 	this-> _data = data;
+	this->pers_ppal = pers_ppal;
 
 	//TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
 	this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
@@ -80,7 +81,15 @@ PersonajeData* Personaje::getData() {
 	return &this->_data;
 }
 
-void Personaje::resetear(bool pers_ppal) {
+void Personaje::posicionarParaMain() {
+	if (pers_ppal)
+		this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log/3);
+	else
+		this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 + (this->_ventana->_ancho_log/3);
+	this->_pos_y = this->_ventana->_alto_log*2/5;
+}
+
+void Personaje::resetear() {
 	if (pers_ppal) {
 		this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log/4);
 		this->_orientacion = false;
@@ -88,6 +97,7 @@ void Personaje::resetear(bool pers_ppal) {
 		this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 + (this->_ventana->_ancho_log/4);
 		this->_orientacion = true;
 	}
+	this->_pos_y = this->_escenario.y_piso;
 	this->healthPoints = HEALTH;
 	this->unFreeze();
 	this->_isDizzy = false;

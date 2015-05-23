@@ -276,10 +276,14 @@ void MainScreen::showModeSelect(int modeSelected) {
 }
 
 void MainScreen::viewDemoUno(int fila, int columna) {
-	if (this->_perSelect->at(fila).at(columna) == LIUKANG)
+	if (this->_perSelect->at(fila).at(columna) == LIUKANG) {
+		punterosPersonajes._jugador1liukang->posicionarParaMain();
 		punterosPersonajes._jugador1liukang->view(punterosPersonajes._jugador2liukang);
-	if (this->_perSelect->at(fila).at(columna) == SCORPION)
+	}
+	if (this->_perSelect->at(fila).at(columna) == SCORPION) {
+		punterosPersonajes._jugador1scorpion->posicionarParaMain();
 		punterosPersonajes._jugador1scorpion->view(punterosPersonajes._jugador2liukang);
+	}
 }
 
 void MainScreen::veiwFaces() {
@@ -419,7 +423,7 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	this->_ventana->clearScreen();
 
 	veiwFaces();
-	//viewDemoUno(fila,columna);
+	viewDemoUno(fila,columna);
 
 	int selectedX = topLeftX + columna*faceW;
 	int selectedY = topLeftY + fila*faceH;

@@ -76,6 +76,7 @@ GameController::GameController(Parser* parser)
 	_end_of_game = false;
 	minimizado = false;
 	enMainScreen = true;
+	partidaPreparada = false;
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
@@ -866,7 +867,10 @@ void GameController::procesamientoMainScreenTraining() {
 }
 
 void GameController::runPVP() {
-	prepararPartida();
+	if (!partidaPreparada) {
+		prepararPartida();
+		partidaPreparada = true;
+	}
 
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 ) {
@@ -902,6 +906,8 @@ void GameController::runTraining() {
 
 void GameController::prepararPartida() {
 	actualizarPersonajes();
+	_personaje1->resetear();
+	_personaje2->resetear();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
@@ -966,13 +972,17 @@ bool GameController::hayPlayer2() {
 }
 
 void GameController::toMainScreen() {
-	_personaje1->resetear(true);
-	_personaje2->resetear(false);
+	_personaje1->resetear();
+	_personaje2->resetear();
+
+	this->_ventana->_pos_log_x = (this->_escenario.ancho - this->_ventana->_ancho_log) / 2;
 
 	enMainScreen = true;
 	screen = MAINSCREEN_MODE_SELECT;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
+
+	partidaPreparada = false;
 }
 
 void GameController::getKeysPlayer2() {

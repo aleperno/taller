@@ -76,6 +76,7 @@ class GameController
 		Hud* _hud;
 		bool minimizado;
 		bool enMainScreen;
+		bool partidaPreparada;
 		int screen;
 		int modeSelected;
 		vector< vector<int> > perSelect;
