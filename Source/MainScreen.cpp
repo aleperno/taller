@@ -30,10 +30,16 @@ MainScreen::~MainScreen()
 	delete this->play_boton;
 }
 
-MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect) {
+MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vector<Personaje*>* punteros) {
 	//atributos pasados como parametro
 	this->_ventana = ventana;
 	this->_perSelect = perSelect;
+	this->punterosPersonajes._jugador1liukang = punteros->at(0);
+	this->punterosPersonajes._jugador1scorpion = punteros->at(1);
+	this->punterosPersonajes._jugador2liukang = punteros->at(2);
+	this->punterosPersonajes._jugador2liukangColor = punteros->at(3);
+	this->punterosPersonajes._jugador2scorpion = punteros->at(4);
+	this->punterosPersonajes._jugador2scorpionColor = punteros->at(5);
 
 	//fuentes
 	this->fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);	//Titulo
@@ -269,6 +275,13 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->updateScreen();
 }
 
+void MainScreen::viewDemoUno(int fila, int columna) {
+	if (this->_perSelect->at(fila).at(columna) == LIUKANG)
+		punterosPersonajes._jugador1liukang->view(punterosPersonajes._jugador2liukang);
+	if (this->_perSelect->at(fila).at(columna) == SCORPION)
+		punterosPersonajes._jugador1scorpion->view(punterosPersonajes._jugador2liukang);
+}
+
 void MainScreen::veiwFaces() {
 	for (unsigned int i=0; i<posicionesCaras.size(); i++) {
 		for (unsigned int j=0; j<posicionesCaras.at(i).size(); j++) {
@@ -393,7 +406,7 @@ void MainScreen::showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus
 }
 
 void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre, int boton) {
-	showTraining(fila,columna,textFocus,nombre, boton);
+	showTraining(fila, columna, textFocus, nombre, boton);
 }
 
 void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
@@ -406,6 +419,7 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	this->_ventana->clearScreen();
 
 	veiwFaces();
+	//viewDemoUno(fila,columna);
 
 	int selectedX = topLeftX + columna*faceW;
 	int selectedY = topLeftY + fila*faceH;

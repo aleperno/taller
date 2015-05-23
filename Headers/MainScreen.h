@@ -3,6 +3,7 @@
 
 #include <Ventana.h>
 #include <Boton.h>
+#include <Personaje.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -43,7 +44,7 @@
 
 class MainScreen {
 public:
-	MainScreen(Ventana* ventana, vector< vector<int> >* perSelect);
+	MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vector<Personaje*>* punteros);
 	~MainScreen();
 
 	//Globales
@@ -51,6 +52,15 @@ public:
 	vector< vector<int> >* _perSelect;
 	vector< vector< pair<int, int> > > posicionesCaras; //x,y por cada una
 
+	struct punterosPersonajes {
+		Personaje* _jugador1liukang;
+		Personaje* _jugador1scorpion;
+		Personaje* _jugador2liukang;
+		Personaje* _jugador2liukangColor;
+		Personaje* _jugador2scorpion;
+		Personaje* _jugador2scorpionColor;
+	};
+	punterosPersonajes punterosPersonajes;
 	int descriptionY;
 	SDL_Color textColor;
 	SDL_Color shadowColor;
@@ -78,6 +88,7 @@ public:
 
 	void prepararPerSelect();
 	void veiwFaces();
+	void viewDemoUno(int fila, int columna);
 	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
 	int mouseOverBackOrPlay();
 	int clickOnTextCamp();

@@ -99,7 +99,14 @@ GameController::GameController(Parser* parser)
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
 
 	iniciarEstructuraPerSelect();
-	_mainScreen = new MainScreen(_ventana,&perSelect);
+	vector<Personaje*> punteros(6);
+	punteros.at(0) = _jugador1liukang;
+	punteros.at(1) = _jugador1scorpion;
+	punteros.at(2) = _jugador2liukang;
+	punteros.at(3) = _jugador2liukangColor;
+	punteros.at(4) = _jugador2scorpion;
+	punteros.at(5) = _jugador2scorpionColor;
+	_mainScreen = new MainScreen(_ventana,&perSelect,&punteros);
 	_fightTimer = new Temporizador();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
