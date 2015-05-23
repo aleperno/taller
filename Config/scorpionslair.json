@@ -1,6 +1,6 @@
 {
-"ventana": {	"anchopx":	640,
-		"altopx":	480,
+"ventana": {	"anchopx":	800,
+		"altopx":	600,
 		"ancho": 	150	},
 
 "escenario": {	"ancho": 	300,
@@ -21,10 +21,9 @@
 		{	"imagen_fondo": "Images/arenas/scorpionslair/sl_0.png",
 			"ancho": 300	}	],
 
-"personaje1": {	"ancho": 	30,
+"jugador1": {	"ancho": 	50,
 		"alto": 	50,
-		"nombre":	"liukang",
-		"arma_speed": 2.5,
+		"arma_speed":	2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,
@@ -32,10 +31,9 @@
 		"defensa":	4,
 		"arrojar":	5	},
 
-"personaje2": {	"ancho": 	30,
+"jugador2": {	"ancho": 	50,
 		"alto": 	50,
-		"nombre":	"scorpion",
-		"arma_speed": 2.5,
+		"arma_speed":	2.5,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,
