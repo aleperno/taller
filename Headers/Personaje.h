@@ -131,6 +131,8 @@ class Personaje
 		void resetearArma();
 
 	public:
+		vector<string> track_movimientos;
+
 		bool isMaxPushLeft();
 		bool isMaxPushRight();
 

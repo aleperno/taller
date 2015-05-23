@@ -388,6 +388,7 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
+	this->tipo_juego = PVP;
 	int backORplay;
 	switch (e->type) {
 
@@ -524,10 +525,12 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 }
 
 void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
+	this->tipo_juego = PVE;
 	procesarEventosMainScreenTraining(e);
 }
 
 void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
+	this->tipo_juego = TRAINING;
 	int backORplay;
 	switch (e->type) {
 
@@ -1091,7 +1094,17 @@ void GameController::getKeysPlayer1() {
 void GameController::getKeys()
 {
 	if (this->_personaje1->canMove()) this->getKeysPlayer1();
-	if (this->_personaje2->canMove()) this->getKeysPlayer2();
+
+	switch (this->tipo_juego) {
+		case PVP:
+			if (this->_personaje2->canMove()) this->getKeysPlayer2();
+			break;
+		case PVE:
+			//TODO MANDAR A AI
+			break;
+		case TRAINING:
+			break;
+	}
 }
 
 void GameController::moveLayers(Personaje* pers, Personaje* otherPers)

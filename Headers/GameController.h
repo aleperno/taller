@@ -41,6 +41,12 @@ using namespace std;
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
 
+enum GameMode {
+	PVP,
+	PVE,
+	TRAINING
+};
+
 class GameController
 {
 	protected:
@@ -48,6 +54,7 @@ class GameController
 
 	private:
 		//Atributos
+		GameMode tipo_juego;
 		static GameController* _instance;
 		MainScreen* _mainScreen;
 		Ventana* _ventana;
