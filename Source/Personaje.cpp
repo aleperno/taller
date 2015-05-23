@@ -89,6 +89,8 @@ void Personaje::resetear(bool pers_ppal) {
 		this->_orientacion = true;
 	}
 	this->healthPoints = HEALTH;
+	this->unFreeze();
+	this->_isDizzy = false;
 	this->idle();
 }
 
