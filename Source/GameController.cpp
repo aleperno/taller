@@ -304,6 +304,32 @@ void GameController::procesarEventosMainScreenIntro(SDL_Event* e) {
 	}
 }
 
+void GameController::actualizarPersonajes() {
+	switch (perSelect.at(filaP1).at(columnaP1)) {
+	case LIUKANG:
+		_personaje1 = _jugador1liukang;
+		break;
+	case SCORPION:
+		_personaje1 = _jugador1scorpion;
+		break;
+	}
+
+	switch (perSelect.at(filaP2).at(columnaP2)) {
+	case LIUKANG:
+		if (perSelect.at(filaP1).at(columnaP1) == LIUKANG)
+			_personaje2 = _jugador2liukangColor;
+		else
+			_personaje2 = _jugador2liukang;
+		break;
+	case SCORPION:
+		if (perSelect.at(filaP1).at(columnaP1) == SCORPION)
+			_personaje2 = _jugador2scorpionColor;
+		else
+			_personaje2 = _jugador2scorpion;
+		break;
+	}
+}
+
 void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 	int mode;
 	switch (e->type) {
@@ -382,6 +408,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
+			actualizarPersonajes();
 		break;
 
 		case NINGUNO:
@@ -446,6 +473,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
+				actualizarPersonajes();
 			}
 		break;
 
@@ -465,6 +493,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
+				actualizarPersonajes();
 			}
 		break;
 
@@ -484,6 +513,7 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
+				actualizarPersonajes();
 			}
 		break;
 		}
@@ -524,6 +554,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
+			actualizarPersonajes();
 		break;
 
 		case NINGUNO:
@@ -563,6 +594,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_RETURN) {
 				this->screen = NO_MAINSCREEN;
 				this->enMainScreen = false;
+				actualizarPersonajes();
 			}
 		break;
 
@@ -578,6 +610,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
+				actualizarPersonajes();
 			}
 		break;
 		}

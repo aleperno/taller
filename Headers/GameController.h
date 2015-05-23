@@ -87,6 +87,7 @@ class GameController
 		static EscenarioData getEscenario(Parser* parser);
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
 		void getPersonajes(Ventana* ventana, Parser* parser, EscenarioData escenario);
+		void actualizarPersonajes();
 		void runPVP();
 		void runPVE();
 		void runTraining();
@@ -94,8 +95,8 @@ class GameController
 		bool endOfGame(SDL_Event* e);
 		void toMainScreen();
 
-		void close();
-		void reloadConfig();
+		//void close();
+		//void reloadConfig();
 
 		void getKeys();
 		void moveLayersRight(float factor);
