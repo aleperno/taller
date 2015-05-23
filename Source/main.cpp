@@ -63,22 +63,6 @@ int main( int argc, char* args[] )
 	logger.log(DEBUG,"Comienzo Programa");
 	Parser::Initialize(path);
 	Parser* parser = Parser::Instance();
-
-	/*cout << parser->escenario.z_index << endl << endl;
-
-	cout << parser->personaje1.ancho << endl << parser->personaje1.alto << endl;
-	cout << parser->personaje1.orientacion << endl << parser->personaje1.nombre << endl;
-	cout << parser->personaje1.h_inicial << endl << parser->personaje1.h_final << endl << parser->personaje1.desplazamiento << endl;
-	cout << parser->personaje1.golpe_alto << endl << parser->personaje1.golpe_bajo << endl << parser->personaje1.patada_alta << endl;
-	cout << parser->personaje1.patada_baja << endl << parser->personaje1.defensa << endl << parser->personaje1.arrojar << endl << endl;
-	
-	cout << parser->personaje2.ancho << endl << parser->personaje2.alto << endl;
-	cout << parser->personaje2.orientacion << endl << parser->personaje2.nombre << endl;
-	cout << parser->personaje2.h_inicial << endl << parser->personaje2.h_final << endl << parser->personaje2.desplazamiento << endl;
-	cout << parser->personaje2.golpe_alto << endl << parser->personaje2.golpe_bajo << endl << parser->personaje2.patada_alta << endl;
-	cout << parser->personaje2.patada_baja << endl << parser->personaje2.defensa << endl << parser->personaje2.arrojar << endl;*/
-	
-
 	GameController* controlador = GameController::Instance(parser);
 	controlador->run();
 	logger.log(DEBUG,"Fin del programa");

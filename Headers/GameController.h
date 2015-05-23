@@ -126,8 +126,6 @@ class GameController
 		void procesamientoMainScreenTraining();
 
 		//Testing
-		void nameSelectPVP();
-		void nameSelectPVEandTraining();
 		void viewWindowPosition();
 		bool canMoveRight(Personaje* pers, Personaje* otherPers);
 		bool canMoveLeft(Personaje* pers, Personaje* otherPers);

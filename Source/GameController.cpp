@@ -342,9 +342,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
-
-			//testing
-			nameSelectPVP();
 		break;
 
 		case NINGUNO:
@@ -409,9 +406,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-
-				//testing
-				nameSelectPVP();
 			}
 		break;
 
@@ -431,9 +425,6 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-
-				//testing
-				nameSelectPVP();
 			}
 		break;
 
@@ -453,31 +444,10 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-
-				//testing
-				nameSelectPVP();
 			}
 		break;
 		}
 	break;
-	}
-}
-
-void GameController::nameSelectPVP() {
-	switch (perSelect.at(filaP1).at(columnaP1)) {
-	case LIUKANG:	cout << "P1 selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-	case SCORPION:	cout << "P1 selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
-	}
-	switch (perSelect.at(filaP2).at(columnaP2)) {
-	case LIUKANG:	cout << "P2 selecciono 'liukang' y el nombre es '" << nombreP2 << "'" << endl; break;
-	case SCORPION:	cout << "P2 selecciono 'scorpion' y el nombre es '" << nombreP2 << "'" << endl; break;
-	}
-}
-
-void GameController::nameSelectPVEandTraining() {
-	switch (perSelect.at(filaP1).at(columnaP1)) {
-	case LIUKANG:	cout << "se selecciono 'liukang' y el nombre es '" << nombreP1 << "'" << endl; break;
-	case SCORPION:	cout << "se selecciono 'scorpion' y el nombre es '" << nombreP1 << "'" << endl; break;
 	}
 }
 
@@ -514,9 +484,6 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			this->enMainScreen = false;
 			this->textFocus = TEXT_NO_FOCUS;
 			SDL_StopTextInput();
-
-			//testing
-			nameSelectPVEandTraining();
 		break;
 
 		case NINGUNO:
@@ -556,9 +523,6 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_RETURN) {
 				this->screen = NO_MAINSCREEN;
 				this->enMainScreen = false;
-
-				//testing
-				nameSelectPVEandTraining();
 			}
 		break;
 
@@ -574,9 +538,6 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 				this->enMainScreen = false;
 				this->textFocus = TEXT_NO_FOCUS;
 				SDL_StopTextInput();
-
-				//testing
-				nameSelectPVEandTraining();
 			}
 		break;
 		}
