@@ -89,6 +89,7 @@ public:
 	void prepararPerSelect();
 	void veiwFaces();
 	void viewDemoUno(int fila, int columna);
+	void viewDemoDos(int fila1, int columna1, int fila2, int columna2);
 	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
 	int mouseOverBackOrPlay();
 	int clickOnTextCamp();

@@ -286,6 +286,36 @@ void MainScreen::viewDemoUno(int fila, int columna) {
 	}
 }
 
+void MainScreen::viewDemoDos(int fila1, int columna1, int fila2, int columna2) {
+	if (this->_perSelect->at(fila1).at(columna1) == LIUKANG) {
+		punterosPersonajes._jugador1liukang->posicionarParaMain();
+		punterosPersonajes._jugador1liukang->view(punterosPersonajes._jugador2liukang);
+	}
+	if (this->_perSelect->at(fila1).at(columna1) == SCORPION) {
+		punterosPersonajes._jugador1scorpion->posicionarParaMain();
+		punterosPersonajes._jugador1scorpion->view(punterosPersonajes._jugador2liukang);
+	}
+
+	if (this->_perSelect->at(fila2).at(columna2) == LIUKANG) {
+		if (this->_perSelect->at(fila2).at(columna2) != this->_perSelect->at(fila1).at(columna1)) {
+			punterosPersonajes._jugador2liukang->posicionarParaMain();
+			punterosPersonajes._jugador2liukang->view(punterosPersonajes._jugador1liukang);
+		} else {
+			punterosPersonajes._jugador2liukangColor->posicionarParaMain();
+			punterosPersonajes._jugador2liukangColor->view(punterosPersonajes._jugador1liukang);
+		}
+	}
+	if (this->_perSelect->at(fila2).at(columna2) == SCORPION) {
+		if (this->_perSelect->at(fila2).at(columna2) != this->_perSelect->at(fila1).at(columna1)) {
+			punterosPersonajes._jugador2scorpion->posicionarParaMain();
+			punterosPersonajes._jugador2scorpion->view(punterosPersonajes._jugador1liukang);
+		} else {
+			punterosPersonajes._jugador2scorpionColor->posicionarParaMain();
+			punterosPersonajes._jugador2scorpionColor->view(punterosPersonajes._jugador1liukang);
+		}
+	}
+}
+
 void MainScreen::veiwFaces() {
 	for (unsigned int i=0; i<posicionesCaras.size(); i++) {
 		for (unsigned int j=0; j<posicionesCaras.at(i).size(); j++) {
@@ -310,6 +340,7 @@ void MainScreen::showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus
 	int columna2 = pair2.second;
 
 	veiwFaces();
+	viewDemoDos(fila1, columna1, fila2, columna2);
 
 	if ((fila1 != fila2) || (columna1 != columna2)) {
 		int selected1X = topLeftX + columna1*faceW;
