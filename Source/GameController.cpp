@@ -5,10 +5,10 @@
  *      Author: neo
  */
 #include <GameController.h>
-#define MOV_FACTOR 300;   //Fraccion de la capa que se mueve por ciclo
-#define MOV_FACTOR2 0.8   //
+#define MOV_FACTOR 300;		//Fraccion de la capa que se mueve por ciclo
+#define MOV_FACTOR2 0.8
 #define MOV_FACTOR_JMP 2
-#define MOVE_P_FACTOR 1 //
+#define MOVE_P_FACTOR 1
 #define JMP_FACTOR 2
 
 GameController* GameController::_instance = 0;
@@ -24,16 +24,47 @@ GameController* GameController::Instance(Parser* parser)
 
 void GameController::KillController()
 {
+	if (hayPlayer1()) {
+		SDL_JoystickClose(this->_joystickOne);
+		this->_joystickOne = NULL;
+		this->setPlayer1(false);
+	}
+	if (hayPlayer2()) {
+		SDL_JoystickClose(this->_joystickTwo);
+		this->_joystickTwo = NULL;
+		this->setPlayer2(false);
+	}
+
+	delete this->_ventana;
+	_ventana = NULL;
+
+	for(std::size_t i=0; i<this->_capas.size(); ++i) {
+		delete this->_capas[i];
+	}
+	_capas.clear();
+
 	delete this->_fightTimer;
 	_fightTimer = NULL;
 	delete this->_mainScreen;
 	_mainScreen = NULL;
-	delete this->_ventana;
-	_ventana = NULL;
-	delete this->_personaje1;
+	delete this->_hud;
+	_hud = NULL;
+	
+	delete this->_jugador1liukang;
+	_jugador1liukang = NULL;
+	delete this->_jugador1scorpion;
+	_jugador1scorpion = NULL;
+	delete this->_jugador2liukang;
+	_jugador2liukang = NULL;
+	delete this->_jugador2liukangColor;
+	_jugador2liukangColor = NULL;
+	delete this->_jugador2scorpion;
+	_jugador2scorpion = NULL;
+	delete this->_jugador2scorpionColor;
+	_jugador2scorpionColor = NULL;
 	_personaje1 = NULL;
-	delete this->_personaje2;
 	_personaje2 = NULL;
+	
 	delete _instance;
 	_instance = NULL;
 	TTF_Quit();
@@ -62,8 +93,9 @@ GameController::GameController(Parser* parser)
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
-	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
+	getPersonajes(_ventana,parser,_escenario);
+	_personaje1 = this->_jugador1scorpion;
+	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
 
 	iniciarEstructuraPerSelect();
@@ -114,19 +146,27 @@ void GameController::iniciarEstructuraPerSelect() {
 	textFocus = TEXT_NO_FOCUS;
 }
 
-Personaje* GameController::getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, bool pers_ppal)
+void GameController::getPersonajes(Ventana* ventana,Parser* parser, EscenarioData escenario)
 {
-	Personaje* pers;
-	if (pers_ppal)
-	{
-		pers = new Personaje(ventana,parser->personaje1,escenario,pers_ppal,false);
-	}else{
-		if (parser->personaje1.nombre == parser->personaje2.nombre)
-			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal,true);
-		else
-			pers = new Personaje(ventana,parser->personaje2,escenario,pers_ppal,false);
-	}
-	return pers;
+	PersonajeData jugador1liukang;
+	jugador1liukang.llenarDatos(&(parser->jugador1),&(parser->liukang));
+	_jugador1liukang = new Personaje(ventana, jugador1liukang, escenario, true, false);
+
+	PersonajeData jugador1scorpion;
+	jugador1scorpion.llenarDatos(&(parser->jugador1),&(parser->scorpion));
+	_jugador1scorpion = new Personaje(ventana, jugador1scorpion, escenario, true, false);
+
+	PersonajeData jugador2liukang;
+	jugador2liukang.llenarDatos(&(parser->jugador2),&(parser->liukang));
+	_jugador2liukang = new Personaje(ventana, jugador2liukang, escenario, false, false);
+
+	PersonajeData jugador2scorpion;
+	jugador2scorpion.llenarDatos(&(parser->jugador2),&(parser->scorpion));
+	_jugador2scorpion = new Personaje(ventana, jugador2scorpion, escenario, false, false);
+
+	_jugador2liukangColor = new Personaje(ventana, jugador2liukang, escenario, false, true);
+
+	_jugador2scorpionColor = new Personaje(ventana, jugador2scorpion, escenario, false, true);
 }
 
 Ventana* GameController::getVentana(Parser* parser)
@@ -557,7 +597,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 			Logger::Instance()->log(ERROR,"Se ha desenchufado un Joystick");
 			break;
 		case SDL_KEYDOWN:
-			if (e->key.keysym.sym == SDLK_r) this->reloadConfig();
+			if (e->key.keysym.sym == SDLK_r) this->toMainScreen();
 			else if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
 			else if (e->key.keysym.sym == SDLK_v) this->_ventana->toggleShake();
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
@@ -816,7 +856,7 @@ void GameController::runPVP() {
 		this->moveLayers(_personaje2,_personaje1);
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
 		if (this->actualizarGanador())
-			this->reloadConfig();		
+			this->toMainScreen();		
 		this->printLayers();
 
 	} else	SDL_Delay(DEF_SLEEP_TIME);
@@ -870,7 +910,7 @@ void GameController::run() {
 			}
 		}
 	}
-	this->close();
+	//this->close();
 	Logger::Instance()->log(DEBUG,"Finaliza ciclo de Juego");
 }
 
@@ -890,7 +930,17 @@ bool GameController::hayPlayer2() {
 	return this->_hayPlayer2;
 }
 
-void GameController::close()
+void GameController::toMainScreen() {
+	_personaje1->resetear(true);
+	_personaje2->resetear(false);
+
+	enMainScreen = true;
+	screen = MAINSCREEN_MODE_SELECT;
+	modeSelected = SELECTED_PVP;
+	botonSeleccionadoEnModo = PLAY_BOTON;
+}
+
+/*void GameController::close()
 {
 	if (hayPlayer1()) {
 		SDL_JoystickClose(this->_joystickOne);
@@ -933,13 +983,13 @@ void GameController::reloadConfig()
 	_ventana = GameController::getVentana(parser);
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
-	_personaje1 = GameController::getPersonaje(_ventana,parser,_escenario,true);
-	_personaje2 = GameController::getPersonaje(_ventana,parser,_escenario,false);
+	_personaje1->resetear(true);
+	_personaje2->resetear(false);
 	_hud = new Hud(_ventana,&nombreP1,&nombreP2);
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	//reiniciar el timer
 	this->_fightTimer->reset();
-}
+}*/
 
 void GameController::getKeysPlayer2() {
 

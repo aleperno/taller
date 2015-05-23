@@ -9,6 +9,7 @@
 
 #define OFFSET_SPRITE_GOLPE 1
 
+#define HEALTH 100
 #define LIFE_MAX 5
 #define LIFE_MED 3
 #define LIFE_MIN 1
@@ -39,7 +40,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_personajeData = data;
 	this->vectorSprites = Personaje::loadVectorMedia(data);
 	this->_lastFrame = 0;
-	this->healthPoints = 100;
+	this->healthPoints = HEALTH;
 	this->_isWalking = false;
 	this->_isDucking = false;
 	this->_isJumping = false;
@@ -77,6 +78,18 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
 PersonajeData* Personaje::getData() {
 	return &this->_data;
+}
+
+void Personaje::resetear(bool pers_ppal) {
+	if (pers_ppal) {
+		this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log/4);
+		this->_orientacion = false;
+	} else {
+		this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 + (this->_ventana->_ancho_log/4);
+		this->_orientacion = true;
+	}
+	this->healthPoints = HEALTH;
+	this->idle();
 }
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )

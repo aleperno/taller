@@ -21,6 +21,7 @@ using namespace std;
 #include <Ventana.h>
 #include <Capa.h>
 #include <Personaje.h>
+#include <PersonajeData.h>
 #include <StringUtil.h>
 #include <HUD.h>
 #include <MainScreen.h>
@@ -52,8 +53,18 @@ class GameController
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		vector<Capa*> _capas;
+
+		//Esos son siempre iguales a unos 2 de abajo
 		Personaje* _personaje1;
 		Personaje* _personaje2;
+
+		Personaje* _jugador1liukang;
+		Personaje* _jugador1scorpion;
+		Personaje* _jugador2liukang;
+		Personaje* _jugador2liukangColor;
+		Personaje* _jugador2scorpion;
+		Personaje* _jugador2scorpionColor;
+
 		bool _end_of_game;
 		SDL_Joystick* _joystickOne;
 		SDL_Joystick* _joystickTwo;
@@ -75,14 +86,17 @@ class GameController
 		static Ventana* getVentana(Parser* parser);
 		static EscenarioData getEscenario(Parser* parser);
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
-		static Personaje* getPersonaje(Ventana* ventana,Parser* parser, EscenarioData escenario, bool pers_ppal);
+		void getPersonajes(Ventana* ventana, Parser* parser, EscenarioData escenario);
 		void runPVP();
 		void runPVE();
 		void runTraining();
 		void printLayers();
 		bool endOfGame(SDL_Event* e);
+		void toMainScreen();
+
 		void close();
 		void reloadConfig();
+
 		void getKeys();
 		void moveLayersRight(float factor);
 		void moveLayersLeft(float factor);

@@ -17,17 +17,16 @@ void Parser::setearEscenarioPorDefecto(Value defEscenario){
 	this->escenario.z_index = defEscenario.get("zindex",-1).asInt();
 }
 
-void Parser::setearPersonajePorDefecto(PersonajeData* personaje,Value defPersonaje){
-	personaje->ancho = defPersonaje.get("ancho",-1).asFloat();
-	personaje->alto = defPersonaje.get("alto",-1).asFloat();
-	personaje->nombre = defPersonaje.get("nombre",1).asString();
-	personaje->arma_speed = defPersonaje.get("arma_speed",-1).asFloat();
-	personaje->golpe_alto = defPersonaje.get("golpe-alto",-1).asInt();
-	personaje->golpe_bajo = defPersonaje.get("golpe-bajo",-1).asInt();
-	personaje->patada_alta = defPersonaje.get("patada-alta",-1).asInt();
-	personaje->patada_baja = defPersonaje.get("patada-baja",-1).asInt();
-	personaje->defensa = defPersonaje.get("defensa",-1).asInt();
-	personaje->arrojar = defPersonaje.get("arrojar",-1).asInt();
+void Parser::setearJugadorPorDefecto(JugadorData* jugador, Value defJugador){
+	jugador->ancho = defJugador.get("ancho",-1).asFloat();
+	jugador->alto = defJugador.get("alto",-1).asFloat();
+	jugador->arma_speed = defJugador.get("arma_speed",-1).asFloat();
+	jugador->golpe_alto = defJugador.get("golpe-alto",-1).asInt();
+	jugador->golpe_bajo = defJugador.get("golpe-bajo",-1).asInt();
+	jugador->patada_alta = defJugador.get("patada-alta",-1).asInt();
+	jugador->patada_baja = defJugador.get("patada-baja",-1).asInt();
+	jugador->defensa = defJugador.get("defensa",-1).asInt();
+	jugador->arrojar = defJugador.get("arrojar",-1).asInt();
 }
 
 void Parser::setearCapasPorDefecto(Value defCapas){
@@ -40,118 +39,118 @@ void Parser::setearCapasPorDefecto(Value defCapas){
 	}
 }
 
-void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
-	personaje->height = persValue.get("height",-1).asInt();
-	personaje->width = persValue.get("width",-1).asInt();
-	personaje->size = persValue.get("size",-1).asInt();
+void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
+	caracter->height = carValue.get("height",-1).asInt();
+	caracter->width = carValue.get("width",-1).asInt();
+	caracter->size = carValue.get("size",-1).asInt();
 
-	personaje->velSprites.push_back(persValue["walk"][2].asInt());
-	personaje->cantSprites.push_back(persValue["walk"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["walk"][0].asInt());
+	caracter->velSprites.push_back(carValue["walk"][2].asInt());
+	caracter->cantSprites.push_back(carValue["walk"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["walk"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["idle"][2].asInt());
-	personaje->cantSprites.push_back(persValue["idle"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["idle"][0].asInt());
+	caracter->velSprites.push_back(carValue["idle"][2].asInt());
+	caracter->cantSprites.push_back(carValue["idle"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["idle"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["jumpUp"][2].asInt());
-	personaje->cantSprites.push_back(persValue["jumpUp"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["jumpUp"][0].asInt());
+	caracter->velSprites.push_back(carValue["jumpUp"][2].asInt());
+	caracter->cantSprites.push_back(carValue["jumpUp"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["jumpUp"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["jumpFwd"][2].asInt());
-	personaje->cantSprites.push_back(persValue["jumpFwd"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["jumpFwd"][0].asInt());
+	caracter->velSprites.push_back(carValue["jumpFwd"][2].asInt());
+	caracter->cantSprites.push_back(carValue["jumpFwd"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["jumpFwd"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["jumpBwd"][2].asInt());
-	personaje->cantSprites.push_back(persValue["jumpBwd"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["jumpBwd"][0].asInt());
+	caracter->velSprites.push_back(carValue["jumpBwd"][2].asInt());
+	caracter->cantSprites.push_back(carValue["jumpBwd"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["jumpBwd"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["duck"][2].asInt());
-	personaje->cantSprites.push_back(persValue["duck"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["duck"][0].asInt());
+	caracter->velSprites.push_back(carValue["duck"][2].asInt());
+	caracter->cantSprites.push_back(carValue["duck"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["duck"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["block"][2].asInt());
-	personaje->cantSprites.push_back(persValue["block"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["block"][0].asInt());
+	caracter->velSprites.push_back(carValue["block"][2].asInt());
+	caracter->cantSprites.push_back(carValue["block"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["block"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["blockDuck"][2].asInt());
-	personaje->cantSprites.push_back(persValue["blockDuck"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["blockDuck"][0].asInt());
+	caracter->velSprites.push_back(carValue["blockDuck"][2].asInt());
+	caracter->cantSprites.push_back(carValue["blockDuck"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["blockDuck"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["dizzy"][2].asInt());
-	personaje->cantSprites.push_back(persValue["dizzy"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["dizzy"][0].asInt());
+	caracter->velSprites.push_back(carValue["dizzy"][2].asInt());
+	caracter->cantSprites.push_back(carValue["dizzy"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["dizzy"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["hittedDuck"][2].asInt());
-	personaje->cantSprites.push_back(persValue["hittedDuck"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["hittedDuck"][0].asInt());
+	caracter->velSprites.push_back(carValue["hittedDuck"][2].asInt());
+	caracter->cantSprites.push_back(carValue["hittedDuck"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["hittedDuck"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["hitted"][2].asInt());
-	personaje->cantSprites.push_back(persValue["hitted"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["hitted"][0].asInt());
+	caracter->velSprites.push_back(carValue["hitted"][2].asInt());
+	caracter->cantSprites.push_back(carValue["hitted"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["hitted"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["duckHiKick"][2].asInt());
-	personaje->cantSprites.push_back(persValue["duckHiKick"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["duckHiKick"][0].asInt());
+	caracter->velSprites.push_back(carValue["duckHiKick"][2].asInt());
+	caracter->cantSprites.push_back(carValue["duckHiKick"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["duckHiKick"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["hiKick"][2].asInt());
-	personaje->cantSprites.push_back(persValue["hiKick"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["hiKick"][0].asInt());
+	caracter->velSprites.push_back(carValue["hiKick"][2].asInt());
+	caracter->cantSprites.push_back(carValue["hiKick"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["hiKick"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["duckLoKick"][2].asInt());
-	personaje->cantSprites.push_back(persValue["duckLoKick"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["duckLoKick"][0].asInt());
+	caracter->velSprites.push_back(carValue["duckLoKick"][2].asInt());
+	caracter->cantSprites.push_back(carValue["duckLoKick"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["duckLoKick"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["loKick"][2].asInt());
-	personaje->cantSprites.push_back(persValue["loKick"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["loKick"][0].asInt());
+	caracter->velSprites.push_back(carValue["loKick"][2].asInt());
+	caracter->cantSprites.push_back(carValue["loKick"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["loKick"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["airKick"][2].asInt());
-	personaje->cantSprites.push_back(persValue["airKick"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["airKick"][0].asInt());
+	caracter->velSprites.push_back(carValue["airKick"][2].asInt());
+	caracter->cantSprites.push_back(carValue["airKick"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["airKick"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["hiPunch"][2].asInt());
-	personaje->cantSprites.push_back(persValue["hiPunch"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["hiPunch"][0].asInt());
+	caracter->velSprites.push_back(carValue["hiPunch"][2].asInt());
+	caracter->cantSprites.push_back(carValue["hiPunch"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["hiPunch"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["loPunch"][2].asInt());
-	personaje->cantSprites.push_back(persValue["loPunch"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["loPunch"][0].asInt());
+	caracter->velSprites.push_back(carValue["loPunch"][2].asInt());
+	caracter->cantSprites.push_back(carValue["loPunch"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["loPunch"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["airPunch"][2].asInt());
-	personaje->cantSprites.push_back(persValue["airPunch"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["airPunch"][0].asInt());
+	caracter->velSprites.push_back(carValue["airPunch"][2].asInt());
+	caracter->cantSprites.push_back(carValue["airPunch"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["airPunch"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["fallDead"][2].asInt());
-	personaje->cantSprites.push_back(persValue["fallDead"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["fallDead"][0].asInt());
+	caracter->velSprites.push_back(carValue["fallDead"][2].asInt());
+	caracter->cantSprites.push_back(carValue["fallDead"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["fallDead"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["falling"][2].asInt());
-	personaje->cantSprites.push_back(persValue["falling"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["falling"][0].asInt());
+	caracter->velSprites.push_back(carValue["falling"][2].asInt());
+	caracter->cantSprites.push_back(carValue["falling"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["falling"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["gancho"][2].asInt());
-	personaje->cantSprites.push_back(persValue["gancho"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["gancho"][0].asInt());
+	caracter->velSprites.push_back(carValue["gancho"][2].asInt());
+	caracter->cantSprites.push_back(carValue["gancho"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["gancho"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["barrido"][2].asInt());
-	personaje->cantSprites.push_back(persValue["barrido"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["barrido"][0].asInt());
+	caracter->velSprites.push_back(carValue["barrido"][2].asInt());
+	caracter->cantSprites.push_back(carValue["barrido"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["barrido"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["arma"][2].asInt());
-	personaje->cantSprites.push_back(persValue["arma"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["arma"][0].asInt());
+	caracter->velSprites.push_back(carValue["arma"][2].asInt());
+	caracter->cantSprites.push_back(carValue["arma"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["arma"][0].asInt());
 
-	personaje->velSprites.push_back(persValue["duckLoPunch"][2].asInt());
-	personaje->cantSprites.push_back(persValue["duckLoPunch"][1].asInt());
-	personaje->anchoSprites.push_back(persValue["duckLoPunch"][0].asInt());
+	caracter->velSprites.push_back(carValue["duckLoPunch"][2].asInt());
+	caracter->cantSprites.push_back(carValue["duckLoPunch"][1].asInt());
+	caracter->anchoSprites.push_back(carValue["duckLoPunch"][0].asInt());
 
 	/*
 	for(int j = 0; j < i; j++)
 	{
-		cout << j+1 << " - " << personaje->cantSprites[j] << endl;
+		cout << j+1 << " - " << caracter->cantSprites[j] << endl;
 	}
 	*/
-	personaje->imgPath = persValue["imgSrc"].asString();
+	caracter->imgPath = carValue["imgSrc"].asString();
 
 	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.
 	En caso de que hay valor invalido ("pepe") tambien dijeron varias veces que una opcion
@@ -159,56 +158,56 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	devuelven '-1' en este caso.*/
 	bool colorAlternativoValido = true;
 	string str = "";
-	try	{	personaje->h_inicial = persValue.get("color-alternativo",-1).get("h-inicial",-1).asFloat();	}
+	try	{	caracter->h_inicial = carValue.get("color-alternativo",-1).get("h-inicial",-1).asFloat();	}
 	catch(const exception &e) {
 		str = e.what();
 		colorAlternativoValido = false;
 	}
 	if (colorAlternativoValido) {
-		if (personaje->h_inicial == -1)		colorAlternativoValido = false;
+		if (caracter->h_inicial == -1)		colorAlternativoValido = false;
 	}
 
 	if (colorAlternativoValido) {
-		try	{	personaje->h_final = persValue.get("color-alternativo",-1).get("h-final",-1).asFloat();	}
+		try	{	caracter->h_final = carValue.get("color-alternativo",-1).get("h-final",-1).asFloat();	}
 		catch(const exception &e) {
 			str = e.what();
 			colorAlternativoValido = false;
 		}
 	}
 	if (colorAlternativoValido) {
-		if (personaje->h_final == -1)		colorAlternativoValido = false;
+		if (caracter->h_final == -1)		colorAlternativoValido = false;
 	}
 	
 	if (colorAlternativoValido) {
-		try	{	personaje->desplazamiento = persValue.get("color-alternativo",-1).get("desplazamiento",-1).asFloat();	}
+		try	{	caracter->desplazamiento = carValue.get("color-alternativo",-1).get("desplazamiento",-1).asFloat();	}
 		catch(const exception &e) {
 			str = e.what();
 			colorAlternativoValido = false;
 		}
 	}
 	if (colorAlternativoValido) {
-		if (personaje->desplazamiento == -1)		colorAlternativoValido = false;
+		if (caracter->desplazamiento == -1)		colorAlternativoValido = false;
 	}
 
 	if (colorAlternativoValido) {
 	//estandar solo si [0;360), si no pertenece a ese rango le doy vueltas
-		while (!(personaje->h_inicial < 360)) {
-			personaje->h_inicial -= 360;
+		while (!(caracter->h_inicial < 360)) {
+			caracter->h_inicial -= 360;
 		}
-		while (personaje->h_inicial < 0) {
-			personaje->h_inicial += 360;
+		while (caracter->h_inicial < 0) {
+			caracter->h_inicial += 360;
 		}
-		while (!(personaje->h_final < 360)) {
-			personaje->h_final -= 360;
+		while (!(caracter->h_final < 360)) {
+			caracter->h_final -= 360;
 		}
-		while (personaje->h_final < 0) {
-			personaje->h_final += 360;
+		while (caracter->h_final < 0) {
+			caracter->h_final += 360;
 		}
 	} else {
-		personaje->h_inicial = -1;
-		personaje->h_final = -1;
-		personaje->desplazamiento = -1;
-		string msg = "Color alternativo de " + personaje->nombre + " es invalido. No sera posible cambiar color en caso de ser necesario.";
+		caracter->h_inicial = -1;
+		caracter->h_final = -1;
+		caracter->desplazamiento = -1;
+		string msg = "Color alternativo de " + caracter->nombre + " es invalido. No sera posible cambiar color en caso de ser necesario.";
 		if (str == "") {
 			Logger::Instance()->log(ERROR,msg);
 		} else {
@@ -217,7 +216,7 @@ void Parser::parsearSpritePersonaje(PersonajeData* personaje, Value persValue){
 	}
 }
 
-void Parser::setearParseoDeSprite() {
+void Parser::setearCaracteres() {
 	Value root;
 	Reader reader;
 	ifstream file(SPRITE_PARSE_PATH);
@@ -234,41 +233,31 @@ void Parser::setearParseoDeSprite() {
 		Logger::Instance()->log(ERROR,"El archivo de parseo de sprites contiene errores.");
 	}
 
-	Value persValue = root[this->personaje1.nombre];
-	if (persValue.empty())
-	{
-		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje1.nombre + "\" (sprites) no existe. Se usa uno por defecto.");
-		this->personaje1.nombre = "liukang";
-		persValue = root["liukang"];
-	}
-	parsearSpritePersonaje(&(this->personaje1), persValue);
+	Value carValue = root["liukang"];
+	this->liukang.nombre = "liukang";
+	parsearSpriteCaracter(&(this->liukang), carValue);
 
-	persValue = root[this->personaje2.nombre];
-	if (persValue.empty())
-	{
-		Logger::Instance()->log(ERROR,"El personaje \"" + this->personaje2.nombre + "\" (sprites) no existe. Se usa uno por defecto.");
-		this->personaje2.nombre = "liukang";
-		persValue = root["liukang"];
-	}
-	parsearSpritePersonaje(&(this->personaje2), persValue);
+	carValue = root["scorpion"];
+	this->scorpion.nombre = "scorpion";
+	parsearSpriteCaracter(&(this->scorpion), carValue);
 
 }
 
-bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[8], Value persValue, int num, string valueString, string botonString) {
-	try	{	*boton = persValue.get(valueString,-1).asInt();	}
+bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[8], Value jugValue, int num, string valueString, string botonString) {
+	try	{	*boton = jugValue.get(valueString,-1).asInt();	}
 		catch(const exception &e) {
 			string str(e.what());
-			string msg = " Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + ".";
+			string msg = " Boton de " + botonString + " del jugador " + to_string(static_cast<long double>(num)) + ".";
 			Logger::Instance()->log(ERROR,str + msg);
 			return false;
 		}
 		if ((*boton < 0) || (*boton > 7)) {
-			string msg = "Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + " es invalido o no definido.";
+			string msg = "Boton de " + botonString + " del jugador " + to_string(static_cast<long double>(num)) + " es invalido o no definido.";
 			Logger::Instance()->log(WARNING,msg);
 			return false;
 		} else {
 			if (teclasUsadas[*boton] == true) {
-				string msg = "Boton de " + botonString + " del personaje " + to_string(static_cast<long double>(num)) + " ya se usa.";
+				string msg = "Boton de " + botonString + " del jugador " + to_string(static_cast<long double>(num)) + " ya se usa.";
 				Logger::Instance()->log(WARNING,msg);
 				return false;
 			} else {
@@ -285,61 +274,51 @@ void Parser::corregirBoton(int* boton, bool (&teclasUsadas)[8], int num, string 
 		}
 		*boton = k;
 		teclasUsadas[k] = true;
-		string msg = "Personaje " + to_string(static_cast<long double>(num)) + ", boton de "
+		string msg = "Jugador " + to_string(static_cast<long double>(num)) + ", boton de "
 						+ botonString + ": " + to_string(static_cast<long double>(k)) + ".";
 		Logger::Instance()->log(WARNING,msg);
 }
 
-void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Value persDef, int num){
+void Parser::setearDatosJugador(JugadorData* jugador, Value jugValue, Value jugDef, int num){
 	//-----ancho-----
-	try {	personaje->ancho = persValue.get("ancho",-1).asFloat();	}
+	try {	jugador->ancho = jugValue.get("ancho",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			string msg = " Se usara valor por defecto de ancho del personaje " + to_string(static_cast<long double>(num)) + ".";
+			string msg = " Se usara valor por defecto de ancho del jugador " + to_string(static_cast<long double>(num)) + ".";
 			Logger::Instance()->log(ERROR,str + msg);
-			personaje->ancho = persDef.get("ancho",-1).asFloat();
+			jugador->ancho = jugDef.get("ancho",-1).asFloat();
 		}
-		if (personaje->ancho < 2) {
-			personaje->ancho = persDef.get("ancho",-1).asFloat();
-			string msg = "Ancho logico del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+		if (jugador->ancho < 2) {
+			jugador->ancho = jugDef.get("ancho",-1).asFloat();
+			string msg = "Ancho logico del jugador " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
 			Logger::Instance()->log(WARNING,msg);
 		}
 
 	//-----alto-----
-	try {	personaje->alto = persValue.get("alto",-1).asFloat();	}
+	try {	jugador->alto = jugValue.get("alto",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			string msg = " Se usara valor por defecto de alto del personaje " + to_string(static_cast<long double>(num)) + ".";
+			string msg = " Se usara valor por defecto de alto del jugador " + to_string(static_cast<long double>(num)) + ".";
 			Logger::Instance()->log(ERROR,str + msg);
-			personaje->alto = persDef.get("alto",-1).asFloat();
+			jugador->alto = jugDef.get("alto",-1).asFloat();
 		}
-		if (personaje->alto < 2) {
-			personaje->alto = persDef.get("alto",-1).asFloat();
-			string msg = "Alto logico del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+		if (jugador->alto < 2) {
+			jugador->alto = jugDef.get("alto",-1).asFloat();
+			string msg = "Alto logico del jugador " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
 			Logger::Instance()->log(WARNING,msg);
 		}
 
-	//-----nombre-----
-	//Mientras no hay error de parseo, todo es levantable como string.
-	try {	personaje->nombre = persValue.get("nombre",-1).asString();	}
-		catch(const exception &e) {
-			string str(e.what());
-			string msg =  " Se usara personaje (sprites) " + to_string(static_cast<long double>(num)) + " por defecto.";
-			Logger::Instance()->log(ERROR,str + " Se usara personaje (sprites) por defecto.");
-			personaje->nombre = persDef.get("nombre",-1).asString();
-		}
-
 	//-----arma_speed-----
-	try {	personaje->arma_speed = persValue.get("arma_speed",-1).asFloat();	}
+	try {	jugador->arma_speed = jugValue.get("arma_speed",-1).asFloat();	}
 		catch(const exception &e) {
 			string str(e.what());
-			string msg = " Se usara valor por defecto para la velocidad del arma del personaje " + to_string(static_cast<long double>(num)) + ".";
+			string msg = " Se usara valor por defecto para la velocidad del arma del jugador " + to_string(static_cast<long double>(num)) + ".";
 			Logger::Instance()->log(ERROR,str + msg);
-			personaje->arma_speed = persDef.get("arma_speed",-1).asFloat();
+			jugador->arma_speed = jugDef.get("arma_speed",-1).asFloat();
 		}
-		if (personaje->arma_speed < 0) {
-			personaje->arma_speed = persDef.get("arma_speed",-1).asFloat();
-			string msg = "Velocidad del arma del personaje " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+		if (jugador->arma_speed < 0) {
+			jugador->arma_speed = jugDef.get("arma_speed",-1).asFloat();
+			string msg = "Velocidad del arma del jugador " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
 			Logger::Instance()->log(WARNING,msg);
 		}
 
@@ -348,19 +327,19 @@ void Parser::setearDatosPersonaje(PersonajeData* personaje, Value persValue, Val
 	//Primero asigna todos valores validos. Luego a los que son invalidos les pone teclas desocupadas en orden creciente.
 	bool teclasUsadas[8] = { false };
 
-	bool BotonGolpeAlto = asignarBoton(&(personaje->golpe_alto), teclasUsadas, persValue, num, "golpe-alto", "golpe alto");
-	bool BotonGolpeBajo = asignarBoton(&(personaje->golpe_bajo), teclasUsadas, persValue, num, "golpe-bajo", "golpe bajo");
-	bool BotonPatadaAlta = asignarBoton(&(personaje->patada_alta), teclasUsadas, persValue, num, "patada-alta", "patada alta");
-	bool BotonPatadaBaja = asignarBoton(&(personaje->patada_baja), teclasUsadas, persValue, num, "patada-baja", "patada baja");
-	bool BotonDefensa = asignarBoton(&(personaje->defensa), teclasUsadas, persValue, num, "defensa", "defensa");
-	bool BotonArrojar = asignarBoton(&(personaje->arrojar), teclasUsadas, persValue, num, "arrojar", "arrojar");
+	bool BotonGolpeAlto = asignarBoton(&(jugador->golpe_alto), teclasUsadas, jugValue, num, "golpe-alto", "golpe alto");
+	bool BotonGolpeBajo = asignarBoton(&(jugador->golpe_bajo), teclasUsadas, jugValue, num, "golpe-bajo", "golpe bajo");
+	bool BotonPatadaAlta = asignarBoton(&(jugador->patada_alta), teclasUsadas, jugValue, num, "patada-alta", "patada alta");
+	bool BotonPatadaBaja = asignarBoton(&(jugador->patada_baja), teclasUsadas, jugValue, num, "patada-baja", "patada baja");
+	bool BotonDefensa = asignarBoton(&(jugador->defensa), teclasUsadas, jugValue, num, "defensa", "defensa");
+	bool BotonArrojar = asignarBoton(&(jugador->arrojar), teclasUsadas, jugValue, num, "arrojar", "arrojar");
 	
-	if (!BotonGolpeAlto)	corregirBoton(&(personaje->golpe_alto), teclasUsadas, num, "golpe alto");
-	if (!BotonGolpeBajo)	corregirBoton(&(personaje->golpe_bajo), teclasUsadas, num, "golpe bajo");
-	if (!BotonPatadaAlta)	corregirBoton(&(personaje->patada_alta), teclasUsadas, num, "patada alta");
-	if (!BotonPatadaBaja)	corregirBoton(&(personaje->patada_baja), teclasUsadas, num, "patada baja");
-	if (!BotonDefensa)	corregirBoton(&(personaje->defensa), teclasUsadas, num, "defensa");
-	if (!BotonArrojar)	corregirBoton(&(personaje->arrojar), teclasUsadas, num, "arrojar");
+	if (!BotonGolpeAlto)	corregirBoton(&(jugador->golpe_alto), teclasUsadas, num, "golpe alto");
+	if (!BotonGolpeBajo)	corregirBoton(&(jugador->golpe_bajo), teclasUsadas, num, "golpe bajo");
+	if (!BotonPatadaAlta)	corregirBoton(&(jugador->patada_alta), teclasUsadas, num, "patada alta");
+	if (!BotonPatadaBaja)	corregirBoton(&(jugador->patada_baja), teclasUsadas, num, "patada baja");
+	if (!BotonDefensa)	corregirBoton(&(jugador->defensa), teclasUsadas, num, "defensa");
+	if (!BotonArrojar)	corregirBoton(&(jugador->arrojar), teclasUsadas, num, "arrojar");
 
 }
 
@@ -368,25 +347,26 @@ Parser::Parser(Value defRoot) {
 
 	setearVentanaPorDefecto(defRoot["ventana"]);
 	setearEscenarioPorDefecto(defRoot["escenario"]);
-	setearPersonajePorDefecto(&(this->personaje1),defRoot["personaje1"]);
-	setearPersonajePorDefecto(&(this->personaje2),defRoot["personaje2"]);
 	setearCapasPorDefecto(defRoot["capas"]);
-
-	setearParseoDeSprite();
+	
+	setearJugadorPorDefecto(&(this->jugador1),defRoot["jugador1"]);
+	setearJugadorPorDefecto(&(this->jugador2),defRoot["jugador2"]);
+	
+	setearCaracteres();
 }
 
 Parser::Parser(Value root, Value defRoot){
 	//FRENTE A AUSENCIA DE CUALQUIER COSA SE REEMPLAZA POR VALOR POR DEFECTO
 	Value defVentana = defRoot["ventana"];
 	Value defEscenario = defRoot["escenario"];
-	Value defPersonaje1 = defRoot["personaje1"];
-	Value defPersonaje2 = defRoot["personaje2"];
+	Value defJugador1 = defRoot["jugador1"];
+	Value defJugador2 = defRoot["jugador2"];
 	Value defCapas = defRoot["capas"];
 
 	bool hayVentana = true;
 	bool hayEscenario = true;
-	bool hayPersonaje1 = true;
-	bool hayPersonaje2 = true;
+	bool hayJugador1 = true;
+	bool hayJugador2 = true;
 	bool hayCapas = true;
 
 	//Primero reviso estructuras enteras
@@ -404,18 +384,18 @@ Parser::Parser(Value root, Value defRoot){
 		Logger::Instance()->log(ERROR,"Escenario no definido. Se usa escenario por defecto.");
 	};
 	
-	Value personaje1 = root["personaje1"];
-	if (personaje1.empty()) {
-		setearPersonajePorDefecto(&(this->personaje1),defPersonaje1);
-		hayPersonaje1 = false;
-		Logger::Instance()->log(ERROR,"Personaje 1 no definido. Se usa personaje 1 por defecto.");
+	Value jugador1 = root["jugador1"];
+	if (jugador1.empty()) {
+		setearJugadorPorDefecto(&(this->jugador1),defJugador1);
+		hayJugador1 = false;
+		Logger::Instance()->log(ERROR,"Jugador 1 no definido. Se usa jugador 1 por defecto.");
 	};
 
-	Value personaje2 = root["personaje2"];
-	if (personaje2.empty()) {
-		setearPersonajePorDefecto(&(this->personaje2),defPersonaje2);
-		hayPersonaje2 = false;
-		Logger::Instance()->log(ERROR,"Personaje 2 no definido. Se usa personaje 2 por defecto.");
+	Value jugador2 = root["jugador2"];
+	if (jugador2.empty()) {
+		setearJugadorPorDefecto(&(this->jugador2),defJugador2);
+		hayJugador2 = false;
+		Logger::Instance()->log(ERROR,"Jugador 2 no definido. Se usa jugador 2 por defecto.");
 	};
 
 	Value capasJson = root["capas"];
@@ -508,7 +488,7 @@ Parser::Parser(Value root, Value defRoot){
 		try {	this->escenario.z_index = escenario.get("zindex",-1).asInt();	}
 		catch(const exception &e) {
 			string str(e.what());
-			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de z-index para personajes.");
+			Logger::Instance()->log(ERROR,str + " Se usara valor por defecto de z-index para jugadores.");
 			this->escenario.z_index = defEscenario.get("zindex",-1).asInt();
 		}
 		if (this->escenario.z_index < 0) {
@@ -522,17 +502,17 @@ Parser::Parser(Value root, Value defRoot){
 		this->ventana.ancho = this-> escenario.ancho;
 	}
 
-	//Personaje1
-	if (hayPersonaje1) {
-		setearDatosPersonaje(&(this->personaje1), personaje1, defPersonaje1, 1);
+	//Jugador1
+	if (hayJugador1) {
+		setearDatosJugador(&(this->jugador1), jugador1, defJugador1, 1);
 	}
 
-	//Personaje2
-	if (hayPersonaje2) {
-		setearDatosPersonaje(&(this->personaje2), personaje2, defPersonaje2, 2);
+	//Jugador2
+	if (hayJugador2) {
+		setearDatosJugador(&(this->jugador2), jugador2, defJugador2, 2);
 	}
 
-	setearParseoDeSprite();
+	setearCaracteres();
 
 	/*Llega con capas por defecto o asegurado que hay por lo menos una capa en json. Si las capas no son por defecto,
 	analiza una por una y descarta las capas que tienen valores invalidos, salvo anchos numericos invalidos.

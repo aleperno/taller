@@ -143,6 +143,8 @@ class Personaje
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
 
+		void resetear(bool pers_ppal);
+
 		void moveLeft(float factor);
 		void moveRight(float factor);
 
