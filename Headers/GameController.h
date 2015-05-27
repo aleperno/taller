@@ -26,6 +26,7 @@ using namespace std;
 #include <HUD.h>
 #include <MainScreen.h>
 #include <Temporizador.h>
+#include <AI.h>
 
 
 #define DEF_SLEEP_TIME 20
@@ -54,6 +55,7 @@ class GameController
 
 	private:
 		//Atributos
+		AI* ai_handler;
 		GameMode tipo_juego;
 		static GameController* _instance;
 		MainScreen* _mainScreen;
@@ -95,6 +97,7 @@ class GameController
 		static EscenarioData getEscenario(Parser* parser);
 		static vector<Capa*> getCapas(Ventana* ventana,Parser* parser, EscenarioData escenario);
 		void getPersonajes(Ventana* ventana, Parser* parser, EscenarioData escenario);
+		void InicializarAI(int _difficulty);
 		void prepararPartida();
 		void actualizarPersonajes();
 		void runPVP();

@@ -25,6 +25,8 @@
 #define LOW_PUNCH "LP"
 #define HIGH_KICK "HK"
 #define LOW_KICK "LK"
+#define TRACK_MOV 100
+#define DIFFICULTY 2
 
 GameController* GameController::_instance = 0;
 
@@ -110,6 +112,7 @@ GameController::GameController(Parser* parser)
 	_escenario = GameController::getEscenario(parser);
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	getPersonajes(_ventana,parser,_escenario);
+	InicializarAI(DIFFICULTY);
 	_personaje1 = this->_jugador1scorpion;
 	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
@@ -125,6 +128,11 @@ GameController::GameController(Parser* parser)
 	_mainScreen = new MainScreen(_ventana,&perSelect,&punteros);
 	_fightTimer = new Temporizador();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
+}
+
+void GameController::InicializarAI(int _difficulty)
+{
+	ai_handler = new AI(_difficulty);
 }
 
 bool GameController::iniciarSDL() {
@@ -541,7 +549,93 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 
 void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 	this->tipo_juego = PVE;
-	procesarEventosMainScreenTraining(e);
+	int backORplay;
+	switch (e->type) {
+
+	case SDL_WINDOWEVENT:
+		if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
+		else if (e->window.event == SDL_WINDOWEVENT_RESTORED) minimizado = false;
+	break;
+		
+	case SDL_MOUSEMOTION:
+		backORplay = this->_mainScreen->mouseOverBackOrPlay();
+		if (backORplay != NINGUNO)	this->botonSeleccionadoEnModo = backORplay;
+	break;
+
+	case SDL_MOUSEBUTTONDOWN:
+		backORplay = this->_mainScreen->mouseOverBackOrPlay();
+		switch (backORplay) {
+
+		case BACK_BOTON:
+			this->screen = MAINSCREEN_MODE_SELECT;
+			this->textFocus = TEXT_NO_FOCUS;
+			SDL_StopTextInput();
+		break;
+
+		case PLAY_BOTON:
+			this->screen = NO_MAINSCREEN;
+			this->enMainScreen = false;
+			this->textFocus = TEXT_NO_FOCUS;
+			SDL_StopTextInput();
+		break;
+
+		case NINGUNO:
+			if (this->_mainScreen->clickOnTextCamp() == TEXT_FOCUS_P1) {
+				textFocus = TEXT_FOCUS_P1;
+				SDL_StartTextInput();
+			} else {
+				textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+				if ((this->_mainScreen->faceSelected().first >= 0) && (this->_mainScreen->faceSelected().second >= 0)) {
+					this->filaP1 = this->_mainScreen->faceSelected().first;
+					this->columnaP1 = this->_mainScreen->faceSelected().second;
+				}
+			}
+		break;
+		}
+	break;
+
+	case SDL_TEXTINPUT:
+		if (textFocus == TEXT_FOCUS_P1)		nombreP1 += e->text.text;
+	break;
+
+	case SDL_KEYDOWN:
+		switch (textFocus) {
+
+		case TEXT_NO_FOCUS:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
+			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
+			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
+			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
+			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
+			else if (e->key.keysym.sym == SDLK_TAB) {
+				textFocus = TEXT_FOCUS_P1;
+				SDL_StartTextInput();
+			}
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+			}
+		break;
+
+		case TEXT_FOCUS_P1:
+			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
+			else if (e->key.keysym.sym == SDLK_TAB) {
+				textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+			}
+			else if (e->key.keysym.sym == SDLK_RETURN) {
+				this->screen = NO_MAINSCREEN;
+				this->enMainScreen = false;
+				this->textFocus = TEXT_NO_FOCUS;
+				SDL_StopTextInput();
+			}
+		break;
+		}
+	break;
+	}
 }
 
 void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
@@ -1055,8 +1149,8 @@ void GameController::getKeysPlayer2() {
 
 void GameController::getKeysPlayer1() {
 
-	//Actualizo la lista de movimientos - Si tiene 50 elementos elimino el primero
-	if(this->_personaje1->track_movimientos.size() >= 50)
+	//Actualizo la lista de movimientos - Si tiene TRACK_MOV elementos elimino el primero
+	if(this->_personaje1->track_movimientos.size() >= TRACK_MOV)
 		this->_personaje1->track_movimientos.erase(this->_personaje1->track_movimientos.begin(), this->_personaje1->track_movimientos.begin() + 1);
 
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
@@ -1148,7 +1242,7 @@ void GameController::getKeys()
 			if (this->_personaje2->canMove()) this->getKeysPlayer2();
 			break;
 		case PVE:
-			//TODO MANDAR A AI
+			if (this->_personaje2->canMove()) this->ai_handler->HandlePlayer(_personaje2, _personaje1->track_movimientos);
 			break;
 		case TRAINING:
 			break;
