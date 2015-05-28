@@ -97,6 +97,10 @@ GameController::GameController(Parser* parser)
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
+	lastJoyValue1X = 0;
+	lastJoyValue1Y = 0;
+	lastJoyValue2X = 0;
+	lastJoyValue2Y = 0;
 	
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
@@ -323,7 +327,9 @@ void GameController::procesarEventosMainScreenIntro(SDL_Event* e) {
 	switch (e->type) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_m) this->screen = MAINSCREEN_MODE_SELECT;
+			break;
+		case SDL_JOYBUTTONDOWN:
+			if ((e->jdevice.which == 0) && (e->jbutton.button == 9)) this->screen = MAINSCREEN_MODE_SELECT;
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			this->screen = MAINSCREEN_MODE_SELECT;
@@ -366,9 +372,10 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 	switch (e->type) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_DOWN) this->modeSelected = (modeSelected + 1) % 3;
-			else if (e->key.keysym.sym == SDLK_UP) this->modeSelected = (modeSelected + 2) % 3;
-			else if (e->key.keysym.sym == SDLK_RETURN) {
+			break;
+
+		case SDL_JOYBUTTONDOWN:
+			if ((e->jdevice.which == 0) && (e->jbutton.button == OK))
 				switch (modeSelected) {
 				case SELECTED_PVP:
 					this->screen = MAINSCREEN_PVP;
@@ -380,7 +387,17 @@ void GameController::procesarEventosMainScreenModeSelect(SDL_Event* e) {
 					this->screen = MAINSCREEN_TRAINING;
 					break;
 				}
-			}
+			break;
+
+		case SDL_JOYAXISMOTION:
+			if ((e->jdevice.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
+				this->modeSelected = (modeSelected + 1) % 3;
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jdevice.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
+				this->modeSelected = (modeSelected + 2) % 3;
+				lastJoyValue1Y = e->jaxis.value;
+			} else if (e->jdevice.which == 0)
+				lastJoyValue1Y = e->jaxis.value;
 			break;
 
 		case SDL_MOUSEMOTION:
@@ -478,70 +495,135 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 	break;
 
 	case SDL_KEYDOWN:
+		if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+	break;
+
+	case SDL_JOYBUTTONDOWN:
 		switch (textFocus) {
 
-		case TEXT_NO_FOCUS:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
-			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
-			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
-			else if ((e->key.keysym.sym == SDLK_PAGEDOWN) && (filaP2 < 2)) filaP2++;
-			else if ((e->key.keysym.sym == SDLK_PAGEUP) && (filaP2 > 0)) filaP2--;
-			else if ((e->key.keysym.sym == SDLK_INSERT) && (columnaP2 > 0)) columnaP2--;
-			else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 3)) columnaP2++;
-			else if (e->key.keysym.sym == SDLK_F1) {
-				textFocus = TEXT_FOCUS_P1;
-				SDL_StartTextInput();
-			}
-			else if (e->key.keysym.sym == SDLK_F2) {
-				textFocus = TEXT_FOCUS_P2;
-				SDL_StartTextInput();
-			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-			}
-		break;
+			case TEXT_NO_FOCUS:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == BACK)) {
+					this->screen = MAINSCREEN_MODE_SELECT;
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_FOCUS_P1;
+					SDL_StartTextInput();
+				} else if ((e->jdevice.which == 1) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_FOCUS_P2;
+					SDL_StartTextInput();
+				}
+			break;
 
-		case TEXT_FOCUS_P1:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if ((e->key.keysym.sym == SDLK_PAGEDOWN) && (filaP2 < 2)) filaP2++;
-			else if ((e->key.keysym.sym == SDLK_PAGEUP) && (filaP2 > 0)) filaP2--;
-			else if ((e->key.keysym.sym == SDLK_INSERT) && (columnaP2 > 0)) columnaP2--;
-			else if ((e->key.keysym.sym == SDLK_DELETE) && (columnaP2 < 3)) columnaP2++;
-			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
-			else if (e->key.keysym.sym == SDLK_F1) {
-				textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-				this->textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-			}
-		break;
+			case TEXT_FOCUS_P1:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == ERASE) && (nombreP1.length() > 0)) {
+					nombreP1.pop_back();
+				}
+			break;
 
-		case TEXT_FOCUS_P2:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
-			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
-			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
-			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP2.length() > 0)) nombreP2.pop_back();
-			else if (e->key.keysym.sym == SDLK_F2) {
-				textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-				this->textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-			}
-		break;
+			case TEXT_FOCUS_P2:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 1) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 1) && (e->jbutton.button == ERASE) && (nombreP2.length() > 0)) {
+					nombreP2.pop_back();
+				}
+			break;
+		}
+	break;
+
+	case SDL_JOYAXISMOTION:
+		switch (textFocus) {
+
+			case TEXT_NO_FOCUS:
+				if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (filaP1 < 2) && (e->jaxis.axis == 1)) {
+					filaP1++;
+					lastJoyValue1Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (filaP1 > 0) && (e->jaxis.axis == 1)) {
+					filaP1--;
+					lastJoyValue1Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (columnaP1 < 3) && (e->jaxis.axis == 0)) {
+					columnaP1++;
+					lastJoyValue1X = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1X > -JOYSTICK_DEAD_ZONE) && (columnaP1 > 0) && (e->jaxis.axis == 0)) {
+					columnaP1--;
+					lastJoyValue1X = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 1)) {
+					lastJoyValue1Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 0)) {
+					lastJoyValue1X = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y < JOYSTICK_DEAD_ZONE) && (filaP2 < 2) && (e->jaxis.axis == 1)) {
+					filaP2++;
+					lastJoyValue2Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (filaP2 > 0) && (e->jaxis.axis == 1)) {
+					filaP2--;
+					lastJoyValue2Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (columnaP2 < 3) && (e->jaxis.axis == 0)) {
+					columnaP2++;
+					lastJoyValue2X = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (columnaP2 > 0) && (e->jaxis.axis == 0)) {
+					columnaP2--;
+					lastJoyValue2X = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
+					lastJoyValue2Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
+					lastJoyValue2X = e->jaxis.value;
+				}
+			break;
+
+			case TEXT_FOCUS_P1:
+				if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y < JOYSTICK_DEAD_ZONE) && (filaP2 < 2) && (e->jaxis.axis == 1)) {
+					filaP2++;
+					lastJoyValue2Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (filaP2 > 0) && (e->jaxis.axis == 1)) {
+					filaP2--;
+					lastJoyValue2Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (columnaP2 < 3) && (e->jaxis.axis == 0)) {
+					columnaP2++;
+					lastJoyValue2X = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (columnaP2 > 0) && (e->jaxis.axis == 0)) {
+					columnaP2--;
+					lastJoyValue2X = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
+					lastJoyValue2Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
+					lastJoyValue2X = e->jaxis.value;
+				}
+			break;
+
+			case TEXT_FOCUS_P2:
+				if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (filaP1 < 2) && (e->jaxis.axis == 1)) {
+					filaP1++;
+					lastJoyValue1Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (filaP1 > 0) && (e->jaxis.axis == 1)) {
+					filaP1--;
+					lastJoyValue1Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (columnaP1 < 3) && (e->jaxis.axis == 0)) {
+					columnaP1++;
+					lastJoyValue1X = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1X > -JOYSTICK_DEAD_ZONE) && (columnaP1 > 0) && (e->jaxis.axis == 0)) {
+					columnaP1--;
+					lastJoyValue1X = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 1)) {
+					lastJoyValue1Y = e->jaxis.value;
+				} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 0)) {
+					lastJoyValue1X = e->jaxis.value;
+				}
+			break;
 		}
 	break;
 	}
@@ -934,9 +1016,6 @@ void GameController::procesamientoMainScreenPVP() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventosMainScreenPVP(&e);
 	}
-	//esa linea marca instante cuando arranco la partida
-	//no tiene que estar aca, pero primero hay que reformar run
-	this->_fightTimer->reset();
 
 	if (!this->minimizado)
 		this->_mainScreen->showPVP(make_pair(filaP1,columnaP1),make_pair(filaP2,columnaP2),textFocus,nombreP1,nombreP2,botonSeleccionadoEnModo);
@@ -951,9 +1030,6 @@ void GameController::procesamientoMainScreenPVE() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventosMainScreenPVE(&e);
 	}
-	//esa linea marca instante cuando arranco la partida
-	//no tiene que estar aca, pero primero hay que reformar run
-	this->_fightTimer->reset();
 
 	if (!this->minimizado)
 		this->_mainScreen->showPVE(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
@@ -968,9 +1044,6 @@ void GameController::procesamientoMainScreenTraining() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventosMainScreenTraining(&e);
 	}
-	//esa linea marca instante cuando arranco la partida
-	//no tiene que estar aca, pero primero hay que reformar run
-	this->_fightTimer->reset();
 
 	if (!this->minimizado)
 		this->_mainScreen->showTraining(filaP1,columnaP1,textFocus,nombreP1,botonSeleccionadoEnModo);
@@ -1025,6 +1098,8 @@ void GameController::prepararPartida() {
 	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
 	if (this->nombreP2.length() == 0)	this->nombreP2 = _personaje2->getData()->nombre;
 	_hud->recargarNombres();
+
+	this->_fightTimer->reset();
 }
 
 void GameController::run() {

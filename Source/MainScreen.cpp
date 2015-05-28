@@ -87,7 +87,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 
 	this->title->loadFromRenderedText("MORTAL TALLER", textColor, fontBig);
 	this->titleShadow->loadFromRenderedText("MORTAL TALLER", shadowColor, fontBig);
-	this->pressStart->loadFromRenderedText("press m", textColor, fontSmall);
+	this->pressStart->loadFromRenderedText("press start", textColor, fontSmall);
 
 	shakeCount = SHAKE_COUNT;
 	randomX = 0;
@@ -125,7 +125,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	this->modeTraining_boton = new Boton(this->_ventana, modeTraining, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*3/5);
 
 	thisIsMenu = new TextureHandler( _ventana->_gRenderer );	//Descripcion en menu modo
-	thisIsMenu->loadFromRenderedText("[Up], [Down], [Enter]", textColor, fontSmall);
+	thisIsMenu->loadFromRenderedText("[1] Confirm", textColor, fontSmall);
 	
 	//perSelect
 	liukangface = new TextureHandler( _ventana->_gRenderer );
@@ -136,7 +136,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	
 	//PVP
 	thisIsPVP = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVP
-	this->thisIsPVP->loadFromRenderedText("[b], [Enter], [Arrows], [F1], [PGup,PGdown,Ins,Del], [F2], [BS]", textColor, fontSmall);
+	this->thisIsPVP->loadFromRenderedText("[3] Name focus, [4] Erase", textColor, fontSmall);
 
 	//PVE
 	thisIsPVE = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVE
@@ -157,8 +157,8 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	//botones 'back' y 'play'
 	TextureHandler* back = new TextureHandler( _ventana->_gRenderer );
 	TextureHandler* play = new TextureHandler( _ventana->_gRenderer );
-	back->loadFromRenderedText("back", textColor, fontMenu);
-	play->loadFromRenderedText("play", textColor, fontMenu);
+	back->loadFromRenderedText("[2] back", textColor, fontMenu);
+	play->loadFromRenderedText("[1] play", textColor, fontMenu);
 	back_boton = new Boton(this->_ventana, back, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
 	play_boton = new Boton(this->_ventana, play, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
 }

@@ -39,6 +39,11 @@ using namespace std;
 #define MAINSCREEN_PVE 4
 #define MAINSCREEN_TRAINING 5
 
+#define OK 0
+#define BACK 1
+#define NAME 2
+#define ERASE 3
+
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
 
@@ -79,6 +84,10 @@ class GameController
 		SDL_Joystick* _joystickTwo;
 		const char* _joystickOneID;
 		const char* _joystickTwoID;
+		Sint16 lastJoyValue1X;
+		Sint16 lastJoyValue1Y;
+		Sint16 lastJoyValue2X;
+		Sint16 lastJoyValue2Y;
 		int _numJoysticks;
 		bool _hayPlayer1;
 		bool _hayPlayer2;
