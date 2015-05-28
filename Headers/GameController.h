@@ -44,6 +44,8 @@ using namespace std;
 #define NAME 2
 #define ERASE 3
 
+#define MAX_NAME_LENGTH 20
+
 //Analog joystick dead zone
 #define JOYSTICK_DEAD_ZONE 8000
 

@@ -491,12 +491,16 @@ void GameController::procesarEventosMainScreenPVP(SDL_Event* e) {
 	break;
 
 	case SDL_TEXTINPUT:
-		if (textFocus == TEXT_FOCUS_P1)		nombreP1 += e->text.text;
-		else if (textFocus == TEXT_FOCUS_P2)	nombreP2 += e->text.text;
+		if ((textFocus == TEXT_FOCUS_P1) && (nombreP1.length() < MAX_NAME_LENGTH))	nombreP1 += e->text.text;
+		else if ((textFocus == TEXT_FOCUS_P2) && (nombreP2.length() < MAX_NAME_LENGTH))	nombreP2 += e->text.text;
 	break;
 
 	case SDL_KEYDOWN:
-		if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+		if (e->key.keysym.sym == SDLK_ESCAPE)	this->_end_of_game = true;
+		else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (textFocus == TEXT_FOCUS_P1) && (nombreP1.length() > 0))
+			nombreP1.pop_back();
+		else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (textFocus == TEXT_FOCUS_P2) && (nombreP2.length() > 0))
+			nombreP2.pop_back();
 	break;
 
 	case SDL_JOYBUTTONDOWN:
@@ -679,11 +683,13 @@ void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 	break;
 
 	case SDL_TEXTINPUT:
-		if (textFocus == TEXT_FOCUS_P1)		nombreP1 += e->text.text;
+		if ((textFocus == TEXT_FOCUS_P1) && (nombreP1.length() < MAX_NAME_LENGTH))	nombreP1 += e->text.text;
 	break;
 
 	case SDL_KEYDOWN:
-		if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+		if (e->key.keysym.sym == SDLK_ESCAPE)	this->_end_of_game = true;
+		else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (textFocus == TEXT_FOCUS_P1) && (nombreP1.length() > 0))
+			nombreP1.pop_back();
 	break;
 
 	case SDL_JOYBUTTONDOWN:
@@ -790,11 +796,13 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 	break;
 
 	case SDL_TEXTINPUT:
-		if (textFocus == TEXT_FOCUS_P1)		nombreP1 += e->text.text;
+		if ((textFocus == TEXT_FOCUS_P1) && (nombreP1.length() < MAX_NAME_LENGTH))	nombreP1 += e->text.text;
 	break;
 
 	case SDL_KEYDOWN:
-		if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+		if (e->key.keysym.sym == SDLK_ESCAPE)	this->_end_of_game = true;
+		else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (textFocus == TEXT_FOCUS_P1) && (nombreP1.length() > 0))
+			nombreP1.pop_back();
 	break;
 
 	case SDL_JOYBUTTONDOWN:
