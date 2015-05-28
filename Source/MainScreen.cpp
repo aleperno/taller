@@ -149,10 +149,10 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	//nombres
 	TextureHandler* nombreP1 = new TextureHandler( _ventana->_gRenderer );
 	TextureHandler* nombreP2 = new TextureHandler( _ventana->_gRenderer );
-	nombreP1->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
-	nombreP2->loadFromRenderedText(NOMBRE_VACIO, textColor, fontMenu);
-	nombreP1_boton = new Boton(this->_ventana, nombreP1, _ventana->_ancho_px*1/4, _ventana->_alto_px*7/10);
-	nombreP2_boton = new Boton(this->_ventana, nombreP2, _ventana->_ancho_px*3/4, _ventana->_alto_px*7/10);
+	nombreP1->loadFromRenderedText(NOMBRE_VACIO, textColor, fontSmall);
+	nombreP2->loadFromRenderedText(NOMBRE_VACIO, textColor, fontSmall);
+	nombreP1_boton = new Boton(this->_ventana, _ventana->_ancho_px*1/5, nombreP1->getHeight(), _ventana->_ancho_px*1/4, _ventana->_alto_px*7/10);
+	nombreP2_boton = new Boton(this->_ventana, _ventana->_ancho_px*1/5, nombreP2->getHeight(), _ventana->_ancho_px*3/4, _ventana->_alto_px*7/10);
 
 	//botones 'back' y 'play'
 	TextureHandler* back = new TextureHandler( _ventana->_gRenderer );
@@ -445,8 +445,14 @@ void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre, in
 }
 
 void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
-	nombreBoton->texture->loadFromRenderedText(nombre.c_str(), textColor, fontSmall);
-	nombreBoton->view();
+	TextureHandler* nombreTexture = new TextureHandler(this->_ventana->_gRenderer);
+	nombreTexture->loadFromRenderedText(nombre,textColor,fontSmall);
+	if (nombreTexture->getWidth() <= nombreBoton->w)
+		nombreTexture->render(nombreBoton->x, nombreBoton->y);
+	else {
+		SDL_Rect parteRenderizar = { nombreTexture->getWidth() - nombreBoton->w, 0, nombreBoton->w, nombreTexture->getHeight() };
+		nombreTexture->renderAnimation(false, nombreBoton->x, nombreBoton->y, nombreBoton->w, nombreTexture->getHeight(), &parteRenderizar);
+	}
 	nombreBoton->viewExternBox(color);
 }
 

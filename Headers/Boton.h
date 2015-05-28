@@ -7,7 +7,10 @@
 
 class Boton {
 public:
+	//boton con textura
 	Boton(Ventana* _ventana, TextureHandler* texture, int ejeCentralX, int y);
+	//boton sin textura
+	Boton(Ventana* _ventana, int w, int h, int ejeCentralX, int y);
 	~Boton();
 
 	//atributos
@@ -16,6 +19,8 @@ public:
 	int ejeCentralX;
 	int x;
 	int y;
+	int w;
+	int h;
 
 	//metodos
 	void view();
