@@ -64,8 +64,7 @@ class Personaje
 		Arma* arma;
 		float arma_speed;
 		float _alto_log;
-		float _ancho_log;
-		float _pos_x;
+		
 		float _pos_y;
 		float _alto_px;
 		float _ancho_px;
@@ -132,6 +131,8 @@ class Personaje
 
 	public:
 		vector<string> track_movimientos;
+		float _ancho_log;
+		float _pos_x;
 
 		bool isMaxPushLeft();
 		bool isMaxPushRight();

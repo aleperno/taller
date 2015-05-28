@@ -11,21 +11,22 @@
 #define MOVE_P_FACTOR 1
 #define JMP_FACTOR 2
 
-#define IDLE "I"
+#define IDLE "ID"
 #define UP_LEFT "UL"
 #define UP_RIGHT "UR"
-#define UP "U"
-#define DUCK "D"
+#define UP "UP"
+#define DUCK "DW"
 #define DUCK_BLOCK "DB"
-#define LEFT "L"
-#define RIGHT "R"
-#define FIRE "F"
-#define BLOCK "B"
-#define HIGH_PUNCH "HP"
-#define LOW_PUNCH "LP"
-#define HIGH_KICK "HK"
-#define LOW_KICK "LK"
-#define TRACK_MOV 100
+#define LEFT "LF"
+#define RIGHT "RG"
+#define FIRE "FI"
+#define BLOCK "BL"
+#define HIGH_PUNCH "GA"
+#define LOW_PUNCH "GB"
+#define HIGH_KICK "PA"
+#define BARRE "SW"
+#define LOW_KICK "PB"
+#define TRACK_MOV 10
 #define DIFFICULTY 2
 
 GameController* GameController::_instance = 0;
@@ -1357,7 +1358,7 @@ void GameController::getKeys()
 			if (this->_personaje2->canMove()) this->getKeysPlayer2();
 			break;
 		case PVE:
-			if (this->_personaje2->canMove()) this->ai_handler->HandlePlayer(_personaje2, _personaje1->track_movimientos);
+			if (this->_personaje2->canMove()) this->ai_handler->HandlePlayer(_personaje2, _personaje1);
 			break;
 		case TRAINING:
 			break;
