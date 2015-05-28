@@ -682,39 +682,59 @@ void GameController::procesarEventosMainScreenPVE(SDL_Event* e) {
 	break;
 
 	case SDL_KEYDOWN:
+		if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+	break;
+
+	case SDL_JOYBUTTONDOWN:
 		switch (textFocus) {
 
-		case TEXT_NO_FOCUS:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
-			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
-			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
-			else if (e->key.keysym.sym == SDLK_TAB) {
-				textFocus = TEXT_FOCUS_P1;
-				SDL_StartTextInput();
-			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-			}
-		break;
+			case TEXT_NO_FOCUS:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == BACK)) {
+					this->screen = MAINSCREEN_MODE_SELECT;
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_FOCUS_P1;
+					SDL_StartTextInput();
+				}
+			break;
 
-		case TEXT_FOCUS_P1:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
-			else if (e->key.keysym.sym == SDLK_TAB) {
-				textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
+			case TEXT_FOCUS_P1:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == ERASE) && (nombreP1.length() > 0)) {
+					nombreP1.pop_back();
+				}
+			break;
+		}
+	break;
+
+	case SDL_JOYAXISMOTION:
+		if (textFocus == TEXT_NO_FOCUS) {
+			if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (filaP1 < 2) && (e->jaxis.axis == 1)) {
+				filaP1++;
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (filaP1 > 0) && (e->jaxis.axis == 1)) {
+				filaP1--;
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (columnaP1 < 3) && (e->jaxis.axis == 0)) {
+				columnaP1++;
+				lastJoyValue1X = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1X > -JOYSTICK_DEAD_ZONE) && (columnaP1 > 0) && (e->jaxis.axis == 0)) {
+				columnaP1--;
+				lastJoyValue1X = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 1)) {
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 0)) {
+				lastJoyValue1X = e->jaxis.value;
 			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-				this->textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-			}
-		break;
 		}
 	break;
 	}
@@ -773,39 +793,59 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 	break;
 
 	case SDL_KEYDOWN:
+		if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+	break;
+
+	case SDL_JOYBUTTONDOWN:
 		switch (textFocus) {
 
-		case TEXT_NO_FOCUS:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_b) this->screen = MAINSCREEN_MODE_SELECT;
-			else if ((e->key.keysym.sym == SDLK_DOWN) && (filaP1 < 2)) filaP1++;
-			else if ((e->key.keysym.sym == SDLK_UP) && (filaP1 > 0)) filaP1--;
-			else if ((e->key.keysym.sym == SDLK_LEFT) && (columnaP1 > 0)) columnaP1--;
-			else if ((e->key.keysym.sym == SDLK_RIGHT) && (columnaP1 < 3)) columnaP1++;
-			else if (e->key.keysym.sym == SDLK_TAB) {
-				textFocus = TEXT_FOCUS_P1;
-				SDL_StartTextInput();
-			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-			}
-		break;
+			case TEXT_NO_FOCUS:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == BACK)) {
+					this->screen = MAINSCREEN_MODE_SELECT;
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_FOCUS_P1;
+					SDL_StartTextInput();
+				}
+			break;
 
-		case TEXT_FOCUS_P1:
-			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if ((e->key.keysym.sym == SDLK_BACKSPACE) && (nombreP1.length() > 0)) nombreP1.pop_back();
-			else if (e->key.keysym.sym == SDLK_TAB) {
-				textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
+			case TEXT_FOCUS_P1:
+				if ((e->jdevice.which == 0) && (e->jbutton.button == OK)) {
+					this->screen = NO_MAINSCREEN;
+					this->enMainScreen = false;
+					this->textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == NAME)) {
+					textFocus = TEXT_NO_FOCUS;
+					SDL_StopTextInput();
+				} else if ((e->jdevice.which == 0) && (e->jbutton.button == ERASE) && (nombreP1.length() > 0)) {
+					nombreP1.pop_back();
+				}
+			break;
+		}
+	break;
+
+	case SDL_JOYAXISMOTION:
+		if (textFocus == TEXT_NO_FOCUS) {
+			if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (filaP1 < 2) && (e->jaxis.axis == 1)) {
+				filaP1++;
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (filaP1 > 0) && (e->jaxis.axis == 1)) {
+				filaP1--;
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (columnaP1 < 3) && (e->jaxis.axis == 0)) {
+				columnaP1++;
+				lastJoyValue1X = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1X > -JOYSTICK_DEAD_ZONE) && (columnaP1 > 0) && (e->jaxis.axis == 0)) {
+				columnaP1--;
+				lastJoyValue1X = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 1)) {
+				lastJoyValue1Y = e->jaxis.value;
+			} else if ((e->jaxis.which == 0) && (e->jaxis.axis == 0)) {
+				lastJoyValue1X = e->jaxis.value;
 			}
-			else if (e->key.keysym.sym == SDLK_RETURN) {
-				this->screen = NO_MAINSCREEN;
-				this->enMainScreen = false;
-				this->textFocus = TEXT_NO_FOCUS;
-				SDL_StopTextInput();
-			}
-		break;
 		}
 	break;
 	}

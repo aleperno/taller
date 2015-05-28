@@ -140,11 +140,11 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 
 	//PVE
 	thisIsPVE = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVE
-	this->thisIsPVE->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
+	this->thisIsPVE->loadFromRenderedText("[3] Name focus, [4] Erase", textColor, fontSmall);
 
 	//Training
 	thisIsTraining = new TextureHandler( _ventana->_gRenderer );	//Descripcion en Training
-	this->thisIsTraining->loadFromRenderedText("[b], [Enter], [Up,Down,Left,Right], [Tab], [BS]", textColor, fontSmall);
+	this->thisIsTraining->loadFromRenderedText("[3] Name focus, [4] Erase", textColor, fontSmall);
 
 	//nombres
 	TextureHandler* nombreP1 = new TextureHandler( _ventana->_gRenderer );
