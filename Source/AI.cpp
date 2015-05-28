@@ -2,6 +2,7 @@
 using namespace std;
 
 #define JMP_FACTOR 2
+#define MOV_FACTOR2 0.8
 
 #define IDLE "ID"
 #define UP_LEFT "UL"
@@ -34,7 +35,7 @@ void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 	{
 		this->prediccion = this->ObtenerPrediccion(_personaje_PLAYER->track_movimientos);
 		this->accion = this->ObtenerAccion(this->prediccion, this->CalcularDistacia(_personaje_AI->_pos_x, _personaje_PLAYER->_pos_x, _personaje_AI->_ancho_log));
-		//this->EjecutarMovimiento(_personaje_AI, this->accion);
+		this->EjecutarMovimiento(_personaje_AI, this->accion);
 	}
 	else
 	{
@@ -57,13 +58,13 @@ int AI::CalcularDistacia(float _pos_x_ai, float _pos_x_player, int _ancho_log)
 	float dist = fabs(_pos_x_ai - _pos_x_player);
 	int dist_entera = (int)dist;
 
-	if(dist_entera < _ancho_log)
+	if(dist_entera < _ancho_log / 2)
 		return 0;
 
-	if((dist_entera > _ancho_log) && (dist_entera < _ancho_log * 2))
+	if((dist_entera > _ancho_log / 2) && (dist_entera < _ancho_log))
 		return 1;
 
-	if(dist_entera > _ancho_log * 2)
+	if(dist_entera > _ancho_log)
 		return 2;
 
 	return 0;
@@ -71,10 +72,32 @@ int AI::CalcularDistacia(float _pos_x_ai, float _pos_x_player, int _ancho_log)
 
 void AI::EjecutarMovimiento(Personaje* _personaje, string _movimiento)
 {
-	//TODO: Ejecutar el movimiento
-	/*Pruebas
-	_personaje->jump(JMP_FACTOR);
-	_personaje->lanzarArma();*/
+	if(_movimiento == IDLE)
+		_personaje->idle();
+
+	if(_movimiento == HIGH_PUNCH)
+		_personaje->golpeAlto();
+
+	if(_movimiento == HIGH_KICK)
+		_personaje->patadaAlta();
+
+	if(_movimiento == DUCK)
+		_personaje->duck();
+
+	if(_movimiento == BLOCK)
+		_personaje->block();
+
+	if(_movimiento == BARRE)
+		_personaje->barrer();
+
+	if(_movimiento == FIRE)
+		_personaje->lanzarArma();
+
+	if(_movimiento == WALK)
+		if(!_personaje->_orientacion)
+			_personaje->moveRight(MOV_FACTOR2);
+		else
+			_personaje->moveLeft(MOV_FACTOR2);
 }
 
 string AI::ObtenerAccion(string _prediccion, int _distancia)

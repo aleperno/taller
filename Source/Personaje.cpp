@@ -107,7 +107,7 @@ void Personaje::resetear() {
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 {
-    float factor_cercania = 0.12f;
+    float factor_cercania = 0.05f;
     bool colision = true;
 
     //Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
