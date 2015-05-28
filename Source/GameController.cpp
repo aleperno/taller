@@ -26,7 +26,7 @@
 #define HIGH_KICK "PA"
 #define BARRE "SW"
 #define LOW_KICK "PB"
-#define TRACK_MOV 10
+#define TRACK_MOV 100
 #define DIFFICULTY 2
 
 GameController* GameController::_instance = 0;
