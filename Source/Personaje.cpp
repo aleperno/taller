@@ -84,10 +84,10 @@ PersonajeData* Personaje::getData() {
 
 void Personaje::posicionarParaMain() {
     if (pers_ppal)
-        this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log/3);
+        this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log*3/8);
     else
-        this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 + (this->_ventana->_ancho_log/3);
-    this->_pos_y = this->_ventana->_alto_log*2/5;
+        this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 + (this->_ventana->_ancho_log*3/8);
+    this->_pos_y = this->_ventana->_alto_log*5/12;
 }
 
 void Personaje::resetear() {
