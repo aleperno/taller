@@ -83,8 +83,12 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	gateRight = new TextureHandler( _ventana->_gRenderer );
 	gateLeft->loadFromFile(GATE_LEFT_PATH,false,0,0,0,true);
 	gateRight->loadFromFile(GATE_RIGHT_PATH,false,0,0,0,true);
+	
 	gateLeftX = -_ventana->_ancho_px*GATE_ANCHO;
 	gateRightX = _ventana->_ancho_px;
+
+	wallElementMedium = new TextureHandler( _ventana->_gRenderer );
+	wallElementMedium->loadFromFile(WALL_ELEMENT_MEDIUM,false,0,0,0,true);
 
 	//showIntro
 	title = new TextureHandler( _ventana->_gRenderer );
@@ -113,9 +117,9 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
 	modeTraining->loadFromRenderedText("training", textColor, fontMenu);
 
-	this->modePVP_boton = new Boton(this->_ventana, modePVP, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*1/5);
-	this->modePVE_boton = new Boton(this->_ventana, modePVE, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*2/5);
-	this->modeTraining_boton = new Boton(this->_ventana, modeTraining, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*3/5);
+	this->modePVP_boton = new Boton(this->_ventana, modePVP, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*2/12);
+	this->modePVE_boton = new Boton(this->_ventana, modePVE, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*4/12);
+	this->modeTraining_boton = new Boton(this->_ventana, modeTraining, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*6/12);
 
 	thisIsMenu = new TextureHandler( _ventana->_gRenderer );	//Descripcion en menu modo
 	thisIsMenu->loadFromRenderedText("[1] Confirm", textColor, fontSmall);
@@ -168,6 +172,11 @@ void MainScreen::prepararPerSelect() {
 			vectorLocal.at(columna) = make_pair(topLeftX + columna*faceW, topLeftY + fila*faceH);
 		posicionesCaras.push_back(vectorLocal);
 	}
+}
+
+void MainScreen::posicionarGate() {
+	gateLeftX = 0;
+	gateRightX = _ventana->_ancho_px*(1-GATE_ANCHO);
 }
 
 void MainScreen::actualizarPosiciones() {
@@ -251,6 +260,10 @@ void MainScreen::showModeSelect(int modeSelected) {
 
 	this->gateLeft->renderScaled(gateLeftX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 	this->gateRight->renderScaled(gateRightX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
+
+	this->wallElementMedium->renderScaled(_ventana->_ancho_px*3/8, _ventana->_alto_px*2/12, _ventana->_ancho_px*2/8, _ventana->_alto_px*1/12);
+	this->wallElementMedium->renderScaled(_ventana->_ancho_px*3/8, _ventana->_alto_px*4/12, _ventana->_ancho_px*2/8, _ventana->_alto_px*1/12);
+	this->wallElementMedium->renderScaled(_ventana->_ancho_px*3/8, _ventana->_alto_px*6/12, _ventana->_ancho_px*2/8, _ventana->_alto_px*1/12);
 
 	switch (modeSelected) {
 	case SELECTED_PVP:

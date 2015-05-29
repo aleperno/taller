@@ -13,6 +13,7 @@
 #define SCORPION_FACE_PATH "Images/characters/scorpionface.png"
 #define GATE_LEFT_PATH "Images/gateleft.png"
 #define GATE_RIGHT_PATH "Images/gateright.png"
+#define WALL_ELEMENT_MEDIUM "Images/wallelementmedium.png"
 
 #define NOMBRE_VACIO " "
 
@@ -100,6 +101,7 @@ public:
 	//Intro
 	TextureHandler* gateLeft;
 	TextureHandler* gateRight;
+	TextureHandler* wallElementMedium;
 	int gateLeftX;
 	int gateRightX;
 	int titleX;
@@ -114,6 +116,7 @@ public:
 	TextureHandler* pressStart;
 	void showIntro();
 	void actualizarPosiciones();
+	void posicionarGate();
 
 	//Mode select
 	Boton* modePVP_boton;

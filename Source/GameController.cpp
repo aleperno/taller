@@ -330,10 +330,14 @@ void GameController::procesarEventosMainScreenIntro(SDL_Event* e) {
 			if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
 			break;
 		case SDL_JOYBUTTONDOWN:
-			if ((e->jdevice.which == 0) && (e->jbutton.button == 9)) this->screen = MAINSCREEN_MODE_SELECT;
+			if ((e->jdevice.which == 0) && (e->jbutton.button == 9)) {
+				this->screen = MAINSCREEN_MODE_SELECT;
+				this->_mainScreen->posicionarGate();
+			}
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			this->screen = MAINSCREEN_MODE_SELECT;
+			this->_mainScreen->posicionarGate();
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) minimizado = true;
