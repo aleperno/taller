@@ -24,6 +24,11 @@ public:
 	float h_inicial;
 	float h_final;
 	float desplazamiento;
+
+	//tomas
+	vector<string> toma1;
+	vector<string> toma2;
+	vector<string> fatality;
 };
 
 #endif /* HEADERS_CARACTERDATA_H_ */

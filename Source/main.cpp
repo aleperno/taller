@@ -63,6 +63,26 @@ int main( int argc, char* args[] )
 	logger.log(DEBUG,"Comienzo Programa");
 	Parser::Initialize(path);
 	Parser* parser = Parser::Instance();
+
+	for (unsigned int i=0; i< parser->liukang.toma1.size(); i++ )
+		cout << parser->liukang.toma1.at(i) << " ";
+	cout << endl;
+	for (unsigned int i=0; i< parser->liukang.toma2.size(); i++ )
+		cout << parser->liukang.toma2.at(i) << " ";
+	cout << endl;
+	for (unsigned int i=0; i< parser->liukang.fatality.size(); i++ )
+		cout << parser->liukang.fatality.at(i) << " ";
+	cout << endl;
+	for (unsigned int i=0; i< parser->scorpion.toma1.size(); i++ )
+		cout << parser->scorpion.toma1.at(i) << " ";
+	cout << endl;
+	for (unsigned int i=0; i< parser->scorpion.toma2.size(); i++ )
+		cout << parser->scorpion.toma2.at(i) << " ";
+	cout << endl;
+	for (unsigned int i=0; i< parser->scorpion.fatality.size(); i++ )
+		cout << parser->scorpion.fatality.at(i) << " ";
+	cout << endl;
+
 	GameController* controlador = GameController::Instance(parser);
 	controlador->run();
 	logger.log(DEBUG,"Fin del programa");

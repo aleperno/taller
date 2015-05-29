@@ -214,6 +214,18 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 			Logger::Instance()->log(ERROR,str + " " + msg);
 		}
 	}
+
+	int toma1size = carValue.get("toma1",-1).size();
+	for (int i=0; i<toma1size; i++)
+		caracter->toma1.push_back(carValue.get("toma1",-1)[i].asString());
+
+	int toma2size = carValue.get("toma2",-1).size();
+	for (int i=0; i<toma2size; i++)
+		caracter->toma2.push_back(carValue.get("toma2",-1)[i].asString());
+
+	int fatalitysize = carValue.get("fatality",-1).size();
+	for (int i=0; i<fatalitysize; i++)
+		caracter->fatality.push_back(carValue.get("fatality",-1)[i].asString());
 }
 
 void Parser::setearCaracteres() {

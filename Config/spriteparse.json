@@ -34,7 +34,10 @@
 					"h-inicial": -20,
 					"h-final": 10,
 					"desplazamiento": 120
-					}
+					},
+		"toma1":	["PB", "PA", "GA"],
+		"toma2":	["GA", "UP", "BL"],
+		"fatality":	["DW", "LF", "RG", "UP"]
 	},
 
 "scorpion": {	"height":	155,
@@ -72,6 +75,9 @@
 							"h-inicial": 40,
 							"h-final": 80,
 							"desplazamiento": 120.5
-							}
+							},
+		"toma1":	["PB", "PB", "PB"],
+		"toma2":	["GA", "GA", "GA"],
+		"fatality":	["LF", "LF", "LF", "LF", "LF"]
 	}
 }
