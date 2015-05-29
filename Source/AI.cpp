@@ -27,7 +27,7 @@ using namespace std;
 #define D_CLOSE 0
 #define D_MED 1
 #define D_FAR 2
-#define TRACK_MOV 100
+#define TRACK_MOV 50
 
 void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 {
@@ -39,7 +39,7 @@ void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 	}
 	else
 	{
-		this->EjecutarMovimiento(_personaje_AI, FIRE);
+		//this->EjecutarMovimiento(_personaje_AI, FIRE);
 	}
 }
 

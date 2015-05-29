@@ -188,19 +188,19 @@ void Personaje::setBoundingBox()
                     boundingBox.h = boundingBox.h / 2;
     }
 
-    /*if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
+    if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
     {
                     // TODO: Alargar bounding box, el pie queda afuera
                     boundingBox.w = this->_ancho_px / 1.4;
                     boundingBox.h = boundingBox.h / 3;
-    }*/
+    }
 
-    /*if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
+    if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
     {
                     // TODO: Alargar bounding box, el pie queda afuera
                     boundingBox.w = this->_ancho_px / 1.4;
                     boundingBox.h = boundingBox.h / 3;
-    }*/
+    }
 
     if((this->_isHiPunching ) && (this->_isDucking))
     {
