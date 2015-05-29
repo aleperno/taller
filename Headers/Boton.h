@@ -8,15 +8,15 @@
 class Boton {
 public:
 	//boton con textura
-	Boton(Ventana* _ventana, TextureHandler* texture, int ejeCentralX, int y);
+	Boton(Ventana* _ventana, TextureHandler* textTexture, TextureHandler* surfaceTexture, int ejeCentralX, int y, int w, int h);
 	//boton sin textura
-	Boton(Ventana* _ventana, int w, int h, int ejeCentralX, int y);
+	Boton(Ventana* _ventana, TextureHandler* surfaceTexture, int ejeCentralX, int y, int w, int h);
 	~Boton();
 
 	//atributos
 	Ventana* _ventana;
-	TextureHandler* texture;
-	int ejeCentralX;
+	TextureHandler* textTexture;
+	TextureHandler* surfaceTexture;
 	int x;
 	int y;
 	int w;
@@ -24,8 +24,6 @@ public:
 
 	//metodos
 	void view();
-	void viewExternBox(SDL_Color* c);
-	void viewHighlight(SDL_Color* c);
 	bool mouseOver();
 };
 

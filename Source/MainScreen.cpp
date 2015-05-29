@@ -6,6 +6,8 @@ MainScreen::~MainScreen()
 	fontBig = NULL;
 	TTF_CloseFont( fontSmall );
 	fontSmall = NULL;
+	TTF_CloseFont( fontMenu );
+	fontMenu = NULL;
 
 	delete this->title;
 	delete this->titleShadow;
@@ -28,6 +30,15 @@ MainScreen::~MainScreen()
 
 	delete this->back_boton;
 	delete this->play_boton;
+
+	delete this->wallElement;
+	delete this->textCamp;
+	delete this->selected;
+	delete this->textCampSelected;
+	delete this->descriptionPlace;
+
+	delete this->gateLeft;
+	delete this->gateRight;
 }
 
 MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vector<Personaje*>* punteros) {
@@ -47,10 +58,20 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	this->fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
 
 	//colores
-	textColor.r = 0xCC;
-	textColor.g = 0x00;
-	textColor.b = 0x00;
-	textColor.a = 0xFF;
+	menuColor.r = 0xCC;
+	menuColor.g = 0x00;
+	menuColor.b = 0x00;
+	menuColor.a = 0xFF;
+
+	nameColor.r = 0xFF;
+	nameColor.g = 0xFF;
+	nameColor.b = 0xFF;
+	nameColor.a = 0xFF;
+
+	descriptionColor.r = 0x00;
+	descriptionColor.g = 0x00;
+	descriptionColor.b = 0x00;
+	descriptionColor.a = 0xFF;
 
 	shadowColor.r = 0x00;
 	shadowColor.g = 0x00;
@@ -72,13 +93,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	selectedBothColor.b = 0x99;
 	selectedBothColor.a = 0xFF;
 
-	notSelectedColor.r = 0x99;
-	notSelectedColor.g = 0x99;
-	notSelectedColor.b = 0x99;
-	notSelectedColor.a = 0xFF;
-
-	//otro
-	descriptionY = _ventana->_alto_px*9/10;
+	//wall
 	gateLeft = new TextureHandler( _ventana->_gRenderer );
 	gateRight = new TextureHandler( _ventana->_gRenderer );
 	gateLeft->loadFromFile(GATE_LEFT_PATH,false,0,0,0,true);
@@ -87,17 +102,30 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	gateLeftX = -_ventana->_ancho_px*GATE_ANCHO;
 	gateRightX = _ventana->_ancho_px;
 
-	wallElementMedium = new TextureHandler( _ventana->_gRenderer );
-	wallElementMedium->loadFromFile(WALL_ELEMENT_MEDIUM,false,0,0,0,true);
+	wallElement = new TextureHandler( _ventana->_gRenderer );
+	wallElement->loadFromFile(WALL_ELEMENT_PATH,false,0,0,0,true);
+	textCamp = new TextureHandler( _ventana->_gRenderer );
+	textCamp->loadFromFile(TEXT_CAMP_PATH,false,0,0,0,true);
+	selected = new TextureHandler( _ventana->_gRenderer );
+	selected->loadFromFile(SELECTED_PATH,false,0,0,0,true);
+	textCampSelected = new TextureHandler( _ventana->_gRenderer );
+	textCampSelected->loadFromFile(TEXT_CAMP_SELECTED_PATH,false,0,0,0,true);
+	descriptionPlace = new TextureHandler( _ventana->_gRenderer );
+	descriptionPlace->loadFromFile(DESCRIPTION_PLACE_PATH,false,0,0,0,true);
+
+	element_w = _ventana->_ancho_px*2/8;
+	element_h = _ventana->_alto_px*1/12;
 
 	//showIntro
 	title = new TextureHandler( _ventana->_gRenderer );
 	titleShadow = new TextureHandler( _ventana->_gRenderer );
 	pressStart = new TextureHandler( _ventana->_gRenderer );
 
-	this->title->loadFromRenderedText("MORTAL TALLER", textColor, fontBig);
+	this->title->loadFromRenderedText("MORTAL TALLER", menuColor, fontBig);
 	this->titleShadow->loadFromRenderedText("MORTAL TALLER", shadowColor, fontBig);
-	this->pressStart->loadFromRenderedText("press start", textColor, fontSmall);
+	this->pressStart->loadFromRenderedText("press start", descriptionColor, fontSmall);
+
+	descriptionY = this->_ventana->_alto_px*11/12 + (this->_ventana->_alto_px*1/12 - pressStart->getHeight())/2;
 
 	shakeCount = SHAKE_COUNT;
 	randomX = 0;
@@ -113,16 +141,16 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	TextureHandler* modePVE = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
 	TextureHandler* modeTraining = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
 
-	modePVP->loadFromRenderedText("2 players", textColor, fontMenu);
-	modePVE->loadFromRenderedText("1 player", textColor, fontMenu);
-	modeTraining->loadFromRenderedText("training", textColor, fontMenu);
+	modePVP->loadFromRenderedText("2 players", menuColor, fontMenu);
+	modePVE->loadFromRenderedText("1 player", menuColor, fontMenu);
+	modeTraining->loadFromRenderedText("training", menuColor, fontMenu);
 
-	this->modePVP_boton = new Boton(this->_ventana, modePVP, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*2/12);
-	this->modePVE_boton = new Boton(this->_ventana, modePVE, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*4/12);
-	this->modeTraining_boton = new Boton(this->_ventana, modeTraining, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*6/12);
+	this->modePVP_boton = new Boton(this->_ventana, modePVP, wallElement, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*2/12, element_w, element_h);
+	this->modePVE_boton = new Boton(this->_ventana, modePVE, wallElement, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*4/12, element_w, element_h);
+	this->modeTraining_boton = new Boton(this->_ventana, modeTraining, wallElement, this->_ventana->_ancho_px/2, this->_ventana->_alto_px*6/12, element_w, element_h);
 
 	thisIsMenu = new TextureHandler( _ventana->_gRenderer );	//Descripcion en menu modo
-	thisIsMenu->loadFromRenderedText("[1] Confirm", textColor, fontSmall);
+	thisIsMenu->loadFromRenderedText("[1] Confirm", descriptionColor, fontSmall);
 	
 	//perSelect
 	liukangface = new TextureHandler( _ventana->_gRenderer );
@@ -133,38 +161,38 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	
 	//PVP
 	thisIsPVP = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVP
-	this->thisIsPVP->loadFromRenderedText("[3] Name focus, [4] Erase", textColor, fontSmall);
+	this->thisIsPVP->loadFromRenderedText("[3] Name focus, [4] Erase", descriptionColor, fontSmall);
 
 	//PVE
 	thisIsPVE = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVE
-	this->thisIsPVE->loadFromRenderedText("[3] Name focus, [4] Erase", textColor, fontSmall);
+	this->thisIsPVE->loadFromRenderedText("[3] Name focus, [4] Erase", descriptionColor, fontSmall);
 
 	//Training
 	thisIsTraining = new TextureHandler( _ventana->_gRenderer );	//Descripcion en Training
-	this->thisIsTraining->loadFromRenderedText("[3] Name focus, [4] Erase", textColor, fontSmall);
+	this->thisIsTraining->loadFromRenderedText("[3] Name focus, [4] Erase", descriptionColor, fontSmall);
 
 	//nombres
 	TextureHandler* nombreP1 = new TextureHandler( _ventana->_gRenderer );
 	TextureHandler* nombreP2 = new TextureHandler( _ventana->_gRenderer );
-	nombreP1->loadFromRenderedText(NOMBRE_VACIO, textColor, fontSmall);
-	nombreP2->loadFromRenderedText(NOMBRE_VACIO, textColor, fontSmall);
-	nombreP1_boton = new Boton(this->_ventana, _ventana->_ancho_px*1/5, nombreP1->getHeight(), _ventana->_ancho_px*1/4, _ventana->_alto_px*7/10);
-	nombreP2_boton = new Boton(this->_ventana, _ventana->_ancho_px*1/5, nombreP2->getHeight(), _ventana->_ancho_px*3/4, _ventana->_alto_px*7/10);
+	nombreP1->loadFromRenderedText(NOMBRE_VACIO, nameColor, fontSmall);
+	nombreP2->loadFromRenderedText(NOMBRE_VACIO, nameColor, fontSmall);
+	nombreP1_boton = new Boton(this->_ventana, textCamp, this->_ventana->_ancho_px*2/8, this->_ventana->_alto_px*8/12, element_w, element_h);
+	nombreP2_boton = new Boton(this->_ventana, textCamp, this->_ventana->_ancho_px*6/8, this->_ventana->_alto_px*8/12, element_w, element_h);
 
 	//botones 'back' y 'play'
 	TextureHandler* back = new TextureHandler( _ventana->_gRenderer );
 	TextureHandler* play = new TextureHandler( _ventana->_gRenderer );
-	back->loadFromRenderedText("[2] back", textColor, fontMenu);
-	play->loadFromRenderedText("[1] play", textColor, fontMenu);
-	back_boton = new Boton(this->_ventana, back, _ventana->_ancho_px*1/4, _ventana->_alto_px*8/10);
-	play_boton = new Boton(this->_ventana, play, _ventana->_ancho_px*3/4, _ventana->_alto_px*8/10);
+	back->loadFromRenderedText("[2] back", menuColor, fontMenu);
+	play->loadFromRenderedText("[1] play", menuColor, fontMenu);
+	back_boton = new Boton(this->_ventana, back, wallElement, this->_ventana->_ancho_px*2/8, this->_ventana->_alto_px*10/12, element_w, element_h);
+	play_boton = new Boton(this->_ventana, play, wallElement, this->_ventana->_ancho_px*6/8, this->_ventana->_alto_px*10/12, element_w, element_h);
 }
 
 void MainScreen::prepararPerSelect() {
-	faceH = _ventana->_alto_px/6;
-	faceW = _ventana->_ancho_px/9;
+	faceH = _ventana->_alto_px*2/12;
+	faceW = _ventana->_ancho_px*1/8;
 	topLeftX = _ventana->_ancho_px/2 - (faceW * _perSelect->at(0).size())/2;
-	topLeftY = _ventana->_alto_px/15;
+	topLeftY = _ventana->_alto_px*1/12;
 
 	for (unsigned int fila=0; fila<_perSelect->size(); fila++) {
 		vector< pair<int, int> > vectorLocal(_perSelect->at(fila).size());
@@ -199,8 +227,10 @@ void MainScreen::actualizarPosiciones() {
 	if (titleY < _ventana->_alto_px/5)
 		titleY = titleY + _ventana->_alto_px/TITLE_SPEED;
 
-	if (pressStartY > _ventana->_alto_px*4/5)
+	if (pressStartY > descriptionY) {
 		pressStartY = pressStartY - _ventana->_alto_px/PRESS_START_SPEED;
+		if (pressStartY < descriptionY)	pressStartY = descriptionY;
+	}
 }
 
 void MainScreen::showIntro() {
@@ -213,6 +243,7 @@ void MainScreen::showIntro() {
 
 	this->titleShadow->render(titleX + _ventana->_ancho_px/300 + randomX, titleY + _ventana->_alto_px/300 + randomY);
 	this->title->render(titleX + randomX, titleY + randomY);
+	descriptionPlace->renderScaled(this->_ventana->_ancho_px*2/8, this->_ventana->_alto_px*11/12, element_w*2, element_h);
 	this->pressStart->render(pressStartX + randomX, pressStartY + randomY);
 
 	this->_ventana->updateScreen();
@@ -261,19 +292,21 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->gateLeft->renderScaled(gateLeftX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 	this->gateRight->renderScaled(gateRightX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 
-	this->wallElementMedium->renderScaled(_ventana->_ancho_px*3/8, _ventana->_alto_px*2/12, _ventana->_ancho_px*2/8, _ventana->_alto_px*1/12);
-	this->wallElementMedium->renderScaled(_ventana->_ancho_px*3/8, _ventana->_alto_px*4/12, _ventana->_ancho_px*2/8, _ventana->_alto_px*1/12);
-	this->wallElementMedium->renderScaled(_ventana->_ancho_px*3/8, _ventana->_alto_px*6/12, _ventana->_ancho_px*2/8, _ventana->_alto_px*1/12);
-
 	switch (modeSelected) {
 	case SELECTED_PVP:
-		this->modePVP_boton->viewHighlight(&selected1Color);
+		this->modePVP_boton->surfaceTexture = selected;
+		this->modePVE_boton->surfaceTexture = wallElement;
+		this->modeTraining_boton->surfaceTexture = wallElement;
 		break;
 	case SELECTED_PVE:
-		this->modePVE_boton->viewHighlight(&selected1Color);
+		this->modePVP_boton->surfaceTexture = wallElement;
+		this->modePVE_boton->surfaceTexture = selected;
+		this->modeTraining_boton->surfaceTexture = wallElement;
 		break;
 	case SELECTED_TRAINING:
-		this->modeTraining_boton->viewHighlight(&selected1Color);
+		this->modePVP_boton->surfaceTexture = wallElement;
+		this->modePVE_boton->surfaceTexture = wallElement;
+		this->modeTraining_boton->surfaceTexture = selected;
 		break;
 	}
 
@@ -281,6 +314,7 @@ void MainScreen::showModeSelect(int modeSelected) {
 	this->modePVE_boton->view();
 	this->modeTraining_boton->view();
 
+	descriptionPlace->renderScaled(this->_ventana->_ancho_px*2/8, this->_ventana->_alto_px*11/12, element_w*2, element_h);
 	this->thisIsMenu->render(_ventana->_ancho_px/2 - thisIsMenu->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
@@ -391,64 +425,69 @@ void MainScreen::showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus
 	if ((nombre1.length() > 0) && (nombre2.length() > 0)) {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//Ambos no nulos y no en foco
-			viewName( nombreP1_boton, nombre1, &notSelectedColor );
-			viewName( nombreP2_boton, nombre2, &notSelectedColor );
+			viewName( nombreP1_boton, nombre1, false );
+			viewName( nombreP2_boton, nombre2, false );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//Ambos no nulos, 1-ro en foco
-			viewName( nombreP1_boton, nombre1, &selected1Color );
-			viewName( nombreP2_boton, nombre2, &notSelectedColor );
+			viewName( nombreP1_boton, nombre1, true );
+			viewName( nombreP2_boton, nombre2, false );
 		} else {	//Ambos no nulos, 2-do en foco
-			viewName( nombreP1_boton, nombre1, &notSelectedColor );
-			viewName( nombreP2_boton, nombre2, &selected2Color );
+			viewName( nombreP1_boton, nombre1, false );
+			viewName( nombreP2_boton, nombre2, true );
 		}
 
 	} else if ((nombre1.length() > 0) && (nombre2.length() == 0)) {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//2-do nulo, nadie en foco
-			viewName( nombreP1_boton, nombre1, &notSelectedColor );
-			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP1_boton, nombre1, false );
+			viewName( nombreP2_boton, NOMBRE_VACIO, false );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//2-do nulo, 1-ro en foco
-			viewName( nombreP1_boton, nombre1, &selected1Color );
-			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP1_boton, nombre1, true );
+			viewName( nombreP2_boton, NOMBRE_VACIO, false );
 		} else {	//2-do nulo, 2-do en foco
-			viewName( nombreP1_boton, nombre1, &notSelectedColor );
-			viewName( nombreP2_boton, NOMBRE_VACIO, &selected2Color );
+			viewName( nombreP1_boton, nombre1, false );
+			viewName( nombreP2_boton, NOMBRE_VACIO, true );
 		}
 	
 	} else if ((nombre1.length() == 0) && (nombre2.length() > 0)) {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//1-ro nulo, nadie en foco
-			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
-			viewName( nombreP2_boton, nombre2, &notSelectedColor );
+			viewName( nombreP1_boton, NOMBRE_VACIO, false );
+			viewName( nombreP2_boton, nombre2, false );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//1-ro nulo, 1-ro en foco
-			viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
-			viewName( nombreP2_boton, nombre2, &notSelectedColor );
+			viewName( nombreP1_boton, NOMBRE_VACIO, true );
+			viewName( nombreP2_boton, nombre2, false );
 		} else {	//1-ro nulo, 2-do en foco
-			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
-			viewName( nombreP2_boton, nombre2, &selected2Color );
+			viewName( nombreP1_boton, NOMBRE_VACIO, false );
+			viewName( nombreP2_boton, nombre2, true );
 		}
 
 	} else {
 
 		if (textFocus == TEXT_NO_FOCUS) {	//ambos nulos, nadie en foco
-			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
-			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP1_boton, NOMBRE_VACIO, false );
+			viewName( nombreP2_boton, NOMBRE_VACIO, false );
 		} else if (textFocus == TEXT_FOCUS_P1) {	//ambos nulos, 1-ro en foco
-			viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
-			viewName( nombreP2_boton, NOMBRE_VACIO, &notSelectedColor );
+			viewName( nombreP1_boton, NOMBRE_VACIO, true );
+			viewName( nombreP2_boton, NOMBRE_VACIO, false );
 		} else {	//ambos nulos, 2-do en foco
-			viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
-			viewName( nombreP2_boton, NOMBRE_VACIO, &selected2Color );
+			viewName( nombreP1_boton, NOMBRE_VACIO, false );
+			viewName( nombreP2_boton, NOMBRE_VACIO, true );
 		}
 
 	}
 
-	if (boton == BACK_BOTON)
-		this->back_boton->viewHighlight(&selected1Color);
-	if (boton == PLAY_BOTON)
-		this->play_boton->viewHighlight(&selected1Color);
+	if (boton == BACK_BOTON) {
+		this->back_boton->surfaceTexture = selected;
+		this->play_boton->surfaceTexture = wallElement;
+	}
+	if (boton == PLAY_BOTON) {
+		this->back_boton->surfaceTexture = wallElement;
+		this->play_boton->surfaceTexture = selected;
+	}
 	this->back_boton->view();
 	this->play_boton->view();
 
+	descriptionPlace->renderScaled(this->_ventana->_ancho_px*2/8, this->_ventana->_alto_px*11/12, element_w*2, element_h);
 	this->thisIsPVP->render(_ventana->_ancho_px/2 - thisIsPVP->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }
@@ -457,16 +496,20 @@ void MainScreen::showPVE(int fila, int columna, int textFocus, string nombre, in
 	showTraining(fila, columna, textFocus, nombre, boton);
 }
 
-void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
+void MainScreen::viewName(Boton* nombreBoton, string nombre, bool elegido) {
+	if (elegido)	nombreBoton->surfaceTexture = textCampSelected;
+	else	nombreBoton->surfaceTexture = textCamp;
+	nombreBoton->view();
+
 	TextureHandler* nombreTexture = new TextureHandler(this->_ventana->_gRenderer);
-	nombreTexture->loadFromRenderedText(nombre,textColor,fontSmall);
+	nombreTexture->loadFromRenderedText(nombre,nameColor,fontSmall);
 	if (nombreTexture->getWidth() <= nombreBoton->w)
-		nombreTexture->render(nombreBoton->x, nombreBoton->y);
+		nombreTexture->render(nombreBoton->x, nombreBoton->y + (nombreBoton->h - nombreTexture->getHeight())/2);
 	else {
 		SDL_Rect parteRenderizar = { nombreTexture->getWidth() - nombreBoton->w, 0, nombreBoton->w, nombreTexture->getHeight() };
-		nombreTexture->renderAnimation(false, nombreBoton->x, nombreBoton->y, nombreBoton->w, nombreTexture->getHeight(), &parteRenderizar);
-	}
-	nombreBoton->viewExternBox(color);
+		nombreTexture->renderAnimation(false, nombreBoton->x, nombreBoton->y + (nombreBoton->h - nombreTexture->getHeight())/2, nombreBoton->w, nombreTexture->getHeight(), &parteRenderizar);
+	};
+	delete nombreTexture;
 }
 
 void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre, int boton) {
@@ -489,20 +532,25 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );
 
 	if (nombre.length() > 0) {
-		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, nombre, &notSelectedColor );
-		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, nombre, &selected1Color );
+		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, nombre, false );
+		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, nombre, true );
 	} else {
-		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, NOMBRE_VACIO, &notSelectedColor );
-		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, NOMBRE_VACIO, &selected1Color );
+		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, NOMBRE_VACIO, false );
+		else if (textFocus == TEXT_FOCUS_P1) viewName( nombreP1_boton, NOMBRE_VACIO, true );
 	}
 
-	if (boton == BACK_BOTON)
-		this->back_boton->viewHighlight(&selected1Color);
-	if (boton == PLAY_BOTON)
-		this->play_boton->viewHighlight(&selected1Color);
+	if (boton == BACK_BOTON) {
+		this->back_boton->surfaceTexture = selected;
+		this->play_boton->surfaceTexture = wallElement;
+	}
+	if (boton == PLAY_BOTON) {
+		this->back_boton->surfaceTexture = wallElement;
+		this->play_boton->surfaceTexture = selected;
+	}
 	this->back_boton->view();
 	this->play_boton->view();
 
+	descriptionPlace->renderScaled(this->_ventana->_ancho_px*2/8, this->_ventana->_alto_px*11/12, element_w*2, element_h);
 	this->thisIsTraining->render(_ventana->_ancho_px/2 - thisIsTraining->getWidth()/2, descriptionY);
 	this->_ventana->updateScreen();
 }

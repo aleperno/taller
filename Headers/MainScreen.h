@@ -13,7 +13,11 @@
 #define SCORPION_FACE_PATH "Images/characters/scorpionface.png"
 #define GATE_LEFT_PATH "Images/gateleft.png"
 #define GATE_RIGHT_PATH "Images/gateright.png"
-#define WALL_ELEMENT_MEDIUM "Images/wallelementmedium.png"
+#define WALL_ELEMENT_PATH "Images/wallelement.png"
+#define SELECTED_PATH "Images/selected.png"
+#define TEXT_CAMP_PATH "Images/textcamp.png"
+#define TEXT_CAMP_SELECTED_PATH "Images/textcampselected.png"
+#define DESCRIPTION_PLACE_PATH "Images/descriptionplace.png"
 
 #define NOMBRE_VACIO " "
 
@@ -39,6 +43,8 @@
 
 //Parametros constantes
 #define GATE_ANCHO 0.625
+#define ELEMENT_X 0.25
+#define ELEMENT_Y 1/12
 #define GATE_SPEED 160
 #define TITLE_SPEED 140
 #define PRESS_START_SPEED 210
@@ -64,13 +70,16 @@ public:
 		Personaje* _jugador2scorpionColor;
 	};
 	punterosPersonajes punterosPersonajes;
+	int element_w;
+	int element_h;
 	int descriptionY;
-	SDL_Color textColor;
+	SDL_Color menuColor;
+	SDL_Color nameColor;
+	SDL_Color descriptionColor;
 	SDL_Color shadowColor;
 	SDL_Color selected1Color;
 	SDL_Color selected2Color;
 	SDL_Color selectedBothColor;
-	SDL_Color notSelectedColor;
 	TTF_Font* fontBig;
 	TTF_Font* fontSmall;
 	TTF_Font* fontMenu;
@@ -93,15 +102,20 @@ public:
 	void veiwFaces();
 	void viewDemoUno(int fila, int columna);
 	void viewDemoDos(int fila1, int columna1, int fila2, int columna2);
-	void viewName(Boton* nombreBoton, string nombre, SDL_Color* color);
+	void viewName(Boton* nombreBoton, string nombre, bool elegido);
 	int mouseOverBackOrPlay();
 	int clickOnTextCamp();
 	pair<int,int> faceSelected();	//x,y
 
+	TextureHandler* wallElement;
+	TextureHandler* textCamp;
+	TextureHandler* selected;
+	TextureHandler* textCampSelected;
+	TextureHandler* descriptionPlace;
+
 	//Intro
 	TextureHandler* gateLeft;
 	TextureHandler* gateRight;
-	TextureHandler* wallElementMedium;
 	int gateLeftX;
 	int gateRightX;
 	int titleX;
