@@ -8,7 +8,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#define FONT_PATH "Images/ardestine.ttf"
+#define FONT_PATH "Images/mortalkombat3.ttf"
 #define LIUKANG_FACE_PATH "Images/characters/liukangface.png"
 #define SCORPION_FACE_PATH "Images/characters/scorpionface.png"
 

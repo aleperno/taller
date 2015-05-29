@@ -15,7 +15,7 @@
 #include <Personaje.h>
 #include <StringUtil.h>
 
-#define FONT_PATH "Images/ardestine.ttf"
+#define FONT_PATH "Images/mortalkombat3.ttf"
 
 class Hud{
 	public:

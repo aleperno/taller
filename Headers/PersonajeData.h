@@ -48,12 +48,18 @@ class PersonajeData
 		float arma_speed;
 
 		string imgPath;
+
+		vector<string> toma1;
+		vector<string> toma2;
+		vector<string> fatality;
+
 		int getGB() { return this->golpe_bajo;}
 		int getGA() { return this->golpe_alto;}
 		int getPB() { return this->patada_baja;}
 		int getPA() { return this->patada_alta;}
 		int getBL() { return this->defensa;}
 		int getAR() { return this->arrojar;}
+
 };
 
 #endif /* HEADERS_PERSONAJEDATA_H_ */

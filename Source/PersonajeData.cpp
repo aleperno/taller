@@ -28,4 +28,9 @@ void PersonajeData::llenarDatos(JugadorData* jugador, CaracterData* caracter) {
 	this->h_inicial = caracter->h_inicial;
 	this->h_final = caracter->h_final;
 	this->desplazamiento = caracter->desplazamiento;
+
+	//tomas
+	this->toma1 = caracter->toma1;
+	this->toma2 = caracter->toma2;
+	this->fatality = caracter->fatality;
 }

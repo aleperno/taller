@@ -64,7 +64,7 @@ int main( int argc, char* args[] )
 	Parser::Initialize(path);
 	Parser* parser = Parser::Instance();
 
-	for (unsigned int i=0; i< parser->liukang.toma1.size(); i++ )
+/*	for (unsigned int i=0; i< parser->liukang.toma1.size(); i++ )
 		cout << parser->liukang.toma1.at(i) << " ";
 	cout << endl;
 	for (unsigned int i=0; i< parser->liukang.toma2.size(); i++ )
@@ -81,7 +81,7 @@ int main( int argc, char* args[] )
 	cout << endl;
 	for (unsigned int i=0; i< parser->scorpion.fatality.size(); i++ )
 		cout << parser->scorpion.fatality.at(i) << " ";
-	cout << endl;
+	cout << endl;*/
 
 	GameController* controlador = GameController::Instance(parser);
 	controlador->run();
