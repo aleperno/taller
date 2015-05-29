@@ -158,6 +158,8 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	liukangface->loadFromFile(LIUKANG_FACE_PATH,false,0,0,0,true);
 	scorpionface->loadFromFile(SCORPION_FACE_PATH,false,0,0,0,true);
 	prepararPerSelect();
+	faceSelectedBox = true;
+	faceSelectedBlinkCounter = 0;
 	
 	//PVP
 	thisIsPVP = new TextureHandler( _ventana->_gRenderer );	//Descripcion en PVP
@@ -389,37 +391,41 @@ void MainScreen::showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus
 	veiwFaces();
 	viewDemoDos(fila1, columna1, fila2, columna2);
 
-	if ((fila1 != fila2) || (columna1 != columna2)) {
-		int selected1X = topLeftX + columna1*faceW;
-		int selected1Y = topLeftY + fila1*faceH;
-		SDL_Rect selected1a = { selected1X, selected1Y, faceW, faceH };
-		SDL_Rect selected1b = { selected1X+1, selected1Y+1, faceW-2, faceH-2 };
-		SDL_Rect selected1c = { selected1X+2, selected1Y+2, faceW-4, faceH-4 };
-		SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1a );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1b );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1c );
+	if (faceSelectedBox) {
+		if ((fila1 != fila2) || (columna1 != columna2)) {
+			int selected1X = topLeftX + columna1*faceW;
+			int selected1Y = topLeftY + fila1*faceH;
+			int boxCant = this->_ventana->_alto_px/150;
+			SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
+			for (int i=0; i<boxCant; i++) {
+				SDL_Rect box = { selected1X+i, selected1Y+i, faceW-2*i, faceH-2*i };
+				SDL_RenderDrawRect( _ventana->_gRenderer, &box );
+			}
 
-		int selected2X = topLeftX + columna2*faceW;
-		int selected2Y = topLeftY + fila2*faceH;
-		SDL_Rect selected2a = { selected2X, selected2Y, faceW, faceH };
-		SDL_Rect selected2b = { selected2X+1, selected2Y+1, faceW-2, faceH-2 };
-		SDL_Rect selected2c = { selected2X+2, selected2Y+2, faceW-4, faceH-4 };
-		SDL_SetRenderDrawColor( _ventana->_gRenderer, selected2Color.r, selected2Color.g, selected2Color.b, selected2Color.a );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected2a );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected2b );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected2c );
+			int selected2X = topLeftX + columna2*faceW;
+			int selected2Y = topLeftY + fila2*faceH;
+			SDL_SetRenderDrawColor( _ventana->_gRenderer, selected2Color.r, selected2Color.g, selected2Color.b, selected2Color.a );
+			for (int i=0; i<boxCant; i++) {
+				SDL_Rect box = { selected2X+i, selected2Y+i, faceW-2*i, faceH-2*i };
+				SDL_RenderDrawRect( _ventana->_gRenderer, &box );
+			}
 
-	} else {
-		int selected1X = topLeftX + columna1*faceW;
-		int selected1Y = topLeftY + fila1*faceH;
-		SDL_Rect selected1a = { selected1X, selected1Y, faceW, faceH };
-		SDL_Rect selected1b = { selected1X+1, selected1Y+1, faceW-2, faceH-2 };
-		SDL_Rect selected1c = { selected1X+2, selected1Y+2, faceW-4, faceH-4 };
-		SDL_SetRenderDrawColor( _ventana->_gRenderer, selectedBothColor.r, selectedBothColor.g, selectedBothColor.b, selectedBothColor.a );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1a );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1b );
-		SDL_RenderDrawRect( _ventana->_gRenderer, &selected1c );
+		} else {
+			int selected1X = topLeftX + columna1*faceW;
+			int selected1Y = topLeftY + fila1*faceH;
+			int boxCant = this->_ventana->_alto_px/150;
+			SDL_SetRenderDrawColor( _ventana->_gRenderer, selectedBothColor.r, selectedBothColor.g, selectedBothColor.b, selectedBothColor.a );
+			for (int i=0; i<boxCant; i++) {
+				SDL_Rect box = { selected1X+i, selected1Y+i, faceW-2*i, faceH-2*i };
+				SDL_RenderDrawRect( _ventana->_gRenderer, &box );
+			}
+		}
+	}
+
+	faceSelectedBlinkCounter++;
+	if (faceSelectedBlinkCounter >= BLINK_MAX) {
+		faceSelectedBlinkCounter = 0;
+		faceSelectedBox = !faceSelectedBox;
 	}
 
 	if ((nombre1.length() > 0) && (nombre2.length() > 0)) {
@@ -521,15 +527,22 @@ void MainScreen::showTraining(int fila, int columna, int textFocus, string nombr
 	veiwFaces();
 	viewDemoUno(fila,columna);
 
-	int selectedX = topLeftX + columna*faceW;
-	int selectedY = topLeftY + fila*faceH;
-	SDL_Rect selected1 = { selectedX, selectedY, faceW, faceH };
-	SDL_Rect selected2 = { selectedX+1, selectedY+1, faceW-2, faceH-2 };
-	SDL_Rect selected3 = { selectedX+2, selectedY+2, faceW-4, faceH-4 };
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
-	SDL_RenderDrawRect( _ventana->_gRenderer, &selected1 );
-	SDL_RenderDrawRect( _ventana->_gRenderer, &selected2 );
-	SDL_RenderDrawRect( _ventana->_gRenderer, &selected3 );
+	if (faceSelectedBox) {
+		int selectedX = topLeftX + columna*faceW;
+		int selectedY = topLeftY + fila*faceH;
+		int boxCant = this->_ventana->_alto_px/150;
+		SDL_SetRenderDrawColor( _ventana->_gRenderer, selected1Color.r, selected1Color.g, selected1Color.b, selected1Color.a );
+		for (int i=0; i<boxCant; i++) {
+			SDL_Rect box = { selectedX+i, selectedY+i, faceW-2*i, faceH-2*i };
+			SDL_RenderDrawRect( _ventana->_gRenderer, &box );
+		}
+	}
+	
+	faceSelectedBlinkCounter++;
+	if (faceSelectedBlinkCounter >= BLINK_MAX) {
+		faceSelectedBlinkCounter = 0;
+		faceSelectedBox = !faceSelectedBox;
+	}
 
 	if (nombre.length() > 0) {
 		if (textFocus == TEXT_NO_FOCUS) viewName( nombreP1_boton, nombre, false );

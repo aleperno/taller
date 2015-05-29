@@ -47,9 +47,10 @@
 #define ELEMENT_Y 1/12
 #define GATE_SPEED 160
 #define TITLE_SPEED 140
-#define PRESS_START_SPEED 210
+#define PRESS_START_SPEED 140
 #define SHAKE_FACTOR 40
 #define SHAKE_COUNT 20
+#define BLINK_MAX 10
 
 class MainScreen {
 public:
@@ -106,6 +107,8 @@ public:
 	int mouseOverBackOrPlay();
 	int clickOnTextCamp();
 	pair<int,int> faceSelected();	//x,y
+	bool faceSelectedBox;
+	int faceSelectedBlinkCounter;
 
 	TextureHandler* wallElement;
 	TextureHandler* textCamp;
