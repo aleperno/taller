@@ -43,7 +43,7 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 
 	//fuentes
 	this->fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);	//Titulo
-	this->fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/25);	//Descripciones
+	this->fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/25);	//Descripciones y nombres
 	this->fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
 
 	//colores
@@ -79,6 +79,12 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 
 	//otro
 	descriptionY = _ventana->_alto_px*9/10;
+	gateLeft = new TextureHandler( _ventana->_gRenderer );
+	gateRight = new TextureHandler( _ventana->_gRenderer );
+	gateLeft->loadFromFile(GATE_LEFT_PATH,false,0,0,0,true);
+	gateRight->loadFromFile(GATE_RIGHT_PATH,false,0,0,0,true);
+	gateLeftX = -_ventana->_ancho_px*GATE_ANCHO;
+	gateRightX = _ventana->_ancho_px;
 
 	//showIntro
 	title = new TextureHandler( _ventana->_gRenderer );
@@ -97,19 +103,6 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	titleY = -title->getHeight();
 	pressStartX = _ventana->_ancho_px/2 - pressStart->getWidth()/2;
 	pressStartY = _ventana->_alto_px;
-
-	int gateAncho = _ventana->_ancho_px/2 + MARGIN;
-	int gateAlto = _ventana->_alto_px;
-
-	gateLeft.x = -gateAncho;
-	gateLeft.y = 0;
-	gateLeft.w = gateAncho;
-	gateLeft.h = gateAlto;
-
-	gateRight.x = _ventana->_ancho_px;
-	gateRight.y = 0;
-	gateRight.w = gateAncho;
-	gateRight.h = gateAlto;
 	
 	//modeSelect
 	TextureHandler* modePVP = new TextureHandler( _ventana->_gRenderer );	//Elemento de menu modo
@@ -178,9 +171,11 @@ void MainScreen::prepararPerSelect() {
 }
 
 void MainScreen::actualizarPosiciones() {
-	if (gateLeft.x < -MARGIN) {
-		gateLeft.x = gateLeft.x + gateLeft.w/GATE_SPEED;
-		gateRight.x = gateRight.x - gateRight.w/GATE_SPEED;
+	if (gateLeftX < 0) {
+		gateLeftX = gateLeftX + _ventana->_ancho_px/GATE_SPEED;
+		gateRightX = gateRightX - _ventana->_ancho_px/GATE_SPEED;
+		if (gateLeftX > 0)	gateLeftX = 0;
+		if (gateRightX < _ventana->_ancho_px*(1-GATE_ANCHO))	gateRightX = _ventana->_ancho_px*(1-GATE_ANCHO);
 	} else {
 		if (shakeCount != 0) {
 			shakeCount--;
@@ -204,9 +199,8 @@ void MainScreen::showIntro() {
 
 	this->_ventana->clearScreen();
 
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, 0x77, 0x77, 0x77, 0xFF );
-	SDL_RenderFillRect( _ventana->_gRenderer, &gateLeft );
-	SDL_RenderFillRect( _ventana->_gRenderer, &gateRight );
+	this->gateLeft->renderScaled(gateLeftX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
+	this->gateRight->renderScaled(gateRightX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 
 	this->titleShadow->render(titleX + _ventana->_ancho_px/300 + randomX, titleY + _ventana->_alto_px/300 + randomY);
 	this->title->render(titleX + randomX, titleY + randomY);
@@ -254,6 +248,9 @@ pair<int,int> MainScreen::faceSelected() {
 
 void MainScreen::showModeSelect(int modeSelected) {
 	this->_ventana->clearScreen();
+
+	this->gateLeft->renderScaled(gateLeftX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
+	this->gateRight->renderScaled(gateRightX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 
 	switch (modeSelected) {
 	case SELECTED_PVP:
@@ -333,6 +330,9 @@ void MainScreen::veiwFaces() {
 
 void MainScreen::showPVP(pair<int,int> pair1, pair<int,int> pair2, int textFocus, string nombre1, string nombre2, int boton) {
 	this->_ventana->clearScreen();
+
+	this->gateLeft->renderScaled(gateLeftX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
+	this->gateRight->renderScaled(gateRightX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 
 	int fila1 = pair1.first;
 	int columna1 = pair1.second;
@@ -458,6 +458,9 @@ void MainScreen::viewName(Boton* nombreBoton, string nombre, SDL_Color* color) {
 
 void MainScreen::showTraining(int fila, int columna, int textFocus, string nombre, int boton) {
 	this->_ventana->clearScreen();
+
+	this->gateLeft->renderScaled(gateLeftX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
+	this->gateRight->renderScaled(gateRightX, 0, _ventana->_ancho_px*GATE_ANCHO, _ventana->_alto_px);
 
 	veiwFaces();
 	viewDemoUno(fila,columna);

@@ -11,6 +11,8 @@
 #define FONT_PATH "Images/mortalkombat3.ttf"
 #define LIUKANG_FACE_PATH "Images/characters/liukangface.png"
 #define SCORPION_FACE_PATH "Images/characters/scorpionface.png"
+#define GATE_LEFT_PATH "Images/gateleft.png"
+#define GATE_RIGHT_PATH "Images/gateright.png"
 
 #define NOMBRE_VACIO " "
 
@@ -35,10 +37,10 @@
 #define TEXT_FOCUS_P2 2
 
 //Parametros constantes
-#define GATE_SPEED 80
+#define GATE_ANCHO 0.625
+#define GATE_SPEED 160
 #define TITLE_SPEED 140
 #define PRESS_START_SPEED 210
-#define MARGIN 10
 #define SHAKE_FACTOR 40
 #define SHAKE_COUNT 20
 
@@ -96,8 +98,10 @@ public:
 	pair<int,int> faceSelected();	//x,y
 
 	//Intro
-	SDL_Rect gateLeft;
-	SDL_Rect gateRight;
+	TextureHandler* gateLeft;
+	TextureHandler* gateRight;
+	int gateLeftX;
+	int gateRightX;
 	int titleX;
 	int titleY;
 	int pressStartX;
