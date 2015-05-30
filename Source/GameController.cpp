@@ -141,7 +141,7 @@ void GameController::InicializarAI(int _difficulty)
 }
 
 bool GameController::iniciarSDL() {
-	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) >= 0 );
+	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO) >= 0 );
 	this->_numJoysticks = SDL_NumJoysticks();
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
