@@ -42,6 +42,7 @@ class Parser{
 		//Eso levanta datos de spriteparse
 		void setearCaracteres();
 		void parsearSpriteCaracter(CaracterData* caracter, Value carValue);
+		void NikPutoModulariza(CaracterData* caracter, Value carValue, string accion);
 			
 	public:
 		//Inicializa instancia usando ruta de *.json
