@@ -84,8 +84,6 @@ class GameController
 		bool _end_of_game;
 		SDL_Joystick* _joystickOne;
 		SDL_Joystick* _joystickTwo;
-		const char* _joystickOneID;
-		const char* _joystickTwoID;
 		Sint16 lastJoyValue1X;
 		Sint16 lastJoyValue1Y;
 		Sint16 lastJoyValue2X;

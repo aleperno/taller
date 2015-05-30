@@ -914,24 +914,24 @@ void GameController::procesarMovimientoJoystick() {
 				this->_personaje1->block();
 			}
 		}
-		else if (AXSP1 < 0 && AYSP1 < 0) {
+		else if (AXSP1 < -JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpLeft(JMP_FACTOR);
  		}
-		else if (AXSP1 > 0 && AYSP1 < 0) {
+		else if (AXSP1 > JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpRight(JMP_FACTOR);
 		}
-		else if (AYSP1 < 0) {
+		else if (AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jump(JMP_FACTOR);
 		}
-		else if (AYSP1 > 0) {
+		else if (AYSP1 > JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->duck();
 		}
-		else if (AXSP1 < 0) {
+		else if (AXSP1 < -JOYSTICK_DEAD_ZONE) {
 			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveLeft(_personaje1,_personaje2) ) {
 				this->_personaje1->moveLeft(MOV_FACTOR2);
  			}
 		}
-		else if (AXSP1 > 0) {
+		else if (AXSP1 > JOYSTICK_DEAD_ZONE) {
 			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveRight(_personaje1,_personaje2) ) {
 				this->_personaje1->moveRight(MOV_FACTOR2);
 			}
@@ -954,24 +954,24 @@ void GameController::procesarMovimientoJoystick() {
 				this->_personaje2->block();
 			}
 		}
-		else if (AXSP2 < 0 && AYSP2 < 0) {
+		else if (AXSP2 < -JOYSTICK_DEAD_ZONE && AYSP2 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje2->jumpLeft(JMP_FACTOR);
 		}
-		else if (AXSP2 > 0 && AYSP2 < 0) {
+		else if (AXSP2 > JOYSTICK_DEAD_ZONE && AYSP2 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje2->jumpRight(JMP_FACTOR);
 		}
-		else if (AYSP2 < 0) {
+		else if (AYSP2 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje2->jump(JMP_FACTOR);
 		}
-		else if (AYSP2 > 0) {
+		else if (AYSP2 > JOYSTICK_DEAD_ZONE) {
 			this->_personaje2->duck();
 		}
-		else if (AXSP2 < 0) {
+		else if (AXSP2 < -JOYSTICK_DEAD_ZONE) {
 			if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() && canMoveLeft(_personaje2,_personaje1)) {
 				this->_personaje2->moveLeft(MOV_FACTOR2);
  			}
  		}
-		else if (AXSP2 > 0) {
+		else if (AXSP2 > JOYSTICK_DEAD_ZONE) {
 			if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() && canMoveRight(_personaje2,_personaje1)) {
 				this->_personaje2->moveRight(MOV_FACTOR2);
 			}
