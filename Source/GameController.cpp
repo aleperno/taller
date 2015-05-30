@@ -235,7 +235,6 @@ void GameController::printLayers()
 {
 	//LimpioPantalla
 	this->_ventana->clearScreen();
-	//this->_ventana->view();
 	if (_ventana->isShaking())
 		_ventana->setShakeIntensity();
 
@@ -1139,6 +1138,7 @@ void GameController::runPVE() {
 
 void GameController::runTraining() {
 	//TODO: los modos son distintos
+	this->_personaje2->freeze();
 	runPVP();
 }
 
