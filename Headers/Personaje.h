@@ -20,38 +20,13 @@ using namespace std;
 #include <PersonajeData.h>
 #include <EscenarioData.h>
 #include <Arma.h>
+#include <PosicionesFilaSprites.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;
 #define JMP_SPEED_X 3;
 //#define ARMA_SPEED 2.5;
-
-#define POS_FILA_WALK			0	// OK
-#define POS_FILA_IDLE			1	// OK
-#define POS_FILA_JUMP			2	// OK
-#define POS_FILA_JMPF			3	// OK
-#define POS_FILA_JMPB			4	// OK
-#define POS_FILA_DUCK			5	// OK
-#define POS_FILA_BLOCK			6	// OK
-#define POS_FILA_BLOCKDUCK		7	// OK
-#define POS_FILA_DIZZY			8	// OK
-#define POS_FILA_HITTED_DUCK 	9	// OK
-#define POS_FILA_HITTED 		10	// OK
-#define POS_FILA_HIKICK_DUCK 	11	// OK
-#define POS_FILA_HIKICK 		12	// OK
-#define POS_FILA_LOKICK_DUCK	13	// OK
-#define POS_FILA_LOKICK			14	// OK
-#define POS_FILA_AIRKICK		15	// OK
-#define POS_FILA_HIPUNCH		16	// OK
-#define POS_FILA_LOPUNCH		17	// OK
-#define POS_FILA_AIRPUNCH		18	// OK
-#define POS_FILA_FALLDEAD		19
-#define POS_FILA_FALL			20
-#define POS_FILA_GANCHO			21	// OK
-#define POS_FILA_BARRIDO		22
-#define POS_FILA_ARMA			23	// OK
-#define POS_FILA_LOPUNCH_DUCK	24	// OK
 
 class Personaje
 {
