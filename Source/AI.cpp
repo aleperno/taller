@@ -93,11 +93,13 @@ void AI::EjecutarMovimiento(Personaje* _personaje, string _movimiento)
 	if(_movimiento == FIRE)
 		_personaje->lanzarArma();
 
-	if(_movimiento == WALK)
-		if(!_personaje->_orientacion)
+	if(_movimiento == WALK){
+		if(!_personaje->_orientacion) {
 			_personaje->moveRight(MOV_FACTOR2);
-		else
+		}else{
 			_personaje->moveLeft(MOV_FACTOR2);
+		}
+	}
 }
 
 string AI::ObtenerAccion(string _prediccion, int _distancia)
@@ -122,7 +124,7 @@ string AI::ObtenerPrediccion(vector<string> _movimientos)
 	string accion_mas_probable = BLOCK;
 
 	//Armo el vector con las acciones candidatas segun los ultimos movimientos
-	for(int i = 0; i < _movimientos.size() - 2; i++)
+	for(unsigned int i = 0; i < _movimientos.size() - 2; i++)
 	{
 		if(_movimientos[i] == ant_ult_mov)
 		{
