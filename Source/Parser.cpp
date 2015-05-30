@@ -49,108 +49,6 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 	caracter->height = carValue.get("height",-1).asInt();
 	caracter->width = carValue.get("width",-1).asInt();
 	caracter->size = carValue.get("size",-1).asInt();
-/*
-	caracter->velSprites.push_back(carValue["walk"][2].asInt());
-	caracter->cantSprites.push_back(carValue["walk"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["walk"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["idle"][2].asInt());
-	caracter->cantSprites.push_back(carValue["idle"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["idle"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["jumpUp"][2].asInt());
-	caracter->cantSprites.push_back(carValue["jumpUp"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["jumpUp"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["jumpFwd"][2].asInt());
-	caracter->cantSprites.push_back(carValue["jumpFwd"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["jumpFwd"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["jumpBwd"][2].asInt());
-	caracter->cantSprites.push_back(carValue["jumpBwd"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["jumpBwd"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["duck"][2].asInt());
-	caracter->cantSprites.push_back(carValue["duck"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["duck"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["block"][2].asInt());
-	caracter->cantSprites.push_back(carValue["block"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["block"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["blockDuck"][2].asInt());
-	caracter->cantSprites.push_back(carValue["blockDuck"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["blockDuck"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["dizzy"][2].asInt());
-	caracter->cantSprites.push_back(carValue["dizzy"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["dizzy"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["hittedDuck"][2].asInt());
-	caracter->cantSprites.push_back(carValue["hittedDuck"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["hittedDuck"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["hitted"][2].asInt());
-	caracter->cantSprites.push_back(carValue["hitted"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["hitted"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["duckHiKick"][2].asInt());
-	caracter->cantSprites.push_back(carValue["duckHiKick"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["duckHiKick"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["hiKick"][2].asInt());
-	caracter->cantSprites.push_back(carValue["hiKick"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["hiKick"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["duckLoKick"][2].asInt());
-	caracter->cantSprites.push_back(carValue["duckLoKick"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["duckLoKick"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["loKick"][2].asInt());
-	caracter->cantSprites.push_back(carValue["loKick"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["loKick"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["airKick"][2].asInt());
-	caracter->cantSprites.push_back(carValue["airKick"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["airKick"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["hiPunch"][2].asInt());
-	caracter->cantSprites.push_back(carValue["hiPunch"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["hiPunch"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["loPunch"][2].asInt());
-	caracter->cantSprites.push_back(carValue["loPunch"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["loPunch"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["airPunch"][2].asInt());
-	caracter->cantSprites.push_back(carValue["airPunch"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["airPunch"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["fallDead"][2].asInt());
-	caracter->cantSprites.push_back(carValue["fallDead"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["fallDead"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["falling"][2].asInt());
-	caracter->cantSprites.push_back(carValue["falling"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["falling"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["gancho"][2].asInt());
-	caracter->cantSprites.push_back(carValue["gancho"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["gancho"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["barrido"][2].asInt());
-	caracter->cantSprites.push_back(carValue["barrido"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["barrido"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["arma"][2].asInt());
-	caracter->cantSprites.push_back(carValue["arma"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["arma"][0].asInt());
-
-	caracter->velSprites.push_back(carValue["duckLoPunch"][2].asInt());
-	caracter->cantSprites.push_back(carValue["duckLoPunch"][1].asInt());
-	caracter->anchoSprites.push_back(carValue["duckLoPunch"][0].asInt());
-*/
-
 	this->NikPutoModulariza(caracter,carValue,"walk");
 	this->NikPutoModulariza(caracter,carValue,"idle");
 	this->NikPutoModulariza(caracter,carValue,"jumpUp");
@@ -176,7 +74,6 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 	this->NikPutoModulariza(caracter,carValue,"barrido");
 	this->NikPutoModulariza(caracter,carValue,"arma");
 	this->NikPutoModulariza(caracter,carValue,"duckLoPunch");
-
 	caracter->imgPath = carValue["imgSrc"].asString();
 
 	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.
