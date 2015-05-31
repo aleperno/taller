@@ -5,7 +5,6 @@
 
 using namespace std;
 
-//Esos datos se levantan desde los jsons de mapa.
 class SoundHandler {
 	public:
 		//Musica

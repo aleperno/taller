@@ -102,6 +102,9 @@ class GameController
 		vector< vector<int> > perSelect;
 		Temporizador* _fightTimer;
 		int tiempoRemanente;
+		int round;
+		int personaje1Wins;
+		int personaje2wins;
 
 		//Metodos
 		static Ventana* getVentana(Parser* parser);
@@ -110,6 +113,7 @@ class GameController
 		void getPersonajes(Ventana* ventana, Parser* parser, EscenarioData escenario);
 		void InicializarAI(int _difficulty);
 		void prepararPartida();
+		void prepararPartidaTraining();
 		void actualizarPersonajes();
 		void runPVP();
 		void runPVE();
@@ -117,6 +121,7 @@ class GameController
 		void printLayers();
 		bool endOfGame(SDL_Event* e);
 		void toMainScreen();
+		void resetearVentanaPersonajes();
 
 		void getKeys();
 		void moveLayersRight(float factor);
@@ -126,6 +131,7 @@ class GameController
 		void iniciarEstructuraPerSelect();
 		void setEndOfGame(bool value);
 		bool actualizarGanador();
+		bool actualizarGanadorTraining();
 
 		void procesarEventosMainScreenIntro(SDL_Event* e);
 		void procesarEventosMainScreenModeSelect(SDL_Event* e);

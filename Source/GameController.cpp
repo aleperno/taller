@@ -242,8 +242,6 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 
 void GameController::printLayers()
 {
-	//LimpioPantalla
-	this->_ventana->clearScreen();
 	if (_ventana->isShaking())
 		_ventana->setShakeIntensity();
 
@@ -261,11 +259,6 @@ void GameController::printLayers()
 		this->_personaje1->view(_personaje2);
 		this->_personaje2->view(_personaje1);
 	}
-
-	this->_hud->printHUD(tiempoRemanente);
-
-	//ActualizoPantalla
-	this->_ventana->updateScreen();
 }
 
 void GameController::viewWindowPosition()
@@ -316,6 +309,34 @@ bool GameController::actualizarGanador() {
 					//personaje2->viewDead();
 					flag = true;
 				}
+			}
+		}
+	}
+	return flag;	
+}
+
+bool GameController::actualizarGanadorTraining() {
+	bool flag = false;
+	if (this->_personaje1->healthPoints <= 5) {
+		this->_personaje1->freeze();
+		this->_personaje1->dizzy();
+		if (this->_personaje1->healthPoints <= 0) {
+			Logger::Instance()->log(WARNING,"Gano personaje 2.");
+			this->_personaje2->freeze();
+			this->_personaje2->winingPosition();
+			//personaje1->viewDead();
+			flag = true;
+		}
+	} else {
+		if (this->_personaje2->healthPoints <= 5) {
+			this->_personaje2->freeze();
+			this->_personaje2->dizzy();
+			if (this->_personaje2->healthPoints <= 0) {
+				Logger::Instance()->log(WARNING,"Gano personaje 1.");
+				this->_personaje1->freeze();
+				this->_personaje1->winingPosition();
+				//personaje2->viewDead();
+				flag = true;
 			}
 		}
 	}
@@ -888,6 +909,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_r) this->toMainScreen();
 			else if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
+			else if (e->key.keysym.sym == SDLK_z && this->tipo_juego == TRAINING) this->resetearVentanaPersonajes();
 			else if (e->key.keysym.sym == SDLK_v) this->_ventana->toggleShake();
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
@@ -1137,33 +1159,69 @@ void GameController::runPVP() {
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
 		if (this->actualizarGanador())
 			this->toMainScreen();		
+		
+		this->_ventana->clearScreen();
 		this->printLayers();
+		this->_hud->printHUD(tiempoRemanente);
+		this->_ventana->updateScreen();
 
 	} else	SDL_Delay(DEF_SLEEP_TIME);
 }
 
 void GameController::runPVE() {
-	//TODO: los modos son distintos
+	//Es identico a PVP salvo que pelea AI como personaje 2
 	runPVP();
 }
 
 void GameController::runTraining() {
-	//TODO: los modos son distintos
-	this->_personaje2->freeze();
-	runPVP();
+	this->_personaje2->freeze();	//PARA QUE?
+
+	if (!partidaPreparada) {
+		prepararPartidaTraining();
+		partidaPreparada = true;
+	}
+
+	SDL_Event e;
+	while( SDL_PollEvent(&e) != 0 ) {
+		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
+		this->procesarEventos(&e);
+	}
+
+	if (!this->minimizado) {
+
+		this->procesarMovimientoJoystick();
+ 		this->getKeys();
+		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
+		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
+		this->moveLayers(_personaje1,_personaje2);
+		this->moveLayers(_personaje2,_personaje1);
+		if (this->actualizarGanadorTraining())
+			this->resetearVentanaPersonajes();
+
+		this->_ventana->clearScreen();
+		this->printLayers();
+		this->_hud->printHUD();
+		this->_ventana->updateScreen();
+
+	} else	SDL_Delay(DEF_SLEEP_TIME);
 }
 
 void GameController::prepararPartida() {
+	prepararPartidaTraining();
+	this->_fightTimer->reset();
+	round = 1;
+	personaje1Wins = 0;
+	personaje2wins = 0;
+}
+
+void GameController::prepararPartidaTraining() {
 	actualizarPersonajes();
-	_personaje1->resetear();
-	_personaje2->resetear();
+	resetearVentanaPersonajes();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
 	if (this->nombreP2.length() == 0)	this->nombreP2 = _personaje2->getData()->nombre;
 	_hud->recargarNombres();
-
-	this->_fightTimer->reset();
 }
 
 void GameController::run() {
@@ -1224,11 +1282,14 @@ bool GameController::hayPlayer2() {
 	return this->_hayPlayer2;
 }
 
-void GameController::toMainScreen() {
+void GameController::resetearVentanaPersonajes() {
+	this->_ventana->_pos_log_x = (this->_escenario.ancho - this->_ventana->_ancho_log) / 2;
 	_personaje1->resetear();
 	_personaje2->resetear();
+}
 
-	this->_ventana->_pos_log_x = (this->_escenario.ancho - this->_ventana->_ancho_log) / 2;
+void GameController::toMainScreen() {
+	resetearVentanaPersonajes();
 
 	enMainScreen = true;
 	screen = MAINSCREEN_MODE_SELECT;
