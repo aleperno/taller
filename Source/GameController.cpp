@@ -1152,6 +1152,8 @@ void GameController::procesamientoMainScreenTraining() {
 }
 
 void GameController::runPVP() {
+	//Mix_HaltMusic();
+	//Mix_PlayMusic(this->musica->musicaPelea, -1);
 	if (!partidaPreparada) {
 		prepararPartida();
 		partidaPreparada = true;
@@ -1196,10 +1198,12 @@ void GameController::runPVP() {
 
 void GameController::runPVE() {
 	//Es identico a PVP salvo que pelea AI como personaje 2
+	Mix_HaltMusic();
 	runPVP();
 }
 
 void GameController::runTraining() {
+	Mix_HaltMusic();
 	this->_personaje2->freeze();	//PARA QUE?
 
 	if (!partidaPreparada) {

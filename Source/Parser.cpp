@@ -39,7 +39,7 @@ void Parser::setearCapasPorDefecto(Value defCapas){
 	}
 }
 
-void Parser::NikPutoModulariza(CaracterData* caracter, Value carValue, string accion) {
+void Parser::parsearAccion(CaracterData* caracter, Value carValue, string accion) {
 	caracter->velSprites.push_back(carValue[accion][2].asInt());
 	caracter->cantSprites.push_back(carValue[accion][1].asInt());
 	caracter->anchoSprites.push_back(carValue[accion][0].asInt());
@@ -49,31 +49,31 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 	caracter->height = carValue.get("height",-1).asInt();
 	caracter->width = carValue.get("width",-1).asInt();
 	caracter->size = carValue.get("size",-1).asInt();
-	this->NikPutoModulariza(caracter,carValue,"walk");
-	this->NikPutoModulariza(caracter,carValue,"idle");
-	this->NikPutoModulariza(caracter,carValue,"jumpUp");
-	this->NikPutoModulariza(caracter,carValue,"jumpFwd");
-	this->NikPutoModulariza(caracter,carValue,"jumpBwd");
-	this->NikPutoModulariza(caracter,carValue,"duck");
-	this->NikPutoModulariza(caracter,carValue,"block");
-	this->NikPutoModulariza(caracter,carValue,"blockDuck");
-	this->NikPutoModulariza(caracter,carValue,"dizzy");
-	this->NikPutoModulariza(caracter,carValue,"hittedDuck");
-	this->NikPutoModulariza(caracter,carValue,"hitted");
-	this->NikPutoModulariza(caracter,carValue,"duckHiKick");
-	this->NikPutoModulariza(caracter,carValue,"hiKick");
-	this->NikPutoModulariza(caracter,carValue,"duckLoKick");
-	this->NikPutoModulariza(caracter,carValue,"loKick");
-	this->NikPutoModulariza(caracter,carValue,"airKick");
-	this->NikPutoModulariza(caracter,carValue,"hiPunch");
-	this->NikPutoModulariza(caracter,carValue,"loPunch");
-	this->NikPutoModulariza(caracter,carValue,"airPunch");
-	this->NikPutoModulariza(caracter,carValue,"fallDead");
-	this->NikPutoModulariza(caracter,carValue,"falling");
-	this->NikPutoModulariza(caracter,carValue,"gancho");
-	this->NikPutoModulariza(caracter,carValue,"barrido");
-	this->NikPutoModulariza(caracter,carValue,"arma");
-	this->NikPutoModulariza(caracter,carValue,"duckLoPunch");
+	this->parsearAccion(caracter,carValue,"walk");
+	this->parsearAccion(caracter,carValue,"idle");
+	this->parsearAccion(caracter,carValue,"jumpUp");
+	this->parsearAccion(caracter,carValue,"jumpFwd");
+	this->parsearAccion(caracter,carValue,"jumpBwd");
+	this->parsearAccion(caracter,carValue,"duck");
+	this->parsearAccion(caracter,carValue,"block");
+	this->parsearAccion(caracter,carValue,"blockDuck");
+	this->parsearAccion(caracter,carValue,"dizzy");
+	this->parsearAccion(caracter,carValue,"hittedDuck");
+	this->parsearAccion(caracter,carValue,"hitted");
+	this->parsearAccion(caracter,carValue,"duckHiKick");
+	this->parsearAccion(caracter,carValue,"hiKick");
+	this->parsearAccion(caracter,carValue,"duckLoKick");
+	this->parsearAccion(caracter,carValue,"loKick");
+	this->parsearAccion(caracter,carValue,"airKick");
+	this->parsearAccion(caracter,carValue,"hiPunch");
+	this->parsearAccion(caracter,carValue,"loPunch");
+	this->parsearAccion(caracter,carValue,"airPunch");
+	this->parsearAccion(caracter,carValue,"fallDead");
+	this->parsearAccion(caracter,carValue,"falling");
+	this->parsearAccion(caracter,carValue,"gancho");
+	this->parsearAccion(caracter,carValue,"barrido");
+	this->parsearAccion(caracter,carValue,"arma");
+	this->parsearAccion(caracter,carValue,"duckLoPunch");
 	caracter->imgPath = carValue["imgSrc"].asString();
 
 	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.
