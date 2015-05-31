@@ -390,20 +390,31 @@ void GameController::actualizarPersonajes() {
 		_personaje1 = _jugador1scorpion;
 		break;
 	}
-
-	switch (perSelect.at(filaP2).at(columnaP2)) {
-	case LIUKANG:
-		if (perSelect.at(filaP1).at(columnaP1) == LIUKANG)
-			_personaje2 = _jugador2liukangColor;
-		else
-			_personaje2 = _jugador2liukang;
-		break;
-	case SCORPION:
-		if (perSelect.at(filaP1).at(columnaP1) == SCORPION)
-			_personaje2 = _jugador2scorpionColor;
-		else
-			_personaje2 = _jugador2scorpion;
-		break;
+	
+	if (modeSelected == SELECTED_PVP) {
+		switch (perSelect.at(filaP2).at(columnaP2)) {
+		case LIUKANG:
+			if (perSelect.at(filaP1).at(columnaP1) == LIUKANG)
+				_personaje2 = _jugador2liukangColor;
+			else
+				_personaje2 = _jugador2liukang;
+			break;
+		case SCORPION:
+			if (perSelect.at(filaP1).at(columnaP1) == SCORPION)
+				_personaje2 = _jugador2scorpionColor;
+			else
+				_personaje2 = _jugador2scorpion;
+			break;
+		}
+	} else {
+		int random = rand() % 2;
+		if (random == 0) {
+			if (_personaje1 == _jugador1liukang)	_personaje2 = _jugador2liukangColor;
+			else	_personaje2 = _jugador2liukang;
+		} else if (random == 1) {
+			if (_personaje1 == _jugador1scorpion)	_personaje2 = _jugador2scorpionColor;
+			else	_personaje2 = _jugador2scorpion;
+		}
 	}
 }
 
