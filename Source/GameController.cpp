@@ -317,9 +317,11 @@ void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
 	if (e->jdevice.which == 0 && this->_personaje1->canMove()) {
 			this->_personaje1->evaluarAccion(e->jbutton.button);
+			this->_personaje1->getCombos()->imprimirCombos();
 	}
 	else if (e->jdevice.which == 1 && this->_personaje2->canMove()) {
 			this->_personaje2->evaluarAccion(e->jbutton.button);
+			this->_personaje2->getCombos()->imprimirCombos();
 	}
 }
 

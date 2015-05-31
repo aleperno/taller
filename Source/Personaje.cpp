@@ -72,10 +72,10 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
     this-> _data = data;
     this->pers_ppal = pers_ppal;
+    this->combos = new CombosPersonaje(&this->_data.toma1,&this->_data.toma2,&this->_data.fatality,1);
 
     //TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
     this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
-    //cout << _pos_x << endl;
 }
 
 PersonajeData* Personaje::getData() {
@@ -204,12 +204,10 @@ void Personaje::setBoundingBox()
 
     if((this->_isHiPunching ) && (this->_isDucking))
     {
-                    //cout << "SARASAAA" << endl;
-                    //boundingBox.x = this->get_x_px() + this->_ancho_log;
-                    boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
-                    boundingBox.y = this->get_y_px() * 1.2;
-                    boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
-                    boundingBox.h = this->_alto_px / 1.2;
+    	boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+    	boundingBox.y = this->get_y_px() * 1.2;
+        boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+        boundingBox.h = this->_alto_px / 1.2;
     }
 
     //Renderiza el boundingbox - solo para pruebas
@@ -220,11 +218,8 @@ void Personaje::setBoundingBox()
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
     vector<SDL_Rect*> media;
-    //const char* acciones[] = { "WALK","IDLE","JUMPUP","JUMPFWD","JUMPBWD", "DUCK", "BLOCK", "BLOCKDUCK", "DIZZY" };
     for (unsigned int i=0; i < data.cantSprites.size(); i++)
     {
-        //cout << acciones[i] << endl;
-        //cout << "	Fila: " << i << " - Cantidada de sprites: " << data.cantSprites[i] << endl;
         SDL_Rect* rectMedia = new SDL_Rect[data.cantSprites[i]];
         for (int j=0; j < data.cantSprites[i]; j++)
         {
@@ -240,20 +235,17 @@ vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 
 Personaje::~Personaje()
 {
-    //delete this;
-    //cout << "destruyo capa" << endl;
+	delete this->combos;
     delete _handler;
-    arma->~Arma();
+    delete this->arma;
     Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
 
 void Personaje::view(Personaje* otherPlayer)
 {
     this->_orientacion = (this->_pos_x + this->_ancho_log / 2 > otherPlayer->_pos_x + otherPlayer->_ancho_log / 2);
-    //this->_orientacion = (this->_pos_x > otherPlayer->_pos_x);
+
     this->setBoundingBox();
-    //printf("El personaje esta en %0.2f\n",_pos_x);
-    //cout << this->_pos_y << endl;
     if ( this->_weaponInAir ) this->arma->viewLanzar();
     if ( this->_isThrowing )
     {

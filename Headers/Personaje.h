@@ -21,6 +21,7 @@ using namespace std;
 #include <EscenarioData.h>
 #include <Arma.h>
 #include <PosicionesFilaSprites.h>
+#include <CombosPersonaje.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
@@ -39,6 +40,7 @@ class Personaje
 		Arma* arma;
 		float arma_speed;
 		float _alto_log;
+		CombosPersonaje* combos;
 		
 		float _pos_y;
 		float _alto_px;
@@ -106,6 +108,7 @@ class Personaje
 
 	public:
 		vector<string> track_movimientos;
+		CombosPersonaje* getCombos() {return this->combos;}
 		float _ancho_log;
 		float _pos_x;
 
