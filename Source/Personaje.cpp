@@ -288,6 +288,7 @@ void Personaje::view(Personaje* otherPlayer)
     if ( this->_weaponInAir ) this->arma->viewLanzar();
     if ( this->_isThrowing )
     {
+		Mix_PlayChannel(-1, this->efectos_sonido->fire, 0);
         if ( this->_isDucking )
         {
             this->viewShotWeapon(0);
@@ -323,6 +324,7 @@ void Personaje::view(Personaje* otherPlayer)
     {
         if ( this->isJumping() || this->isFalling() )
         {
+			Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
             if ( this->_isHitFalling )
             {
                 this->viewFall();
@@ -336,6 +338,7 @@ void Personaje::view(Personaje* otherPlayer)
                         if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                         {
                             //otherPlayer->downLife(LIFE_MED);
+							Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                             otherPlayer->hit(LIFE_MED);
                         }
                     }
@@ -347,6 +350,7 @@ void Personaje::view(Personaje* otherPlayer)
                         if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                         {
                             //otherPlayer->downLife(LIFE_MED);
+							Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                             otherPlayer->hit(LIFE_MED);
                         }
                     }
@@ -357,15 +361,18 @@ void Personaje::view(Personaje* otherPlayer)
                 if ( this->_isJumpingRight || this->_isFallingRight)
                 {
                     //cout << "SALTO DERECHA" << endl;
+					Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
                     this->viewJumpRight();
                 }
                 else if ( this->_isJumpingLeft || this->_isFallingLeft)
                 {
                     //cout << "SALTO IZQUIERDA" << endl;
+					Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
                     this->viewJumpLeft();
                 }
                 else
                 {
+					Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
                     this->viewJump();
                 }
             }
@@ -379,9 +386,11 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewHiKick())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                 {
                     //otherPlayer->downLife(LIFE_MIN);
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     otherPlayer->hit(LIFE_MIN);
                 }
             }
@@ -391,10 +400,12 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewHiPunch())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking() && !otherPlayer->isDucking())
 
                 {
                     //otherPlayer->downLife(LIFE_MED);
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     otherPlayer->fall(LIFE_MAX);
                     this->_ventana->toggleShake();
                 }
@@ -405,9 +416,11 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewLoPunch())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                 {
                     //otherPlayer->downLife(LIFE_MIN);
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     otherPlayer->hit(LIFE_MIN);
                 }
             }
@@ -417,9 +430,11 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewLoKick())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                 {
                     //otherPlayer->downLife(LIFE_MIN);
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     otherPlayer->hit(LIFE_MIN);
                 }
             }
@@ -427,6 +442,7 @@ void Personaje::view(Personaje* otherPlayer)
         else if (this->_isDucking && this->_beingHit)
         {
             this->viewHit();
+			Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
         }
         else if (this->_isDucking)
         {
@@ -449,10 +465,12 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewHiKick())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking() && !otherPlayer->isDucking())
 
                 {
                     //otherPlayer->downLife(LIFE_MIN);
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     otherPlayer->hit(LIFE_MIN);
                 }
             }
@@ -462,9 +480,11 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewHiPunch())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
 
                 {
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     //otherPlayer->downLife(LIFE_MIN);
                     otherPlayer->hit(LIFE_MIN);
                 }
@@ -475,10 +495,12 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewLoKick())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
 
                 {
                     //otherPlayer->downLife(LIFE_MIN);
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     otherPlayer->hit(LIFE_MIN);
                 }
             }
@@ -488,9 +510,11 @@ void Personaje::view(Personaje* otherPlayer)
             if(this->viewLoPunch())
             // TODO: SACAR ESTO DE ACÁ.
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking()&& !otherPlayer->isDucking())
 
                 {
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     //otherPlayer->downLife(LIFE_MIN);
                     otherPlayer->hit(LIFE_MIN);
                 }
@@ -499,13 +523,16 @@ void Personaje::view(Personaje* otherPlayer)
         else if (this->_beingHit)
         {
             this->viewHit();
+			Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
         }
         else if (this->_isBarriendo)
         {
             if(this->viewBarrido())
             {
+				Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
                 if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                 {
+					Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     //otherPlayer->downLife(LIFE_MIN);
                     otherPlayer->hit(LIFE_MIN);
                 }

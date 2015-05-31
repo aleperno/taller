@@ -77,7 +77,6 @@ class Personaje
 		bool _isBlocking;
 		bool _isDizzy;
 		bool _isHitFalling;
-		
 
 		// For throwable weapon.
 		bool _isThrowing;
