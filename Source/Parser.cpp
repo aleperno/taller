@@ -258,6 +258,34 @@ void Parser::setearDatosJugador(JugadorData* jugador, Value jugValue, Value jugD
 			Logger::Instance()->log(WARNING,msg);
 		}
 
+	//-----tomasTiempo-----
+	try {	jugador->tomasTiempoLimite = jugValue.get("tomasTiempo",-1).asInt();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto para tiempo limite de tomas del jugador " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			jugador->tomasTiempoLimite = jugDef.get("tomasTiempo",-1).asInt();
+		}
+		if (jugador->tomasTiempoLimite < 0) {
+			jugador->tomasTiempoLimite = jugDef.get("tomasTiempo",-1).asInt();
+			string msg = "Tiempo limite de tomas del jugador " + to_string(static_cast<long double>(num)) + " invalido o no definido. Se usa valor por defecto.";
+			Logger::Instance()->log(WARNING,msg);
+		}
+
+	//-----tolerancia-----
+	try {	jugador->tomasTolerancia = jugValue.get("tolerancia",-1).asInt();	}
+		catch(const exception &e) {
+			string str(e.what());
+			string msg = " Se usara valor por defecto para tolerancia de tomas del jugador " + to_string(static_cast<long double>(num)) + ".";
+			Logger::Instance()->log(ERROR,str + msg);
+			jugador->tomasTolerancia = jugDef.get("tolerancia",-1).asInt();
+		}
+		if (jugador->tomasTolerancia < 0) {
+			jugador->tomasTolerancia = jugDef.get("tolerancia",-1).asInt();
+			string msg = "Tolerancia de tomas del jugador " + to_string(static_cast<long double>(num)) + " invalida o no definida. Se usa valor por defecto.";
+			Logger::Instance()->log(WARNING,msg);
+		}
+
 	//-----joyconfig-----
 	//Teclas validas: 0, 1, 2, 3, 4, 5, 6, 7
 	//Primero asigna todos valores validos. Luego a los que son invalidos les pone teclas desocupadas en orden creciente.

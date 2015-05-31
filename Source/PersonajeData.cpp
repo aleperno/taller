@@ -33,4 +33,6 @@ void PersonajeData::llenarDatos(JugadorData* jugador, CaracterData* caracter) {
 	this->toma1 = caracter->toma1;
 	this->toma2 = caracter->toma2;
 	this->fatality = caracter->fatality;
+	this->tomasTiempoLimite = jugador->tomasTiempoLimite;
+	this->tomasTolerancia = jugador->tomasTolerancia;
 }

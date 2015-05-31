@@ -9,6 +9,8 @@ public:
 	float ancho;
 	float alto;
 	float arma_speed;
+	int tomasTiempoLimite;
+	int tomasTolerancia;
 	
 	//joyconfig
 	int golpe_alto;

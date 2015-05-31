@@ -53,6 +53,9 @@ class PersonajeData
 		vector<string> toma2;
 		vector<string> fatality;
 
+		int tomasTiempoLimite;
+		int tomasTolerancia;
+
 		int getGB() { return this->golpe_bajo;}
 		int getGA() { return this->golpe_alto;}
 		int getPB() { return this->patada_baja;}
