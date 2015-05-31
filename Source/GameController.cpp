@@ -1152,8 +1152,7 @@ void GameController::procesamientoMainScreenTraining() {
 }
 
 void GameController::runPVP() {
-	//Mix_HaltMusic();
-	//Mix_PlayMusic(this->musica->musicaPelea, -1);
+	Mix_HaltMusic();
 	if (!partidaPreparada) {
 		prepararPartida();
 		partidaPreparada = true;
