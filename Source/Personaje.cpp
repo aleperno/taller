@@ -83,6 +83,33 @@ PersonajeData* Personaje::getData() {
     return &this->_data;
 }
 
+void Personaje::setIdle()
+{
+    this->_isWalking = false;
+    this->_isDucking = false;
+    this->_isJumping = false;
+    this->_isJumpingRight = false;
+    this->_isJumpingLeft = false;
+    this->_isFalling = false;
+    this->_isFallingRight = false;
+    this->_isFallingLeft = false;
+    this->_isHitFalling = false;
+    this->_isBarriendo = false;
+
+    this->_isThrowing = false;
+    this->_weaponInAir = false;
+    this->_timesThrow = 0;
+
+    this->_isBlocking = false;
+    this->_isDizzy = false;
+    this->_canMove = true;
+    this->_beingHit = false;
+    this->_isHiKicking = false;
+    this->_isLoKicking = false;
+    this->_isHiPunching = false;
+    this->_isLoPunching = false;
+}
+
 void Personaje::posicionarParaMain() {
     if (pers_ppal)
         this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log*3/8);
@@ -90,7 +117,7 @@ void Personaje::posicionarParaMain() {
         this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 + (this->_ventana->_ancho_log*3/8);
     this->_pos_y = this->_ventana->_alto_log*5/12;
 
-    this->idle(); // Se pone el personaje en idle.
+    this->setIdle(); // Se pone el personaje en idle.
 }
 
 void Personaje::resetear() {

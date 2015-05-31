@@ -58,6 +58,8 @@ class Personaje
 		vector<SDL_Rect*> loadVectorMedia(PersonajeData data);
 		int _lastFrame;
 
+		void setIdle();
+
 		bool _isWalking;
 		bool _isDucking;
 		bool _isJumping;
