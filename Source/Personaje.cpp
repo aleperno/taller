@@ -104,6 +104,7 @@ void Personaje::resetear() {
     this->_pos_y = this->_escenario.y_piso;
     this->healthPoints = HEALTH;
     this->unFreeze();
+    this->_isDizzy = false;
     this->idle();
 }
 
