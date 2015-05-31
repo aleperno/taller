@@ -17,6 +17,7 @@ class SoundHandler {
 		Mix_Chunk *gancho;
 		Mix_Chunk *fire;
 		Mix_Chunk *caida;
+		Mix_Chunk *jump;
 
 		//Efectos de sonido - Menu
 		Mix_Chunk *select;
