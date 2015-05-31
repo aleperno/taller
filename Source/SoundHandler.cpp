@@ -1,8 +1,11 @@
 #include <SoundHandler.h>
+#include <stdio.h>
 
 SoundHandler::SoundHandler()
 {
-
+	this->musicaMenu = Mix_LoadMUS("Sound/mk3-menu_music.mp3");
+	if(musicaMenu == NULL)
+		printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
 }
 
 SoundHandler::~SoundHandler()

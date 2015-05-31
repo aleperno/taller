@@ -27,6 +27,7 @@ using namespace std;
 #include <MainScreen.h>
 #include <Temporizador.h>
 #include <AI.h>
+#include <SoundHandler.h>
 
 
 #define DEF_SLEEP_TIME 20

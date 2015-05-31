@@ -1171,6 +1171,8 @@ void GameController::run() {
 	while (!this->_end_of_game)
 	{
 		if (enMainScreen) {
+			if (Mix_PlayingMusic() == 0)
+				Mix_PlayMusic(this->musica->musicaMenu, -1);
 			switch (screen) {
 			case MAINSCREEN_INTRO:
 				procesamientoMainScreenIntro();

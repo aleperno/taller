@@ -5,6 +5,7 @@
  *      Author: neo
  */
 #include <Ventana.h>
+#include <SDL_mixer.h>
 
 Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, EscenarioData escenario)
 {
@@ -40,6 +41,7 @@ Ventana::~Ventana()
 	//delete _gWindow;
 	_gRenderer = NULL;
 	_gWindow = NULL;
+	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
