@@ -22,6 +22,7 @@ using namespace std;
 #include <Arma.h>
 #include <PosicionesFilaSprites.h>
 #include <CombosPersonaje.h>
+#include <SoundHandler.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
@@ -33,6 +34,7 @@ class Personaje
 {
 	private:
 		//Atributos
+		SoundHandler* efectos_sonido;
 		TextureHandler* _handler;
 		Ventana* _ventana;
 		EscenarioData _escenario;

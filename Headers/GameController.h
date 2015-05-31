@@ -62,6 +62,7 @@ class GameController
 
 	private:
 		//Atributos
+		SoundHandler* musica;
 		AI* ai_handler;
 		GameMode tipo_juego;
 		static GameController* _instance;

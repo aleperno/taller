@@ -118,6 +118,7 @@ GameController::GameController(Parser* parser)
 	_capas = GameController::getCapas(_ventana,parser,_escenario);
 	getPersonajes(_ventana,parser,_escenario);
 	InicializarAI(DIFFICULTY);
+	this->musica = new SoundHandler();
 	_personaje1 = this->_jugador1scorpion;
 	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
@@ -142,6 +143,14 @@ void GameController::InicializarAI(int _difficulty)
 
 bool GameController::iniciarSDL() {
 	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO) >= 0 );
+	if(flag)
+	{
+		if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+        {
+            Logger::Instance()->log(ERROR,"No se ha iniciado el mixer de sonido");
+            flag = false;
+        }
+	}
 	this->_numJoysticks = SDL_NumJoysticks();
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;

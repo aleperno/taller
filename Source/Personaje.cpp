@@ -18,6 +18,7 @@
 Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor)
 {
     Logger::Instance()->log(DEBUG,"Se crea personaje");
+	this->efectos_sonido = new SoundHandler();
     this->_ventana = ventana;
     this->_handler = new TextureHandler(ventana->_gRenderer);
     this->_alto_log = data.alto;
