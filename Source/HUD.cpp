@@ -11,7 +11,10 @@ Hud::~Hud()
 {
 	delete this->hud1.nombreTexture;
 	delete this->hud2.nombreTexture;
-	delete this->hudTiempo.timeTexture;
+	delete this->timeTexture;
+	delete this->roundTexture;
+	delete this->p1winsTexture;
+	delete this->p2winsTexture;
 	TTF_CloseFont( fontNombres );
 	fontNombres = NULL;
 	TTF_CloseFont( fontTimer );
@@ -47,8 +50,6 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->colorNombres.g = 0xFF;
 	this->colorNombres.b = 0xFF;
 	this->colorNombres.a = 0xFF;
-
-	this->colorTimer = colorVida;
 
 	this->_ventana = ventana;
 
@@ -92,8 +93,10 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->fontTimer = TTF_OpenFont(FONT_PATH,hudInternoH);
 	this->hud1.nombreTexture = new TextureHandler( _ventana->_gRenderer );
 	this->hud2.nombreTexture = new TextureHandler( _ventana->_gRenderer );
-	this->hudTiempo.timeTexture = new TextureHandler( _ventana->_gRenderer );
-
+	this->timeTexture = new TextureHandler( _ventana->_gRenderer );
+	this->roundTexture = new TextureHandler( _ventana->_gRenderer );
+	this->p1winsTexture = new TextureHandler( _ventana->_gRenderer );
+	this->p2winsTexture = new TextureHandler( _ventana->_gRenderer );
 }
 
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
@@ -104,6 +107,18 @@ void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
 void Hud::recargarNombres() {
 	this->hud1.nombreTexture->loadFromRenderedText(*_nombreP1, colorNombres, fontNombres);
 	this->hud2.nombreTexture->loadFromRenderedText(*_nombreP2, colorNombres, fontNombres);
+}
+
+void Hud::actualizarRounds(int round, int p1wins, int p2wins) {
+	this->roundTexture->loadFromRenderedText("round " + StringUtil::int2string(round), colorVida, fontTimer);
+	if (p1wins == 1)
+		this->p1winsTexture->loadFromRenderedText("I", colorVida, fontTimer);
+	else if (p1wins == 0)
+		this->p1winsTexture->free();
+	if (p2wins == 1)
+		this->p2winsTexture->loadFromRenderedText("I", colorVida, fontTimer);
+	else if (p2wins == 0)
+		this->p2winsTexture->free();
 }
 
 void Hud::actualizarHealthbars() {
@@ -144,14 +159,10 @@ void Hud::printHUD() {
 void Hud::printHUD(int time) {
 	printHUD();
 
-	/*SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExterno.r, colorExterno.g, colorExterno.b, colorExterno.a );
-	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.externo) );
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExternoIlum.r, colorExternoIlum.g, colorExternoIlum.b, colorExternoIlum.a );
-	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.externoIlum) );
-	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorInterno.r, colorInterno.g, colorInterno.b, colorInterno.a );
-	SDL_RenderFillRect( _ventana->_gRenderer, &(this->hudTiempo.interno) );*/
+	this->roundTexture->render(_ventana->_ancho_px/2 - this->roundTexture->getWidth()/2, this->hud1.interno.y + this->timeTexture->getHeight());
+	this->p1winsTexture->render(hud1.externo.x + hud1.externo.w, this->hud1.interno.y);
+	this->p2winsTexture->render(hud2.externo.x - this->p2winsTexture->getWidth(), this->hud1.interno.y);
 
-	this->hudTiempo.timeTexture->loadFromRenderedText(StringUtil::int2string(time), colorTimer, fontTimer);
-	//this->hudTiempo.timeTexture->render(_ventana->_ancho_px/2 - this->hudTiempo.timeTexture->getWidth()/2, this->hudTiempo.interno.y);
-	this->hudTiempo.timeTexture->render(_ventana->_ancho_px/2 - this->hudTiempo.timeTexture->getWidth()/2, this->hud1.interno.y);
+	this->timeTexture->loadFromRenderedText(StringUtil::int2string(time), colorVida, fontTimer);
+	this->timeTexture->render(_ventana->_ancho_px/2 - this->timeTexture->getWidth()/2, this->hud1.interno.y);
 }

@@ -23,6 +23,7 @@ class Hud{
 		~Hud();
 		void setearPersonajes(Personaje* personaje1, Personaje* personaje2);
 		void recargarNombres();
+		void actualizarRounds(int round, int p1wins, int p2wins);
 		void prepararHUD();
 		void actualizarHealthbars();
 		void printHUD();
@@ -40,7 +41,6 @@ class Hud{
 		SDL_Color colorVida;
 		SDL_Color colorVidaIlum;
 		SDL_Color colorNombres;
-		SDL_Color colorTimer;
 		struct hudPersonaje {
 			SDL_Rect externo;
 			SDL_Rect interno;
@@ -48,10 +48,10 @@ class Hud{
 			SDL_Rect health;
 			TextureHandler* nombreTexture;
 		};
-		struct hudTime {
-			TextureHandler* timeTexture;
-		};
-		hudTime hudTiempo;
+		TextureHandler* timeTexture;
+		TextureHandler* roundTexture;
+		TextureHandler* p1winsTexture;
+		TextureHandler* p2winsTexture;
 		hudPersonaje hud1;
 		hudPersonaje hud2;
 };

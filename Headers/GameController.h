@@ -104,7 +104,7 @@ class GameController
 		int tiempoRemanente;
 		int round;
 		int personaje1Wins;
-		int personaje2wins;
+		int personaje2Wins;
 
 		//Metodos
 		static Ventana* getVentana(Parser* parser);

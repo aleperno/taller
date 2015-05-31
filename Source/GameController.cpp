@@ -276,11 +276,13 @@ bool GameController::actualizarGanador() {
 	bool flag = false;
 	if (tiempoRemanente <= 0) {
 		if (_personaje1->healthPoints < _personaje2->healthPoints) {
-			Logger::Instance()->log(WARNING,"Gano personaje 2.");
+			Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
+			personaje2Wins++;
 			flag = true;
 		} else {
 			if (_personaje1->healthPoints > _personaje2->healthPoints) {
-				Logger::Instance()->log(WARNING,"Gano personaje 1.");
+				Logger::Instance()->log(WARNING,"Round ganado por personaje 1.");
+				personaje1Wins++;
 				flag = true;
 			} else {
 				Logger::Instance()->log(WARNING,"Empate!");
@@ -292,9 +294,10 @@ bool GameController::actualizarGanador() {
 			this->_personaje1->freeze();
 			this->_personaje1->dizzy();
 			if (this->_personaje1->healthPoints <= 0) {
-				Logger::Instance()->log(WARNING,"Gano personaje 2.");
+				Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
 				this->_personaje2->freeze();
 				this->_personaje2->winingPosition();
+				personaje2Wins++;
 				//personaje1->viewDead();
 				flag = true;
 			}
@@ -303,9 +306,10 @@ bool GameController::actualizarGanador() {
 				this->_personaje2->freeze();
 				this->_personaje2->dizzy();
 				if (this->_personaje2->healthPoints <= 0) {
-					Logger::Instance()->log(WARNING,"Gano personaje 1.");
+					Logger::Instance()->log(WARNING,"Round ganado por personaje 1.");
 					this->_personaje1->freeze();
 					this->_personaje1->winingPosition();
+					personaje1Wins++;
 					//personaje2->viewDead();
 					flag = true;
 				}
@@ -321,7 +325,7 @@ bool GameController::actualizarGanadorTraining() {
 		this->_personaje1->freeze();
 		this->_personaje1->dizzy();
 		if (this->_personaje1->healthPoints <= 0) {
-			Logger::Instance()->log(WARNING,"Gano personaje 2.");
+			Logger::Instance()->log(WARNING,"Murio personaje 2.");
 			this->_personaje2->freeze();
 			this->_personaje2->winingPosition();
 			//personaje1->viewDead();
@@ -332,7 +336,7 @@ bool GameController::actualizarGanadorTraining() {
 			this->_personaje2->freeze();
 			this->_personaje2->dizzy();
 			if (this->_personaje2->healthPoints <= 0) {
-				Logger::Instance()->log(WARNING,"Gano personaje 1.");
+				Logger::Instance()->log(WARNING,"Murio personaje 1.");
 				this->_personaje1->freeze();
 				this->_personaje1->winingPosition();
 				//personaje2->viewDead();
@@ -1157,9 +1161,20 @@ void GameController::runPVP() {
 		this->moveLayers(_personaje1,_personaje2);
 		this->moveLayers(_personaje2,_personaje1);
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-		if (this->actualizarGanador())
-			this->toMainScreen();		
-		
+		if (this->actualizarGanador()) {
+			if (personaje1Wins == 2) {
+				Logger::Instance()->log(WARNING,"Partida ganada por personaje 1.");
+				this->toMainScreen();
+			} else if (personaje2Wins == 2) {
+				Logger::Instance()->log(WARNING,"Partida ganada por personaje 2.");
+				this->toMainScreen();
+			} else {
+				round++;
+				resetearVentanaPersonajes();
+				_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
+				this->_fightTimer->reset();
+			}
+		}
 		this->_ventana->clearScreen();
 		this->printLayers();
 		this->_hud->printHUD(tiempoRemanente);
@@ -1208,10 +1223,11 @@ void GameController::runTraining() {
 
 void GameController::prepararPartida() {
 	prepararPartidaTraining();
-	this->_fightTimer->reset();
 	round = 1;
 	personaje1Wins = 0;
-	personaje2wins = 0;
+	personaje2Wins = 0;
+	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
+	this->_fightTimer->reset();
 }
 
 void GameController::prepararPartidaTraining() {
