@@ -1152,7 +1152,7 @@ void GameController::procesamientoMainScreenTraining() {
 }
 
 void GameController::runPVP() {
-	Mix_HaltMusic();
+	
 	if (!partidaPreparada) {
 		prepararPartida();
 		partidaPreparada = true;
@@ -1165,7 +1165,13 @@ void GameController::runPVP() {
 	}
 
 	if (!this->minimizado) {
-
+		if(!this->musica_pelea)
+		{
+			Mix_HaltMusic();
+			this->musica_pelea = true;
+			Mix_VolumeMusic(32);
+			Mix_PlayMusic(this->musica->musicaPelea, -1);
+		}
 		this->procesarMovimientoJoystick();
  		this->getKeys();
 		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
@@ -1197,12 +1203,18 @@ void GameController::runPVP() {
 
 void GameController::runPVE() {
 	//Es identico a PVP salvo que pelea AI como personaje 2
-	Mix_HaltMusic();
+	if(!this->musica_pelea)
+	{
+		Mix_HaltMusic();
+		this->musica_pelea = true;
+		Mix_VolumeMusic(32);
+		Mix_PlayMusic(this->musica->musicaPelea, -1);
+	}
 	runPVP();
 }
 
 void GameController::runTraining() {
-	Mix_HaltMusic();
+	
 	this->_personaje2->freeze();	//PARA QUE?
 
 	if (!partidaPreparada) {
@@ -1217,7 +1229,13 @@ void GameController::runTraining() {
 	}
 
 	if (!this->minimizado) {
-
+		if(!this->musica_pelea)
+		{
+			Mix_HaltMusic();
+			this->musica_pelea = true;
+			Mix_VolumeMusic(32);
+			Mix_PlayMusic(this->musica->musicaPelea, -1);
+		}
 		this->procesarMovimientoJoystick();
  		this->getKeys();
 		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
@@ -1260,7 +1278,11 @@ void GameController::run() {
 	{
 		if (enMainScreen) {
 			if (Mix_PlayingMusic() == 0)
+			{
+				this->musica_pelea = false;
+				Mix_VolumeMusic(64);
 				Mix_PlayMusic(this->musica->musicaMenu, -1);
+			}
 			switch (screen) {
 			case MAINSCREEN_INTRO:
 				procesamientoMainScreenIntro();
@@ -1320,7 +1342,7 @@ void GameController::resetearVentanaPersonajes() {
 
 void GameController::toMainScreen() {
 	resetearVentanaPersonajes();
-
+	Mix_HaltMusic();
 	enMainScreen = true;
 	screen = MAINSCREEN_MODE_SELECT;
 	modeSelected = SELECTED_PVP;

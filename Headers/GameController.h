@@ -84,6 +84,7 @@ class GameController
 		Personaje* _jugador2scorpionColor;
 
 		bool _end_of_game;
+		bool musica_pelea;
 		SDL_Joystick* _joystickOne;
 		SDL_Joystick* _joystickTwo;
 		Sint16 lastJoyValue1X;
