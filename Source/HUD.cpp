@@ -160,8 +160,8 @@ void Hud::printHUD(int time) {
 	printHUD();
 
 	this->roundTexture->render(_ventana->_ancho_px/2 - this->roundTexture->getWidth()/2, this->hud1.interno.y + this->timeTexture->getHeight());
-	this->p1winsTexture->render(hud1.externo.x + hud1.externo.w, this->hud1.interno.y);
-	this->p2winsTexture->render(hud2.externo.x - this->p2winsTexture->getWidth(), this->hud1.interno.y);
+	this->p1winsTexture->render(hud1.externo.x, this->hud1.externo.y + this->hud1.externo.h);
+	this->p2winsTexture->render(hud2.externo.x + hud2.externo.w - this->p2winsTexture->getWidth(), this->hud2.externo.y + this->hud2.externo.h);
 
 	this->timeTexture->loadFromRenderedText(StringUtil::int2string(time), colorVida, fontTimer);
 	this->timeTexture->render(_ventana->_ancho_px/2 - this->timeTexture->getWidth()/2, this->hud1.interno.y);

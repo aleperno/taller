@@ -53,9 +53,9 @@ MainScreen::MainScreen(Ventana* ventana, vector< vector<int> >* perSelect, vecto
 	this->punterosPersonajes._jugador2scorpionColor = punteros->at(5);
 
 	//fuentes
-	this->fontBig = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/8);	//Titulo
-	this->fontSmall = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/25);	//Descripciones y nombres
-	this->fontMenu = TTF_OpenFont(FONT_PATH, _ventana->_alto_px/15);
+	this->fontBig = TTF_OpenFont(FONT_PATH, (_ventana->_ancho_px + _ventana->_alto_px)/2/12);	//Titulo
+	this->fontSmall = TTF_OpenFont(FONT_PATH, (_ventana->_ancho_px + _ventana->_alto_px)/2/35);	//Descripciones y nombres
+	this->fontMenu = TTF_OpenFont(FONT_PATH, (_ventana->_ancho_px + _ventana->_alto_px)/2/25);
 
 	//colores
 	menuColor.r = 0xCC;
