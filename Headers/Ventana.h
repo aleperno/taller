@@ -51,7 +51,6 @@ class Ventana
 		bool _isShaking;
 		int _shakeLenght;
 		int _shakeIntensity;
-		int _window_x,_window_y;
 		int _shakeInt;
 };
 

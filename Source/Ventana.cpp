@@ -17,16 +17,11 @@ Ventana::Ventana(int ancho_px, int alto_px, float ancho_log, float alto_log, Esc
 	this->_escenario = escenario;
 	this->_isShaking = false;
 	this->_shakeInt =0;
-	int x,y;
 	//Inicializacion ventana
 	this -> _gWindow = SDL_CreateWindow( "Mortal Kombat - Taller", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _ancho_px, _alto_px, SDL_WINDOW_SHOWN );
 	this -> _gRenderer = SDL_CreateRenderer( this->_gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	int imgFlags = IMG_INIT_PNG;
 	IMG_Init( imgFlags );
-
-	SDL_GetWindowPosition(_gWindow,&x,&y);
-	_window_x = x;
-	_window_y = y;
 
 	this->_shakeIntensity = SHAKE_INTENSITY;
 	this ->_shakeLenght = SHAKE_LENGTH;

@@ -21,6 +21,8 @@ void Parser::setearJugadorPorDefecto(JugadorData* jugador, Value defJugador){
 	jugador->ancho = defJugador.get("ancho",-1).asFloat();
 	jugador->alto = defJugador.get("alto",-1).asFloat();
 	jugador->arma_speed = defJugador.get("arma_speed",-1).asFloat();
+	jugador->tomasTiempoLimite = defJugador.get("tomasTiempo",-1).asInt();
+	jugador->tomasTolerancia = defJugador.get("tolerancia",-1).asInt();
 	jugador->golpe_alto = defJugador.get("golpe-alto",-1).asInt();
 	jugador->golpe_bajo = defJugador.get("golpe-bajo",-1).asInt();
 	jugador->patada_alta = defJugador.get("patada-alta",-1).asInt();
