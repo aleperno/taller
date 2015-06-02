@@ -23,6 +23,7 @@ using namespace std;
 #include <PosicionesFilaSprites.h>
 #include <CombosPersonaje.h>
 #include <SoundHandler.h>
+#include <AccionesTracking.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
@@ -143,7 +144,6 @@ class Personaje
 		void blockDuck();
 		void dizzy();
 		void winingPosition();
-		void arrojarArma();
 		void fall(int life);
 		void dead();
 		void barrer();
@@ -168,7 +168,7 @@ class Personaje
 		bool isDucking();
 		bool isHitting();
 
-		void evaluarAccion (int accion);
+		void evaluarAccion (int accion, bool enPVE);
 		bool canMove();
 		void freeze();
 		void unFreeze();

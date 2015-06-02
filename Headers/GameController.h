@@ -28,6 +28,7 @@ using namespace std;
 #include <Temporizador.h>
 #include <AI.h>
 #include <SoundHandler.h>
+#include <AccionesTracking.h>
 
 
 #define DEF_SLEEP_TIME 20
@@ -176,6 +177,9 @@ class GameController
 		static GameController* Instance(Parser* parser = 0);
 		void run();
 		void KillController(); //Destructor
+		bool estoyEnPVP() { return (this->tipo_juego == PVP);}
+		bool estoyEnPVE() { return (this->tipo_juego == PVE);}
+		bool estoyEnTraining() { return (this->tipo_juego == TRAINING);}
 };
 
 #endif /* HEADERS_GAMECONTROLLER_H_ */

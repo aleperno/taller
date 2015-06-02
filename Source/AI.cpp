@@ -4,30 +4,6 @@ using namespace std;
 #define JMP_FACTOR 2
 #define MOV_FACTOR2 0.8
 
-#define IDLE "ID"
-#define UP_LEFT "UL"
-#define UP_RIGHT "UR"
-#define UP "UP"
-#define UP_KICK "UK"
-#define UP_PUNCH "UH"
-#define DUCK "DW"
-#define DUCK_BLOCK "DB"
-#define DUCK_KICK "DK"
-#define DUCK_PUNCH "DP"
-#define BARRE "SW"
-#define LEFT "LF"
-#define RIGHT "RG"
-#define FIRE "FI"
-#define BLOCK "BL"
-#define HIGH_PUNCH "GA"
-#define LOW_PUNCH "GB"
-#define HIGH_KICK "PA"
-#define LOW_KICK "PB"
-#define WALK "WK"
-#define D_CLOSE 0
-#define D_MED 1
-#define D_FAR 2
-#define TRACK_MOV 50
 
 void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 {

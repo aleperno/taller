@@ -1241,29 +1241,27 @@ void Personaje::patadaAlta() {
     }
 }
 
-void Personaje::evaluarAccion(int accion) {
+void Personaje::evaluarAccion(int accion, bool enPVE) {
     if (accion == this->getData()->getAR()) {
         this->lanzarArma();
+        if (enPVE) this->track_movimientos.push_back(FIRE);
     }
     else if (accion == this->getData()->getGA()) {
         this->golpeAlto();
+        if (enPVE) this->track_movimientos.push_back(HIGH_PUNCH);
     }
     else if (accion == this->getData()->getGB()) {
         this->golpeBajo();
+        if (enPVE) this->track_movimientos.push_back(LOW_PUNCH);
     }
     else if (accion == this->getData()->getPA()) {
         this->patadaAlta();
+        if (enPVE) this->track_movimientos.push_back(HIGH_KICK);
     }
     else if (accion == this->getData()->getPB()) {
         this->patadaBaja();
+        if (enPVE) this->track_movimientos.push_back(LOW_KICK);
     }
-    else if (accion == 9) {
-        this->barrer();
-    }
-}
-
-void Personaje::arrojarArma() {
-
 }
 
 void Personaje::duck()

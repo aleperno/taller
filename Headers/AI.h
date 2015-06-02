@@ -8,6 +8,7 @@ using namespace std;
 #include <Logger.h>
 #include <Personaje.h>
 #include <vector>
+#include <AccionesTracking.h>
 
 struct RegistroLookUp
 {
