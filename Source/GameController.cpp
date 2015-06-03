@@ -126,13 +126,11 @@ void GameController::InicializarAI(int _difficulty)
 
 bool GameController::iniciarSDL() {
 	bool flag =  (SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO) >= 0 );
-	if(flag)
-	{
-		if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-        {
-            Logger::Instance()->log(ERROR,"No se ha iniciado el mixer de sonido");
-            flag = false;
-        }
+	if(flag) {
+		if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+           		Logger::Instance()->log(ERROR,"No se ha iniciado el mixer de sonido");
+            		flag = false;
+        	}
 	}
 	this->_numJoysticks = SDL_NumJoysticks();
 	this->_joystickOne = NULL;
@@ -1176,7 +1174,7 @@ void GameController::runPVP() {
 			this->ai_handler->HandlePlayer(_personaje2, _personaje1);
 		}
 
- 		//this->getKeys();
+ 		this->getKeys();
 		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
 		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 		this->moveLayers(_personaje1,_personaje2);
