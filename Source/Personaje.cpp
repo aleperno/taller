@@ -14,10 +14,13 @@
 #define LIFE_MED 3
 #define LIFE_MIN 1
 
+#define TIEMPO_ARMA 1000
+
 
 Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenario, bool pers_ppal, bool cambiarColor)
 {
     Logger::Instance()->log(DEBUG,"Se crea personaje");
+	this->t_lanza_arma = new Temporizador();
 	this->efectos_sonido = new SoundHandler();
     this->_ventana = ventana;
     this->_handler = new TextureHandler(ventana->_gRenderer);
@@ -173,9 +176,12 @@ void Personaje::lanzarArma()
     {
         if (!this->_weaponInAir)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
         {
-            this->_isThrowing = true;
-            this->_weaponInAir = true;
-            this->resetearArma();
+			if(this->t_lanza_arma->getTimeInTicks() >= TIEMPO_ARMA)
+			{
+				this->_isThrowing = true;
+				this->_weaponInAir = true;
+				this->resetearArma();
+			}
         }
     }
 }
@@ -288,6 +294,7 @@ void Personaje::view(Personaje* otherPlayer)
     if ( this->_weaponInAir ) this->arma->viewLanzar();
     if ( this->_isThrowing )
     {
+		this->t_lanza_arma->reset();
 		if(!Mix_Playing(-1))
 			Mix_PlayChannel(-1, this->efectos_sonido->fire, 0);
         if ( this->_isDucking )
@@ -353,7 +360,7 @@ void Personaje::view(Personaje* otherPlayer)
                         if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
                         {
                             //otherPlayer->downLife(LIFE_MED);
-							if(!Mix_Playing(-1))
+							//if(!Mix_Playing(-1))
 								Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                             otherPlayer->hit(LIFE_MED);
                         }
@@ -416,7 +423,7 @@ void Personaje::view(Personaje* otherPlayer)
                 {
                     //otherPlayer->downLife(LIFE_MED);
 					//if(!Mix_Playing(-1))
-						Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
+						Mix_PlayChannel(-1, this->efectos_sonido->gancho, 0);
                     otherPlayer->fall(LIFE_MAX);
                     this->_ventana->toggleShake();
                 }
@@ -548,7 +555,7 @@ void Personaje::view(Personaje* otherPlayer)
         {
             this->viewHit();
 			//if(!Mix_Playing(-1))
-				Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
+				//Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
         }
         else if (this->_isBarriendo)
         {

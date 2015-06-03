@@ -7,15 +7,23 @@ using namespace std;
 
 void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 {
-	if(_personaje_PLAYER->track_movimientos.size() >= TRACK_MOV)
+	if(!_personaje_PLAYER->_isDizzy)
 	{
-		this->prediccion = this->ObtenerPrediccion(_personaje_PLAYER->track_movimientos);
-		this->accion = this->ObtenerAccion(this->prediccion, this->CalcularDistacia(_personaje_AI->_pos_x, _personaje_PLAYER->_pos_x, _personaje_AI->_ancho_log));
-		this->EjecutarMovimiento(_personaje_AI, this->accion);
+		if(_personaje_PLAYER->track_movimientos.size() >= TRACK_MOV)
+		{
+			this->prediccion = this->ObtenerPrediccion(_personaje_PLAYER->track_movimientos);
+			this->accion = this->ObtenerAccion(this->prediccion, this->CalcularDistacia(_personaje_AI->_pos_x, _personaje_PLAYER->_pos_x, _personaje_AI->_ancho_log));
+			this->EjecutarMovimiento(_personaje_AI, this->accion);
+		}
+		else
+		{
+			//this->EjecutarMovimiento(_personaje_AI, FIRE);
+		}
 	}
 	else
 	{
-		//this->EjecutarMovimiento(_personaje_AI, FIRE);
+		//TODO: EJECUTAR FATALITY
+		this->EjecutarMovimiento(_personaje_AI, FIRE);
 	}
 }
 

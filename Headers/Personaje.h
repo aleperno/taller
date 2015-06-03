@@ -24,6 +24,7 @@ using namespace std;
 #include <CombosPersonaje.h>
 #include <SoundHandler.h>
 #include <AccionesTracking.h>
+#include <Temporizador.h>
 
 #define SPEED 3;
 #define JMP_SPEED 10;
@@ -76,7 +77,7 @@ class Personaje
 		bool _isLoPunching;
 		bool _isBarriendo;
 		bool _isBlocking;
-		bool _isDizzy;
+		
 		bool _isHitFalling;
 
 		// For throwable weapon.
@@ -110,11 +111,14 @@ class Personaje
 		void setBoundingBox();
 		void resetearArma();
 
+		Temporizador* t_lanza_arma;
+
 	public:
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
 		float _ancho_log;
 		float _pos_x;
+		bool _isDizzy;
 
 		bool isMaxPushLeft();
 		bool isMaxPushRight();
