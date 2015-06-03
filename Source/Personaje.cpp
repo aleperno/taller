@@ -1248,7 +1248,7 @@ void Personaje::patadaAlta() {
     }
 }
 
-void Personaje::evaluarAccion(int accion, bool enPVE) {
+void Personaje::evaluarAccion(int accion, bool enPVE, bool enTraining) {
     if (accion == this->getData()->getAR()) {
         this->lanzarArma();
         if (enPVE) this->track_movimientos.push_back(FIRE);
@@ -1256,18 +1256,22 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
     else if (accion == this->getData()->getGA()) {
         this->golpeAlto();
         if (enPVE) this->track_movimientos.push_back(HIGH_PUNCH);
+        if (enTraining) this->getBufferTeclas()->push_back("GA");
     }
     else if (accion == this->getData()->getGB()) {
         this->golpeBajo();
         if (enPVE) this->track_movimientos.push_back(LOW_PUNCH);
+        if (enTraining) this->getBufferTeclas()->push_back("GB");
     }
     else if (accion == this->getData()->getPA()) {
         this->patadaAlta();
         if (enPVE) this->track_movimientos.push_back(HIGH_KICK);
+        if (enTraining) this->getBufferTeclas()->push_back("PA");
     }
     else if (accion == this->getData()->getPB()) {
         this->patadaBaja();
         if (enPVE) this->track_movimientos.push_back(LOW_KICK);
+        if (enTraining) this->getBufferTeclas()->push_back("PB");
     }
 }
 

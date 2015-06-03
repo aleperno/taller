@@ -45,6 +45,7 @@ class Personaje
 		float arma_speed;
 		float _alto_log;
 		CombosPersonaje* combos;
+		vector<string> bufferTeclas;
 		
 		float _pos_y;
 		float _alto_px;
@@ -132,6 +133,7 @@ class Personaje
 		void downLife(int cantidad);
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
+		vector<string>* getBufferTeclas() {return &this->bufferTeclas;}
 
 		void posicionarParaMain();
 		void resetear();
@@ -172,7 +174,7 @@ class Personaje
 		bool isDucking();
 		bool isHitting();
 
-		void evaluarAccion (int accion, bool enPVE);
+		void evaluarAccion (int accion, bool enPVE, bool enTraining);
 		bool canMove();
 		void freeze();
 		void unFreeze();

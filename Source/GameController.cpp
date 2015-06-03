@@ -331,11 +331,10 @@ bool GameController::actualizarGanadorTraining() {
 void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
 	if (e->jdevice.which == 0 && this->_personaje1->canMove()) {
-			this->_personaje1->evaluarAccion(e->jbutton.button,this->estoyEnPVE());
+			this->_personaje1->evaluarAccion(e->jbutton.button,this->estoyEnPVE(),this->estoyEnTraining());
 	}
 	else if (e->jdevice.which == 1 && this->_personaje2->canMove()) {
-			this->_personaje2->evaluarAccion(e->jbutton.button,this->estoyEnPVE());
-			//this->_personaje2->getCombos()->imprimirCombos();
+			this->_personaje2->evaluarAccion(e->jbutton.button,this->estoyEnPVE(),this->estoyEnTraining());
 	}
 }
 
@@ -929,6 +928,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 
 void GameController::procesarMovimientoJoystick() {
 	bool estoyEnPVE = this->estoyEnPVE();
+	bool estoyEnTraining = this->estoyEnTraining();
 
 	if (this->hayPlayer1()) {
 		if (this->_personaje1->canMove()) {
@@ -937,6 +937,7 @@ void GameController::procesarMovimientoJoystick() {
 		const Uint8 BLBTP1 = SDL_JoystickGetButton(this->_joystickOne,this->_personaje1->getData()->defensa);
 
 		if (BLBTP1 == 1) {
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("BL");
 			if (this->_personaje1->isDucking()) {
 				this->_personaje1->blockDuck();
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(DUCK_BLOCK);
@@ -946,27 +947,35 @@ void GameController::procesarMovimientoJoystick() {
 		}
 		else if (AXSP1 < -JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpLeft(JMP_FACTOR);
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("LF");
 			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_LEFT);
  		}
 		else if (AXSP1 > JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpRight(JMP_FACTOR);
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("RT");
 			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_RIGHT);
 		}
 		else if (AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jump(JMP_FACTOR);
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
 			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP);
 		}
 		else if (AYSP1 > JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->duck();
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("DW");
 			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(DUCK);
 		}
 		else if (AXSP1 < -JOYSTICK_DEAD_ZONE) {
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("LF");
 			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveLeft(_personaje1,_personaje2) ) {
 				this->_personaje1->moveLeft(MOV_FACTOR2);
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(LEFT);
  			}
 		}
 		else if (AXSP1 > JOYSTICK_DEAD_ZONE) {
+			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("RT");
 			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveRight(_personaje1,_personaje2) ) {
 				this->_personaje1->moveRight(MOV_FACTOR2);
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(RIGHT);
@@ -1155,51 +1164,65 @@ void GameController::runPVP() {
 	}
 
 	if (!this->minimizado) {
-		if(!this->musica_pelea)
-		{
+		if(!this->musica_pelea)	{
 			Mix_HaltMusic();
 			this->musica_pelea = true;
 			Mix_VolumeMusic(32);
 			Mix_PlayMusic(this->musica->musicaPelea, -1);
 		}
-		//Actualizo la lista de movimientos - Si tiene TRACK_MOV elementos elimino el primero
-		if(this->_personaje1->track_movimientos.size() >= TRACK_MOV) {
+
+		if (this->estoyEnPVE()) {
+			//Actualizo la lista de movimientos - Si tiene TRACK_MOV elementos elimino el primero
+			if(this->_personaje1->track_movimientos.size() >= TRACK_MOV) {
 				this->_personaje1->track_movimientos.erase(this->_personaje1->track_movimientos.begin(), this->_personaje1->track_movimientos.begin() + 1);
+			}
 		}
 
 		this->procesarMovimientoJoystick();
-
-		//EN CASO DE ENTRAR POR PVE()
-		if (this->tipo_juego == PVE && this->_personaje2->canMove()) {
+		if (this->estoyEnPVE() && this->_personaje2->canMove()) {
 			this->ai_handler->HandlePlayer(_personaje2, _personaje1);
 		}
-
  		this->getKeys();
+
 		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
 		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
 		this->moveLayers(_personaje1,_personaje2);
 		this->moveLayers(_personaje2,_personaje1);
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-		if (this->actualizarGanador()) {
-			if (personaje1Wins == 2) {
-				Logger::Instance()->log(WARNING,"Partida ganada por personaje 1.");
-				this->toMainScreen();
-			} else if (personaje2Wins == 2) {
-				Logger::Instance()->log(WARNING,"Partida ganada por personaje 2.");
-				this->toMainScreen();
-			} else {
-				round++;
-				resetearVentanaPersonajes();
-				_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
-				this->_fightTimer->reset();
+
+		if (this->estoyEnTraining()) {
+			if (this->actualizarGanadorTraining())
+					this->resetearVentanaPersonajes();
+			//imprimir buffer de botones
+		} else {
+			if (this->actualizarGanador()) {
+					if (personaje1Wins == 2) {
+					Logger::Instance()->log(WARNING,"Partida ganada por personaje 1.");
+					this->toMainScreen();
+					} else {
+						if (personaje2Wins == 2) {
+								Logger::Instance()->log(WARNING,"Partida ganada por personaje 2.");
+								this->toMainScreen();
+						} else {
+								round++;
+								resetearVentanaPersonajes();
+								_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
+								this->_fightTimer->reset();
+						}
+					}
 			}
 		}
+
 		this->_ventana->clearScreen();
 		this->printLayers();
-		this->_hud->printHUD(tiempoRemanente);
+		if (this->estoyEnTraining()) {
+			this->_hud->printHUD();
+		} else {
+			this->_hud->printHUD(tiempoRemanente);
+		}
 		this->_ventana->updateScreen();
 
-	} else	SDL_Delay(DEF_SLEEP_TIME);
+	} else { SDL_Delay(DEF_SLEEP_TIME);} //IF (!minimizado)
 }
 
 void GameController::runPVE() {
@@ -1220,41 +1243,7 @@ void GameController::runTraining() {
 					//PARA QUE NO SE DETECTE EL INPUT
 					//DEL PLAYER 2. PUTO. DEJA DE REPETIR CODIGO HIJO DE PUTA
 					//NEGRO
-
-	if (!partidaPreparada) {
-		prepararPartidaTraining();
-		partidaPreparada = true;
-	}
-
-	SDL_Event e;
-	while( SDL_PollEvent(&e) != 0 ) {
-		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
-		this->procesarEventos(&e);
-	}
-
-	if (!this->minimizado) {
-		if(!this->musica_pelea)
-		{
-			Mix_HaltMusic();
-			this->musica_pelea = true;
-			Mix_VolumeMusic(32);
-			Mix_PlayMusic(this->musica->musicaPelea, -1);
-		}
-		this->procesarMovimientoJoystick();
- 		this->getKeys();
-		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
-		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
-		this->moveLayers(_personaje1,_personaje2);
-		this->moveLayers(_personaje2,_personaje1);
-		if (this->actualizarGanadorTraining())
-			this->resetearVentanaPersonajes();
-
-		this->_ventana->clearScreen();
-		this->printLayers();
-		this->_hud->printHUD();
-		this->_ventana->updateScreen();
-
-	} else	SDL_Delay(DEF_SLEEP_TIME);
+	this->runPVP();
 }
 
 void GameController::prepararPartida() {
