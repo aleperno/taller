@@ -548,7 +548,7 @@ void Personaje::view(Personaje* otherPlayer)
 					//if(!Mix_Playing(-1))
 						Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
                     //otherPlayer->downLife(LIFE_MIN);
-                    otherPlayer->hit(LIFE_MIN);
+                    otherPlayer->fallSwep(LIFE_MED);
                 }
             }
         }

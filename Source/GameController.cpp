@@ -916,6 +916,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 			
 			//Prueba caida de barrida, luego se borra
 			else if (e->key.keysym.sym == SDLK_q) this->_personaje1->fallSwep(10);
+			else if (e->key.keysym.sym == SDLK_7) this->_personaje1->barrer();
 			
 			break;
 		case SDL_WINDOWEVENT:
