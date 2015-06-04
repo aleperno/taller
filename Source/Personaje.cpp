@@ -230,9 +230,16 @@ void Personaje::setBoundingBox()
         boundingBox.h = this->_alto_px / 2;
     }
 
+	if(this->_isDizzy)
+	{
+		boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+		boundingBox.y = this->get_y_px() * 1.2;
+		boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+		boundingBox.h = this->_alto_px / 1.2;
+	}
 
     //Renderiza el boundingbox - solo para pruebas
-    SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+   // SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 

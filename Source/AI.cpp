@@ -17,7 +17,7 @@ void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 		}
 		else
 		{
-			//this->EjecutarMovimiento(_personaje_AI, FIRE);
+			this->EjecutarMovimiento(_personaje_AI, FIRE);
 		}
 	}
 	else
