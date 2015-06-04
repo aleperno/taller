@@ -153,6 +153,58 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 	int fatalitysize = carValue.get("fatality",-1).size();
 	for (int i=0; i<fatalitysize; i++)
 		caracter->fatality.push_back(carValue.get("fatality",-1)[i].asString());
+
+	revisarSuperposicionDeTomas(caracter);
+}
+
+void Parser::revisarSuperposicionDeTomas(CaracterData* caracter) {
+	bool superpuestos = false;
+	string toma1 = "";
+	string toma2 = "";
+	string fatality = "";
+
+	for (unsigned int i=0; i<caracter->toma1.size(); i++)
+		toma1 = toma1 + caracter->toma1.at(i);
+
+	for (unsigned int i=0; i<caracter->toma2.size(); i++)
+		toma2 = toma2 + caracter->toma2.at(i);
+
+	for (unsigned int i=0; i<caracter->fatality.size(); i++)
+		fatality = fatality + caracter->fatality.at(i);
+
+	if (toma1.find(toma2) != string::npos)
+		superpuestos = true;
+	else if (toma2.find(toma1) != string::npos)
+		superpuestos = true;
+	else if (toma1.find(fatality) != string::npos)
+		superpuestos = true;
+	else if (fatality.find(toma1) != string::npos)
+		superpuestos = true;
+	else if (toma2.find(fatality) != string::npos)
+		superpuestos = true;
+	else if (fatality.find(toma2) != string::npos)
+		superpuestos = true;
+
+	if (superpuestos) {
+		Logger::Instance()->log(WARNING,"Tomas superpuestas de " + caracter->nombre + ". Se usaran las por defecto.");
+
+		caracter->toma1.clear();
+		caracter->toma1.resize(2);
+		caracter->toma1.at(0) = "PB";
+		caracter->toma1.at(1) = "PB";
+
+		caracter->toma2.clear();
+		caracter->toma2.resize(3);
+		caracter->toma2.at(0) = "PA";
+		caracter->toma2.at(1) = "PB";
+		caracter->toma2.at(2) = "GA";
+
+		caracter->fatality.clear();
+		caracter->fatality.resize(3);
+		caracter->fatality.at(0) = "BL";
+		caracter->fatality.at(1) = "GB";
+		caracter->fatality.at(2) = "GB";
+	}
 }
 
 void Parser::setearCaracteres() {

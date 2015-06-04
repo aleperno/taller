@@ -43,6 +43,7 @@ class Parser{
 		void setearCaracteres();
 		void parsearSpriteCaracter(CaracterData* caracter, Value carValue);
 		void parsearAccion(CaracterData* caracter, Value carValue, string accion);
+		void revisarSuperposicionDeTomas(CaracterData* caracter);
 			
 	public:
 		//Inicializa instancia usando ruta de *.json
