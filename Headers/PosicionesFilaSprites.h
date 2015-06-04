@@ -26,5 +26,6 @@
 #define POS_FILA_BARRIDO		22
 #define POS_FILA_ARMA			23	// OK
 #define POS_FILA_LOPUNCH_DUCK	24	// OK
+#define POS_FILA_FALLSWEEP		25
 
 #endif

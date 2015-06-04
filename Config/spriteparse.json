@@ -29,6 +29,7 @@
 		"barrido":		[150,8,4],
 		"arma":			[150,3,4],
 		"duckLoPunch":	[150,5,4],
+		"fallsweep":	[150,13,4],
 		"imgSrc":	"Images/characters/liukang.png",
 		"color-alternativo": {
 					"h-inicial": -20,
@@ -70,6 +71,7 @@
 				"barrido":		[150,8,4],
 				"arma":			[150,3,4],
 				"duckLoPunch":	[150,5,4],
+				"fallsweep":	[150,12,4],
 				"imgSrc":	"Images/characters/scorpion.png",
 				"color-alternativo": {
 							"h-inicial": 40,

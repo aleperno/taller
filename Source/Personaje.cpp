@@ -46,34 +46,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
     this->vectorSprites = Personaje::loadVectorMedia(data);
     this->_lastFrame = 0;
     this->healthPoints = HEALTH;
-    this->_isWalking = false;
-    this->_isDucking = false;
-    this->_isJumping = false;
-    this->_isJumpingRight = false;
-    this->_isJumpingLeft = false;
-    this->_isFalling = false;
-    this->_isFallingRight = false;
-    this->_isFallingLeft = false;
-    this->_isHitFalling = false;
-    this->_isBarriendo = false;
-    
-    this->_isThrowing = false;
-    this->_weaponInAir = false;
-    this->_timesThrow = 0;
-
-    this->_isBlocking = false;
-    this->_isDizzy = false;
-    this->_canMove = true;
-    this->_beingHit = false;
-    this->_isHiKicking = false;
-    this->_isLoKicking = false;
-    this->_isHiPunching = false;
-    this->_isLoPunching = false;
-
+	this->setIdle();
     this->pos_last_action = 0;
-
     this->setBoundingBox();
-
     this-> _data = data;
     this->pers_ppal = pers_ppal;
     this->combos = new CombosPersonaje(&this->_data.toma1,&this->_data.toma2,&this->_data.fatality,1);
@@ -97,6 +72,7 @@ void Personaje::setIdle()
     this->_isFallingRight = false;
     this->_isFallingLeft = false;
     this->_isHitFalling = false;
+	this->_isSweepFall = false;
     this->_isBarriendo = false;
 
     this->_isThrowing = false;
@@ -212,7 +188,7 @@ void Personaje::setBoundingBox()
     boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
     boundingBox.h = this->_alto_px / 1.2;
 
-    if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight) || (this->_isFallingLeft) || (this->_isFallingRight))
+    if((this->_isDucking) || (this->_isJumpingLeft) || (this->_isJumpingRight) || (this->_isFallingLeft) || (this->_isFallingRight) || (this->_isSweepFall))
     {
         boundingBox.y = boundingBox.y * 1.35;
         boundingBox.h = boundingBox.h / 2;
@@ -256,7 +232,7 @@ void Personaje::setBoundingBox()
 
 
     //Renderiza el boundingbox - solo para pruebas
-    //SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+    SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 
@@ -337,7 +313,7 @@ void Personaje::view(Personaje* otherPlayer)
             if ( this->_isHitFalling )
             {
                 this->viewFall();
-            }
+			}
             else if ( this->isHitting() )
             {
                 if ( this->_isHiKicking || this->_isLoKicking )
@@ -556,7 +532,11 @@ void Personaje::view(Personaje* otherPlayer)
             this->viewHit();
 			//if(!Mix_Playing(-1))
 				//Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
-        }
+        } 
+		else if (this->_isSweepFall) 
+		{
+			this->viewFallSweep();
+		}
         else if (this->_isBarriendo)
         {
             if(this->viewBarrido())
@@ -1098,6 +1078,28 @@ void Personaje::viewShotWeapon(size_t posicion)
     this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
+void Personaje::viewFallSweep()
+{
+	int accion = POS_FILA_FALLSWEEP;
+	int delay = _data.velSprites[accion];
+	++_lastFrame;
+	int aux = _lastFrame / delay;
+	if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
+	{
+		_lastFrame = 0;
+	}
+	int frame = _lastFrame/delay;
+	//cout << frame << endl;
+	SDL_Rect* currentClip = &(this->vectorSprites[accion][frame]);
+	int x = get_x_px();
+	int y = get_y_px();
+	this->_handler->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+    if (aux == this->_personajeData.cantSprites[accion]){
+        this->_isSweepFall = false;
+    }
+    pos_last_action = accion;
+}
+
 int Personaje::get_x_px()
 {
     float pos_r = 0; //La posicion en pixeles en reales
@@ -1580,7 +1582,7 @@ bool Personaje::isDucking() {
 
 bool Personaje::isHitting()
 {
-    return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling);
+	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling || this->_isSweepFall);
 }
 
 void Personaje::moveRight(float factor)
@@ -1628,4 +1630,10 @@ void Personaje::hit(int life)
 {
     this->healthPoints -= life;
     this->_beingHit = true;
+}
+
+void Personaje::fallSwep(int life)
+{
+	this->healthPoints -= life;
+	this->_isSweepFall = true;
 }

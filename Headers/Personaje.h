@@ -80,6 +80,7 @@ class Personaje
 		bool _isBlocking;
 		
 		bool _isHitFalling;
+		bool _isSweepFall;
 
 		// For throwable weapon.
 		bool _isThrowing;
@@ -105,6 +106,7 @@ class Personaje
 		bool viewPunchAir();
 		bool viewKickAir();
 		bool viewBarrido();
+		void viewFallSweep();
 
 		void viewHit();
 		void viewFall();
@@ -151,6 +153,7 @@ class Personaje
 		void dizzy();
 		void winingPosition();
 		void fall(int life);
+		void fallSwep(int life);
 		void dead();
 		void barrer();
 		void golpeBajo();

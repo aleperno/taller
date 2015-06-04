@@ -913,6 +913,10 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_i) this->_personaje1->golpeBajo();
 			else if (e->key.keysym.sym == SDLK_k) this->_personaje1->golpeAlto();
 			else if (e->key.keysym.sym == SDLK_t) this->_personaje1->barrer();
+			
+			//Prueba caida de barrida, luego se borra
+			else if (e->key.keysym.sym == SDLK_q) this->_personaje1->fallSwep(10);
+			
 			break;
 		case SDL_WINDOWEVENT:
 			if (e->window.event == SDL_WINDOWEVENT_MINIMIZED) {

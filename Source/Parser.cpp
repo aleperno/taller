@@ -76,6 +76,7 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 	this->parsearAccion(caracter,carValue,"barrido");
 	this->parsearAccion(caracter,carValue,"arma");
 	this->parsearAccion(caracter,carValue,"duckLoPunch");
+	this->parsearAccion(caracter,carValue,"fallsweep");
 	caracter->imgPath = carValue["imgSrc"].asString();
 
 	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.
