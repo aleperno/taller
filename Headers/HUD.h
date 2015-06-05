@@ -17,6 +17,8 @@
 
 #define FONT_PATH "Images/mortalkombat3.ttf"
 
+using namespace std;
+
 class Hud{
 	public:
 		Hud(Ventana* ventana, string* nombreP1, string* nombreP2);
@@ -28,6 +30,7 @@ class Hud{
 		void actualizarHealthbars();
 		void printHUD();
 		void printHUD(int time);
+		void printHUD(vector<string>* bufferTeclas);
 	private:
 		TTF_Font* fontNombres;
 		TTF_Font* fontTimer;
@@ -52,6 +55,7 @@ class Hud{
 		TextureHandler* roundTexture;
 		TextureHandler* p1winsTexture;
 		TextureHandler* p2winsTexture;
+		TextureHandler* bufferTexture;
 		hudPersonaje hud1;
 		hudPersonaje hud2;
 };

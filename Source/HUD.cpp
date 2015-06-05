@@ -7,6 +7,8 @@
 
 #include <HUD.h>
 
+using namespace std;
+
 Hud::~Hud()
 {
 	delete this->hud1.nombreTexture;
@@ -15,6 +17,7 @@ Hud::~Hud()
 	delete this->roundTexture;
 	delete this->p1winsTexture;
 	delete this->p2winsTexture;
+	delete this->bufferTexture;
 	TTF_CloseFont( fontNombres );
 	fontNombres = NULL;
 	TTF_CloseFont( fontTimer );
@@ -97,6 +100,7 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->roundTexture = new TextureHandler( _ventana->_gRenderer );
 	this->p1winsTexture = new TextureHandler( _ventana->_gRenderer );
 	this->p2winsTexture = new TextureHandler( _ventana->_gRenderer );
+	this->bufferTexture = new TextureHandler(_ventana->_gRenderer);
 }
 
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
@@ -165,4 +169,18 @@ void Hud::printHUD(int time) {
 
 	this->timeTexture->loadFromRenderedText(StringUtil::int2string(time), colorVida, fontTimer);
 	this->timeTexture->render(_ventana->_ancho_px/2 - this->timeTexture->getWidth()/2, this->hud1.interno.y);
+}
+
+void Hud::printHUD(vector<string>* bufferTeclas) {
+	this->printHUD();
+	string cadena;
+	cadena = "";
+	for (unsigned int i=0;i<bufferTeclas->size();++i) {
+		cadena += bufferTeclas->at(i);
+		cadena += " ";
+	}
+	if (!bufferTeclas->empty()) {
+		this->bufferTexture->loadFromRenderedText(cadena,colorNombres,fontNombres);
+		this->bufferTexture->render(_ventana->_ancho_log/2,_ventana->_alto_log/2);
+	}
 }

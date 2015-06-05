@@ -1198,12 +1198,14 @@ void GameController::runPVP() {
 		this->tiempoRemanenteBuffer = (int)ceil(BUFFER_WAIT_TIME - ((float)this->_bufferTimer->getTimeInTicks())/1000);
 
 		if (this->estoyEnTraining()) {
-			if (this->actualizarGanadorTraining())
-					this->resetearVentanaPersonajes();
-			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer);
-			//Si el tiempo de espera llega a cero, actualizo el timer
-			if (this->tiempoRemanenteBuffer <= 0) this->_bufferTimer->reset();
+			if (this->actualizarGanadorTraining()) {
+				this->resetearVentanaPersonajes();
+			} else {
 
+				this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer);
+				//Si el tiempo de espera llega a cero, actualizo el timer
+				if (this->tiempoRemanenteBuffer <= 0) this->_bufferTimer->reset();
+			}
 		} else { //If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
@@ -1213,7 +1215,7 @@ void GameController::runPVP() {
 		this->_ventana->clearScreen();
 		this->printLayers();
 		if (this->estoyEnTraining()) {
-			this->_hud->printHUD();
+			this->_hud->printHUD(this->_personaje1->getBufferTeclas());
 		} else {
 			this->_hud->printHUD(tiempoRemanente);
 		}
