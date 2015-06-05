@@ -32,6 +32,8 @@ using namespace std;
 #define JMP_SPEED_X 3;
 //#define ARMA_SPEED 2.5;
 
+#define CANTIDAD_BUFFER 8
+
 class Personaje
 {
 	private:
@@ -119,6 +121,7 @@ class Personaje
 	public:
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
+		void actualizarBufferTeclas(int tiempoRemanenteBuffer);
 		float _ancho_log;
 		float _pos_x;
 		bool _isDizzy;

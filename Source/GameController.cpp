@@ -46,6 +46,8 @@ void GameController::KillController()
 
 	delete this->_fightTimer;
 	_fightTimer = NULL;
+	delete this->_bufferTimer;
+	_bufferTimer = NULL;
 	delete this->_mainScreen;
 	_mainScreen = NULL;
 	delete this->_hud;
@@ -116,6 +118,7 @@ GameController::GameController(Parser* parser)
 	punteros.at(5) = _jugador2scorpionColor;
 	_mainScreen = new MainScreen(_ventana,&perSelect,&punteros);
 	_fightTimer = new Temporizador();
+	_bufferTimer = new Temporizador();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
 
@@ -332,7 +335,7 @@ void GameController::procesarBotones(SDL_Event* e) {
 	Logger::Instance()->log(DEBUG,"Joystick # " + StringUtil::int2string(e->jdevice.which) + " pressed " + StringUtil::int2string(e->jbutton.button));
 
 	if (e->jbutton.button == 9) this->toMainScreen();
-	else if (e->jbutton.button == 8 && this->tipo_juego == TRAINING) this->resetearVentanaPersonajes();
+	else if (e->jbutton.button == 8 && this->estoyEnTraining()) this->resetearVentanaPersonajes();
 	else if (e->jdevice.which == 0 && this->_personaje1->canMove()) {
 		this->_personaje1->evaluarAccion(e->jbutton.button,this->estoyEnPVE(),this->estoyEnTraining());
 	} else if (e->jdevice.which == 1 && this->_personaje2->canMove()) {
@@ -1163,7 +1166,7 @@ void GameController::runPVP() {
 		prepararPartida();
 		partidaPreparada = true;
 	}
-
+	//PROCESO DE INPUTS POR EVENTOS
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 ) {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
@@ -1177,46 +1180,33 @@ void GameController::runPVP() {
 			Mix_VolumeMusic(32);
 			Mix_PlayMusic(this->musica->musicaPelea, -1);
 		}
-
 		if (this->estoyEnPVE()) {
 			//Actualizo la lista de movimientos - Si tiene TRACK_MOV elementos elimino el primero
 			if(this->_personaje1->track_movimientos.size() >= TRACK_MOV) {
 				this->_personaje1->track_movimientos.erase(this->_personaje1->track_movimientos.begin(), this->_personaje1->track_movimientos.begin() + 1);
 			}
 		}
-
+		//PROCESO DE INPUTS POR ESTADO
 		this->procesarMovimientoJoystick();
 		if (this->estoyEnPVE() && this->_personaje2->canMove()) {
 			this->ai_handler->HandlePlayer(_personaje2, _personaje1);
 		}
  		this->getKeys();
+ 		this->continuarAccionesYMoverCapas();
 
-		_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje2);
-		_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,_personaje1);
-		this->moveLayers(_personaje1,_personaje2);
-		this->moveLayers(_personaje2,_personaje1);
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
+		this->tiempoRemanenteBuffer = (int)ceil(BUFFER_WAIT_TIME - ((float)this->_bufferTimer->getTimeInTicks())/1000);
 
 		if (this->estoyEnTraining()) {
 			if (this->actualizarGanadorTraining())
 					this->resetearVentanaPersonajes();
-			//imprimir buffer de botones
-		} else {
+			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer);
+			//Si el tiempo de espera llega a cero, actualizo el timer
+			if (this->tiempoRemanenteBuffer <= 0) this->_bufferTimer->reset();
+
+		} else { //If not in training
 			if (this->actualizarGanador()) {
-					if (personaje1Wins == 2) {
-					Logger::Instance()->log(WARNING,"Partida ganada por personaje 1.");
-					this->toMainScreen();
-					} else {
-						if (personaje2Wins == 2) {
-								Logger::Instance()->log(WARNING,"Partida ganada por personaje 2.");
-								this->toMainScreen();
-						} else {
-								round++;
-								resetearVentanaPersonajes();
-								_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
-								this->_fightTimer->reset();
-						}
-					}
+					this->actualizarPartida();
 			}
 		}
 
@@ -1230,6 +1220,33 @@ void GameController::runPVP() {
 		this->_ventana->updateScreen();
 
 	} else { SDL_Delay(DEF_SLEEP_TIME);} //IF (!minimizado)
+}
+
+void GameController::continuarAccionesYMoverCapas() {
+	this->_personaje1->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,this->_personaje2);
+	this->_personaje2->continueAction(MOV_FACTOR_JMP,JMP_FACTOR,this->_personaje1);
+	this->moveLayers(_personaje1,_personaje2);
+	this->moveLayers(_personaje2,_personaje1);
+}
+
+void GameController::actualizarPartida() {
+	if (personaje1Wins == 2) {
+		Logger::Instance()->log(WARNING,"Partida ganada por personaje 1.");
+		//IMPRIMIR CARTEL DE GANADOR EN PANTALLA
+		this->toMainScreen();
+		} else {
+			if (personaje2Wins == 2) {
+				Logger::Instance()->log(WARNING,"Partida ganada por personaje 2.");
+				//IMPRIMIR CARTEL DE GANADOR EN PANTALLA
+				this->toMainScreen();
+			} else {
+				round++;
+				//LANZAR CARTEL DE QUE INICIA EL ROUND
+				resetearVentanaPersonajes();
+				_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
+				this->_fightTimer->reset();
+			}
+		}
 }
 
 void GameController::runPVE() {
@@ -1265,6 +1282,7 @@ void GameController::prepararPartida() {
 void GameController::prepararPartidaTraining() {
 	actualizarPersonajes();
 	resetearVentanaPersonajes();
+	this->_bufferTimer->reset();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;

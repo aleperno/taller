@@ -114,6 +114,12 @@ void Personaje::resetear() {
     this->idle();
 }
 
+void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer) {
+	if(this->getBufferTeclas()->size() > CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0) {
+			this->bufferTeclas.erase(this->bufferTeclas.begin(),this->bufferTeclas.end());
+	}
+}
+
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 {
     float factor_cercania = 0.05f;

@@ -33,6 +33,7 @@ using namespace std;
 
 #define DEF_SLEEP_TIME 20
 #define FIGHT_TIME_COUNTDOWN 200
+#define BUFFER_WAIT_TIME 10
 
 #define NO_MAINSCREEN 0
 #define MAINSCREEN_INTRO 1
@@ -107,6 +108,8 @@ class GameController
 		int round;
 		int personaje1Wins;
 		int personaje2Wins;
+		int tiempoRemanenteBuffer;
+		Temporizador* _bufferTimer;
 
 		//Metodos
 		static Ventana* getVentana(Parser* parser);
@@ -134,6 +137,8 @@ class GameController
 		void setEndOfGame(bool value);
 		bool actualizarGanador();
 		bool actualizarGanadorTraining();
+		void actualizarPartida();
+		void continuarAccionesYMoverCapas();
 
 		void procesarEventosMainScreenIntro(SDL_Event* e);
 		void procesarEventosMainScreenModeSelect(SDL_Event* e);

@@ -14,15 +14,15 @@ CombosPersonaje::~CombosPersonaje() {
 }
 void CombosPersonaje::imprimirCombos() {
 	for (unsigned int i=0; i<this->combo1->size();++i) {
-		//cout << this->combo1->at(i);
+		cout << this->combo1->at(i);
 	}
 	cout << endl;
 	for (unsigned int i=0; i<this->combo2->size();++i) {
-			//cout << this->combo2->at(i);
+			cout << this->combo2->at(i);
 		}
 	cout << endl;
 	for (unsigned int i=0; i<this->fatality1->size();++i) {
-			//cout << this->fatality1->at(i);
+			cout << this->fatality1->at(i);
 	}
 	cout << endl;
 }
