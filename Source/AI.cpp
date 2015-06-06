@@ -42,13 +42,13 @@ int AI::CalcularDistacia(float _pos_x_ai, float _pos_x_player, int _ancho_log)
 	float dist = fabs(_pos_x_ai - _pos_x_player);
 	int dist_entera = (int)dist;
 
-	if(dist_entera < _ancho_log / 2)
+	if(dist_entera < _ancho_log / 5)
 		return 0;
 
-	if((dist_entera > _ancho_log / 2) && (dist_entera < _ancho_log))
+	if((dist_entera > _ancho_log / 5) && (dist_entera < _ancho_log / 2))
 		return 1;
 
-	if(dist_entera > _ancho_log)
+	if(dist_entera > _ancho_log / 2)
 		return 2;
 
 	return 0;
