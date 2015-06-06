@@ -129,6 +129,7 @@ class Personaje
 		float _ancho_log;
 		float _pos_x;
 		bool _isDizzy;
+		bool _isIdle;
 
 		bool isMaxPushLeft();
 		bool isMaxPushRight();

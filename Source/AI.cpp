@@ -161,9 +161,9 @@ void AI::CrearTablasLookUp(int _difficulty)
 	//TODO: Armar distintas tablas para distintas dificultades
 
 	//Prediccion: Idle
-	LookUpTable.push_back(RegistroLookUp(IDLE, D_CLOSE, HIGH_PUNCH));
+	LookUpTable.push_back(RegistroLookUp(IDLE, D_CLOSE, FIRE));
 	LookUpTable.push_back(RegistroLookUp(IDLE, D_MED, FIRE));
-	LookUpTable.push_back(RegistroLookUp(IDLE, D_FAR, WALK));
+	LookUpTable.push_back(RegistroLookUp(IDLE, D_FAR, FIRE));
 
 	//Prediccion: Salto izquierda
 	LookUpTable.push_back(RegistroLookUp(UP_LEFT, D_CLOSE, DUCK));

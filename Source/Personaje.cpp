@@ -1664,6 +1664,7 @@ void Personaje::idle()
     this->_isBlocking = false;
     this->_isDucking = false;
     this->_isWalking = false;
+	this->_isIdle = true;
     //this->_isDizzy = false;
 }
 
