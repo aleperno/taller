@@ -907,7 +907,6 @@ void GameController::procesarAxis(SDL_Event* e) {
 		lastJoyValue1Y = e->jaxis.value;
 	}
 
-
 	if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
 		this->_personaje1->getBufferTeclas()->push_back("RT");
 		lastJoyValue1X = e->jaxis.value;
@@ -1305,6 +1304,7 @@ void GameController::prepararPartidaTraining() {
 	actualizarPersonajes();
 	resetearVentanaPersonajes();
 	this->_bufferTimer->reset();
+	this->_personaje1->getBufferTeclas()->erase(this->_personaje1->getBufferTeclas()->begin(),this->_personaje1->getBufferTeclas()->end());
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
