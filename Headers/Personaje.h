@@ -180,7 +180,8 @@ class Personaje
 		bool isDucking();
 		bool isHitting();
 
-		void evaluarAccion (int accion, bool enPVE, bool enTraining);
+		void evaluarAccion(int accion, bool enPVE, bool enTraining);
+		void evaluarAccion(int accion);
 		bool canMove();
 		void freeze();
 		void unFreeze();

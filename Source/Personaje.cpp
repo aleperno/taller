@@ -1263,6 +1263,24 @@ void Personaje::patadaAlta() {
     }
 }
 
+void Personaje::evaluarAccion(int accion) {
+	if (accion == this->getData()->getAR()) {
+	        this->lanzarArma();
+	    }
+	    else if (accion == this->getData()->getGA()) {
+	        this->golpeAlto();
+	    }
+	    else if (accion == this->getData()->getGB()) {
+	        this->golpeBajo();
+	    }
+	    else if (accion == this->getData()->getPA()) {
+	        this->patadaAlta();
+	    }
+	    else if (accion == this->getData()->getPB()) {
+	        this->patadaBaja();
+	    }
+}
+
 void Personaje::evaluarAccion(int accion, bool enPVE, bool enTraining) {
     if (accion == this->getData()->getAR()) {
         this->lanzarArma();
@@ -1287,6 +1305,16 @@ void Personaje::evaluarAccion(int accion, bool enPVE, bool enTraining) {
         this->patadaBaja();
         if (enPVE) this->track_movimientos.push_back(LOW_KICK);
         if (enTraining) this->getBufferTeclas()->push_back("PB");
+    }
+    else if (accion == this->getData()->getBL()) {
+    	if (enPVE) {
+    		if (this->isDucking()) {
+    			this->track_movimientos.push_back(DUCK_BLOCK);
+    		}else {
+    			this->track_movimientos.push_back(BLOCK);
+    		}
+    	}
+    	if (enTraining) this->getBufferTeclas()->push_back("BL");
     }
 }
 

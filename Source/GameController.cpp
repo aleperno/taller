@@ -339,7 +339,7 @@ void GameController::procesarBotones(SDL_Event* e) {
 	else if (e->jdevice.which == 0 && this->_personaje1->canMove()) {
 		this->_personaje1->evaluarAccion(e->jbutton.button,this->estoyEnPVE(),this->estoyEnTraining());
 	} else if (e->jdevice.which == 1 && this->_personaje2->canMove()) {
-		this->_personaje2->evaluarAccion(e->jbutton.button,this->estoyEnPVE(),this->estoyEnTraining());
+		this->_personaje2->evaluarAccion(e->jbutton.button);
 	}
 }
 
@@ -947,10 +947,8 @@ void GameController::procesarMovimientoJoystick() {
 		const Uint8 BLBTP1 = SDL_JoystickGetButton(this->_joystickOne,this->_personaje1->getData()->defensa);
 
 		if (BLBTP1 == 1) {
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("BL");
 			if (this->_personaje1->isDucking()) {
 				this->_personaje1->blockDuck();
-				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(DUCK_BLOCK);
 			} else {
 				this->_personaje1->block();
 			}
