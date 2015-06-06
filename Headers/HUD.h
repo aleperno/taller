@@ -31,6 +31,7 @@ class Hud{
 		void printHUD();
 		void printHUD(int time);
 		void printHUD(vector<string>* bufferTeclas);
+		void printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombres);
 	private:
 		TTF_Font* fontNombres;
 		TTF_Font* fontTimer;
@@ -44,6 +45,8 @@ class Hud{
 		SDL_Color colorVida;
 		SDL_Color colorVidaIlum;
 		SDL_Color colorNombres;
+		int tomasY;
+		int tomasMargen;
 		struct hudPersonaje {
 			SDL_Rect externo;
 			SDL_Rect interno;

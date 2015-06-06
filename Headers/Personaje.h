@@ -33,6 +33,10 @@ using namespace std;
 //#define ARMA_SPEED 2.5;
 
 #define CANTIDAD_BUFFER 8
+struct teclaBuffer {
+	string accion;
+	bool es_de_combo;
+};
 
 class Personaje
 {

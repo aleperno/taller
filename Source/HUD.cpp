@@ -18,6 +18,7 @@ Hud::~Hud()
 	delete this->p1winsTexture;
 	delete this->p2winsTexture;
 	delete this->bufferTexture;
+
 	TTF_CloseFont( fontNombres );
 	fontNombres = NULL;
 	TTF_CloseFont( fontTimer );
@@ -101,6 +102,9 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->p1winsTexture = new TextureHandler( _ventana->_gRenderer );
 	this->p2winsTexture = new TextureHandler( _ventana->_gRenderer );
 	this->bufferTexture = new TextureHandler(_ventana->_gRenderer);
+
+	this->tomasY = _ventana->_alto_px/8;
+	this->tomasMargen = _ventana->_ancho_px/100;
 }
 
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
@@ -182,5 +186,31 @@ void Hud::printHUD(vector<string>* bufferTeclas) {
 		}
 		this->bufferTexture->loadFromRenderedText(cadena,colorNombres,fontNombres);
 		this->bufferTexture->render(_ventana->_ancho_log/2,_ventana->_alto_log/2);
+	}
+}
+
+void Hud::printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombres) {
+	this->printHUD();
+
+	int x_actual = _ventana->_ancho_px/10;
+	int y_actual = tomasY + hud1.nombreTexture->getHeight()*2;
+
+	for (unsigned int i=0; i<bufferTeclas->size(); i++) {
+		TextureHandler* teclaTexture = new TextureHandler(_ventana->_gRenderer);
+		if (bufferTeclas->at(i).es_de_combo)
+			teclaTexture->loadFromRenderedText(bufferTeclas->at(i).accion,colorVida,fontNombres);
+		else
+			teclaTexture->loadFromRenderedText(bufferTeclas->at(i).accion,colorNombres,fontNombres);
+		teclaTexture->render(x_actual, tomasY);
+		x_actual = x_actual + teclaTexture->getWidth() + tomasMargen;
+		delete teclaTexture;
+	}
+
+	for (unsigned int i=0; i<tomasNombres->size(); i++) {
+		TextureHandler* tomaNombre = new TextureHandler(_ventana->_gRenderer);
+		tomaNombre->loadFromRenderedText(tomasNombres->at(i),colorVida,fontNombres);
+		tomaNombre->render(_ventana->_ancho_px/10, y_actual);
+		y_actual = y_actual + tomaNombre->getHeight();
+		delete tomaNombre;
 	}
 }
