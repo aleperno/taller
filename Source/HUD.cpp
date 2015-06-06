@@ -175,11 +175,11 @@ void Hud::printHUD(vector<string>* bufferTeclas) {
 	this->printHUD();
 	string cadena;
 	cadena = "";
-	for (unsigned int i=0;i<bufferTeclas->size();++i) {
-		cadena += bufferTeclas->at(i);
-		cadena += " ";
-	}
 	if (!bufferTeclas->empty()) {
+		for (unsigned int i=0;i<bufferTeclas->size();++i) {
+			cadena += bufferTeclas->at(i);
+			cadena += " ";
+		}
 		this->bufferTexture->loadFromRenderedText(cadena,colorNombres,fontNombres);
 		this->bufferTexture->render(_ventana->_ancho_log/2,_ventana->_alto_log/2);
 	}

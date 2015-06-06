@@ -114,9 +114,10 @@ void Personaje::resetear() {
     this->idle();
 }
 
-void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer) {
-	if(this->getBufferTeclas()->size() > CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0) {
+void Personaje::actualizarBufferTeclas(int* tiempoRemanenteBuffer) {
+	if(this->getBufferTeclas()->size() >= CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0) {
 			this->bufferTeclas.erase(this->bufferTeclas.begin(),this->bufferTeclas.end());
+			if (this->bufferTeclas.size()>= CANTIDAD_BUFFER) tiempoRemanenteBuffer = 0;
 	}
 }
 
