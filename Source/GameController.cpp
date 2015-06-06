@@ -1233,7 +1233,7 @@ void GameController::runPVP() {
 		this->printLayers();
 		if (this->estoyEnTraining()) {
 			this->_hud->printHUD(this->_personaje1->getBufferTeclas());
-			this->_personaje1->actualizarBufferTeclas(&this->tiempoRemanenteBuffer);
+			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer);
 		} else {
 			this->_hud->printHUD(tiempoRemanente);
 		}

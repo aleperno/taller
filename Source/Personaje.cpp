@@ -114,11 +114,10 @@ void Personaje::resetear() {
     this->idle();
 }
 
-void Personaje::actualizarBufferTeclas(int* tiempoRemanenteBuffer) {
-	if(this->getBufferTeclas()->size() >= CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0) {
-			this->bufferTeclas.erase(this->bufferTeclas.begin(),this->bufferTeclas.begin()+1);
-			if (this->bufferTeclas.size()>= CANTIDAD_BUFFER) tiempoRemanenteBuffer = 0;
-	}
+void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer) {
+	if(this->getBufferTeclas()->size() >= CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0)
+		if (this->getBufferTeclas()->size() > 0)
+			this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin()+1);
 }
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )

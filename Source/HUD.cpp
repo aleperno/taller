@@ -192,7 +192,7 @@ void Hud::printHUD(vector<string>* bufferTeclas) {
 void Hud::printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombres) {
 	this->printHUD();
 
-	int x_actual = _ventana->_ancho_px/10;
+	int x_actual = hud1.interno.x;
 	int y_actual = tomasY + hud1.nombreTexture->getHeight()*2;
 
 	for (unsigned int i=0; i<bufferTeclas->size(); i++) {
@@ -209,7 +209,7 @@ void Hud::printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombr
 	for (unsigned int i=0; i<tomasNombres->size(); i++) {
 		TextureHandler* tomaNombre = new TextureHandler(_ventana->_gRenderer);
 		tomaNombre->loadFromRenderedText(tomasNombres->at(i),colorVida,fontNombres);
-		tomaNombre->render(_ventana->_ancho_px/10, y_actual);
+		tomaNombre->render(hud1.interno.x, y_actual);
 		y_actual = y_actual + tomaNombre->getHeight();
 		delete tomaNombre;
 	}

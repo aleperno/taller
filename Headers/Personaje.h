@@ -32,7 +32,7 @@ using namespace std;
 #define JMP_SPEED_X 3;
 //#define ARMA_SPEED 2.5;
 
-#define CANTIDAD_BUFFER 8
+#define CANTIDAD_BUFFER 16
 struct teclaBuffer {
 	string accion;
 	bool es_de_combo;
@@ -125,7 +125,7 @@ class Personaje
 	public:
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
-		void actualizarBufferTeclas(int* tiempoRemanenteBuffer);
+		void actualizarBufferTeclas(int tiempoRemanenteBuffer);
 		float _ancho_log;
 		float _pos_x;
 		bool _isDizzy;
