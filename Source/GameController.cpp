@@ -83,10 +83,10 @@ GameController::GameController(Parser* parser)
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
-	lastJoyValue1X = 0;
-	lastJoyValue1Y = 0;
-	lastJoyValue2X = 0;
-	lastJoyValue2Y = 0;
+	lastJoyValue1X = JOYSTICK_DEAD_ZONE;
+	lastJoyValue1Y = JOYSTICK_DEAD_ZONE;
+	lastJoyValue2X = JOYSTICK_DEAD_ZONE;
+	lastJoyValue2Y = JOYSTICK_DEAD_ZONE;
 	
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
@@ -957,35 +957,55 @@ void GameController::procesarMovimientoJoystick() {
 		}
 		else if (AXSP1 < -JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpLeft(JMP_FACTOR);
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("LF");
-			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_LEFT);
+			if (!((this->lastJoyValue1Y <= -JOYSTICK_DEAD_ZONE ) && (this->lastJoyValue1X <= -JOYSTICK_DEAD_ZONE))) {
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("LF");
+				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_LEFT);
+				this->lastJoyValue1Y = -JOYSTICK_DEAD_ZONE;
+				this->lastJoyValue1X = -JOYSTICK_DEAD_ZONE;
+			}
  		}
 		else if (AXSP1 > JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpRight(JMP_FACTOR);
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("RT");
-			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_RIGHT);
+			if (!((this->lastJoyValue1Y <= -JOYSTICK_DEAD_ZONE ) && (this->lastJoyValue1X >= JOYSTICK_DEAD_ZONE))) {
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("RT");
+				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_RIGHT);
+				this->lastJoyValue1Y = -JOYSTICK_DEAD_ZONE;
+				this->lastJoyValue1X = JOYSTICK_DEAD_ZONE;
+			}
 		}
 		else if (AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jump(JMP_FACTOR);
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
-			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP);
+			if (!(this->lastJoyValue1Y <= -JOYSTICK_DEAD_ZONE )) {
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("UP");
+				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP);
+				this->lastJoyValue1Y = -JOYSTICK_DEAD_ZONE;
+			}
 		}
 		else if (AYSP1 > JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->duck();
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("DW");
-			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(DUCK);
+			if (!(this->lastJoyValue1Y >= JOYSTICK_DEAD_ZONE )) {
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("DW");
+				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(DUCK);
+				this->lastJoyValue1Y = JOYSTICK_DEAD_ZONE;
+			}
 		}
 		else if (AXSP1 < -JOYSTICK_DEAD_ZONE) {
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("LF");
+			if (!(this->lastJoyValue1X <= -JOYSTICK_DEAD_ZONE )) {
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("LF");
+				this->lastJoyValue1X = -JOYSTICK_DEAD_ZONE;
+			}
 			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveLeft(_personaje1,_personaje2) ) {
 				this->_personaje1->moveLeft(MOV_FACTOR2);
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(LEFT);
  			}
 		}
 		else if (AXSP1 > JOYSTICK_DEAD_ZONE) {
-			if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("RT");
+			if (!(this->lastJoyValue1X >= JOYSTICK_DEAD_ZONE )) {
+				if (estoyEnTraining) this->_personaje1->getBufferTeclas()->push_back("RT");
+				this->lastJoyValue1X = JOYSTICK_DEAD_ZONE;
+			}
 			if ( !this->_personaje1->isJumping() && !this->_personaje1->isFalling() && canMoveRight(_personaje1,_personaje2) ) {
 				this->_personaje1->moveRight(MOV_FACTOR2);
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(RIGHT);
