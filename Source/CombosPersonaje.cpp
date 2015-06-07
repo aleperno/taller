@@ -27,7 +27,64 @@ void CombosPersonaje::imprimirCombos() {
 	cout << endl;
 }
 
-bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,string* comboAux) {
+bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>** comboAux) {
+	unsigned int tamanioBuffer = bufferBotones->size();
+	if (tamanioBuffer<this->combo1->size() && tamanioBuffer<this->combo2->size() && tamanioBuffer<this->fatality1->size()) return false;
+
+	unsigned int i = 0;
+	unsigned int j = 0;
+	int contadorTolerancia = 0;
+	bool hayMatch = false;
+	(*comboAux) = NULL;
+	while (i<bufferBotones->size() && j<combo1->size() && !hayMatch && contadorTolerancia <= this->tolerancia) {
+		if (bufferBotones->at(i) == this->combo1->at(j)) {
+			++i;
+			++j;
+		} else {
+			if(j>0) ++contadorTolerancia;
+			++i;
+		}
+		if (j>=combo1->size()) hayMatch=true;
+	}
+	if (hayMatch) {
+		(*comboAux) = this->combo1;
+		return true;
+	}
+
+	i = 0;	j = 0; 	contadorTolerancia = 0; hayMatch = false; (*comboAux) = NULL;
+	while (i<bufferBotones->size() && j<this->combo2->size() && !hayMatch) {
+		if (bufferBotones->at(i) == this->combo2->at(j)) {
+			++i;
+			++j;
+		} else {
+			if(j>0) ++contadorTolerancia;
+			++i;
+		}
+		if (j>=combo2->size()) hayMatch=true;
+	}
+	if (hayMatch) {
+		(*comboAux) = this->combo2;
+		return true;
+	}
+
+	i = 0;	j = 0; 	contadorTolerancia = 0; hayMatch = false; (*comboAux) = NULL;
+	while (i<bufferBotones->size() && j<this->fatality1->size() && !hayMatch) {
+		if (bufferBotones->at(i) == this->fatality1->at(j)) {
+			++i;
+			++j;
+		} else {
+			if(j>0) ++contadorTolerancia;
+			++i;
+		}
+		if (j>=this->fatality1->size()) hayMatch=true;
+	}
+	if (hayMatch) {
+		(*comboAux) = this->fatality1;
+		return true;
+	}
+
+	return false;
+
 	//recorrer buffer y combo1  e ir comparando cada posicion de los string
 	//Si hay un match, guardar el combo1 en comboAux y devolver true
 	//Si termina de recorrer el combo1 y no hay match, empezar a recorrer el combo2
@@ -35,5 +92,4 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,string* comboAux
 	//Si no hay match con el combo2, hacer lo mismo con la fatality
 	//Si no hay match, guardar "" en comboAux y devolver false
 
-	return false;
 }

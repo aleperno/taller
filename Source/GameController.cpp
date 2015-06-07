@@ -52,6 +52,8 @@ void GameController::KillController()
 	_mainScreen = NULL;
 	delete this->_hud;
 	_hud = NULL;
+	if (comboAUX) delete this->comboAUX;
+	comboAUX = NULL;
 	
 	delete this->_jugador1liukang;
 	_jugador1liukang = NULL;
@@ -119,6 +121,7 @@ GameController::GameController(Parser* parser)
 	_mainScreen = new MainScreen(_ventana,&perSelect,&punteros);
 	_fightTimer = new Temporizador();
 	_bufferTimer = new Temporizador();
+	comboAUX = new vector<string>();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
 
@@ -938,7 +941,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 		case SDL_KEYDOWN:
 			if (e->key.keysym.sym == SDLK_r) this->toMainScreen();
 			else if (e->key.keysym.sym == SDLK_ESCAPE) this->_end_of_game = true;
-			else if (e->key.keysym.sym == SDLK_z && this->tipo_juego == TRAINING) this->resetearVentanaPersonajes();
+			else if (e->key.keysym.sym == SDLK_z && this->estoyEnTraining()) this->resetearVentanaPersonajes();
 			else if (e->key.keysym.sym == SDLK_v) this->_ventana->toggleShake();
 			else if (e->key.keysym.sym == SDLK_1) this->_personaje1->healthPoints -= 10;
 			else if (e->key.keysym.sym == SDLK_2) this->_personaje2->healthPoints -= 10;
@@ -1272,22 +1275,12 @@ void GameController::actualizarPartida() {
 
 void GameController::runPVE() {
 	//Es identico a PVP salvo que pelea AI como personaje 2
-	if(!this->musica_pelea)
-	{
-		Mix_HaltMusic();
-		this->musica_pelea = true;
-		Mix_VolumeMusic(32);
-		Mix_PlayMusic(this->musica->musicaPelea, -1);
-	}
 	runPVP();
 }
 
 void GameController::runTraining() {
 	
-	this->_personaje2->freeze();	//PARA QUE?
-					//PARA QUE NO SE DETECTE EL INPUT
-					//DEL PLAYER 2. PUTO. DEJA DE REPETIR CODIGO HIJO DE PUTA
-					//NEGRO
+	this->_personaje2->freeze();
 	this->runPVP();
 }
 
@@ -1298,7 +1291,6 @@ void GameController::prepararPartida() {
 	personaje2Wins = 0;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
-	this->comboAUX = "";
 }
 
 void GameController::prepararPartidaTraining() {

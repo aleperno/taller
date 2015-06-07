@@ -110,7 +110,7 @@ class GameController
 		int personaje2Wins;
 		int tiempoRemanenteBuffer;
 		Temporizador* _bufferTimer;
-		string comboAUX;
+		vector<string>* comboAUX;
 		bool hayCombo;
 
 		//Metodos
