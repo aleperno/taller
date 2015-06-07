@@ -1217,6 +1217,7 @@ void GameController::runPVP() {
 		this->tiempoRemanenteBuffer = (int)ceil(BUFFER_WAIT_TIME - ((float)this->_bufferTimer->getTimeInTicks())/1000);
 
 		if (this->estoyEnTraining()) {
+			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX);
 			if (this->actualizarGanadorTraining()) {
 				this->resetearVentanaPersonajes();
 			} else {
@@ -1232,7 +1233,7 @@ void GameController::runPVP() {
 		this->_ventana->clearScreen();
 		this->printLayers();
 		if (this->estoyEnTraining()) {
-			this->_hud->printHUD(this->_personaje1->getBufferTeclas());
+			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX);
 			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer);
 		} else {
 			this->_hud->printHUD(tiempoRemanente);
@@ -1297,6 +1298,7 @@ void GameController::prepararPartida() {
 	personaje2Wins = 0;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
+	this->comboAUX = "";
 }
 
 void GameController::prepararPartidaTraining() {

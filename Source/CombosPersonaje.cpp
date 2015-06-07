@@ -27,6 +27,13 @@ void CombosPersonaje::imprimirCombos() {
 	cout << endl;
 }
 
-bool CombosPersonaje::existeCombo(vector<string>* bufferBotones) {
+bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,string* comboAux) {
+	//recorrer buffer y combo1  e ir comparando cada posicion de los string
+	//Si hay un match, guardar el combo1 en comboAux y devolver true
+	//Si termina de recorrer el combo1 y no hay match, empezar a recorrer el combo2
+	//con el mismo criterio
+	//Si no hay match con el combo2, hacer lo mismo con la fatality
+	//Si no hay match, guardar "" en comboAux y devolver false
+
 	return false;
 }

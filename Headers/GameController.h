@@ -110,6 +110,8 @@ class GameController
 		int personaje2Wins;
 		int tiempoRemanenteBuffer;
 		Temporizador* _bufferTimer;
+		string comboAUX;
+		bool hayCombo;
 
 		//Metodos
 		static Ventana* getVentana(Parser* parser);
