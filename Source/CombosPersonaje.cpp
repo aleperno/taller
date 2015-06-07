@@ -27,7 +27,7 @@ void CombosPersonaje::imprimirCombos() {
 	cout << endl;
 }
 
-bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>** comboAux) {
+bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>** comboAux, string* nombreCombo) {
 	unsigned int tamanioBuffer = bufferBotones->size();
 	if (tamanioBuffer<this->combo1->size() && tamanioBuffer<this->combo2->size() && tamanioBuffer<this->fatality1->size()) return false;
 
@@ -48,6 +48,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo1;
+		(*nombreCombo) = "Combo 1";
 		return true;
 	}
 
@@ -64,6 +65,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo2;
+		(*nombreCombo) = "Combo 2";
 		return true;
 	}
 
@@ -80,6 +82,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 	if (hayMatch) {
 		(*comboAux) = this->fatality1;
+		(*nombreCombo) = "Fatality";
 		return true;
 	}
 

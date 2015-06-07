@@ -30,7 +30,7 @@ class Hud{
 		void actualizarHealthbars();
 		void printHUD();
 		void printHUD(int time);
-		void printHUD(vector<string>* bufferTeclas,bool hayCombo, vector<string>* combo);
+		void printHUD(vector<string>* bufferTeclas,bool hayCombo, vector<string>* combo, string nombreCombo);
 		void printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombres);
 	private:
 		TTF_Font* fontNombres;

@@ -1218,7 +1218,7 @@ void GameController::runPVP() {
 		this->tiempoRemanenteBuffer = (int)ceil(BUFFER_WAIT_TIME - ((float)this->_bufferTimer->getTimeInTicks())/1000);
 
 		if (this->estoyEnTraining()) {
-			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX);
+			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
 			if (this->hayCombo) {
 				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->aleluya, 0);
 			}
@@ -1237,7 +1237,7 @@ void GameController::runPVP() {
 		this->_ventana->clearScreen();
 		this->printLayers();
 		if (this->estoyEnTraining()) {
-			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX);
+			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX, nombreCombo);
 			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer,this->hayCombo);
 		} else {
 			this->_hud->printHUD(tiempoRemanente);

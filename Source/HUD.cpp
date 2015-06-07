@@ -175,7 +175,7 @@ void Hud::printHUD(int time) {
 	this->timeTexture->render(_ventana->_ancho_px/2 - this->timeTexture->getWidth()/2, this->hud1.interno.y);
 }
 
-void Hud::printHUD(vector<string>* bufferTeclas, bool hayCombo, vector<string>* combo) {
+void Hud::printHUD(vector<string>* bufferTeclas, bool hayCombo, vector<string>* combo, string nombreCombo) {
 	this->printHUD();
 	string cadena;
 	cadena = "";
@@ -184,6 +184,7 @@ void Hud::printHUD(vector<string>* bufferTeclas, bool hayCombo, vector<string>* 
 				cadena += combo->at(i);
 				cadena += " ";
 			}
+			cadena += nombreCombo;
 			this->bufferTexture->loadFromRenderedText(cadena,colorInterno,fontTimer);
 			this->bufferTexture->render(_ventana->_ancho_log/2,_ventana->_alto_log/2);
 	} else {

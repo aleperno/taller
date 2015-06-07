@@ -112,6 +112,7 @@ class GameController
 		Temporizador* _bufferTimer;
 		vector<string>* comboAUX;
 		bool hayCombo;
+		string nombreCombo;
 
 		//Metodos
 		static Ventana* getVentana(Parser* parser);
