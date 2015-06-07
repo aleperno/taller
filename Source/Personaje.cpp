@@ -206,7 +206,7 @@ void Personaje::setBoundingBox()
         boundingBox.h = boundingBox.h / 2;
     }
 
-	if( ( this->_isHiKicking || this->_isHiPunching || this->_isLoKicking || this->_isLoPunching || this->_isIdle || this->_isWalking) && (!this->_isDucking))
+	if( ( this->_isHiKicking || this->_isHiPunching || this->_isLoKicking || this->_isLoPunching || this->_isIdle || this->_isWalking) && (!this->_isDucking) && (!this->_isBarriendo))
     {
         boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
 		boundingBox.y = this->get_y_px() * 1.2;
@@ -238,7 +238,7 @@ void Personaje::setBoundingBox()
 
     	boundingBox.y = this->get_y_px() * 1.5;
         boundingBox.w = this->_ancho_px / 1.3f;//boundingBox.w = this->_ancho_px / 1.8;
-        boundingBox.h = this->_alto_px / 2;
+        boundingBox.h = this->_alto_px / 1.5f;
     }
 
 	if(this->_isDizzy)
@@ -250,7 +250,7 @@ void Personaje::setBoundingBox()
 	}
 
     //Renderiza el boundingbox - solo para pruebas
- //   SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+    //SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 
@@ -1668,7 +1668,7 @@ void Personaje::idle()
 {
     this->_isBlocking = false;
     this->_isDucking = false;
-    //this->_isWalking = false;
+    this->_isWalking = false;
     //this->_isDizzy = false;
 }
 
