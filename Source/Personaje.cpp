@@ -206,12 +206,13 @@ void Personaje::setBoundingBox()
         boundingBox.h = boundingBox.h / 2;
     }
 
-    /*if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
+	if( ( this->_isHiKicking || this->_isHiPunching || this->_isLoKicking || this->_isLoPunching || this->_isIdle || this->_isWalking) && (!this->_isDucking))
     {
-        // TODO: Alargar bounding box, el pie queda afuera
-        boundingBox.w = this->_ancho_px / 1.4;
-        boundingBox.h = boundingBox.h / 3;
-    }*/
+        boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+		boundingBox.y = this->get_y_px() * 1.2;
+		boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+		boundingBox.h = this->_alto_px / 1.2;
+    }
 
     /*if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
     {
@@ -231,9 +232,9 @@ void Personaje::setBoundingBox()
 	if((this->_isBarriendo) && (!this->_isDucking))
     {
 		if(!this->_orientacion)
-    		boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+    		boundingBox.x = this->get_x_px() + (this->_ancho_px / 10);
 		else
-			boundingBox.x = this->get_x_px() - (this->_ancho_px / 4);
+			boundingBox.x = this->get_x_px() - (this->_ancho_px / 10);
 
     	boundingBox.y = this->get_y_px() * 1.5;
         boundingBox.w = this->_ancho_px / 1.3f;//boundingBox.w = this->_ancho_px / 1.8;

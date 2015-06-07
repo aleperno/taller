@@ -1438,7 +1438,8 @@ void GameController::getKeysPlayer2() {
 			this->_personaje2->moveRight(MOV_FACTOR2);
 		}
 	} else 	{
-		if (!this->hayPlayer2())_personaje2->idle();
+		if(!this->estoyEnPVE())
+			if (!this->hayPlayer2())_personaje2->idle();
 	}
 }
 
