@@ -23,6 +23,7 @@ class SoundHandler {
 		Mix_Chunk *select;
 		Mix_Chunk *selected;
 		Mix_Chunk *inicio;
+		Mix_Chunk* aleluya;
 
 		SoundHandler();
 		~SoundHandler();

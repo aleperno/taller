@@ -6,11 +6,11 @@ SoundHandler::SoundHandler()
 {
 	this->musicaMenu = Mix_LoadMUS("Sound/mk3-menu_music.mp3");
 	if(musicaMenu == NULL)
-		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de música");
+		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de mï¿½sica");
 
 	this->musicaPelea = Mix_LoadMUS("Sound/mk3-fight_music.mp3");
 	if(musicaPelea == NULL)
-		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de música");
+		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de mï¿½sica");
 
 	this->fire = Mix_LoadWAV("Sound/mk3-fire.wav");
 	if(fire == NULL)
@@ -47,6 +47,10 @@ SoundHandler::SoundHandler()
 	this->selected = Mix_LoadWAV("Sound/mk3-selected.wav");
 	if(selected == NULL)
 		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido");
+
+	this->aleluya = Mix_LoadWAV("Sound/aleluya.wav");
+	if(aleluya == NULL)
+		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido aleluya");
 }
 
 SoundHandler::~SoundHandler()
@@ -61,6 +65,7 @@ SoundHandler::~SoundHandler()
 	Mix_FreeChunk( select );
 	Mix_FreeChunk( selected );
 	Mix_FreeChunk( inicio );
+	Mix_FreeChunk(aleluya);
 
 	Mix_FreeMusic( musicaMenu );
 	Mix_FreeMusic( musicaPelea );
@@ -74,6 +79,7 @@ SoundHandler::~SoundHandler()
 	select = NULL;
 	selected = NULL;
 	inicio = NULL;
+	aleluya = NULL;
 
 	musicaMenu = NULL;
 	musicaPelea = NULL;
