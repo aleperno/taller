@@ -52,8 +52,6 @@ void GameController::KillController()
 	_mainScreen = NULL;
 	delete this->_hud;
 	_hud = NULL;
-	if (comboAUX) delete this->comboAUX;
-	comboAUX = NULL;
 	
 	delete this->_jugador1liukang;
 	_jugador1liukang = NULL;
@@ -1221,6 +1219,9 @@ void GameController::runPVP() {
 
 		if (this->estoyEnTraining()) {
 			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX);
+			if (this->hayCombo) {
+				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->aleluya, 0);
+			}
 			if (this->actualizarGanadorTraining()) {
 				this->resetearVentanaPersonajes();
 			} else {

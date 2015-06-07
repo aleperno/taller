@@ -48,9 +48,9 @@ SoundHandler::SoundHandler()
 	if(selected == NULL)
 		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido");
 
-	this->aleluya = Mix_LoadWAV("Sound/aleluya.wav");
+	this->aleluya = Mix_LoadWAV("Sound/Aleluya.wav");
 	if(aleluya == NULL)
-		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido aleluya");
+		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido Aleluya");
 }
 
 SoundHandler::~SoundHandler()
