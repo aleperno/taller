@@ -35,7 +35,7 @@ class AI
 		vector<RegistroLookUp> LookUpTable;
 		string ObtenerAccion(string _prediccion, int _distancia);
 		string ObtenerPrediccion(vector<string> _movimientos);
-		void EjecutarMovimiento(Personaje* _personaje, string _movimiento);
+		void EjecutarMovimiento(Personaje* _personaje, string _movimiento, Personaje* _personaje_PLAYER);
 		int CalcularDistacia(float _pos_x_ai, float _pos_x_player, int _ancho_log);
 
 	public:

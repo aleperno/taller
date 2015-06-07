@@ -122,7 +122,7 @@ void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer) {
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 {
-    float factor_cercania = 0.05f;
+    float factor_cercania = 0.12f;
     bool colision = true;
 
     //Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
@@ -206,12 +206,13 @@ void Personaje::setBoundingBox()
         boundingBox.h = boundingBox.h / 2;
     }
 
-    /*if( ( this->_isHiKicking || this->_isHiPunching ) && (!this->_isDucking))
+	if( ( this->_isHiKicking || this->_isHiPunching || this->_isLoKicking || this->_isLoPunching || this->_isIdle || this->_isWalking) && (!this->_isDucking) && (!this->_isBarriendo))
     {
-        // TODO: Alargar bounding box, el pie queda afuera
-        boundingBox.w = this->_ancho_px / 1.4;
-        boundingBox.h = boundingBox.h / 3;
-    }*/
+        boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+		boundingBox.y = this->get_y_px() * 1.2;
+		boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+		boundingBox.h = this->_alto_px / 1.2;
+    }
 
     /*if( ( this->_isLoKicking || this->_isLoPunching ) && (!this->_isDucking))
     {
@@ -230,10 +231,22 @@ void Personaje::setBoundingBox()
 
 	if((this->_isBarriendo) && (!this->_isDucking))
     {
+/*
+
     	boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
     	boundingBox.y = this->get_y_px() * 1.5;
         boundingBox.w = this->_ancho_px / 1.5f;//boundingBox.w = this->_ancho_px / 1.8;
         boundingBox.h = this->_alto_px / 2;
+*/
+		if(!this->_orientacion)
+    		boundingBox.x = this->get_x_px() + (this->_ancho_px / 10);
+		else
+			boundingBox.x = this->get_x_px() - (this->_ancho_px / 10);
+
+    	boundingBox.y = this->get_y_px() * 1.5;
+        boundingBox.w = this->_ancho_px / 1.1f;//boundingBox.w = this->_ancho_px / 1.8;
+        boundingBox.h = this->_alto_px / 1.5f;
+
     }
 
 	if(this->_isDizzy)
@@ -245,7 +258,7 @@ void Personaje::setBoundingBox()
 	}
 
     //Renderiza el boundingbox - solo para pruebas
-   // SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+    //SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 
@@ -1663,7 +1676,7 @@ void Personaje::idle()
 {
     this->_isBlocking = false;
     this->_isDucking = false;
-    //this->_isWalking = false;
+    this->_isWalking = false;
     //this->_isDizzy = false;
 }
 
