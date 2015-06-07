@@ -13,17 +13,17 @@ void AI::HandlePlayer(Personaje* _personaje_AI, Personaje* _personaje_PLAYER)
 		{
 			this->prediccion = this->ObtenerPrediccion(_personaje_PLAYER->track_movimientos);
 			this->accion = this->ObtenerAccion(this->prediccion, this->CalcularDistacia(_personaje_AI->_pos_x, _personaje_PLAYER->_pos_x, _personaje_AI->_ancho_log));
-			this->EjecutarMovimiento(_personaje_AI, this->accion);
+			this->EjecutarMovimiento(_personaje_AI, this->accion, _personaje_PLAYER);
 		}
 		else
 		{
-			this->EjecutarMovimiento(_personaje_AI, FIRE);
+			this->EjecutarMovimiento(_personaje_AI, FIRE, _personaje_PLAYER);
 		}
 	}
 	else
 	{
 		//TODO: EJECUTAR FATALITY
-		this->EjecutarMovimiento(_personaje_AI, FIRE);
+		this->EjecutarMovimiento(_personaje_AI, FIRE, _personaje_PLAYER);
 	}
 }
 
@@ -54,7 +54,7 @@ int AI::CalcularDistacia(float _pos_x_ai, float _pos_x_player, int _ancho_log)
 	return 0;
 }
 
-void AI::EjecutarMovimiento(Personaje* _personaje, string _movimiento)
+void AI::EjecutarMovimiento(Personaje* _personaje, string _movimiento, Personaje* _player)
 {
 	if(_movimiento == IDLE)
 		_personaje->idle();
@@ -78,10 +78,13 @@ void AI::EjecutarMovimiento(Personaje* _personaje, string _movimiento)
 		_personaje->lanzarArma();
 
 	if(_movimiento == WALK){
-		if(!_personaje->_orientacion) {
-			_personaje->moveRight(MOV_FACTOR2);
-		}else{
-			_personaje->moveLeft(MOV_FACTOR2);
+		if(!_personaje->hayColision(_personaje->boundingBox, _player->boundingBox))
+		{
+			if(!_personaje->_orientacion) {
+				_personaje->moveRight(MOV_FACTOR2);
+			}else{
+				_personaje->moveLeft(MOV_FACTOR2);
+			}
 		}
 	}
 }

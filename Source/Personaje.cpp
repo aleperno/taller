@@ -122,7 +122,7 @@ void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer) {
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )
 {
-    float factor_cercania = 0.05f;
+    float factor_cercania = 0.12f;
     bool colision = true;
 
     //Calculo los lados de cada bounding box, izquierda, derecha, arriba y abajo
@@ -237,7 +237,7 @@ void Personaje::setBoundingBox()
 			boundingBox.x = this->get_x_px() - (this->_ancho_px / 10);
 
     	boundingBox.y = this->get_y_px() * 1.5;
-        boundingBox.w = this->_ancho_px / 1.3f;//boundingBox.w = this->_ancho_px / 1.8;
+        boundingBox.w = this->_ancho_px / 1.1f;//boundingBox.w = this->_ancho_px / 1.8;
         boundingBox.h = this->_alto_px / 1.5f;
     }
 
