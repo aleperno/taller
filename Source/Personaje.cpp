@@ -242,13 +242,13 @@ void Personaje::setBoundingBox()
         boundingBox.w = this->_ancho_px / 1.5f;//boundingBox.w = this->_ancho_px / 1.8;
         boundingBox.h = this->_alto_px / 2;
 */
-		if(!this->_orientacion)
-    		boundingBox.x = this->get_x_px() + (this->_ancho_px / 10);
-		else
-			boundingBox.x = this->get_x_px() - (this->_ancho_px / 10);
+		//if(!this->_orientacion)
+    		boundingBox.x = this->get_x_px() + (this->_ancho_px / 8);
+		//else
+			//boundingBox.x = this->get_x_px() - (this->_ancho_px / 8);
 
-    	boundingBox.y = this->get_y_px() * 1.5;
-        boundingBox.w = this->_ancho_px / 1.1f;//boundingBox.w = this->_ancho_px / 1.8;
+    	boundingBox.y = this->get_y_px() * 1.32;
+        boundingBox.w = this->_ancho_px / 1.45f;//boundingBox.w = this->_ancho_px / 1.8;
         boundingBox.h = this->_alto_px / 1.5f;
 
     }
@@ -262,7 +262,7 @@ void Personaje::setBoundingBox()
 	}
 
     //Renderiza el boundingbox - solo para pruebas
-    //SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+    SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 
