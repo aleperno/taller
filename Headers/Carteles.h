@@ -10,7 +10,8 @@
 #define PATH_FATALITY	"Images/fatality.png"
 #define PATH_BABALITY	"Images/babality.png"
 
-#define DELAY_SHOWING	400
+#define DELAY_SHOWING_FATALITY	1300
+#define DELAY_SHOWING_FIGHT		500
 
 class Carteles
 {

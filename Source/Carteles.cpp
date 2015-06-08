@@ -28,7 +28,7 @@ void Carteles::viewFigth()
 	int y = (this->_ventana->_alto_px/3) - (height/2);
 	this->_handlerFight->renderScaled(x, y, width, height);
 	this->_ventana->updateScreen();
-	SDL_Delay(DELAY_SHOWING);
+	SDL_Delay(DELAY_SHOWING_FIGHT);
 }
 
 void Carteles::viewFatality()
@@ -39,7 +39,7 @@ void Carteles::viewFatality()
 	int y = (this->_ventana->_alto_px/3) - (height/2);
 	this->_handlerFatality->renderScaled(x, y, width, height);
 	this->_ventana->updateScreen();
-	SDL_Delay(DELAY_SHOWING);
+	SDL_Delay(DELAY_SHOWING_FATALITY);
 }
 
 void Carteles::viewBabality()
@@ -50,5 +50,5 @@ void Carteles::viewBabality()
 	int y = (this->_ventana->_alto_px/3) - (height/2);
 	this->_handlerBabality->renderScaled(x, y, width, height);
 	this->_ventana->updateScreen();
-	SDL_Delay(DELAY_SHOWING);
+	SDL_Delay(DELAY_SHOWING_FATALITY);
 }

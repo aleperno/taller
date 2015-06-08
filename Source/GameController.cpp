@@ -1026,15 +1026,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{
 				if (this->_personaje1->_isDizzy)
 				{
-					this->_carteles->viewFatality();
-					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->fatality, 0);
 					this->_personaje2->applyFatality();
 					this->_personaje1->receiveFatality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
-					this->_carteles->viewFatality();
-					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->fatality, 0);
 					this->_personaje1->applyFatality();
 					this->_personaje2->receiveFatality();
 				}	
@@ -1043,15 +1039,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{	
 				if (this->_personaje1->_isDizzy)
 				{
-					this->_carteles->viewBabality();
-					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->babality, 0);
 					this->_personaje2->applyBabality();
 					this->_personaje1->receiveBabality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
-					this->_carteles->viewBabality();
-					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->babality, 0);
 					this->_personaje1->applyBabality();
 					this->_personaje2->receiveBabality();
 				}	
@@ -1378,6 +1370,20 @@ void GameController::runPVP() {
 			}
 			this->_hud->printHUD(tiempoRemanente);
 		}
+		
+		// Muestro cartel fatality o babality si se debe.
+		if ( this->_personaje1->appliedFatality() || this->_personaje2->appliedFatality() )
+		{
+			if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->fatality, 0);
+			this->_carteles->viewFatality();
+		}
+		else if ( this->_personaje1->appliedBabality() || this->_personaje2->appliedBabality() )
+		{
+			if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->babality, 0);
+			this->_carteles->viewBabality();
+		}
+
+
 		this->_ventana->updateScreen();
 		if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2))
 		{	

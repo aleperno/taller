@@ -61,6 +61,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
     this->pers_ppal = pers_ppal;
     this->combos = new CombosPersonaje(&this->_data.toma1,&this->_data.toma2,&this->_data.fatality,this->_data.tomasTolerancia);
 
+	this->_fatalityApplied = false;
+	this->_babalityApplied = false;
+
     //TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
     this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
 }
@@ -101,6 +104,8 @@ void Personaje::setIdle()
 	this->_apllyingFatality  = false;
 	this->_receivingBabality = false;
 	this->_apllyingBabality  = false;
+	this->_fatalityApplied	 = false;
+	this->_babalityApplied	 = false;
 }
 
 void Personaje::posicionarParaMain() {
@@ -559,11 +564,11 @@ void Personaje::view(Personaje* otherPlayer)
 		}
 		else if (this->_receivingFatality)
 		{
-			this->viewSkeleton();
+			this->viewSkeleton(&(this->_fatalityApplied));
 		}
 		else if (this->_receivingBabality)
 		{
-			this->viewBaby();
+			this->viewBaby(&(this->_babalityApplied));
 		}
         else if (this->_isDizzy)
         {
@@ -1218,7 +1223,7 @@ void Personaje::viewFallSweep()
     pos_last_action = accion;
 }
 
-void Personaje::viewBaby()
+void Personaje::viewBaby(bool* flag)
 {
 	// TODO: DEFINIR DELAY
 	//int delay = _data.velSprites[POS_FILA_DIZZY];
@@ -1247,6 +1252,8 @@ void Personaje::viewBaby()
 	{
 		this->_iterFatality = 0;
 		this->healthPoints -= 5;
+		// MOSTRAR CARTEL DE BABALITY
+		*flag = true;
 	}
 }
 
@@ -1274,7 +1281,7 @@ void Personaje::viewBabyStance()
     this->_handlerFatalities->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
 }
 
-void Personaje::viewSkeleton()
+void Personaje::viewSkeleton(bool* flag)
 {
 	// TODO: DEFINIR DELAY
 	//int delay = _data.velSprites[POS_FILA_DIZZY];
@@ -1303,6 +1310,8 @@ void Personaje::viewSkeleton()
 	{
 		this->_iterFatality = 0;
 		this->healthPoints -= 5;
+		// MOSTRAR CARTEL FATALITY
+		*flag = true;
 	}
 }
 
@@ -1370,7 +1379,7 @@ void Personaje::moveLeft(float factor)
     this->_isDucking = false;
     this->_isBlocking = false;
     this->_isDizzy = false;
-    if( ( !this->_isJumping && !this->_isFalling  && !this->isHitting() ) || ( this->_isJumpingLeft ))
+    if( ( (!this->_beingHit) && !this->_isJumping && !this->_isFalling  && !this->isHitting() ) || ( this->_isJumpingLeft ))
     {
         this->_isWalking = true;
         Logger::Instance()->log(DEBUG,"Camino a la Izquierda");
@@ -1841,12 +1850,22 @@ bool Personaje::isHitting()
 	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling || this->_isSweepFall);
 }
 
+bool Personaje::appliedFatality()
+{
+	return this->_fatalityApplied;
+}
+
+bool Personaje::appliedBabality()
+{
+	return this->_babalityApplied;
+}
+
 void Personaje::moveRight(float factor)
 {
     this->_isDucking = false;
     this->_isBlocking = false;
     this->_isDizzy = false;
-    if(!( this->_isJumping ) && !( this->_isFalling ) && !this->isHitting() )
+    if(!( this->_isJumping ) && !( this->_isFalling ) && !this->isHitting() && (!this->_beingHit) )
     {
         this->_isWalking = true;
         Logger::Instance()->log(DEBUG,"Camino a la derecha");

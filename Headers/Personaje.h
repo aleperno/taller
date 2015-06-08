@@ -109,6 +109,9 @@ class Personaje
 		bool _receivingBabality;
 		bool _apllyingBabality;
 
+		bool _fatalityApplied;
+		bool _babalityApplied;
+
 		void viewWalking();
 		void viewDuck();
 		void viewDizzy();
@@ -128,9 +131,9 @@ class Personaje
 		void viewFallSweep();
 
 		// VIEWs Fatalities
-		void viewBaby();
+		void viewBaby(bool* flag);
 		void viewBabyStance();
-		void viewSkeleton();
+		void viewSkeleton(bool* flag);
 		void viewSkeletonStance();
 
 		void viewHit();
@@ -208,6 +211,9 @@ class Personaje
 		bool isJumpingLeft();
 		bool isDucking();
 		bool isHitting();
+
+		bool appliedFatality();
+		bool appliedBabality();
 
 		void evaluarAccion(int accion, bool enPVE, bool enTraining);
 		void evaluarAccion(int accion);
