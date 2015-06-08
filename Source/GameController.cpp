@@ -1319,6 +1319,7 @@ void GameController::runPVE() {
 void GameController::runTraining() {
 	
 	this->_personaje2->freeze();
+	this->_personaje2->idle();
 	this->runPVP();
 }
 

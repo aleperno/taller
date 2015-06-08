@@ -358,6 +358,8 @@ Personaje::~Personaje()
 {
 	delete this->combos;
     delete _handler;
+	delete _handlerFatalities;
+	delete _handlerSkeleton;
     delete this->arma;
     Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
