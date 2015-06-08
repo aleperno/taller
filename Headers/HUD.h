@@ -18,7 +18,7 @@
 #define FONT_PATH "Images/mortalkombat3.ttf"
 #define FINISH_Y_PATH "Images/finishYellow.png"
 #define FINISH_R_PATH "Images/finishRed.png"
-#define FINISH_CYCLES 10
+#define FINISH_CYCLES 50
 
 using namespace std;
 
