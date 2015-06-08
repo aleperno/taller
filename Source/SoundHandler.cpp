@@ -51,6 +51,10 @@ SoundHandler::SoundHandler()
 	this->aleluya = Mix_LoadWAV("Sound/Aleluya.wav");
 	if(aleluya == NULL)
 		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido Aleluya");
+
+	this->toasty = Mix_LoadWAV("Sound/toasty.wav");
+	if(toasty == NULL)
+		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido toasty");
 }
 
 SoundHandler::~SoundHandler()
@@ -62,10 +66,13 @@ SoundHandler::~SoundHandler()
 	Mix_FreeChunk( caida );
 	Mix_FreeChunk( jump );
 
+
 	Mix_FreeChunk( select );
 	Mix_FreeChunk( selected );
 	Mix_FreeChunk( inicio );
 	Mix_FreeChunk(aleluya);
+
+	Mix_FreeChunk(toasty);
 
 	Mix_FreeMusic( musicaMenu );
 	Mix_FreeMusic( musicaPelea );
@@ -83,4 +90,5 @@ SoundHandler::~SoundHandler()
 
 	musicaMenu = NULL;
 	musicaPelea = NULL;
+	toasty = NULL;
 }

@@ -12,6 +12,7 @@
 #include <VentanaData.h>
 #include <CapaData.h>
 #include <EscenarioData.h>
+#include <ToastyData.h>
 
 using namespace Json;
 using namespace std;
@@ -65,6 +66,8 @@ class Parser{
 
 		CaracterData liukang;
 		CaracterData scorpion;
+
+		ToastyData toasty;
 };
 
 #endif // PARSER_H_INCLUDED

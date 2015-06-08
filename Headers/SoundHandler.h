@@ -25,6 +25,9 @@ class SoundHandler {
 		Mix_Chunk *inicio;
 		Mix_Chunk* aleluya;
 
+		//Toasty
+		Mix_Chunk *toasty;
+
 		SoundHandler();
 		~SoundHandler();
 

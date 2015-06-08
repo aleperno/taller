@@ -245,6 +245,13 @@ void Parser::setearCaracteres() {
 	this->scorpion.nombre = "scorpion";
 	parsearSpriteCaracter(&(this->scorpion), carValue);
 
+	carValue = root["toasty"];
+	this->toasty.Imgpath = carValue.get("path","").asString();
+	this->toasty.alto = carValue.get("alto",0).asInt();
+	this->toasty.ancho = carValue.get("ancho",0).asInt();
+	this->toasty.factor = carValue.get("factor",0).asFloat();
+	this->toasty.rate = carValue.get("rate",0).asFloat();
+
 }
 
 bool Parser::asignarBoton(int* boton, bool (&teclasUsadas)[8], Value jugValue, int num, string valueString, string botonString) {

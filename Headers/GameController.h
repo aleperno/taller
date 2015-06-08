@@ -29,7 +29,7 @@ using namespace std;
 #include <AI.h>
 #include <SoundHandler.h>
 #include <AccionesTracking.h>
-
+#include <Toasty.h>
 
 #define DEF_SLEEP_TIME 20
 #define FIGHT_TIME_COUNTDOWN 200
@@ -73,6 +73,7 @@ class GameController
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		vector<Capa*> _capas;
+		Toasty* toasty;
 
 		//Esos son siempre iguales a unos 2 de abajo
 		Personaje* _personaje1;

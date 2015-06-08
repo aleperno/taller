@@ -109,6 +109,7 @@ GameController::GameController(Parser* parser)
 	_personaje1 = this->_jugador1scorpion;
 	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
+	this->toasty = new Toasty(_ventana,parser->toasty);
 
 	iniciarEstructuraPerSelect();
 	vector<Personaje*> punteros(6);
@@ -231,8 +232,10 @@ vector<Capa*> GameController::getCapas(Ventana* ventana,Parser* parser, Escenari
 void GameController::printLayers()
 {
 	if (_ventana->isShaking())
+	{
 		_ventana->setShakeIntensity();
-
+		this->toasty->setActive();
+	}
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->view();
@@ -247,6 +250,20 @@ void GameController::printLayers()
 		this->_personaje1->view(_personaje2);
 		this->_personaje2->view(_personaje1);
 	}
+	if (this->toasty->active)
+	{
+		//cout << "Toasty se encuentra activo" << endl;
+		bool play = this->toasty->view();
+		if (play)
+		{
+			//cout << "Debo reproducir toasty" << endl;
+			if(!Mix_Playing(-1))
+			{
+				Mix_PlayChannel(-1,this->musica->toasty, 0);
+			}
+		}
+	}
+
 }
 
 void GameController::viewWindowPosition()
@@ -983,6 +1000,11 @@ void GameController::procesarEventos(SDL_Event* e) {
 					this->_personaje1->applyBabality();
 					this->_personaje2->receiveBabality();
 				}	
+			}
+			else if (e->key.keysym.sym == SDLK_8)
+			{
+				cout << "apreto 8" << endl;
+				this->toasty->setActive();
 			}
 			
 			break;

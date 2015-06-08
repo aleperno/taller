@@ -109,5 +109,11 @@
 				"toma1":	["PB", "PB", "PB"],
 				"toma2":	["GA", "GA", "GA"],
 				"fatality":	["LF", "LF", "LF", "LF", "LF"]
-			 }
+			 },
+"toasty": { "path": "Images/toasty.png",
+			"alto":	287,
+			"ancho":296,
+			"factor": 20,
+			"rate":5,
+	}
 }
