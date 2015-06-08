@@ -24,12 +24,18 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->efectos_sonido = new SoundHandler();
     this->_ventana = ventana;
     this->_handler = new TextureHandler(ventana->_gRenderer);
+	this->_handlerFatalities = new TextureHandler(ventana->_gRenderer);
+	this->_handlerSkeleton = new TextureHandler(ventana->_gRenderer);
     this->_alto_log = data.alto;
     this->_ancho_log = data.ancho;
     string path = data.imgPath;
     this->arma_speed = data.arma_speed;
     this->_handler->loadFromFile(path,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
-    this-> _escenario = escenario;
+
+	this->_handlerFatalities->loadFromFile(data.imgFatalities,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
+	this->_handlerSkeleton->loadFromFile(data.imgSkeleton,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
+    
+	this-> _escenario = escenario;
     this-> _factor_escala = escenario.ancho / this->_ancho_log;
     this->_pos_y = escenario.y_piso;
     if (pers_ppal) {
@@ -44,7 +50,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
     this->_zIndex = escenario.z_index;
     this->_personajeData = data;
     this->vectorSprites = Personaje::loadVectorMedia(data);
+	this->loadFatalitiesMedia();
     this->_lastFrame = 0;
+	this->_iterFatality = 0;
     this->healthPoints = HEALTH;
 	this->setIdle();
     this->pos_last_action = 0;
@@ -78,6 +86,7 @@ void Personaje::setIdle()
     this->_isThrowing = false;
     this->_weaponInAir = false;
     this->_timesThrow = 0;
+	this->_iterFatality = 0;
 
     this->_isBlocking = false;
     this->_isDizzy = false;
@@ -87,6 +96,11 @@ void Personaje::setIdle()
     this->_isLoKicking = false;
     this->_isHiPunching = false;
     this->_isLoPunching = false;
+
+	this->_receivingFatality = false;
+	this->_apllyingFatality  = false;
+	this->_receivingBabality = false;
+	this->_apllyingBabality  = false;
 }
 
 void Personaje::posicionarParaMain() {
@@ -111,7 +125,7 @@ void Personaje::resetear() {
     this->healthPoints = HEALTH;
     this->unFreeze();
     this->_isDizzy = false;
-    this->idle();
+    this->setIdle();
 }
 
 void Personaje::borrarBuffer() {
@@ -269,7 +283,6 @@ void Personaje::setBoundingBox()
     SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
-
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
 {
     vector<SDL_Rect*> media;
@@ -286,6 +299,59 @@ vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
         media.push_back(rectMedia);
     }
     return media;
+}
+
+void Personaje::loadFatalitiesMedia()
+{
+	vector<SDL_Rect*> media;
+	SDL_Rect* mediaSkeleton			= new SDL_Rect[this->_personajeData.cantSpritesSkeleton];
+	SDL_Rect* mediaSkeletonStance	= new SDL_Rect[this->_personajeData.cantSpritesSkeletonStance];
+	SDL_Rect* mediaBabyStance		= new SDL_Rect[this->_personajeData.cantSpritesBabyStance];
+	SDL_Rect* mediaBaby				= new SDL_Rect[this->_personajeData.cantSpritesBaby];
+	
+	// Cargo sprites Skeleton.
+	for (int j=0; j < this->_personajeData.cantSpritesSkeleton; j++)
+    {
+		mediaSkeleton[j].x = j*this->_personajeData.anchoSpriteSkeleton;
+        mediaSkeleton[j].y = 0;
+		mediaSkeleton[j].w = this->_personajeData.anchoSpriteSkeleton;
+		mediaSkeleton[j].h = this->_personajeData.altoSpriteSkeleton;
+    }
+	media.push_back(mediaSkeleton);
+	int action = 0;
+
+	// Cargo sprites Baby Stance
+	for (int j=0; j < this->_personajeData.cantSpritesBabyStance; j++)
+    {
+		mediaBabyStance[j].x = j*this->_personajeData.anchoSpriteFatalities;
+        mediaBabyStance[j].y = action * this->_personajeData.altoSpriteFatalities;
+		mediaBabyStance[j].w = this->_personajeData.anchoSpriteFatalities;
+		mediaBabyStance[j].h = this->_personajeData.altoSpriteFatalities;
+    }
+	media.push_back(mediaBabyStance);
+	action++;
+
+	// Cargo sprites Skeleton Stance.
+	for (int j=0; j < this->_personajeData.cantSpritesSkeletonStance; j++)
+    {
+		mediaSkeletonStance[j].x = j*this->_personajeData.anchoSpriteFatalities;
+        mediaSkeletonStance[j].y = action * this->_personajeData.altoSpriteFatalities;
+		mediaSkeletonStance[j].w = this->_personajeData.anchoSpriteFatalities;
+		mediaSkeletonStance[j].h = this->_personajeData.altoSpriteFatalities;
+    }
+	media.push_back(mediaSkeletonStance);
+	action++;
+
+	// Cargo sprites Baby.
+	for (int j=0; j < this->_personajeData.cantSpritesBaby; j++)
+    {
+		mediaBaby[j].x = j*this->_personajeData.anchoSpriteFatalities;
+		mediaBaby[j].y = action * this->_personajeData.altoSpriteFatalities;
+		mediaBaby[j].w = this->_personajeData.anchoSpriteFatalities;
+		mediaBaby[j].h = this->_personajeData.altoSpriteFatalities;
+    }
+	media.push_back(mediaBaby);
+	this->vectorSpritesFatalities = media;
 }
 
 Personaje::~Personaje()
@@ -481,6 +547,22 @@ void Personaje::view(Personaje* otherPlayer)
         {
             this->viewDuck();
         }
+		else if (this->_apllyingFatality)
+		{
+			this->viewSkeletonStance();
+		}
+		else if (this->_apllyingBabality)
+		{
+			this->viewBabyStance();
+		}
+		else if (this->_receivingFatality)
+		{
+			this->viewSkeleton();
+		}
+		else if (this->_receivingBabality)
+		{
+			this->viewBaby();
+		}
         else if (this->_isDizzy)
         {
             this->viewDizzy();
@@ -1134,6 +1216,116 @@ void Personaje::viewFallSweep()
     pos_last_action = accion;
 }
 
+void Personaje::viewBaby()
+{
+	// TODO: DEFINIR DELAY
+	//int delay = _data.velSprites[POS_FILA_DIZZY];
+	int delay = 5;
+
+    ++_lastFrame;
+    int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+    {
+        _lastFrame = 0;
+    }
+	else if ( aux >= this->_personajeData.cantSpritesBaby )
+	{
+		frame = _personajeData.cantSpritesBaby - 1;
+	}
+	SDL_Rect* currentClip = &(this->vectorSpritesFatalities[POS_FILA_BABY][frame]);
+    int x = get_x_px();
+    int y = get_y_px();
+    this->_handlerFatalities->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+	this->_iterFatality++;
+
+	int it = ITERACIONES_FATALITY;
+	if (this->_iterFatality >= it)
+	{
+		this->_iterFatality = 0;
+		this->healthPoints -= 5;
+	}
+}
+
+void Personaje::viewBabyStance()
+{
+	// TODO: DEFINIR DELAY
+	//int delay = _data.velSprites[POS_FILA_DIZZY];
+	int delay = 5;
+
+    ++_lastFrame;
+    int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+    {
+        _lastFrame = 0;
+    }
+	else if ( aux >= this->_personajeData.cantSpritesBabyStance )
+	{
+		frame = this->_personajeData.cantSpritesBabyStance - 1;
+
+	}
+	SDL_Rect* currentClip = &(this->vectorSpritesFatalities[POS_FILA_BABYSTANCE][frame]);
+    int x = get_x_px();
+    int y = get_y_px();
+    this->_handlerFatalities->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
+void Personaje::viewSkeleton()
+{
+	// TODO: DEFINIR DELAY
+	//int delay = _data.velSprites[POS_FILA_DIZZY];
+	int delay = 5;
+
+    ++_lastFrame;
+    int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+    {
+        _lastFrame = 0;
+    }
+	else if( aux >= this->_personajeData.cantSpritesSkeleton )
+	{
+		frame = this->_personajeData.cantSpritesSkeleton - 1;
+	}
+	SDL_Rect* currentClip = &(this->vectorSpritesFatalities[POS_FILA_SKELETON][frame]);
+    int x = get_x_px();
+    int y = get_y_px();
+    this->_handlerSkeleton->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+
+	this->_iterFatality++;
+
+	int it = ITERACIONES_FATALITY;
+	if (this->_iterFatality >= it)
+	{
+		this->_iterFatality = 0;
+		this->healthPoints -= 5;
+	}
+}
+
+void Personaje::viewSkeletonStance()
+{
+	// TODO: DEFINIR DELAY
+	//int delay = _data.velSprites[POS_FILA_DIZZY];
+	int delay = 5;
+    ++_lastFrame;
+    int aux = _lastFrame / delay;
+	int frame = aux;
+	if ( aux < 0 )
+    {
+        _lastFrame = 0;
+    }
+	else if( aux >= this->_personajeData.cantSpritesSkeletonStance )
+	{
+		 frame = this->_personajeData.cantSpritesSkeletonStance - 1;
+	}
+	SDL_Rect* currentClip = &(this->vectorSpritesFatalities[POS_FILA_SKELETONSTANCE][frame]);
+    int x = get_x_px();
+    int y = get_y_px();
+    this->_handlerFatalities->renderAnimation(this->_orientacion,x,y,_ancho_px,_alto_px,currentClip);
+}
+
 int Personaje::get_x_px()
 {
     float pos_r = 0; //La posicion en pixeles en reales
@@ -1692,6 +1884,42 @@ void Personaje::hit(int life)
 {
     this->healthPoints -= life;
     this->_beingHit = true;
+}
+
+void Personaje::applyFatality()
+{
+	this->_lastFrame = 0;
+	this->setIdle();
+	this->_apllyingFatality = true;
+}
+
+bool Personaje::receiveFatality()
+{
+	if (this->_isDizzy)
+	{
+		this->_lastFrame = 0;
+		this->setIdle();
+		this->_receivingFatality = true;
+	}
+	return this->_receivingFatality;
+}
+
+void Personaje::applyBabality()
+{
+	this->_lastFrame = 0;
+	this->setIdle();
+	this->_apllyingBabality = true;
+}
+
+bool Personaje::receiveBabality()
+{
+	if (this->_isDizzy)
+	{
+		this->_lastFrame = 0;
+		this->setIdle();
+		this->_receivingBabality = true;
+	}
+	return this->_receivingBabality;
 }
 
 void Personaje::fallSwep(int life)
