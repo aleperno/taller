@@ -16,6 +16,9 @@
 #include <StringUtil.h>
 
 #define FONT_PATH "Images/mortalkombat3.ttf"
+#define FINISH_Y_PATH "Images/finishYellow.png"
+#define FINISH_R_PATH "Images/finishRed.png"
+#define FINISH_CYCLES 10
 
 using namespace std;
 
@@ -28,6 +31,7 @@ class Hud{
 		void actualizarRounds(int round, int p1wins, int p2wins);
 		void prepararHUD();
 		void actualizarHealthbars();
+		void showFinishHim();
 		void printHUD();
 		void printHUD(int time);
 		void printHUD(vector<string>* bufferTeclas,bool hayCombo, vector<string>* combo, string nombreCombo);
@@ -45,8 +49,15 @@ class Hud{
 		SDL_Color colorVida;
 		SDL_Color colorVidaIlum;
 		SDL_Color colorNombres;
+
 		int tomasY;
 		int tomasMargen;
+		int finishX;
+		int finishY;
+		int finishW;
+		int finishH;
+		int finishCount;
+
 		struct hudPersonaje {
 			SDL_Rect externo;
 			SDL_Rect interno;
@@ -58,6 +69,8 @@ class Hud{
 		TextureHandler* roundTexture;
 		TextureHandler* p1winsTexture;
 		TextureHandler* p2winsTexture;
+		TextureHandler* finishHimYellow;
+		TextureHandler* finishHimRed;
 		TextureHandler* bufferTexture;
 		hudPersonaje hud1;
 		hudPersonaje hud2;

@@ -18,6 +18,8 @@ Hud::~Hud()
 	delete this->p1winsTexture;
 	delete this->p2winsTexture;
 	delete this->bufferTexture;
+	delete this->finishHimYellow;
+	delete this->finishHimRed;
 
 	TTF_CloseFont( fontNombres );
 	fontNombres = NULL;
@@ -105,6 +107,17 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 
 	this->tomasY = _ventana->_alto_px/8;
 	this->tomasMargen = _ventana->_ancho_px/100;
+
+	this->finishHimRed = new TextureHandler(_ventana->_gRenderer);
+	this->finishHimRed->loadFromFile(FINISH_R_PATH,false,0,0,0,true);
+	this->finishHimYellow = new TextureHandler(_ventana->_gRenderer);
+	this->finishHimYellow->loadFromFile(FINISH_Y_PATH,false,0,0,0,true);
+
+	this->finishH = _ventana->_alto_px/5;
+	this->finishW = _ventana->_ancho_px/5;
+	this->finishX = _ventana->_ancho_px/2 - finishW/2;
+	this->finishY = _ventana->_alto_px/4;
+	int finishCount = 0;
 }
 
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
@@ -139,6 +152,19 @@ void Hud::actualizarHealthbars() {
 	this->hud2.healthIlum.x = _ventana->_ancho_px - this->hud2.interno.h/2 - this->hud2.health.w;
 }
 
+void Hud::showFinishHim() {
+	if (finishCount < FINISH_CYCLES) {
+		this->finishHimRed->renderScaled(finishX, finishY, finishW, finishH);
+		finishCount++;
+	} else if (finishCount < FINISH_CYCLES*2 - 1) {
+		this->finishHimYellow->renderScaled(finishX, finishY, finishW, finishH);
+		finishCount++;
+	} else {
+		this->finishHimYellow->renderScaled(finishX, finishY, finishW, finishH);
+		finishCount = 0;
+	}
+}
+
 void Hud::printHUD() {
 
 	SDL_SetRenderDrawColor( _ventana->_gRenderer, colorExterno.r, colorExterno.g, colorExterno.b, colorExterno.a );
@@ -162,6 +188,8 @@ void Hud::printHUD() {
 	this->hud1.nombreTexture->render(this->hud1.interno.x, this->hud1.interno.y);
 	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth() - this->hud2.interno.h/2, this->hud2.interno.y);
 
+	if ( (this->_personaje1->_isDizzy && this->_personaje1->healthPoints>0) || (this->_personaje2->_isDizzy && this->_personaje2->healthPoints>0) )
+		this->showFinishHim();
 }
 
 void Hud::printHUD(int time) {
