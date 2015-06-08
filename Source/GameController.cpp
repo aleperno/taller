@@ -318,10 +318,9 @@ bool GameController::actualizarGanador() {
 			} else {
 				if ( this->_wasAlive )
 				{
-					//this->_hud->showFinishHim();
+					// Variables que indican cuando activar finish him
 					this->_wasAlive = false;
 					this->_toDizzy  = true;
-					cout << "Show Finish Him" << endl;
 				}
 			}
 		} else {
@@ -339,10 +338,9 @@ bool GameController::actualizarGanador() {
 				} else {
 					if ( this->_wasAlive )
 					{
-						//this->_hud->showFinishHim();
+						// Variables que indican cuando activar finish him
 						this->_wasAlive = false;
 						this->_toDizzy  = true;
-						cout << "Show Finish Him" << endl;
 					}
 				}
 			}
