@@ -48,6 +48,8 @@ void GameController::KillController()
 	_fightTimer = NULL;
 	delete this->_bufferTimer;
 	_bufferTimer = NULL;
+	delete this->_tomaValidaTimer;
+	_tomaValidaTimer = NULL;
 	delete this->_mainScreen;
 	_mainScreen = NULL;
 	delete this->_hud;
@@ -119,6 +121,7 @@ GameController::GameController(Parser* parser)
 	_mainScreen = new MainScreen(_ventana,&perSelect,&punteros);
 	_fightTimer = new Temporizador();
 	_bufferTimer = new Temporizador();
+	_tomaValidaTimer = new Temporizador();
 	comboAUX = new vector<string>();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
@@ -1216,9 +1219,15 @@ void GameController::runPVP() {
 
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
 		this->tiempoRemanenteBuffer = (int)ceil(BUFFER_WAIT_TIME - ((float)this->_bufferTimer->getTimeInTicks())/1000);
-
+		this->tiempoRemanenteTomaValida = (int)ceil(this->_personaje1->getData()->tomasTiempoLimite -((float)this->_tomaValidaTimer->getTimeInTicks())/1000 );
 		if (this->estoyEnTraining()) {
-			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
+			if (this->tiempoRemanenteTomaValida == 0) {
+				this->hayCombo = false;
+				this->_personaje1->borrarBuffer();
+				this->_tomaValidaTimer->reset();
+			} else {
+				this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
+			}
 			if (this->hayCombo) {
 				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->aleluya, 0);
 			}
@@ -1292,13 +1301,15 @@ void GameController::prepararPartida() {
 	personaje2Wins = 0;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
+	this->_tomaValidaTimer->reset();
 }
 
 void GameController::prepararPartidaTraining() {
 	actualizarPersonajes();
 	resetearVentanaPersonajes();
 	this->_bufferTimer->reset();
-	this->_personaje1->getBufferTeclas()->erase(this->_personaje1->getBufferTeclas()->begin(),this->_personaje1->getBufferTeclas()->end());
+	this->_tomaValidaTimer->reset();
+	this->_personaje1->borrarBuffer();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
@@ -1372,6 +1383,7 @@ void GameController::resetearVentanaPersonajes() {
 	this->_ventana->_pos_log_x = (this->_escenario.ancho - this->_ventana->_ancho_log) / 2;
 	_personaje1->resetear();
 	_personaje2->resetear();
+	this->_personaje1->borrarBuffer();
 }
 
 void GameController::toMainScreen() {

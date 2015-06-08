@@ -190,6 +190,7 @@ class Personaje
 		bool canMove();
 		void freeze();
 		void unFreeze();
+		void borrarBuffer();
 
 		PersonajeData* getData();
 		void continueAction(float factor_x, float factor_y, Personaje* otherPers);

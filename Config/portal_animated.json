@@ -28,7 +28,7 @@
 "jugador1": {	"ancho": 	50,
 		"alto": 	50,
 		"arma_speed":	2.5,
-		"tomasTiempo":	2000,
+		"tomasTiempo":	10,
 		"tolerancia":	1,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,

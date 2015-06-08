@@ -51,7 +51,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
     this->setBoundingBox();
     this-> _data = data;
     this->pers_ppal = pers_ppal;
-    this->combos = new CombosPersonaje(&this->_data.toma1,&this->_data.toma2,&this->_data.fatality,1);
+    this->combos = new CombosPersonaje(&this->_data.toma1,&this->_data.toma2,&this->_data.fatality,this->_data.tomasTolerancia);
 
     //TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
     this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
@@ -114,9 +114,13 @@ void Personaje::resetear() {
     this->idle();
 }
 
+void Personaje::borrarBuffer() {
+	this->getBufferTeclas()->erase(this->getBufferTeclas()->begin(),this->getBufferTeclas()->end());
+}
+
 void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer, bool hayCombo) {
 	if (hayCombo && tiempoRemanenteBuffer==0) {
-		this->bufferTeclas.erase(this->bufferTeclas.begin(),this->bufferTeclas.end());
+		this->borrarBuffer();
 	}else {
 		if(this->getBufferTeclas()->size() >= CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0)
 			if (this->getBufferTeclas()->size() > 0)
