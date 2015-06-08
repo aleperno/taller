@@ -265,10 +265,8 @@ void GameController::printLayers()
 		if (play)
 		{
 			//cout << "Debo reproducir toasty" << endl;
-			if(!Mix_Playing(-1))
-			{
-				Mix_PlayChannel(-1,this->musica->toasty, 0);
-			}
+			Mix_PlayChannel(-1,this->musica->toasty, 0);
+
 		}
 	}
 
