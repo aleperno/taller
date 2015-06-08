@@ -176,7 +176,6 @@ void Hud::showFinishHim() {
 		this->finishCount = 0;
 		this->_viewFinishHim = false;
 	}
-	cout << finishCount << endl;
 }
 
 void Hud::printHUD() {
@@ -204,7 +203,6 @@ void Hud::printHUD() {
 
 	if ( this->_viewFinishHim )
 	{
-		cout << "FINISH HIM!" << endl;
 		this->showFinishHim();
 	}
 }
