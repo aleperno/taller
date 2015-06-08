@@ -92,6 +92,8 @@ class GameController
 		bool p1nameEmpty;
 		bool p2nameEmpty;
 		bool _beginRound;
+		bool _toDizzy;
+		bool _wasAlive;
 		bool _end_of_game;
 		bool musica_pelea;
 		SDL_Joystick* _joystickOne;

@@ -116,7 +116,8 @@ GameController::GameController(Parser* parser)
 
 	_carteles = new Carteles(_ventana);
 	_beginRound = false;
-
+	_wasAlive = true;
+	_toDizzy = false;
 
 	iniciarEstructuraPerSelect();
 	vector<Personaje*> punteros(6);
@@ -286,6 +287,9 @@ void GameController::setEndOfGame(bool value) {
 
 bool GameController::actualizarGanador() {
 	bool flag = false;
+
+	if (this->_toDizzy) this->_toDizzy = false;
+
 	if (tiempoRemanente <= 0) {
 		if (_personaje1->healthPoints < _personaje2->healthPoints) {
 			Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
@@ -313,6 +317,14 @@ bool GameController::actualizarGanador() {
 				personaje2Wins++;
 				//personaje1->viewDead();
 				flag = true;
+			} else {
+				if ( this->_wasAlive )
+				{
+					//this->_hud->showFinishHim();
+					this->_wasAlive = false;
+					this->_toDizzy  = true;
+					cout << "Show Finish Him" << endl;
+				}
 			}
 		} else {
 			if (this->_personaje2->healthPoints <= 5) {
@@ -326,6 +338,14 @@ bool GameController::actualizarGanador() {
 					personaje1Wins++;
 					//personaje2->viewDead();
 					flag = true;
+				} else {
+					if ( this->_wasAlive )
+					{
+						//this->_hud->showFinishHim();
+						this->_wasAlive = false;
+						this->_toDizzy  = true;
+						cout << "Show Finish Him" << endl;
+					}
 				}
 			}
 		}
@@ -335,6 +355,9 @@ bool GameController::actualizarGanador() {
 
 bool GameController::actualizarGanadorTraining() {
 	bool flag = false;
+
+	if (this->_toDizzy) this->_toDizzy = false;
+
 	if (this->_personaje1->healthPoints <= 5) {
 		this->_personaje1->freeze();
 		//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
@@ -345,11 +368,20 @@ bool GameController::actualizarGanadorTraining() {
 			this->_personaje2->winingPosition();
 			//personaje1->viewDead();
 			flag = true;
+		} else {
+			if ( this->_wasAlive )
+			{
+				//this->_hud->showFinishHim();
+				this->_wasAlive = false;
+				this->_toDizzy  = true;
+				//cout << "Show Finish Him" << endl;
+			}
 		}
 	} else {
 		if (this->_personaje2->healthPoints <= 5) {
 			this->_personaje2->freeze();
 			this->_personaje2->dizzy();
+			
 			//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 			if (this->_personaje2->healthPoints <= 0) {
 				Logger::Instance()->log(WARNING,"Murio personaje 1.");
@@ -357,6 +389,14 @@ bool GameController::actualizarGanadorTraining() {
 				this->_personaje1->winingPosition();
 				//personaje2->viewDead();
 				flag = true;
+			} else {
+				if ( this->_wasAlive )
+				{
+					//this->_hud->showFinishHim();
+					this->_wasAlive = false;
+					this->_toDizzy  = true;
+					//cout << "Show Finish Him" << endl;
+				}
 			}
 		}
 	}
@@ -1313,6 +1353,8 @@ void GameController::runPVP() {
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
 					this->_beginRound = true;
+					_toDizzy = false;
+					_wasAlive = true;
 			}
 		}
 
@@ -1320,8 +1362,28 @@ void GameController::runPVP() {
 		this->printLayers();
 		if (this->estoyEnTraining()) {
 			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX, nombreCombo);
+			if (this->_toDizzy)
+			{
+				int i = 0;
+				while ( i < 40 )
+				{
+					this->_hud->showFinishHim();
+					this->_ventana->updateScreen();
+					i++;
+				}
+			}
 			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer,this->hayCombo);
 		} else {
+			if (this->_toDizzy)
+			{
+				int i = 0;
+				while ( i < 40 )
+				{
+					this->_hud->showFinishHim();
+					this->_ventana->updateScreen();
+					i++;
+				}
+			}
 			this->_hud->printHUD(tiempoRemanente);
 		}
 		this->_ventana->updateScreen();
@@ -1379,6 +1441,8 @@ void GameController::prepararPartida() {
 	personaje1Wins = 0;
 	personaje2Wins = 0;
 	_beginRound = true;
+	_toDizzy = false;
+	_wasAlive = true;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
 	this->_tomaValidaTimer->reset();
