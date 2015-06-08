@@ -1365,6 +1365,7 @@ void GameController::runPVP() {
 			if (this->_toDizzy)
 			{
 				this->_hud->activateFinishHim();
+				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 				this->_toDizzy = false;
 			}
 			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer,this->hayCombo);
@@ -1372,6 +1373,7 @@ void GameController::runPVP() {
 			if (this->_toDizzy)
 			{
 				this->_hud->activateFinishHim();
+				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 				this->_toDizzy = false;
 			}
 			this->_hud->printHUD(tiempoRemanente);
