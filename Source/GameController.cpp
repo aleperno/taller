@@ -1031,12 +1031,14 @@ void GameController::procesarEventos(SDL_Event* e) {
 				if (this->_personaje1->_isDizzy)
 				{
 					this->_carteles->viewFatality();
+					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->fatality, 0);
 					this->_personaje2->applyFatality();
 					this->_personaje1->receiveFatality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
 					this->_carteles->viewFatality();
+					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->fatality, 0);
 					this->_personaje1->applyFatality();
 					this->_personaje2->receiveFatality();
 				}	
@@ -1046,12 +1048,14 @@ void GameController::procesarEventos(SDL_Event* e) {
 				if (this->_personaje1->_isDizzy)
 				{
 					this->_carteles->viewBabality();
+					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->babality, 0);
 					this->_personaje2->applyBabality();
 					this->_personaje1->receiveBabality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
 					this->_carteles->viewBabality();
+					if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->babality, 0);
 					this->_personaje1->applyBabality();
 					this->_personaje2->receiveBabality();
 				}	
