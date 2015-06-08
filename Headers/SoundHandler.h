@@ -24,6 +24,18 @@ class SoundHandler {
 		Mix_Chunk *selected;
 		Mix_Chunk *inicio;
 		Mix_Chunk* aleluya;
+		Mix_Chunk* fight;
+		Mix_Chunk* roundOne;
+		Mix_Chunk* roundTwo;
+		Mix_Chunk* roundThree;
+		Mix_Chunk* scorpion_wins;
+		Mix_Chunk* liukang_wins;
+		Mix_Chunk* fatality;
+		Mix_Chunk* finish_him;
+		Mix_Chunk* outstanding;
+		Mix_Chunk* excellent;
+		Mix_Chunk* babality;
+		Mix_Chunk* flawless_victory;
 
 		SoundHandler();
 		~SoundHandler();
