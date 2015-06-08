@@ -1254,6 +1254,13 @@ void GameController::runPVP() {
 		prepararPartida();
 		partidaPreparada = true;
 	}
+
+	//Freezeo personajes para que no sea posible hacer algo en primer ciclo (en PVE se ve)
+	if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2)) {
+		this->_personaje1->freeze();
+		this->_personaje2->freeze();
+	}
+
 	//PROCESO DE INPUTS POR EVENTOS
 	SDL_Event e;
 	while( SDL_PollEvent(&e) != 0 ) {
@@ -1322,6 +1329,8 @@ void GameController::runPVP() {
 		{	
 			this->_carteles->viewFigth();
 			this->_beginRound = false;
+			this->_personaje1->unFreeze();
+			this->_personaje2->unFreeze();
 		}
 	} else { SDL_Delay(DEF_SLEEP_TIME);} //IF (!minimizado)
 }
@@ -1345,7 +1354,6 @@ void GameController::actualizarPartida() {
 				this->toMainScreen();
 			} else {
 				round++;
-				//LANZAR CARTEL DE QUE INICIA EL ROUND
 				resetearVentanaPersonajes();
 				_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 				this->_fightTimer->reset();
