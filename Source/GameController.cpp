@@ -85,6 +85,8 @@ GameController::GameController(Parser* parser)
 	screen = MAINSCREEN_INTRO;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
+	p1nameEmpty = true;
+	p2nameEmpty = false;
 	lastJoyValue1X = JOYSTICK_DEAD_ZONE;
 	lastJoyValue1Y = JOYSTICK_DEAD_ZONE;
 	lastJoyValue2X = JOYSTICK_DEAD_ZONE;
@@ -1382,8 +1384,16 @@ void GameController::prepararPartidaTraining() {
 	this->_personaje1->borrarBuffer();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
-	if (this->nombreP1.length() == 0)	this->nombreP1 = _personaje1->getData()->nombre;
-	if (this->nombreP2.length() == 0)	this->nombreP2 = _personaje2->getData()->nombre;
+	if (this->nombreP1.length() == 0) {
+		this->nombreP1 = _personaje1->getData()->nombre;
+		p1nameEmpty = true;
+	} else	p1nameEmpty = false;
+
+	if (this->nombreP2.length() == 0) {
+		this->nombreP2 = _personaje2->getData()->nombre;
+		p2nameEmpty = true;
+	} else	p2nameEmpty = false;
+
 	_hud->recargarNombres();
 }
 
@@ -1463,6 +1473,11 @@ void GameController::toMainScreen() {
 	screen = MAINSCREEN_MODE_SELECT;
 	modeSelected = SELECTED_PVP;
 	botonSeleccionadoEnModo = PLAY_BOTON;
+
+	if (p1nameEmpty)
+		this->nombreP1 = "";
+	if (p2nameEmpty)
+		this->nombreP2 = "";
 
 	partidaPreparada = false;
 }

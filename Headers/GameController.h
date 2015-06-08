@@ -89,6 +89,8 @@ class GameController
 		Personaje* _jugador2scorpion;
 		Personaje* _jugador2scorpionColor;
 
+		bool p1nameEmpty;
+		bool p2nameEmpty;
 		bool _beginRound;
 		bool _end_of_game;
 		bool musica_pelea;
