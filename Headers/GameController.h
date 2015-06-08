@@ -87,6 +87,7 @@ class GameController
 		Personaje* _jugador2scorpion;
 		Personaje* _jugador2scorpionColor;
 
+		bool _beginRound;
 		bool _end_of_game;
 		bool musica_pelea;
 		SDL_Joystick* _joystickOne;

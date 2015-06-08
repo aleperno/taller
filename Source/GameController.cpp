@@ -110,6 +110,7 @@ GameController::GameController(Parser* parser)
 	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
 	_carteles = new Carteles(_ventana);
+	_beginRound = false;
 
 	iniciarEstructuraPerSelect();
 	vector<Personaje*> punteros(6);
@@ -1277,6 +1278,7 @@ void GameController::runPVP() {
 		} else { //If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
+					this->_beginRound = true;
 			}
 		}
 
@@ -1289,7 +1291,11 @@ void GameController::runPVP() {
 			this->_hud->printHUD(tiempoRemanente);
 		}
 		this->_ventana->updateScreen();
-
+		if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2))
+		{	
+			this->_carteles->viewFigth();
+			this->_beginRound = false;
+		}
 	} else { SDL_Delay(DEF_SLEEP_TIME);} //IF (!minimizado)
 }
 
@@ -1337,6 +1343,7 @@ void GameController::prepararPartida() {
 	round = 1;
 	personaje1Wins = 0;
 	personaje2Wins = 0;
+	_beginRound = true;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
 	this->_tomaValidaTimer->reset();
