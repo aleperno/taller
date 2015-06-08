@@ -291,11 +291,13 @@ bool GameController::actualizarGanador() {
 	if (tiempoRemanente <= 0) {
 		if (_personaje1->healthPoints < _personaje2->healthPoints) {
 			Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
+			this->_carteles->viewWinner(this->nombreP2);
 			personaje2Wins++;
 			flag = true;
 		} else {
 			if (_personaje1->healthPoints > _personaje2->healthPoints) {
 				Logger::Instance()->log(WARNING,"Round ganado por personaje 1.");
+				this->_carteles->viewWinner(this->nombreP1);
 				personaje1Wins++;
 				flag = true;
 			} else {
@@ -310,6 +312,7 @@ bool GameController::actualizarGanador() {
 			this->_personaje1->dizzy();
 			if (this->_personaje1->healthPoints <= 0) {
 				Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
+				this->_carteles->viewWinner(this->nombreP2);
 				this->_personaje2->freeze();
 				this->_personaje2->winingPosition();
 				personaje2Wins++;
@@ -333,6 +336,7 @@ bool GameController::actualizarGanador() {
 					this->_personaje1->freeze();
 					this->_personaje1->winingPosition();
 					personaje1Wins++;
+					this->_carteles->viewWinner(this->nombreP1);
 					//personaje2->viewDead();
 					flag = true;
 				} else {
@@ -1383,11 +1387,9 @@ void GameController::runPVP() {
 			this->_carteles->viewBabality();
 		}
 
-
 		this->_ventana->updateScreen();
 		if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2))
 		{	
-
 			this->_carteles->viewFigth();
 			this->_beginRound = false;
 			this->_personaje1->unFreeze();
@@ -1407,11 +1409,13 @@ void GameController::actualizarPartida() {
 	if (personaje1Wins == 2) {
 		Logger::Instance()->log(WARNING,"Partida ganada por personaje 1.");
 		//IMPRIMIR CARTEL DE GANADOR EN PANTALLA
+		this->_carteles->viewWinner(this->nombreP1);
 		this->toMainScreen();
 		} else {
 			if (personaje2Wins == 2) {
 				Logger::Instance()->log(WARNING,"Partida ganada por personaje 2.");
 				//IMPRIMIR CARTEL DE GANADOR EN PANTALLA
+				this->_carteles->viewWinner(this->nombreP2);
 				this->toMainScreen();
 			} else {
 				round++;

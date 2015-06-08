@@ -10,6 +10,8 @@
 #define PATH_FATALITY	"Images/fatality.png"
 #define PATH_BABALITY	"Images/babality.png"
 
+#define PATH_FONT		"Images/mortalkombat3.ttf"
+
 #define DELAY_SHOWING_FATALITY	1300
 #define DELAY_SHOWING_FIGHT		500
 
@@ -21,6 +23,10 @@ class Carteles
 		TextureHandler* _handlerFight;
 		TextureHandler* _handlerFatality;
 		TextureHandler* _handlerBabality;
+		TextureHandler* _handlerWinner;
+
+		SDL_Color colorNombres;
+		TTF_Font* fontNombres;
 		
 	public:
 		Carteles(Ventana* ventana);
@@ -28,6 +34,7 @@ class Carteles
 		void viewFigth();
 		void viewFatality();
 		void viewBabality();
+		void viewWinner(string nombre);
 };
 
 #endif /* HEADERS_CARTELES_H_ */
