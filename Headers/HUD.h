@@ -31,6 +31,7 @@ class Hud{
 		void actualizarRounds(int round, int p1wins, int p2wins);
 		void prepararHUD();
 		void actualizarHealthbars();
+		void activateFinishHim();
 		void showFinishHim();
 		void printHUD();
 		void printHUD(int time);
@@ -52,6 +53,7 @@ class Hud{
 
 		int tomasY;
 		int tomasMargen;
+		bool _viewFinishHim;
 		int finishX;
 		int finishY;
 		int finishW;

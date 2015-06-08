@@ -1364,31 +1364,22 @@ void GameController::runPVP() {
 			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX, nombreCombo);
 			if (this->_toDizzy)
 			{
-				int i = 0;
-				while ( i < 40 )
-				{
-					this->_hud->showFinishHim();
-					this->_ventana->updateScreen();
-					i++;
-				}
+				this->_hud->activateFinishHim();
+				this->_toDizzy = false;
 			}
 			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer,this->hayCombo);
 		} else {
 			if (this->_toDizzy)
 			{
-				int i = 0;
-				while ( i < 40 )
-				{
-					this->_hud->showFinishHim();
-					this->_ventana->updateScreen();
-					i++;
-				}
+				this->_hud->activateFinishHim();
+				this->_toDizzy = false;
 			}
 			this->_hud->printHUD(tiempoRemanente);
 		}
 		this->_ventana->updateScreen();
 		if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2))
 		{	
+
 			this->_carteles->viewFigth();
 			this->_beginRound = false;
 			this->_personaje1->unFreeze();

@@ -113,11 +113,17 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->finishHimYellow = new TextureHandler(_ventana->_gRenderer);
 	this->finishHimYellow->loadFromFile(FINISH_Y_PATH,false,0,0,0,true);
 
+	this->_viewFinishHim = false;
 	this->finishH = (_ventana->_alto_px/5) * 3;
 	this->finishW = (_ventana->_ancho_px/5) * 3;
 	this->finishX = _ventana->_ancho_px/2 - finishW/2;
 	this->finishY = (_ventana->_alto_px/3) - (this->finishH/2); ;// _ventana->_alto_px/3;
 	int finishCount = 0;
+}
+
+void Hud::activateFinishHim()
+{
+	this->_viewFinishHim = true;
 }
 
 void Hud::setearPersonajes(Personaje* personaje1, Personaje* personaje2) {
@@ -154,21 +160,23 @@ void Hud::actualizarHealthbars() {
 
 void Hud::showFinishHim() {
 
-	bool flag = (finishCount%2==0)?true:false;
+	if (this->finishCount < 0) this->finishCount = 0;
+	bool flag = (this->finishCount%2==0)?true:false;
 
 	if (flag) {
-		//cout << "Muestro rojo" << endl;
+		//cout << "Muestro finishHim rojo" << endl;
 		this->finishHimRed->renderScaled(finishX, finishY, finishW, finishH);
-		finishCount++;
-	} else if (flag) {
-		//cout << "Muestro amarillo" << endl;
+		this->finishCount++;
+	} else if (!flag) {
+		//cout << "Muestro finishHim amarillo" << endl;
 		this->finishHimYellow->renderScaled(finishX, finishY, finishW, finishH);
-		finishCount++;
-	} else {
-		this->finishHimYellow->renderScaled(finishX, finishY, finishW, finishH);
-		finishCount = 0;
+		this->finishCount++;
+	} 
+	if (finishCount > FINISH_CYCLES) {
+		this->finishCount = 0;
+		this->_viewFinishHim = false;
 	}
-	SDL_Delay(2);
+	cout << finishCount << endl;
 }
 
 void Hud::printHUD() {
@@ -194,10 +202,11 @@ void Hud::printHUD() {
 	this->hud1.nombreTexture->render(this->hud1.interno.x, this->hud1.interno.y);
 	this->hud2.nombreTexture->render(_ventana->_ancho_px - this->hud2.nombreTexture->getWidth() - this->hud2.interno.h/2, this->hud2.interno.y);
 
-	/*
-	if ( (this->_personaje1->_isDizzy && this->_personaje1->healthPoints>0) || (this->_personaje2->_isDizzy && this->_personaje2->healthPoints>0) )
+	if ( this->_viewFinishHim )
+	{
+		cout << "FINISH HIM!" << endl;
 		this->showFinishHim();
-	*/
+	}
 }
 
 void Hud::printHUD(int time) {
