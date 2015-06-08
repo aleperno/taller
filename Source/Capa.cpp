@@ -36,6 +36,11 @@ Capa::Capa(Ventana* ventana, CapaData data, EscenarioData escenario)
 	}
 }
 
+void Capa::resetPos()
+{
+	this-> _pos_x = ((- _ancho_log)+this->_ventana->_ancho_log) /2;
+}
+
 Capa::~Capa()
 {
 	//delete this;

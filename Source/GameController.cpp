@@ -1533,6 +1533,10 @@ void GameController::resetearVentanaPersonajes() {
 	_personaje1->resetear();
 	_personaje2->resetear();
 	this->_personaje1->borrarBuffer();
+	for (unsigned int i=0; i<_capas.size(); i++)
+	{
+		_capas[i]->resetPos();
+	}
 }
 
 void GameController::toMainScreen() {

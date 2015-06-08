@@ -53,6 +53,7 @@ class Capa
 		void view();
 		void moveLeft(float factor);
 		void moveRight(float factor);
+		void resetPos();
 };
 
 
