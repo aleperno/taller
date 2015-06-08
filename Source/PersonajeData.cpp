@@ -1,4 +1,5 @@
 #include <PersonajeData.h>
+#include <iostream>
 
 void PersonajeData::llenarDatos(JugadorData* jugador, CaracterData* caracter) {
 	this->nombre = caracter->nombre;
@@ -23,6 +24,18 @@ void PersonajeData::llenarDatos(JugadorData* jugador, CaracterData* caracter) {
 	this->anchoSprites = caracter->anchoSprites;
 	this->velSprites = caracter->velSprites;
 	this->imgPath = caracter->imgPath;
+
+	this->cantSpritesBabyStance		= caracter->cantSpritesBabyStance;
+	this->cantSpritesBaby			= caracter->cantSpritesBaby;
+	this->cantSpritesSkeletonStance = caracter->cantSpritesSkeletonStance;
+	this->anchoSpriteFatalities		= caracter->anchoSpriteFatalities;
+	this->altoSpriteFatalities		= caracter->altoSpriteFatalities;
+	this->imgFatalities				= caracter->imgFatalities;
+
+	this->cantSpritesSkeleton = caracter->cantSpritesSkeleton;
+	this->anchoSpriteSkeleton = caracter->anchoSpriteSkeleton;
+	this->altoSpriteSkeleton  = caracter->altoSpriteSkeleton;
+	this->imgSkeleton		  = caracter->imgSkeleton;
 
 	//color alternativo
 	this->h_inicial = caracter->h_inicial;

@@ -32,6 +32,8 @@ using namespace std;
 #define JMP_SPEED_X 3;
 //#define ARMA_SPEED 2.5;
 
+#define ITERACIONES_FATALITY 100;
+
 #define CANTIDAD_BUFFER 16
 struct teclaBuffer {
 	string accion;
@@ -44,6 +46,8 @@ class Personaje
 		//Atributos
 		SoundHandler* efectos_sonido;
 		TextureHandler* _handler;
+		TextureHandler* _handlerFatalities;
+		TextureHandler* _handlerSkeleton;
 		Ventana* _ventana;
 		EscenarioData _escenario;
 		PersonajeData _data;
@@ -64,8 +68,12 @@ class Personaje
 		float getAlpha(float factor);
 		float getBeta(float factor);	
 		vector<SDL_Rect*> vectorSprites;
+		vector<SDL_Rect*> vectorSpritesFatalities;
 		vector<SDL_Rect*> loadVectorMedia(PersonajeData data);
+		void loadFatalitiesMedia();
+		
 		int _lastFrame;
+		int _iterFatality;
 
 		void setIdle();
 
@@ -84,7 +92,7 @@ class Personaje
 		bool _isLoPunching;
 		bool _isBarriendo;
 		bool _isBlocking;
-		
+
 		bool _isHitFalling;
 		bool _isSweepFall;
 
@@ -95,6 +103,11 @@ class Personaje
 
 		int pos_last_action;
 		bool _beingHit;
+
+		bool _receivingFatality;
+		bool _apllyingFatality;
+		bool _receivingBabality;
+		bool _apllyingBabality;
 
 		void viewWalking();
 		void viewDuck();
@@ -113,6 +126,12 @@ class Personaje
 		bool viewKickAir();
 		bool viewBarrido();
 		void viewFallSweep();
+
+		// VIEWs Fatalities
+		void viewBaby();
+		void viewBabyStance();
+		void viewSkeleton();
+		void viewSkeletonStance();
 
 		void viewHit();
 		void viewFall();
@@ -169,6 +188,11 @@ class Personaje
 		void patadaBaja();
 		void patadaAlta();
 		void hit(int life);
+
+		void applyFatality();
+		bool receiveFatality();
+		void applyBabality();
+		bool receiveBabality();
 
 		unsigned int _zIndex;
 		void showIdle();

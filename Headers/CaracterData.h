@@ -20,6 +20,18 @@ public:
 	vector<int> velSprites;
 	string imgPath;
 
+	int cantSpritesBabyStance;
+	int cantSpritesBaby;
+	int cantSpritesSkeletonStance;
+	int anchoSpriteFatalities;
+	int altoSpriteFatalities;
+	string imgFatalities;
+
+	int cantSpritesSkeleton;
+	int anchoSpriteSkeleton;
+	int altoSpriteSkeleton;
+	string imgSkeleton;
+
 	//color alternativo
 	float h_inicial;
 	float h_final;

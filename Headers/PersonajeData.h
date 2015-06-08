@@ -48,6 +48,18 @@ class PersonajeData
 		float arma_speed;
 
 		string imgPath;
+		
+		int cantSpritesBabyStance;
+		int cantSpritesBaby;
+		int cantSpritesSkeletonStance;
+		int anchoSpriteFatalities;
+		int altoSpriteFatalities;
+		string imgFatalities;
+
+		int cantSpritesSkeleton;
+		int anchoSpriteSkeleton;
+		int altoSpriteSkeleton;
+		string imgSkeleton;
 
 		vector<string> toma1;
 		vector<string> toma2;

@@ -79,6 +79,19 @@ void Parser::parsearSpriteCaracter(CaracterData* caracter, Value carValue) {
 	this->parsearAccion(caracter,carValue,"fallsweep");
 	caracter->imgPath = carValue["imgSrc"].asString();
 
+	caracter->cantSpritesBabyStance		= carValue["cantSpritesBabyStance"].asInt();
+	caracter->cantSpritesBaby			= carValue["cantSpritesBaby"].asInt();
+	caracter->cantSpritesSkeletonStance = carValue["cantSpritesSkeletonStance"].asInt();
+	caracter->anchoSpriteFatalities		= carValue["anchoSpriteFatalities"].asInt();
+	caracter->altoSpriteFatalities		= carValue["altoSpriteFatalities"].asInt();
+	caracter->imgFatalities				= carValue["imgFatalities"].asString();
+
+	caracter->cantSpritesSkeleton	= carValue["cantSpritesSkeleton"].asInt();
+	// cout << caracter->cantSpritesSkeleton << endl;
+	caracter->anchoSpriteSkeleton	= carValue["anchoSpriteSkeleton"].asInt();
+	caracter->altoSpriteSkeleton	= carValue["altoSpriteSkeleton"].asInt();
+	caracter->imgSkeleton			= carValue["imgSkeleton"].asString();
+
 	/*Segun lo que vimos en la clase, los valores de color pueden ser float o cosas invalidas.
 	En caso de que hay valor invalido ("pepe") tambien dijeron varias veces que una opcion
 	es logear que no se puede hacer transformacion y no cambiar color. A esos fines se

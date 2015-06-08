@@ -923,7 +923,7 @@ void GameController::procesarAxis(SDL_Event* e) {
 }
 
 void GameController::procesarEventos(SDL_Event* e) {
-		switch (e->type) {
+	switch (e->type) {
 		case SDL_JOYBUTTONDOWN:
 			this->procesarBotones(e);
 			break;
@@ -953,6 +953,34 @@ void GameController::procesarEventos(SDL_Event* e) {
 			//Prueba caida de barrida, luego se borra
 			else if (e->key.keysym.sym == SDLK_q) this->_personaje1->fallSwep(10);
 			else if (e->key.keysym.sym == SDLK_7) this->_personaje1->barrer();
+
+			//Prueba fatalities
+			else if (e->key.keysym.sym == SDLK_5)
+			{
+				if (this->_personaje1->_isDizzy)
+				{
+					this->_personaje2->applyFatality();
+					this->_personaje1->receiveFatality();
+				}
+				else if (this->_personaje2->_isDizzy)
+				{
+					this->_personaje1->applyFatality();
+					this->_personaje2->receiveFatality();
+				}	
+			}
+			else if (e->key.keysym.sym == SDLK_6)
+			{	
+				if (this->_personaje1->_isDizzy)
+				{
+					this->_personaje2->applyBabality();
+					this->_personaje1->receiveBabality();
+				}
+				else if (this->_personaje2->_isDizzy)
+				{
+					this->_personaje1->applyBabality();
+					this->_personaje2->receiveBabality();
+				}	
+			}
 			
 			break;
 		case SDL_WINDOWEVENT:
