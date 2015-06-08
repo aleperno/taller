@@ -30,6 +30,8 @@ using namespace std;
 #include <SoundHandler.h>
 #include <AccionesTracking.h>
 #include <Toasty.h>
+#include <Carteles.h>
+
 
 #define DEF_SLEEP_TIME 20
 #define FIGHT_TIME_COUNTDOWN 200
@@ -65,6 +67,7 @@ class GameController
 
 	private:
 		//Atributos
+		Carteles* _carteles;
 		SoundHandler* musica;
 		AI* ai_handler;
 		GameMode tipo_juego;
@@ -86,6 +89,7 @@ class GameController
 		Personaje* _jugador2scorpion;
 		Personaje* _jugador2scorpionColor;
 
+		bool _beginRound;
 		bool _end_of_game;
 		bool musica_pelea;
 		SDL_Joystick* _joystickOne;

@@ -55,10 +55,36 @@ SoundHandler::SoundHandler()
 	this->toasty = Mix_LoadWAV("Sound/toasty.wav");
 	if(toasty == NULL)
 		Logger::Instance()->log(ERROR,"No se pudo cargar archivo de sonido toasty");
+	
+	this->fight = Mix_LoadWAV("Sound/shaokahn/fight.wav");
+	this->roundOne = Mix_LoadWAV("Sound/shaokahn/roundOne.wav");
+	this->roundTwo = Mix_LoadWAV("Sound/shaokahn/roundTwo.wav");
+	this->roundThree = Mix_LoadWAV("Sound/shaokahn/roundThree.wav");
+	this->scorpion_wins = Mix_LoadWAV("Sound/shaokahn/scorpion_wins.wav");
+	this->liukang_wins = Mix_LoadWAV("Sound/shaokahn/liukang_wins.wav");
+	this->fatality = Mix_LoadWAV("Sound/shaokahn/fatality.wav");
+	this->finish_him = Mix_LoadWAV("Sound/shaokahn/finish_him.wav");
+	this->excellent = Mix_LoadWAV("Sound/shaokahn/excellent.wav");
+	this->outstanding = Mix_LoadWAV("Sound/shaokahn/outstanding.wav");
+	this->babality = Mix_LoadWAV("Sound/shaokahn/babality.wav");
+	this->flawless_victory = Mix_LoadWAV("Sound/shaokahn/flawless_victory.wav");
+
 }
 
 SoundHandler::~SoundHandler()
-{
+{	
+	Mix_FreeChunk(fight); fight = NULL;
+	Mix_FreeChunk(roundOne); roundOne = NULL;
+	Mix_FreeChunk(roundTwo); roundTwo = NULL;
+	Mix_FreeChunk(roundThree); roundThree = NULL;
+	Mix_FreeChunk(scorpion_wins); scorpion_wins = NULL;
+	Mix_FreeChunk(liukang_wins); liukang_wins = NULL;
+	Mix_FreeChunk(fatality); fatality = NULL;
+	Mix_FreeChunk(finish_him); finish_him = NULL;
+	Mix_FreeChunk(excellent); excellent = NULL;
+	Mix_FreeChunk(outstanding); outstanding = NULL;
+	Mix_FreeChunk(babality); babality = NULL;
+	Mix_FreeChunk(flawless_victory); flawless_victory = NULL;
 	Mix_FreeChunk( miss );
 	Mix_FreeChunk( hit );
 	Mix_FreeChunk( gancho );
@@ -76,7 +102,7 @@ SoundHandler::~SoundHandler()
 
 	Mix_FreeMusic( musicaMenu );
 	Mix_FreeMusic( musicaPelea );
-
+	
 	miss = NULL;
 	hit = NULL;
 	gancho = NULL;

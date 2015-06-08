@@ -109,7 +109,12 @@ GameController::GameController(Parser* parser)
 	_personaje1 = this->_jugador1scorpion;
 	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
+
 	this->toasty = new Toasty(_ventana,parser->toasty);
+
+	_carteles = new Carteles(_ventana);
+	_beginRound = false;
+
 
 	iniciarEstructuraPerSelect();
 	vector<Personaje*> punteros(6);
@@ -297,6 +302,7 @@ bool GameController::actualizarGanador() {
 	} else {
 		if (this->_personaje1->healthPoints <= 5) {
 			this->_personaje1->freeze();
+			//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 			this->_personaje1->dizzy();
 			if (this->_personaje1->healthPoints <= 0) {
 				Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
@@ -309,6 +315,7 @@ bool GameController::actualizarGanador() {
 		} else {
 			if (this->_personaje2->healthPoints <= 5) {
 				this->_personaje2->freeze();
+				//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 				this->_personaje2->dizzy();
 				if (this->_personaje2->healthPoints <= 0) {
 					Logger::Instance()->log(WARNING,"Round ganado por personaje 1.");
@@ -328,6 +335,7 @@ bool GameController::actualizarGanadorTraining() {
 	bool flag = false;
 	if (this->_personaje1->healthPoints <= 5) {
 		this->_personaje1->freeze();
+		//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 		this->_personaje1->dizzy();
 		if (this->_personaje1->healthPoints <= 0) {
 			Logger::Instance()->log(WARNING,"Murio personaje 2.");
@@ -340,6 +348,7 @@ bool GameController::actualizarGanadorTraining() {
 		if (this->_personaje2->healthPoints <= 5) {
 			this->_personaje2->freeze();
 			this->_personaje2->dizzy();
+			//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 			if (this->_personaje2->healthPoints <= 0) {
 				Logger::Instance()->log(WARNING,"Murio personaje 1.");
 				this->_personaje1->freeze();
@@ -979,11 +988,13 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{
 				if (this->_personaje1->_isDizzy)
 				{
+					this->_carteles->viewFatality();
 					this->_personaje2->applyFatality();
 					this->_personaje1->receiveFatality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
+					this->_carteles->viewFatality();
 					this->_personaje1->applyFatality();
 					this->_personaje2->receiveFatality();
 				}	
@@ -992,18 +1003,20 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{	
 				if (this->_personaje1->_isDizzy)
 				{
+					this->_carteles->viewBabality();
 					this->_personaje2->applyBabality();
 					this->_personaje1->receiveBabality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
+					this->_carteles->viewBabality();
 					this->_personaje1->applyBabality();
 					this->_personaje2->receiveBabality();
 				}	
 			}
 			else if (e->key.keysym.sym == SDLK_8)
 			{
-				cout << "apreto 8" << endl;
+				//cout << "apreto 8" << endl;
 				this->toasty->setActive();
 			}
 			
@@ -1279,7 +1292,7 @@ void GameController::runPVP() {
 				this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
 			}
 			if (this->hayCombo) {
-				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->aleluya, 0);
+				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->excellent, 0);
 			}
 			if (this->actualizarGanadorTraining()) {
 				this->resetearVentanaPersonajes();
@@ -1290,6 +1303,7 @@ void GameController::runPVP() {
 		} else { //If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
+					this->_beginRound = true;
 			}
 		}
 
@@ -1302,7 +1316,11 @@ void GameController::runPVP() {
 			this->_hud->printHUD(tiempoRemanente);
 		}
 		this->_ventana->updateScreen();
-
+		if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2))
+		{	
+			this->_carteles->viewFigth();
+			this->_beginRound = false;
+		}
 	} else { SDL_Delay(DEF_SLEEP_TIME);} //IF (!minimizado)
 }
 
@@ -1350,6 +1368,7 @@ void GameController::prepararPartida() {
 	round = 1;
 	personaje1Wins = 0;
 	personaje2Wins = 0;
+	_beginRound = true;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
 	this->_tomaValidaTimer->reset();
