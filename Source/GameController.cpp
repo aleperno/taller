@@ -109,6 +109,7 @@ GameController::GameController(Parser* parser)
 	_personaje1 = this->_jugador1scorpion;
 	_personaje2 = this->_jugador2liukangColor;
 	_hud = new Hud(_ventana, &nombreP1, &nombreP2);
+	_carteles = new Carteles(_ventana);
 
 	iniciarEstructuraPerSelect();
 	vector<Personaje*> punteros(6);

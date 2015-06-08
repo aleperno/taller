@@ -29,6 +29,7 @@ using namespace std;
 #include <AI.h>
 #include <SoundHandler.h>
 #include <AccionesTracking.h>
+#include <Carteles.h>
 
 
 #define DEF_SLEEP_TIME 20
@@ -65,6 +66,7 @@ class GameController
 
 	private:
 		//Atributos
+		Carteles* _carteles;
 		SoundHandler* musica;
 		AI* ai_handler;
 		GameMode tipo_juego;
