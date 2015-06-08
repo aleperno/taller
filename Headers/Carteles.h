@@ -10,6 +10,8 @@
 #define PATH_FATALITY	"Images/fatality.png"
 #define PATH_BABALITY	"Images/babality.png"
 
+#define DELAY_SHOWING	400
+
 class Carteles
 {
 	private:

@@ -967,11 +967,13 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{
 				if (this->_personaje1->_isDizzy)
 				{
+					this->_carteles->viewFatality();
 					this->_personaje2->applyFatality();
 					this->_personaje1->receiveFatality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
+					this->_carteles->viewFatality();
 					this->_personaje1->applyFatality();
 					this->_personaje2->receiveFatality();
 				}	
@@ -980,11 +982,13 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{	
 				if (this->_personaje1->_isDizzy)
 				{
+					this->_carteles->viewBabality();
 					this->_personaje2->applyBabality();
 					this->_personaje1->receiveBabality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
+					this->_carteles->viewBabality();
 					this->_personaje1->applyBabality();
 					this->_personaje2->receiveBabality();
 				}	

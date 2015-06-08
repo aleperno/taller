@@ -11,7 +11,6 @@ Carteles::Carteles(Ventana* ventana)
 	this->_handlerFight->loadFromFile(PATH_FIGHT,false,0,0,0,true);
 	this->_handlerFatality->loadFromFile(PATH_FATALITY,false,0,0,0,true);
 	this->_handlerBabality->loadFromFile(PATH_BABALITY,false,0,0,0,true);
-	
 }
 
 Carteles::~Carteles()
@@ -29,6 +28,7 @@ void Carteles::viewFigth()
 	int y = (this->_ventana->_alto_px/3) - (height/2);
 	this->_handlerFight->renderScaled(x, y, width, height);
 	this->_ventana->updateScreen();
+	SDL_Delay(DELAY_SHOWING);
 }
 
 void Carteles::viewFatality()
@@ -39,6 +39,7 @@ void Carteles::viewFatality()
 	int y = (this->_ventana->_alto_px/3) - (height/2);
 	this->_handlerFatality->renderScaled(x, y, width, height);
 	this->_ventana->updateScreen();
+	SDL_Delay(DELAY_SHOWING);
 }
 
 void Carteles::viewBabality()
@@ -49,4 +50,5 @@ void Carteles::viewBabality()
 	int y = (this->_ventana->_alto_px/3) - (height/2);
 	this->_handlerBabality->renderScaled(x, y, width, height);
 	this->_ventana->updateScreen();
+	SDL_Delay(DELAY_SHOWING);
 }
