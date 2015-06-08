@@ -118,7 +118,7 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->finishW = (_ventana->_ancho_px/5) * 3;
 	this->finishX = _ventana->_ancho_px/2 - finishW/2;
 	this->finishY = (_ventana->_alto_px/3) - (this->finishH/2); ;// _ventana->_alto_px/3;
-	int finishCount = 0;
+	this->finishCount = 0;
 }
 
 void Hud::activateFinishHim()
