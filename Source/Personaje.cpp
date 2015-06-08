@@ -33,7 +33,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
     this->_handler->loadFromFile(path,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
 
 	this->_handlerFatalities->loadFromFile(data.imgFatalities,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
-	this->_handlerSkeleton->loadFromFile(data.imgSkeleton,cambiarColor,data.h_inicial,data.h_final,data.desplazamiento,true);
+	this->_handlerSkeleton->loadFromFile(data.imgSkeleton,false,data.h_inicial,data.h_final,data.desplazamiento,true);
     
 	this-> _escenario = escenario;
     this-> _factor_escala = escenario.ancho / this->_ancho_log;
@@ -358,6 +358,8 @@ Personaje::~Personaje()
 {
 	delete this->combos;
     delete _handler;
+	delete _handlerFatalities;
+	delete _handlerSkeleton;
     delete this->arma;
     Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
