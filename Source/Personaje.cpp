@@ -821,7 +821,6 @@ bool Personaje::viewHiKick()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isHiKicking = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
@@ -897,7 +896,6 @@ bool Personaje::viewBarrido()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isBarriendo = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && this->first_cycle)
     {
         flag = true;
@@ -933,7 +931,6 @@ bool Personaje::viewHiPunch()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isHiPunching = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
@@ -969,7 +966,6 @@ bool Personaje::viewLoKick()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isLoKicking = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
@@ -1005,7 +1001,6 @@ bool Personaje::viewLoPunch()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isLoPunching = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
@@ -1037,7 +1032,6 @@ bool Personaje::viewPunchAir()
         this->_isLoPunching = false;
         this->_isHiPunching = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
@@ -1069,7 +1063,6 @@ bool Personaje::viewKickAir()
         this->_isLoKicking = false;
         this->_isHiKicking = false;
     }
-    //TODO ver si corta los golpes multiples
     else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
