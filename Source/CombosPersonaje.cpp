@@ -44,7 +44,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 			if(j>0) ++contadorTolerancia;
 			++i;
 		}
-		if (j>=combo1->size()) hayMatch=true;
+		if (j>combo1->size()) hayMatch=true;
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo1;
@@ -61,7 +61,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 			if(j>0) ++contadorTolerancia;
 			++i;
 		}
-		if (j>=combo2->size()) hayMatch=true;
+		if (j>combo2->size()) hayMatch=true;
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo2;
@@ -78,7 +78,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 			if(j>0) ++contadorTolerancia;
 			++i;
 		}
-		if (j>=this->fatality1->size()) hayMatch=true;
+		if (j>this->fatality1->size()) hayMatch=true;
 	}
 	if (hayMatch) {
 		(*comboAux) = this->fatality1;
