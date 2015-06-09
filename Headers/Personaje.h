@@ -55,7 +55,7 @@ class Personaje
 		float _alto_log;
 		CombosPersonaje* combos;
 		vector<string> bufferTeclas;
-		int bufferTeclasSize;
+		unsigned int bufferTeclasSize;
 		Temporizador* bufferTimer;
 		
 		float _pos_y;
