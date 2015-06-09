@@ -227,7 +227,7 @@ void Hud::printHUD(vector<string>* bufferTeclas, bool hayCombo, vector<string>* 
 				cadena += " ";
 			}
 			cadena += nombreCombo;
-			this->bufferTexture->loadFromRenderedText(cadena,colorInterno,fontTimer);
+			this->bufferTexture->loadFromRenderedText(cadena,colorVida,fontTimer);
 			this->bufferTexture->render(this->hud1.interno.x,tomasY);
 	} else {
 		if (!bufferTeclas->empty()) {

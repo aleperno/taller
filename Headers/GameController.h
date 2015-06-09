@@ -118,8 +118,6 @@ class GameController
 		int personaje1Wins;
 		int personaje2Wins;
 		vector<string>* comboAUX;
-		bool hayCombo;
-		string nombreCombo;
 
 		//Metodos
 		static Ventana* getVentana(Parser* parser);

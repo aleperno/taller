@@ -142,6 +142,7 @@ class Personaje
 		void cancelActions();
 
 	public:
+		string nombreCombo;
 		vector<string> bufferTeclas;
 		Temporizador* bufferTimer;
 		CombosPersonaje* combos;

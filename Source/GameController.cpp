@@ -1359,29 +1359,30 @@ void GameController::runPVP() {
  		this->continuarAccionesYMoverCapas();
 
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-		if (this->estoyEnTraining()) {
-			this->hayCombo = this->_personaje1->getCombos()->existeCombo(&(this->_personaje1->bufferTeclas),&comboAUX,&nombreCombo);
-
-			if (this->hayCombo) {
-				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->excellent, 0);
-			}
-			if (this->actualizarGanadorTraining()) {
+		if (this->estoyEnTraining())
+			if (this->actualizarGanadorTraining())
 				this->resetearVentanaPersonajes();
-			}
-		} else { //If not in training
+
+		else	//If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
 					this->_beginRound = true;
 					_toDizzy = false;
 					_wasAlive = true;
 			}
-		}
 
 		this->_ventana->clearScreen();
 		this->printLayers();
 		this->_personaje1->actualizarBufferTeclas();
+		this->_personaje2->actualizarBufferTeclas();
 		if (this->estoyEnTraining()) {
-			this->_hud->printHUD(&(this->_personaje1->bufferTeclas), this->hayCombo, comboAUX, nombreCombo);
+
+			if (this->_personaje1->nombreCombo.size() > 0) {
+				comboAUX = this->_personaje1->combos->giveMeCombo(this->_personaje1->nombreCombo);
+				this->_hud->printHUD(&(this->_personaje1->bufferTeclas), true, comboAUX, this->_personaje1->nombreCombo);
+			} else
+				this->_hud->printHUD(&(this->_personaje1->bufferTeclas), false, comboAUX, this->_personaje1->nombreCombo);
+
 			if (this->_toDizzy)
 			{
 				this->_hud->activateFinishHim();

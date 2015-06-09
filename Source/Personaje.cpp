@@ -1620,15 +1620,18 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
 }
 
 bool Personaje::evaluarCombo() {
-	string nombreCombo;
 	if (this->combos->existeCombo(&(this->bufferTeclas),&nombreCombo)) {
 		if (nombreCombo == BARRIDA)
 			this->barrer();
 		if (nombreCombo == ARROJABLE)
 			this->lanzarArma();
 		this->bufferTeclas.clear();
+		Mix_PlayChannel(-1, this->efectos_sonido->excellent, 0);
 		return true;
-	} else return false;
+	} else {
+		nombreCombo = "";
+		return false;
+	}
 }
 
 void Personaje::duck()
