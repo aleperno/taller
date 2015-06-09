@@ -36,7 +36,6 @@ class Hud{
 		void printHUD();
 		void printHUD(int time);
 		void printHUD(vector<string>* bufferTeclas,bool hayCombo, vector<string>* combo, string nombreCombo);
-		void printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombres);
 	private:
 		TTF_Font* fontNombres;
 		TTF_Font* fontTimer;
@@ -52,7 +51,6 @@ class Hud{
 		SDL_Color colorNombres;
 
 		int tomasY;
-		int tomasMargen;
 		bool _viewFinishHim;
 		int finishX;
 		int finishY;

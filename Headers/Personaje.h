@@ -34,11 +34,6 @@ using namespace std;
 
 #define ITERACIONES_FATALITY 100;
 
-struct teclaBuffer {
-	string accion;
-	bool es_de_combo;
-};
-
 class Personaje
 {
 	private:
@@ -53,7 +48,6 @@ class Personaje
 		Arma* arma;
 		float arma_speed;
 		float _alto_log;
-		CombosPersonaje* combos;
 		vector<string> bufferTeclas;
 		unsigned int bufferTeclasSize;
 		Temporizador* bufferTimer;
@@ -150,8 +144,10 @@ class Personaje
 		void cancelActions();
 
 	public:
+		CombosPersonaje* combos;
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
+		void actualizarBufferTeclas();
 		void actualizarBufferTeclas(int tiempoRemanenteBuffer, bool hayCombo);
 		float _ancho_log;
 		float _pos_x;

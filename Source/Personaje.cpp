@@ -182,6 +182,13 @@ void Personaje::borrarBuffer() {
 	this->getBufferTeclas()->erase(this->getBufferTeclas()->begin(),this->getBufferTeclas()->end());
 }
 
+void Personaje::actualizarBufferTeclas() {
+	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
+		this->bufferTeclas.clear();
+	else if (this->bufferTeclas.size() > bufferTeclasSize)
+		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin()+1);
+}
+
 void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer, bool hayCombo) {
 	if (hayCombo && tiempoRemanenteBuffer==0) {
 		this->borrarBuffer();
@@ -1579,26 +1586,31 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
     if (accion == this->getData()->getAR()) {
         this->lanzarArma();
         if (enPVE) this->track_movimientos.push_back(FIRE);
+		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getGA()) {
         this->golpeAlto();
         if (enPVE) this->track_movimientos.push_back(HIGH_PUNCH);
         this->getBufferTeclas()->push_back("GA");
+		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getGB()) {
         this->golpeBajo();
         if (enPVE) this->track_movimientos.push_back(LOW_PUNCH);
         this->getBufferTeclas()->push_back("GB");
+		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getPA()) {
         this->patadaAlta();
         if (enPVE) this->track_movimientos.push_back(HIGH_KICK);
         this->getBufferTeclas()->push_back("PA");
+		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getPB()) {
         this->patadaBaja();
         if (enPVE) this->track_movimientos.push_back(LOW_KICK);
         this->getBufferTeclas()->push_back("PB");
+		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getBL()) {
     	if (enPVE) {
@@ -1609,7 +1621,9 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
     		}
     	}
     	this->getBufferTeclas()->push_back("BL");
+		this->bufferTimer->reset();
     }
+
 }
 
 void Personaje::duck()

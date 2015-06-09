@@ -106,7 +106,6 @@ Hud::Hud(Ventana* ventana, string* nombreP1, string* nombreP2)
 	this->bufferTexture = new TextureHandler(_ventana->_gRenderer);
 
 	this->tomasY = _ventana->_alto_px/8;
-	this->tomasMargen = _ventana->_ancho_px/100;
 
 	this->finishHimRed = new TextureHandler(_ventana->_gRenderer);
 	this->finishHimRed->loadFromFile(FINISH_R_PATH,false,0,0,0,true);
@@ -229,7 +228,7 @@ void Hud::printHUD(vector<string>* bufferTeclas, bool hayCombo, vector<string>* 
 			}
 			cadena += nombreCombo;
 			this->bufferTexture->loadFromRenderedText(cadena,colorInterno,fontTimer);
-			this->bufferTexture->render(_ventana->_ancho_log/2,_ventana->_alto_log/2);
+			this->bufferTexture->render(this->hud1.interno.x,tomasY);
 	} else {
 		if (!bufferTeclas->empty()) {
 			for (unsigned int i=0;i<bufferTeclas->size();++i) {
@@ -237,33 +236,7 @@ void Hud::printHUD(vector<string>* bufferTeclas, bool hayCombo, vector<string>* 
 				cadena += " ";
 			}
 			this->bufferTexture->loadFromRenderedText(cadena,colorNombres,fontNombres);
-			this->bufferTexture->render(_ventana->_ancho_log/2,_ventana->_alto_log/2);
+			this->bufferTexture->render(this->hud1.interno.x,tomasY);
 		}
-	}
-}
-
-void Hud::printHUD(vector<teclaBuffer>* bufferTeclas, vector<string>* tomasNombres) {
-	this->printHUD();
-
-	int x_actual = hud1.interno.x;
-	int y_actual = tomasY + hud1.nombreTexture->getHeight()*2;
-
-	for (unsigned int i=0; i<bufferTeclas->size(); i++) {
-		TextureHandler* teclaTexture = new TextureHandler(_ventana->_gRenderer);
-		if (bufferTeclas->at(i).es_de_combo)
-			teclaTexture->loadFromRenderedText(bufferTeclas->at(i).accion,colorVida,fontNombres);
-		else
-			teclaTexture->loadFromRenderedText(bufferTeclas->at(i).accion,colorNombres,fontNombres);
-		teclaTexture->render(x_actual, tomasY);
-		x_actual = x_actual + teclaTexture->getWidth() + tomasMargen;
-		delete teclaTexture;
-	}
-
-	for (unsigned int i=0; i<tomasNombres->size(); i++) {
-		TextureHandler* tomaNombre = new TextureHandler(_ventana->_gRenderer);
-		tomaNombre->loadFromRenderedText(tomasNombres->at(i),colorVida,fontNombres);
-		tomaNombre->render(hud1.interno.x, y_actual);
-		y_actual = y_actual + tomaNombre->getHeight();
-		delete tomaNombre;
 	}
 }
