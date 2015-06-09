@@ -117,7 +117,6 @@ class GameController
 		int round;
 		int personaje1Wins;
 		int personaje2Wins;
-		int tiempoRemanenteBuffer;
 		Temporizador* _bufferTimer;
 		int tiempoRemanenteTomaValida;
 		Temporizador* _tomaValidaTimer;

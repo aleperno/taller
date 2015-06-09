@@ -182,21 +182,13 @@ void Personaje::borrarBuffer() {
 	this->getBufferTeclas()->erase(this->getBufferTeclas()->begin(),this->getBufferTeclas()->end());
 }
 
-void Personaje::actualizarBufferTeclas() {
+void Personaje::actualizarBufferTeclas(bool hayCombo) {
 	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
 		this->bufferTeclas.clear();
-	else if (this->bufferTeclas.size() > bufferTeclasSize)
-		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin()+1);
-}
-
-void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer, bool hayCombo) {
-	if (hayCombo && tiempoRemanenteBuffer==0) {
-		this->borrarBuffer();
-	}else {
-		if(this->getBufferTeclas()->size() >= bufferTeclasSize || tiempoRemanenteBuffer == 0)
-			if (this->getBufferTeclas()->size() > 0)
-				this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin()+1);
-	}
+	else if (hayCombo)
+		this->bufferTeclas.clear();
+	else if(this->getBufferTeclas()->size() > bufferTeclasSize )
+		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin() + 1);
 }
 
 bool Personaje::hayColision( SDL_Rect boundingBox_1, SDL_Rect boundingBox_2 )

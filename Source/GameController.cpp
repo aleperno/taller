@@ -1351,7 +1351,6 @@ void GameController::runPVP() {
  		this->continuarAccionesYMoverCapas();
 
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-		this->tiempoRemanenteBuffer = (int)ceil(BUFFER_WAIT_TIME - ((float)this->_bufferTimer->getTimeInTicks())/1000);
 		this->tiempoRemanenteTomaValida = (int)ceil(this->_personaje1->getData()->tomasTiempoLimite -((float)this->_tomaValidaTimer->getTimeInTicks())/1000 );
 		if (this->estoyEnTraining()) {
 			if (this->tiempoRemanenteTomaValida == 0) {
@@ -1366,9 +1365,6 @@ void GameController::runPVP() {
 			}
 			if (this->actualizarGanadorTraining()) {
 				this->resetearVentanaPersonajes();
-			} else {
-				//Si el tiempo de espera llega a cero, actualizo el timer
-				if (this->tiempoRemanenteBuffer <= 0) this->_bufferTimer->reset();
 			}
 		} else { //If not in training
 			if (this->actualizarGanador()) {
@@ -1389,7 +1385,7 @@ void GameController::runPVP() {
 				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 				this->_toDizzy = false;
 			}
-			this->_personaje1->actualizarBufferTeclas(this->tiempoRemanenteBuffer,this->hayCombo);
+			this->_personaje1->actualizarBufferTeclas(this->hayCombo);
 		} else {
 			if (this->_toDizzy)
 			{
