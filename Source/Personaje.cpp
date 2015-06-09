@@ -418,6 +418,9 @@ void Personaje::view(Personaje* otherPlayer)
     	this->viewHit();
     	this->cancelActions();
     }
+    else if (_isSweepFall){
+    	this->viewFallSweep();
+    }
     else
     {
     if ( this->_weaponInAir ) this->arma->viewLanzar();
