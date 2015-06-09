@@ -178,10 +178,8 @@ void Personaje::resetear() {
 	this->bufferTimer->reset();
 }
 
-void Personaje::actualizarBufferTeclas(bool hayCombo) {
+void Personaje::actualizarBufferTeclas() {
 	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
-		this->bufferTeclas.clear();
-	else if (hayCombo)
 		this->bufferTeclas.clear();
 	else if(this->getBufferTeclas()->size() > bufferTeclasSize )
 		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin() + 1);
@@ -1612,6 +1610,17 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
 		this->bufferTimer->reset();
     }
 
+}
+
+void Personaje::evaluarCombo() {
+	string nombreCombo;
+	if (this->combos->existeCombo(&(this->bufferTeclas),&nombreCombo)) {
+		if (nombreCombo == BARRIDA)
+			this->barrer();
+		if (nombreCombo == ARROJABLE)
+			this->lanzarArma();
+		this->bufferTeclas.clear();
+	}	
 }
 
 void Personaje::duck()

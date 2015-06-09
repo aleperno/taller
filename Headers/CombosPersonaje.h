@@ -6,6 +6,10 @@
 #include<list>
 #include<string>
 
+#define ARROJABLE "arrojable"
+#define BARRIDA "barrida"
+#define FATALITY "fatality"
+
 using namespace std;
 
 class CombosPersonaje {
@@ -20,6 +24,7 @@ class CombosPersonaje {
 	void imprimirCombos();
 	unsigned int comboMasLargoSize();
 	bool existeCombo(vector<string>* bufferBotones, vector<string>** comboAUX, string* nombreCombo);
+	bool existeCombo(vector<string>* bufferBotones, string* nombreCombo);
 };
 
 #endif

@@ -1011,6 +1011,10 @@ void GameController::procesarAxis(SDL_Event* e) {
 		lastJoyValue2X = e->jaxis.value;
 	}
 
+	if (e->jaxis.which == 0)
+		this->_personaje1->evaluarCombo();
+	if (e->jaxis.which == 1)
+		this->_personaje2->evaluarCombo();
 }
 
 void GameController::procesarEventos(SDL_Event* e) {
@@ -1367,6 +1371,7 @@ void GameController::runPVP() {
 
 		this->_ventana->clearScreen();
 		this->printLayers();
+	//	this->_personaje1->actualizarBufferTeclas();
 		if (this->estoyEnTraining()) {
 			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX, nombreCombo);
 			if (this->_toDizzy)
@@ -1375,7 +1380,6 @@ void GameController::runPVP() {
 				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 				this->_toDizzy = false;
 			}
-			this->_personaje1->actualizarBufferTeclas(this->hayCombo);
 		} else {
 			if (this->_toDizzy)
 			{

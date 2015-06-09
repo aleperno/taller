@@ -147,7 +147,7 @@ class Personaje
 		CombosPersonaje* combos;
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
-		void actualizarBufferTeclas(bool hayCombo);
+		void actualizarBufferTeclas();
 		float _ancho_log;
 		float _pos_x;
 		bool _isDizzy;
@@ -217,6 +217,7 @@ class Personaje
 
 		void evaluarAccion(int accion, bool enPVE);
 		void evaluarAccion(int accion);
+		void evaluarCombo();
 		bool canMove();
 		void freeze();
 		void unFreeze();

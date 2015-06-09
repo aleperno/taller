@@ -36,7 +36,7 @@ void CombosPersonaje::imprimirCombos() {
 	cout << endl;
 }
 
-bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>** comboAux, string* nombreCombo) {
+bool CombosPersonaje::existeCombo(vector<string>* bufferBotones, vector<string>** comboAux, string* nombreCombo) {
 	unsigned int tamanioBuffer = bufferBotones->size();
 	if (tamanioBuffer<this->combo1->size() && tamanioBuffer<this->combo2->size() && tamanioBuffer<this->fatality1->size()) return false;
 
@@ -57,7 +57,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo1;
-		(*nombreCombo) = "Combo 1";
+		(*nombreCombo) = ARROJABLE;
 		return true;
 	}
 
@@ -74,7 +74,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo2;
-		(*nombreCombo) = "Combo 2";
+		(*nombreCombo) = BARRIDA;
 		return true;
 	}
 
@@ -91,7 +91,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 	if (hayMatch) {
 		(*comboAux) = this->fatality1;
-		(*nombreCombo) = "Fatality";
+		(*nombreCombo) = FATALITY;
 		return true;
 	}
 
@@ -104,4 +104,62 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	//Si no hay match con el combo2, hacer lo mismo con la fatality
 	//Si no hay match, guardar "" en comboAux y devolver false
 
+}
+
+bool CombosPersonaje::existeCombo(vector<string>* bufferBotones, string* nombreCombo) {
+	unsigned int tamanioBuffer = bufferBotones->size();
+	if (tamanioBuffer<this->combo1->size() && tamanioBuffer<this->combo2->size() && tamanioBuffer<this->fatality1->size()) return false;
+
+	unsigned int i = 0;
+	unsigned int j = 0;
+	int contadorTolerancia = 0;
+	bool hayMatch = false;
+	while (i<bufferBotones->size() && j<combo1->size() && !hayMatch && contadorTolerancia <= this->tolerancia) {
+		if (bufferBotones->at(i) == this->combo1->at(j)) {
+			++i;
+			++j;
+		} else {
+			if(j>0) ++contadorTolerancia;
+			++i;
+		}
+		if (j==combo1->size()) hayMatch=true;
+	}
+	if (hayMatch) {
+		(*nombreCombo) = ARROJABLE;
+		return true;
+	}
+
+	i = 0;	j = 0; 	contadorTolerancia = 0; hayMatch = false;
+	while (i<bufferBotones->size() && j<this->combo2->size() && !hayMatch && contadorTolerancia <= this->tolerancia) {
+		if (bufferBotones->at(i) == this->combo2->at(j)) {
+			++i;
+			++j;
+		} else {
+			if(j>0) ++contadorTolerancia;
+			++i;
+		}
+		if (j==combo2->size()) hayMatch=true;
+	}
+	if (hayMatch) {
+		(*nombreCombo) = BARRIDA;
+		return true;
+	}
+
+	i = 0;	j = 0; 	contadorTolerancia = 0; hayMatch = false;
+	while (i<bufferBotones->size() && j<this->fatality1->size() && !hayMatch && contadorTolerancia <= this->tolerancia) {
+		if (bufferBotones->at(i) == this->fatality1->at(j)) {
+			++i;
+			++j;
+		} else {
+			if(j>0) ++contadorTolerancia;
+			++i;
+		}
+		if (j==this->fatality1->size()) hayMatch=true;
+	}
+	if (hayMatch) {
+		(*nombreCombo) = FATALITY;
+		return true;
+	}
+
+	return false;
 }
