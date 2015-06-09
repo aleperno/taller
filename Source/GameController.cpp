@@ -46,10 +46,6 @@ void GameController::KillController()
 
 	delete this->_fightTimer;
 	_fightTimer = NULL;
-	delete this->_bufferTimer;
-	_bufferTimer = NULL;
-	delete this->_tomaValidaTimer;
-	_tomaValidaTimer = NULL;
 	delete this->_mainScreen;
 	_mainScreen = NULL;
 	delete this->_hud;
@@ -129,8 +125,6 @@ GameController::GameController(Parser* parser)
 	punteros.at(5) = _jugador2scorpionColor;
 	_mainScreen = new MainScreen(_ventana,&perSelect,&punteros);
 	_fightTimer = new Temporizador();
-	_bufferTimer = new Temporizador();
-	_tomaValidaTimer = new Temporizador();
 	comboAUX = new vector<string>();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 }
@@ -967,6 +961,7 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 }
 
 void GameController::procesarAxis(SDL_Event* e) {
+	//joystic 0
 	if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje1->getBufferTeclas()->push_back("DW");
 		lastJoyValue1Y = e->jaxis.value;
@@ -991,29 +986,30 @@ void GameController::procesarAxis(SDL_Event* e) {
 		lastJoyValue1X = e->jaxis.value;
 	}
 
+	//joystic 1
 	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
-			this->_personaje2->getBufferTeclas()->push_back("DW");
-			lastJoyValue2Y = e->jaxis.value;
-		}
-		else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
-			this->_personaje2->getBufferTeclas()->push_back("UP");
-			lastJoyValue2Y = e->jaxis.value;
-		}
-		else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
-			lastJoyValue2Y = e->jaxis.value;
-		}
+		this->_personaje2->getBufferTeclas()->push_back("DW");
+		lastJoyValue2Y = e->jaxis.value;
+	}
+	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
+		this->_personaje2->getBufferTeclas()->push_back("UP");
+		lastJoyValue2Y = e->jaxis.value;
+	}
+	else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
+		lastJoyValue2Y = e->jaxis.value;
+	}
 
-		if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
-			this->_personaje2->getBufferTeclas()->push_back("RT");
-			lastJoyValue2X = e->jaxis.value;
-		}
-		else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
-			this->_personaje2->getBufferTeclas()->push_back("LF");
-			lastJoyValue2X = e->jaxis.value;
-		}
-		else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
-			lastJoyValue2X = e->jaxis.value;
-		}
+	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
+		this->_personaje2->getBufferTeclas()->push_back("RT");
+		lastJoyValue2X = e->jaxis.value;
+	}
+	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
+		this->_personaje2->getBufferTeclas()->push_back("LF");
+		lastJoyValue2X = e->jaxis.value;
+	}
+	else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
+		lastJoyValue2X = e->jaxis.value;
+	}
 
 }
 
@@ -1351,15 +1347,9 @@ void GameController::runPVP() {
  		this->continuarAccionesYMoverCapas();
 
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-		this->tiempoRemanenteTomaValida = (int)ceil(this->_personaje1->getData()->tomasTiempoLimite -((float)this->_tomaValidaTimer->getTimeInTicks())/1000 );
 		if (this->estoyEnTraining()) {
-			if (this->tiempoRemanenteTomaValida == 0) {
-				this->hayCombo = false;
-				this->_personaje1->borrarBuffer();
-				this->_tomaValidaTimer->reset();
-			} else {
-				this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
-			}
+			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
+
 			if (this->hayCombo) {
 				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->excellent, 0);
 			}
@@ -1469,14 +1459,11 @@ void GameController::prepararPartida() {
 	_wasAlive = true;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
-	this->_tomaValidaTimer->reset();
 }
 
 void GameController::prepararPartidaTraining() {
 	actualizarPersonajes();
 	resetearVentanaPersonajes();
-	this->_bufferTimer->reset();
-	this->_tomaValidaTimer->reset();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0) {

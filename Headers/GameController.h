@@ -117,9 +117,6 @@ class GameController
 		int round;
 		int personaje1Wins;
 		int personaje2Wins;
-		Temporizador* _bufferTimer;
-		int tiempoRemanenteTomaValida;
-		Temporizador* _tomaValidaTimer;
 		vector<string>* comboAUX;
 		bool hayCombo;
 		string nombreCombo;

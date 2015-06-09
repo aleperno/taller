@@ -178,10 +178,6 @@ void Personaje::resetear() {
 	this->bufferTimer->reset();
 }
 
-void Personaje::borrarBuffer() {
-	this->getBufferTeclas()->erase(this->getBufferTeclas()->begin(),this->getBufferTeclas()->end());
-}
-
 void Personaje::actualizarBufferTeclas(bool hayCombo) {
 	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
 		this->bufferTeclas.clear();
