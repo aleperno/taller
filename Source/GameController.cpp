@@ -1370,18 +1370,17 @@ void GameController::runPVP() {
  		this->continuarAccionesYMoverCapas();
 
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
-		if (this->estoyEnTraining())
+		if (this->estoyEnTraining()) {
 			if (this->actualizarGanadorTraining())
 				this->resetearVentanaPersonajes();
-
-		else	//If not in training
+		} else {//If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
 					this->_beginRound = true;
 					_toDizzy = false;
 					_wasAlive = true;
 			}
-
+		}
 		this->_ventana->clearScreen();
 		this->printLayers();
 		this->_personaje1->actualizarBufferTeclas();

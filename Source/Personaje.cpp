@@ -418,6 +418,7 @@ void Personaje::view(Personaje* otherPlayer)
     {
     	this->viewHit();
     	this->cancelActions();
+		this->bufferTeclas.clear();
     }
     else if (_isSweepFall){
     	this->viewFallSweep();
