@@ -146,6 +146,7 @@ class Personaje
 
 		//Testing
 		bool first_cycle;
+		void cancelActions();
 
 	public:
 		vector<string> track_movimientos;

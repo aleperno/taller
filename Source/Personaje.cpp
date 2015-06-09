@@ -111,6 +111,42 @@ void Personaje::setIdle()
 	this->_babalityApplied	 = false;
 }
 
+void Personaje::cancelActions()
+{
+    this->_isWalking = false;
+    //this->_isDucking = false;
+    //this->_isJumping = false;
+    //this->_isJumpingRight = false;
+    //this->_isJumpingLeft = false;
+    //this->_isFalling = false;
+    //this->_isFallingRight = false;
+    //this->_isFallingLeft = false;
+    //this->_isHitFalling = false;
+	//this->_isSweepFall = false;
+    this->_isBarriendo = false;
+
+    this->_isThrowing = false;
+    //this->_weaponInAir = false;
+    //this->_timesThrow = 0;
+	//this->_iterFatality = 0;
+
+    //this->_isBlocking = false;
+    //this->_isDizzy = false;
+    //this->_canMove = true;
+    //this->_beingHit = false;
+    this->_isHiKicking = false;
+    this->_isLoKicking = false;
+    this->_isHiPunching = false;
+    this->_isLoPunching = false;
+
+	//this->_receivingFatality = false;
+	//this->_apllyingFatality  = false;
+	//this->_receivingBabality = false;
+	//this->_apllyingBabality  = false;
+	//this->_fatalityApplied	 = false;
+	//this->_babalityApplied	 = false;
+}
+
 void Personaje::posicionarParaMain() {
     if (pers_ppal)
         this->_pos_x = (this->_escenario.ancho - _ancho_log) /2 - (this->_ventana->_ancho_log*3/8);
@@ -377,6 +413,13 @@ void Personaje::view(Personaje* otherPlayer)
     this->_orientacion = (this->_pos_x + this->_ancho_log / 2 > otherPlayer->_pos_x + otherPlayer->_ancho_log / 2);
 
     this->setBoundingBox();
+    if (this->_beingHit)
+    {
+    	this->viewHit();
+    	this->cancelActions();
+    }
+    else
+    {
     if ( this->_weaponInAir ) this->arma->viewLanzar();
     if ( this->_isThrowing )
     {
@@ -547,6 +590,7 @@ void Personaje::view(Personaje* otherPlayer)
                 }
             }
         }
+        //TODO beingHit
         else if (this->_isDucking && this->_beingHit)
         {
             this->viewHit();
@@ -653,6 +697,7 @@ void Personaje::view(Personaje* otherPlayer)
                 }
             }
         }
+        //TODO beingHit
         else if (this->_beingHit)
         {
             this->viewHit();
@@ -682,6 +727,7 @@ void Personaje::view(Personaje* otherPlayer)
         {
             this->showIdle();
         }
+    }
     }
     //int x = get_x_px();
     //int y = get_y_px();
