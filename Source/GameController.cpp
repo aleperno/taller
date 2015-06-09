@@ -1194,8 +1194,9 @@ bool GameController::canMoveLeft(Personaje* pers, Personaje* otherPers)
 	{
 		if(pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking() && !otherPers->isMaxPushLeft())
+			if(!otherPers->isBlocking() && !otherPers->isMaxPushLeft() && !otherPers->isHitting())
 			{
+				//Se puede mover y empuja al otro
 				otherPers->moveLeft(MOV_FACTOR2);
 				if(otherPers->isLeftMargin())
 				{
@@ -1220,7 +1221,7 @@ bool GameController::canMoveRight(Personaje* pers, Personaje* otherPers)
 	{
 		if(!pers->_orientacion)
 		{	
-			if(!otherPers->isBlocking() && !otherPers->isMaxPushRight())
+			if(!otherPers->isBlocking() && !otherPers->isMaxPushRight() && !otherPers->isHitting())
 			{
 				otherPers->moveRight(MOV_FACTOR2);
 				if(otherPers->isRightMargin())
