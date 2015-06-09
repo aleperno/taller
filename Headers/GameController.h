@@ -158,6 +158,7 @@ class GameController
 		void procesarBotones(SDL_Event* e);
 		void procesarAxis(SDL_Event* e);
 		void procesarMovimientoJoystick();
+		void evaluarCombosAxis(SDL_Event* e);
 
 		bool hayPlayer1();
 		bool hayPlayer2();

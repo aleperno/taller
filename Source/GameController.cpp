@@ -965,11 +965,13 @@ void GameController::procesarAxis(SDL_Event* e) {
 	if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje1->bufferTeclas.push_back("DW");
 		this->_personaje1->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue1Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje1->bufferTeclas.push_back("UP");
 		this->_personaje1->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue1Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.axis == 1)) {
@@ -979,11 +981,13 @@ void GameController::procesarAxis(SDL_Event* e) {
 	if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
 		this->_personaje1->bufferTeclas.push_back("RT");
 		this->_personaje1->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue1X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
 		this->_personaje1->bufferTeclas.push_back("LF");
 		this->_personaje1->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue1X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.axis == 0)) {
@@ -994,11 +998,13 @@ void GameController::procesarAxis(SDL_Event* e) {
 	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje2->bufferTeclas.push_back("DW");
 		this->_personaje2->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue2Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje2->bufferTeclas.push_back("UP");
 		this->_personaje2->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue2Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
@@ -1008,17 +1014,22 @@ void GameController::procesarAxis(SDL_Event* e) {
 	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
 		this->_personaje2->bufferTeclas.push_back("RT");
 		this->_personaje2->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue2X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
 		this->_personaje2->bufferTeclas.push_back("LF");
 		this->_personaje2->bufferTimer->reset();
+		evaluarCombosAxis(e);
 		lastJoyValue2X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
 		lastJoyValue2X = e->jaxis.value;
 	}
 
+}
+
+void GameController::evaluarCombosAxis(SDL_Event* e) {
 	if (e->jaxis.which == 0)
 		this->_personaje1->evaluarCombo();
 	if (e->jaxis.which == 1)

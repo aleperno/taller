@@ -174,6 +174,7 @@ void Personaje::resetear() {
     this->unFreeze();
     this->_isDizzy = false;
     this->setIdle();
+	this->nombreCombo = "";
 	this->bufferTeclas.clear();
 	this->bufferTimer->reset();
 }
