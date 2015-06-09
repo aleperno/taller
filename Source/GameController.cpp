@@ -963,11 +963,13 @@ void GameController::procesarEventosMainScreenTraining(SDL_Event* e) {
 void GameController::procesarAxis(SDL_Event* e) {
 	//joystic 0
 	if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
-		this->_personaje1->getBufferTeclas()->push_back("DW");
+		this->_personaje1->bufferTeclas.push_back("DW");
+		this->_personaje1->bufferTimer->reset();
 		lastJoyValue1Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
-		this->_personaje1->getBufferTeclas()->push_back("UP");
+		this->_personaje1->bufferTeclas.push_back("UP");
+		this->_personaje1->bufferTimer->reset();
 		lastJoyValue1Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.axis == 1)) {
@@ -975,11 +977,13 @@ void GameController::procesarAxis(SDL_Event* e) {
 	}
 
 	if ((e->jaxis.which == 0) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue1X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
-		this->_personaje1->getBufferTeclas()->push_back("RT");
+		this->_personaje1->bufferTeclas.push_back("RT");
+		this->_personaje1->bufferTimer->reset();
 		lastJoyValue1X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
-		this->_personaje1->getBufferTeclas()->push_back("LF");
+		this->_personaje1->bufferTeclas.push_back("LF");
+		this->_personaje1->bufferTimer->reset();
 		lastJoyValue1X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 0) && (e->jaxis.axis == 0)) {
@@ -988,11 +992,13 @@ void GameController::procesarAxis(SDL_Event* e) {
 
 	//joystic 1
 	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
-		this->_personaje2->getBufferTeclas()->push_back("DW");
+		this->_personaje2->bufferTeclas.push_back("DW");
+		this->_personaje2->bufferTimer->reset();
 		lastJoyValue2Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
-		this->_personaje2->getBufferTeclas()->push_back("UP");
+		this->_personaje2->bufferTeclas.push_back("UP");
+		this->_personaje2->bufferTimer->reset();
 		lastJoyValue2Y = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
@@ -1000,11 +1006,13 @@ void GameController::procesarAxis(SDL_Event* e) {
 	}
 
 	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
-		this->_personaje2->getBufferTeclas()->push_back("RT");
+		this->_personaje2->bufferTeclas.push_back("RT");
+		this->_personaje2->bufferTimer->reset();
 		lastJoyValue2X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
-		this->_personaje2->getBufferTeclas()->push_back("LF");
+		this->_personaje2->bufferTeclas.push_back("LF");
+		this->_personaje2->bufferTimer->reset();
 		lastJoyValue2X = e->jaxis.value;
 	}
 	else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
@@ -1352,7 +1360,7 @@ void GameController::runPVP() {
 
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
 		if (this->estoyEnTraining()) {
-			this->hayCombo = this->_personaje1->getCombos()->existeCombo(this->_personaje1->getBufferTeclas(),&comboAUX,&nombreCombo);
+			this->hayCombo = this->_personaje1->getCombos()->existeCombo(&(this->_personaje1->bufferTeclas),&comboAUX,&nombreCombo);
 
 			if (this->hayCombo) {
 				if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->excellent, 0);
@@ -1371,9 +1379,9 @@ void GameController::runPVP() {
 
 		this->_ventana->clearScreen();
 		this->printLayers();
-	//	this->_personaje1->actualizarBufferTeclas();
+		this->_personaje1->actualizarBufferTeclas();
 		if (this->estoyEnTraining()) {
-			this->_hud->printHUD(this->_personaje1->getBufferTeclas(), this->hayCombo, comboAUX, nombreCombo);
+			this->_hud->printHUD(&(this->_personaje1->bufferTeclas), this->hayCombo, comboAUX, nombreCombo);
 			if (this->_toDizzy)
 			{
 				this->_hud->activateFinishHim();

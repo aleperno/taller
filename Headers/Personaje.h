@@ -48,9 +48,7 @@ class Personaje
 		Arma* arma;
 		float arma_speed;
 		float _alto_log;
-		vector<string> bufferTeclas;
 		unsigned int bufferTeclasSize;
-		Temporizador* bufferTimer;
 		
 		float _pos_y;
 		float _alto_px;
@@ -144,6 +142,8 @@ class Personaje
 		void cancelActions();
 
 	public:
+		vector<string> bufferTeclas;
+		Temporizador* bufferTimer;
 		CombosPersonaje* combos;
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
@@ -165,7 +165,6 @@ class Personaje
 		void downLife(int cantidad);
 		PersonajeData _personajeData;
 		void view(Personaje* otherPlayer);
-		vector<string>* getBufferTeclas() {return &this->bufferTeclas;}
 
 		void posicionarParaMain();
 		void resetear();

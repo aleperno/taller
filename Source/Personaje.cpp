@@ -181,7 +181,7 @@ void Personaje::resetear() {
 void Personaje::actualizarBufferTeclas() {
 	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
 		this->bufferTeclas.clear();
-	else if(this->getBufferTeclas()->size() > bufferTeclasSize )
+	else if(this->bufferTeclas.size() > bufferTeclasSize )
 		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin() + 1);
 }
 
@@ -1577,25 +1577,25 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
     else if (accion == this->getData()->getGA()) {
         this->golpeAlto();
         if (enPVE) this->track_movimientos.push_back(HIGH_PUNCH);
-        this->getBufferTeclas()->push_back("GA");
+		this->bufferTeclas.push_back("GA");
 		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getGB()) {
         this->golpeBajo();
         if (enPVE) this->track_movimientos.push_back(LOW_PUNCH);
-        this->getBufferTeclas()->push_back("GB");
+        this->bufferTeclas.push_back("GB");
 		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getPA()) {
         this->patadaAlta();
         if (enPVE) this->track_movimientos.push_back(HIGH_KICK);
-        this->getBufferTeclas()->push_back("PA");
+        this->bufferTeclas.push_back("PA");
 		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getPB()) {
         this->patadaBaja();
         if (enPVE) this->track_movimientos.push_back(LOW_KICK);
-        this->getBufferTeclas()->push_back("PB");
+        this->bufferTeclas.push_back("PB");
 		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getBL()) {
@@ -1606,7 +1606,7 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
     			this->track_movimientos.push_back(BLOCK);
     		}
     	}
-    	this->getBufferTeclas()->push_back("BL");
+    	this->bufferTeclas.push_back("BL");
 		this->bufferTimer->reset();
     }
 
