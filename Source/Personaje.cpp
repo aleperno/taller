@@ -64,6 +64,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_fatalityApplied = false;
 	this->_babalityApplied = false;
 
+	//tamano de buffer para tomas varia segun los parametros de tomas, para que entran seguramente
+	bufferTeclasSize = this->_personajeData.tomasTolerancia + combos->comboMasLargoSize() + 5;
+
     //TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
     this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
 
@@ -180,7 +183,7 @@ void Personaje::actualizarBufferTeclas(int tiempoRemanenteBuffer, bool hayCombo)
 	if (hayCombo && tiempoRemanenteBuffer==0) {
 		this->borrarBuffer();
 	}else {
-		if(this->getBufferTeclas()->size() >= CANTIDAD_BUFFER || tiempoRemanenteBuffer == 0)
+		if(this->getBufferTeclas()->size() >= bufferTeclasSize || tiempoRemanenteBuffer == 0)
 			if (this->getBufferTeclas()->size() > 0)
 				this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin()+1);
 	}

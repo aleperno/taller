@@ -34,7 +34,6 @@ using namespace std;
 
 #define ITERACIONES_FATALITY 100;
 
-#define CANTIDAD_BUFFER 16
 struct teclaBuffer {
 	string accion;
 	bool es_de_combo;
@@ -56,6 +55,7 @@ class Personaje
 		float _alto_log;
 		CombosPersonaje* combos;
 		vector<string> bufferTeclas;
+		int bufferTeclasSize;
 		
 		float _pos_y;
 		float _alto_px;

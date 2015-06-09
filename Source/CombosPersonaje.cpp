@@ -12,6 +12,15 @@ CombosPersonaje::~CombosPersonaje() {
 	this->combo2 = NULL;
 	this->fatality1 = NULL;
 }
+
+int CombosPersonaje::comboMasLargoSize() {
+	int max = 0;
+	if (combo1->size() > max)	max = combo1->size();
+	if (combo2->size() > max)	max = combo2->size();
+	if (fatality1->size() > max)	max = fatality1->size();
+	return max;
+}
+
 void CombosPersonaje::imprimirCombos() {
 	for (unsigned int i=0; i<this->combo1->size();++i) {
 		cout << this->combo1->at(i);
