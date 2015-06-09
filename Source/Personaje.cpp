@@ -63,6 +63,9 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
     //TODO: Estoy hardcodeando el ancho y alto del arma, a un sexto de lo que mide el personaje
     this->arma = new Arma("Images/characters/Fireball.png", _alto_log/6, _alto_log/6, _factor_escala, _ventana, _zIndex);
+
+    //Testing golpe multiple
+    this->first_cycle = true;
 }
 
 PersonajeData* Personaje::getData() {
@@ -802,6 +805,7 @@ bool Personaje::viewHiKick()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -812,9 +816,11 @@ bool Personaje::viewHiKick()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isHiKicking = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;
@@ -875,6 +881,7 @@ bool Personaje::viewBarrido()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -885,9 +892,11 @@ bool Personaje::viewBarrido()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isBarriendo = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && this->first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;
@@ -908,6 +917,7 @@ bool Personaje::viewHiPunch()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -918,9 +928,11 @@ bool Personaje::viewHiPunch()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isHiPunching = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;
@@ -941,6 +953,7 @@ bool Personaje::viewLoKick()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -951,9 +964,11 @@ bool Personaje::viewLoKick()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isLoKicking = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;
@@ -974,6 +989,7 @@ bool Personaje::viewLoPunch()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -984,9 +1000,11 @@ bool Personaje::viewLoPunch()
     if (aux == this->_personajeData.cantSprites[accion]){
         this->_isLoPunching = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;
@@ -1002,6 +1020,7 @@ bool Personaje::viewPunchAir()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -1013,9 +1032,11 @@ bool Personaje::viewPunchAir()
         this->_isLoPunching = false;
         this->_isHiPunching = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;
@@ -1031,6 +1052,7 @@ bool Personaje::viewKickAir()
     if ( aux < 0 || aux >= this->_personajeData.cantSprites[accion] || pos_last_action != accion)
     {
         _lastFrame = 0;
+        this->first_cycle = true;
     }
     int frame = _lastFrame/delay;
     //cout << frame << endl;
@@ -1042,9 +1064,11 @@ bool Personaje::viewKickAir()
         this->_isLoKicking = false;
         this->_isHiKicking = false;
     }
-    else if (aux >= this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE)
+    //TODO ver si corta los golpes multiples
+    else if (aux == this->_personajeData.cantSprites[accion] - OFFSET_SPRITE_GOLPE && first_cycle)
     {
         flag = true;
+        this->first_cycle = false;
     }
     pos_last_action = accion;
     return flag;

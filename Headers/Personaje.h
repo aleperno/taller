@@ -141,6 +141,9 @@ class Personaje
 
 		Temporizador* t_lanza_arma;
 
+		//Testing
+		bool first_cycle;
+
 	public:
 		vector<string> track_movimientos;
 		CombosPersonaje* getCombos() {return this->combos;}
