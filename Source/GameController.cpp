@@ -1481,7 +1481,6 @@ void GameController::prepararPartidaTraining() {
 	resetearVentanaPersonajes();
 	this->_bufferTimer->reset();
 	this->_tomaValidaTimer->reset();
-	this->_personaje1->borrarBuffer();
 
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0) {
@@ -1563,7 +1562,6 @@ void GameController::resetearVentanaPersonajes() {
 	this->_ventana->_pos_log_x = (this->_escenario.ancho - this->_ventana->_ancho_log) / 2;
 	_personaje1->resetear();
 	_personaje2->resetear();
-	this->_personaje1->borrarBuffer();
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{
 		_capas[i]->resetPos();

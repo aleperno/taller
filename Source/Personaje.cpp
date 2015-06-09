@@ -64,6 +64,7 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 	this->_fatalityApplied = false;
 	this->_babalityApplied = false;
 
+	this->bufferTimer = new Temporizador();
 	//tamano de buffer para tomas varia segun los parametros de tomas, para que entran seguramente
 	bufferTeclasSize = this->_personajeData.tomasTolerancia + combos->comboMasLargoSize() + 5;
 
@@ -173,6 +174,8 @@ void Personaje::resetear() {
     this->unFreeze();
     this->_isDizzy = false;
     this->setIdle();
+	this->bufferTeclas.clear();
+	this->bufferTimer->reset();
 }
 
 void Personaje::borrarBuffer() {
@@ -408,6 +411,7 @@ Personaje::~Personaje()
 	delete _handlerFatalities;
 	delete _handlerSkeleton;
     delete this->arma;
+	delete this->bufferTimer;
     Logger::Instance()->log(DEBUG,"Destruyo personaje");
 }
 

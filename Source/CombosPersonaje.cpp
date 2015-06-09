@@ -13,8 +13,8 @@ CombosPersonaje::~CombosPersonaje() {
 	this->fatality1 = NULL;
 }
 
-int CombosPersonaje::comboMasLargoSize() {
-	int max = 0;
+unsigned int CombosPersonaje::comboMasLargoSize() {
+	unsigned int max = 0;
 	if (combo1->size() > max)	max = combo1->size();
 	if (combo2->size() > max)	max = combo2->size();
 	if (fatality1->size() > max)	max = fatality1->size();

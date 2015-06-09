@@ -18,7 +18,7 @@ class CombosPersonaje {
 	CombosPersonaje(vector<string>* combo1, vector<string>* combo2, vector<string>* fatality1, int tolerancia);
 	~CombosPersonaje();
 	void imprimirCombos();
-	int comboMasLargoSize();
+	unsigned int comboMasLargoSize();
 	bool existeCombo(vector<string>* bufferBotones, vector<string>** comboAUX, string* nombreCombo);
 };
 
