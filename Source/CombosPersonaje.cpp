@@ -44,7 +44,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 			if(j>0) ++contadorTolerancia;
 			++i;
 		}
-		if (j>combo1->size()) hayMatch=true;
+		if (j==combo1->size()) hayMatch=true;
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo1;
@@ -53,7 +53,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 
 	i = 0;	j = 0; 	contadorTolerancia = 0; hayMatch = false; (*comboAux) = NULL;
-	while (i<bufferBotones->size() && j<this->combo2->size() && !hayMatch) {
+	while (i<bufferBotones->size() && j<this->combo2->size() && !hayMatch && contadorTolerancia <= this->tolerancia) {
 		if (bufferBotones->at(i) == this->combo2->at(j)) {
 			++i;
 			++j;
@@ -61,7 +61,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 			if(j>0) ++contadorTolerancia;
 			++i;
 		}
-		if (j>combo2->size()) hayMatch=true;
+		if (j==combo2->size()) hayMatch=true;
 	}
 	if (hayMatch) {
 		(*comboAux) = this->combo2;
@@ -70,7 +70,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 	}
 
 	i = 0;	j = 0; 	contadorTolerancia = 0; hayMatch = false; (*comboAux) = NULL;
-	while (i<bufferBotones->size() && j<this->fatality1->size() && !hayMatch) {
+	while (i<bufferBotones->size() && j<this->fatality1->size() && !hayMatch && contadorTolerancia <= this->tolerancia) {
 		if (bufferBotones->at(i) == this->fatality1->at(j)) {
 			++i;
 			++j;
@@ -78,7 +78,7 @@ bool CombosPersonaje::existeCombo(vector<string>* bufferBotones,vector<string>**
 			if(j>0) ++contadorTolerancia;
 			++i;
 		}
-		if (j>this->fatality1->size()) hayMatch=true;
+		if (j==this->fatality1->size()) hayMatch=true;
 	}
 	if (hayMatch) {
 		(*comboAux) = this->fatality1;
