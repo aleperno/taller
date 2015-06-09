@@ -216,7 +216,7 @@ class Personaje
 
 		void evaluarAccion(int accion, bool enPVE);
 		void evaluarAccion(int accion);
-		void evaluarCombo();
+		bool evaluarCombo();
 		bool canMove();
 		void freeze();
 		void unFreeze();
