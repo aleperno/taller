@@ -1575,28 +1575,32 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
 		this->bufferTimer->reset();
     }
     else if (accion == this->getData()->getGA()) {
-        this->golpeAlto();
         if (enPVE) this->track_movimientos.push_back(HIGH_PUNCH);
 		this->bufferTeclas.push_back("GA");
 		this->bufferTimer->reset();
+		if (!evaluarCombo())
+			this->golpeAlto();
     }
     else if (accion == this->getData()->getGB()) {
-        this->golpeBajo();
         if (enPVE) this->track_movimientos.push_back(LOW_PUNCH);
         this->bufferTeclas.push_back("GB");
 		this->bufferTimer->reset();
+		if (!evaluarCombo())
+			this->golpeBajo();
     }
     else if (accion == this->getData()->getPA()) {
-        this->patadaAlta();
         if (enPVE) this->track_movimientos.push_back(HIGH_KICK);
         this->bufferTeclas.push_back("PA");
 		this->bufferTimer->reset();
+		if (!evaluarCombo())
+			this->patadaAlta();
     }
     else if (accion == this->getData()->getPB()) {
-        this->patadaBaja();
         if (enPVE) this->track_movimientos.push_back(LOW_KICK);
         this->bufferTeclas.push_back("PB");
 		this->bufferTimer->reset();
+		if (!evaluarCombo())
+			this->patadaBaja();
     }
     else if (accion == this->getData()->getBL()) {
     	if (enPVE) {
@@ -1612,7 +1616,7 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
 
 }
 
-void Personaje::evaluarCombo() {
+bool Personaje::evaluarCombo() {
 	string nombreCombo;
 	if (this->combos->existeCombo(&(this->bufferTeclas),&nombreCombo)) {
 		if (nombreCombo == BARRIDA)
@@ -1620,7 +1624,8 @@ void Personaje::evaluarCombo() {
 		if (nombreCombo == ARROJABLE)
 			this->lanzarArma();
 		this->bufferTeclas.clear();
-	}	
+		return true;
+	} else return false;
 }
 
 void Personaje::duck()

@@ -50,7 +50,7 @@
 										"h-final": 10,
 										"desplazamiento": 120
 									 },
-				"toma1":	["RT", "RT"],
+				"toma1":	["GA", "GA"],
 				"toma2":	["DW", "DW", "DW"],
 				"fatality":	["BL", "GB", "GB", "GB"]
 			},
