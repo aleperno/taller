@@ -219,7 +219,7 @@ class Personaje
 		bool appliedFatality();
 		bool appliedBabality();
 
-		void evaluarAccion(int accion, bool enPVE, bool enTraining);
+		void evaluarAccion(int accion, bool enPVE);
 		void evaluarAccion(int accion);
 		bool canMove();
 		void freeze();

@@ -409,9 +409,9 @@ void GameController::procesarBotones(SDL_Event* e) {
 	if (e->jbutton.button == 9) this->toMainScreen();
 	else if (e->jbutton.button == 8 && this->estoyEnTraining()) this->resetearVentanaPersonajes();
 	else if (e->jdevice.which == 0 && this->_personaje1->canMove()) {
-		this->_personaje1->evaluarAccion(e->jbutton.button,this->estoyEnPVE(),this->estoyEnTraining());
+		this->_personaje1->evaluarAccion(e->jbutton.button,this->estoyEnPVE());
 	} else if (e->jdevice.which == 1 && this->_personaje2->canMove()) {
-		this->_personaje2->evaluarAccion(e->jbutton.button);
+		this->_personaje2->evaluarAccion(e->jbutton.button,false);
 	}
 }
 
@@ -991,6 +991,30 @@ void GameController::procesarAxis(SDL_Event* e) {
 		lastJoyValue1X = e->jaxis.value;
 	}
 
+	if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
+			this->_personaje2->getBufferTeclas()->push_back("DW");
+			lastJoyValue2Y = e->jaxis.value;
+		}
+		else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
+			this->_personaje2->getBufferTeclas()->push_back("UP");
+			lastJoyValue2Y = e->jaxis.value;
+		}
+		else if ((e->jaxis.which == 1) && (e->jaxis.axis == 1)) {
+			lastJoyValue2Y = e->jaxis.value;
+		}
+
+		if ((e->jaxis.which == 1) && (e->jaxis.value > JOYSTICK_DEAD_ZONE) && (lastJoyValue2X < JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
+			this->_personaje2->getBufferTeclas()->push_back("RT");
+			lastJoyValue2X = e->jaxis.value;
+		}
+		else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2X > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 0)) {
+			this->_personaje2->getBufferTeclas()->push_back("LF");
+			lastJoyValue2X = e->jaxis.value;
+		}
+		else if ((e->jaxis.which == 1) && (e->jaxis.axis == 0)) {
+			lastJoyValue2X = e->jaxis.value;
+		}
+
 }
 
 void GameController::procesarEventos(SDL_Event* e) {
@@ -999,7 +1023,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 			this->procesarBotones(e);
 			break;
 		case SDL_JOYAXISMOTION:
-			if (this->estoyEnTraining()) this->procesarAxis(e);
+			this->procesarAxis(e);
 			break;
 		case SDL_JOYDEVICEADDED:
 			Logger::Instance()->log(DEBUG,"Se ha enchufado un Joystick");
