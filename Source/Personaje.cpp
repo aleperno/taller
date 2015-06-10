@@ -528,6 +528,25 @@ void Personaje::view(Personaje* otherPlayer)
                 }
             }
         }
+        else if (this->_isBarriendo)
+		{
+			if(this->viewBarrido())
+			{
+				if(!Mix_Playing(-1))
+					Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
+				if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
+				{
+					//if(!Mix_Playing(-1))
+						Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
+					//otherPlayer->downLife(LIFE_MIN);
+					otherPlayer->fallSwep(LIFE_MED);
+				}
+			}
+		}
+        else if (this->_isSweepFall)
+		{
+			this->viewFallSweep();
+		}
         else if (this->_isDucking && this->_isBlocking)
         {
             this->viewBlockDuck();
@@ -712,25 +731,6 @@ void Personaje::view(Personaje* otherPlayer)
 			//if(!Mix_Playing(-1))
 				//Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
         } 
-		else if (this->_isSweepFall) 
-		{
-			this->viewFallSweep();
-		}
-        else if (this->_isBarriendo)
-        {
-            if(this->viewBarrido())
-            {
-				if(!Mix_Playing(-1))
-					Mix_PlayChannel(-1, this->efectos_sonido->miss, 0);
-                if(this->hayColision(this->boundingBox, otherPlayer->boundingBox) && !otherPlayer->isBlocking())
-                {
-					//if(!Mix_Playing(-1))
-						Mix_PlayChannel(-1, this->efectos_sonido->hit, 0);
-                    //otherPlayer->downLife(LIFE_MIN);
-                    otherPlayer->fallSwep(LIFE_MED);
-                }
-            }
-        }
         else
         {
             this->showIdle();
@@ -1947,7 +1947,7 @@ bool Personaje::isDucking() {
 
 bool Personaje::isHitting()
 {
-	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling || this->_isSweepFall);
+	return (this->_isHiPunching || this->_isHiKicking || this->_isLoPunching || this->_isLoKicking || this->_isHitFalling || this->_isBarriendo);
 }
 
 bool Personaje::appliedFatality()
