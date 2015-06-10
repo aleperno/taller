@@ -302,9 +302,12 @@ bool GameController::actualizarGanador() {
 		}
 	} else {
 		if (this->_personaje1->healthPoints <= 5) {
-			this->_personaje1->freeze();
 			//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
-			if (personaje2Wins == 1) this->_personaje1->dizzy();
+			if (personaje2Wins == 1)
+			{
+				this->_personaje1->freeze();
+				this->_personaje1->dizzy();
+			}
 			if (this->_personaje1->healthPoints <= 0) {
 				Logger::Instance()->log(WARNING,"Round ganado por personaje 2.");
 				this->_carteles->viewWinner(this->nombreP2);
@@ -323,9 +326,12 @@ bool GameController::actualizarGanador() {
 			}
 		} else {
 			if (this->_personaje2->healthPoints <= 5) {
-				this->_personaje2->freeze();
 				//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
-				if (personaje1Wins == 1) this->_personaje2->dizzy();
+				if (personaje1Wins == 1)
+				{
+					this->_personaje2->freeze();
+					this->_personaje2->dizzy();
+				}
 				if (this->_personaje2->healthPoints <= 0) {
 					Logger::Instance()->log(WARNING,"Round ganado por personaje 1.");
 					this->_personaje1->freeze();
