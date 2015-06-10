@@ -280,7 +280,15 @@ void Personaje::setBoundingBox()
         boundingBox.h = boundingBox.h / 2;
     }
 
-	if( ( this->_isHiKicking || this->_isHiPunching || this->_isLoKicking || this->_isLoPunching || this->_isIdle || this->_isWalking) && (!this->_isDucking) && (!this->_isBarriendo))
+    if ( (this->_isHiKicking) || (this->_isHiPunching) )
+    {
+    	boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
+		boundingBox.y = this->get_y_px() * 1.2;
+		boundingBox.w = this->_ancho_px / 2;//boundingBox.w = this->_ancho_px / 1.8;
+		boundingBox.h = this->_alto_px / 1.2;
+    }
+
+	if( (this->_isLoKicking || this->_isLoPunching || this->_isIdle || this->_isWalking) && (!this->_isDucking) && (!this->_isBarriendo) )
     {
         boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
 		boundingBox.y = this->get_y_px() * 1.2;
@@ -1709,7 +1717,7 @@ void Personaje::blockDuck()
 void Personaje::jump(float factor)
 {
     //cout << "salto" << endl;
-    if (  !this->isFalling() && !this->isJumping() && !this->isHitting() )
+    if (  !this->isFalling() && !this->isJumping() && !this->isHitting() && !this->_beingHit && !this->_isSweepFall)
     {
         if (!this->_isJumping) this->_lastFrame = 0;
         this->_isJumping = true;
@@ -1721,7 +1729,7 @@ void Personaje::jump(float factor)
 }
 
 void Personaje::jumpRight(float factor){
-    if ( !this->isFalling() && !this->isJumping() && !this->isHitting() )
+    if ( !this->isFalling() && !this->isJumping() && !this->isHitting() && !this->_beingHit && !this->_isSweepFall )
     {
         if (!this->_isJumpingRight) this->_lastFrame = 0;
         this->_isJumpingRight = true;
@@ -1733,7 +1741,7 @@ void Personaje::jumpRight(float factor){
 }
 
 void Personaje::jumpLeft(float factor){
-    if ( !this->isFalling() && !this->isJumping() && !this->isHitting() )
+    if ( !this->isFalling() && !this->isJumping() && !this->isHitting() && !this->_beingHit && !this->_isSweepFall )
     {
         if (!this->_isJumpingLeft) this->_lastFrame = 0;
         this->_isJumpingLeft = true;
