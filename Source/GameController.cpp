@@ -83,10 +83,10 @@ GameController::GameController(Parser* parser)
 	botonSeleccionadoEnModo = PLAY_BOTON;
 	p1nameEmpty = true;
 	p2nameEmpty = false;
-	lastJoyValue1X = JOYSTICK_DEAD_ZONE;
-	lastJoyValue1Y = JOYSTICK_DEAD_ZONE;
-	lastJoyValue2X = JOYSTICK_DEAD_ZONE;
-	lastJoyValue2Y = JOYSTICK_DEAD_ZONE;
+	lastJoyValue1X = 0;
+	lastJoyValue1Y = 0;
+	lastJoyValue2X = 0;
+	lastJoyValue2Y = 0;
 	
 	this->_joystickOne = NULL;
 	this->_joystickTwo = NULL;
