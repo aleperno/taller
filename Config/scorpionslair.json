@@ -25,7 +25,7 @@
 		"alto": 	50,
 		"arma_speed":	2.5,
 		"tomasTiempo":	3000,
-		"tolerancia":	1,
+		"tolerancia":	0,
 		"golpe-alto":	0,
 		"golpe-bajo":	1,
 		"patada-alta":	2,

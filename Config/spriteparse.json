@@ -50,9 +50,9 @@
 										"h-final": 10,
 										"desplazamiento": 120
 									 },
-				"toma1":	["GA", "GA"],
-				"toma2":	["DW", "DW", "DW"],
-				"fatality":	["BL", "GB", "GB", "GB"]
+				"toma1":	["LF", "LF", "GB"],
+				"toma2":	["DW", "DW", "PB"],
+				"fatality":	["LF", "RT", "LF", "GB"]
 			},
 
 "scorpion": {	"height":	155,
@@ -106,9 +106,9 @@
 										"h-final": 80,
 										"desplazamiento": 120.5
 									 },
-				"toma1":	["PB", "PB", "PB"],
-				"toma2":	["GA", "GA", "GA"],
-				"fatality":	["LF", "LF", "LF", "LF", "LF"]
+				"toma1":	["LF", "LF", "GB"],
+				"toma2":	["DW", "DW", "PB"],
+				"fatality":	["BL", "GB", "BL", "GB"]
 			 },
 "toasty": { "path": "Images/toasty.png",
 			"alto":	287,
