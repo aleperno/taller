@@ -1399,7 +1399,12 @@ void GameController::runPVP() {
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
 		if (this->estoyEnTraining()) {
 			if (this->actualizarGanadorTraining())
+			{
 				this->resetearVentanaPersonajes();
+				this->_beginRound = true;
+				_toDizzy = false;
+				_wasAlive = true;
+			}
 		} else {//If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
