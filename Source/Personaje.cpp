@@ -325,7 +325,7 @@ void Personaje::setBoundingBox()
 		//else
 			//boundingBox.x = this->get_x_px() - (this->_ancho_px / 8);
 
-    	boundingBox.y = this->get_y_px() * 1.32;
+    	boundingBox.y = this->get_y_px() * 1.32 + this->_alto_px/5;
         boundingBox.w = this->_ancho_px / 1.45f;//boundingBox.w = this->_ancho_px / 1.8;
         boundingBox.h = this->_alto_px / 1.5f;
 
@@ -340,7 +340,7 @@ void Personaje::setBoundingBox()
 	}
 
     //Renderiza el boundingbox - solo para pruebas
-    SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
+    //SDL_RenderDrawRect( this->_ventana->_gRenderer, &boundingBox );
 }
 
 vector<SDL_Rect*> Personaje::loadVectorMedia(PersonajeData data)
