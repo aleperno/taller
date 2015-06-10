@@ -1086,14 +1086,18 @@ void GameController::procesarEventos(SDL_Event* e) {
 			{
 				if (this->_personaje1->_isDizzy)
 				{
+					// TODO: TUNUNÛN
+					//Mix_PlayChannel(-1, this->musica->, 0);
 					this->_personaje2->applyFatality();
 					this->_personaje1->receiveFatality();
 				}
 				else if (this->_personaje2->_isDizzy)
 				{
+					// TODO: TUNUNÛN
+					//Mix_PlayChannel(-1, this->musica->, 0);
 					this->_personaje1->applyFatality();
 					this->_personaje2->receiveFatality();
-				}	
+				}
 			}
 			else if (e->key.keysym.sym == SDLK_6)
 			{	
@@ -1470,6 +1474,7 @@ void GameController::runPVP() {
 		this->_ventana->updateScreen();
 		if( _beginRound && (personaje1Wins < 2) && (personaje2Wins < 2))
 		{	
+			Mix_PlayChannel(-1, this->musica->fight, 0);
 			this->_carteles->viewFigth();
 			this->_beginRound = false;
 			this->_personaje1->unFreeze();
