@@ -318,7 +318,7 @@ bool GameController::actualizarGanador() {
 				{
 					// Variables que indican cuando activar finish him
 					this->_wasAlive = false;
-					this->_toDizzy  = true;
+					if (personaje2Wins == 1) this->_toDizzy  = true;
 				}
 			}
 		} else {
@@ -339,7 +339,7 @@ bool GameController::actualizarGanador() {
 					{
 						// Variables que indican cuando activar finish him
 						this->_wasAlive = false;
-						this->_toDizzy  = true;
+						if (personaje1Wins == 1) this->_toDizzy  = true;
 					}
 				}
 			}
