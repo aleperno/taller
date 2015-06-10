@@ -223,9 +223,14 @@ void Personaje::lanzarArma()
 {
     //TODO: Chequear lanzamiento en salto y agachado
     // TODO: Agregar otras acciones.
-    if ( !this->_isBlocking && !this->_isHiKicking && !this->_isLoKicking && !this->_isHiPunching && !this->_isLoPunching) 
+    //if ( !this->_isBlocking && !this->_isHiKicking && !this->_isLoKicking && !this->_isHiPunching && !this->_isLoPunching)
+	if ( !this->_isBlocking)
     {
-        if (!this->_weaponInAir)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
+    	this->_isHiPunching = false;
+    	this->_isLoKicking = false;
+    	this->_isHiKicking = false;
+    	this->_isLoPunching = false;
+    	if (!this->_weaponInAir)   //( !this->isFalling() && !this->isJumping() && !this->_isThrowing )
         {
 			if(this->t_lanza_arma->getTimeInTicks() >= TIEMPO_ARMA)
 			{
@@ -1518,11 +1523,22 @@ void Personaje::dead()
 
 void Personaje::barrer()
 {
+	/*
     if ( !this->_isHiPunching && !this->_isLoKicking && !this->_isHiKicking && !this->_isBlocking && !this->_isLoPunching )
     {
         this->_isBarriendo = true;
         this->_isWalking = false;
     }
+    */
+	if (!this->_isBlocking)
+	{
+		this->_isBarriendo = true;
+		this->_isWalking = false;
+		this->_isHiPunching = false;
+		this->_isLoKicking = false;
+		this->_isHiKicking = false;
+		this->_isLoPunching = false;
+	}
 }
 
 void Personaje::golpeBajo() {
