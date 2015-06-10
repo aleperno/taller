@@ -179,6 +179,7 @@ void Personaje::resetear() {
 	this->nombreCombo = "";
 	this->bufferTeclas.clear();
 	this->bufferTimer->reset();
+	this->canMakeFatality = false;
 }
 
 void Personaje::actualizarBufferTeclas() {
