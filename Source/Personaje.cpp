@@ -183,7 +183,7 @@ void Personaje::resetear() {
 }
 
 void Personaje::actualizarBufferTeclas() {
-	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
+	if (bufferTimer->getTimeInTicks() > (unsigned)this->_data.tomasTiempoLimite)
 		this->bufferTeclas.clear();
 	else if(this->bufferTeclas.size() > bufferTeclasSize )
 		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin() + 1);
