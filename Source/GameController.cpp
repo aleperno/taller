@@ -128,6 +128,7 @@ GameController::GameController(Parser* parser)
 	comboAUX = new vector<string>();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
 	this->inFatality = false;
+	this->toast_prob = false;
 }
 
 void GameController::InicializarAI(int _difficulty)
@@ -237,7 +238,12 @@ void GameController::printLayers()
 	if (_ventana->isShaking())
 	{
 		_ventana->setShakeIntensity();
-		this->toasty->setActive();
+		if (!toast_prob) this->toasty->setActive();
+		this->toast_prob = true;
+	}
+	else
+	{
+		this->toast_prob = false;
 	}
 	for (unsigned int i=0; i<_capas.size(); i++)
 	{

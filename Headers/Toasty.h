@@ -15,7 +15,7 @@
 #include <string>
 #include <stdlib.h>
 
-#define TOASTY_PROB 1
+#define TOASTY_PROB 0.5
 
 class Toasty
 {
