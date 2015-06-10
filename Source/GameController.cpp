@@ -1374,7 +1374,6 @@ void GameController::runPVP() {
 		if( e.type == SDL_QUIT ) this->setEndOfGame(true);
 		this->procesarEventos(&e);
 	}
-
 	if (!this->minimizado) {
 		if(!this->musica_pelea)	{
 			Mix_HaltMusic();
@@ -1399,7 +1398,10 @@ void GameController::runPVP() {
 		tiempoRemanente = (int)ceil(FIGHT_TIME_COUNTDOWN - ((float)this->_fightTimer->getTimeInTicks())/1000);
 		if (this->estoyEnTraining()) {
 			if (this->actualizarGanadorTraining())
+			{
 				this->resetearVentanaPersonajes();
+				inFatality = false;
+			}
 		} else {//If not in training
 			if (this->actualizarGanador()) {
 					this->actualizarPartida();
@@ -1509,6 +1511,7 @@ void GameController::prepararPartida() {
 	_beginRound = true;
 	_toDizzy = false;
 	_wasAlive = true;
+	this->inFatality = false;
 	_hud->actualizarRounds(round,personaje1Wins,personaje2Wins);
 	this->_fightTimer->reset();
 }
@@ -1516,7 +1519,7 @@ void GameController::prepararPartida() {
 void GameController::prepararPartidaTraining() {
 	actualizarPersonajes();
 	resetearVentanaPersonajes();
-
+	this->inFatality = false;
 	_hud->setearPersonajes(_personaje1, _personaje2);
 	if (this->nombreP1.length() == 0) {
 		this->nombreP1 = _personaje1->getData()->nombre;
