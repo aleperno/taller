@@ -183,6 +183,9 @@ class GameController
 		void procesamientoMainScreenPVE();
 		void procesamientoMainScreenTraining();
 
+		void procesarFinales();
+		void procesarFinal(Personaje* player, Personaje* otherPlayer);
+
 		//Testing
 		void viewWindowPosition();
 		bool canMoveRight(Personaje* pers, Personaje* otherPers);

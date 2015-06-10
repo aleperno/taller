@@ -73,6 +73,8 @@ Personaje::Personaje(Ventana* ventana, PersonajeData data, EscenarioData escenar
 
     //Testing golpe multiple
     this->first_cycle = true;
+
+    this->canMakeFatality = false;
 }
 
 PersonajeData* Personaje::getData() {
@@ -1628,6 +1630,8 @@ bool Personaje::evaluarCombo() {
 			this->barrer();
 		if (nombreCombo == ARROJABLE)
 			this->lanzarArma();
+		if (nombreCombo == FATALITY && this->canMakeFatality)
+			this->applyFatality();
 		this->bufferTeclas.clear();
 		Mix_PlayChannel(-1, this->efectos_sonido->excellent, 0);
 		return true;
@@ -2009,11 +2013,16 @@ void Personaje::applyFatality()
 	this->_apllyingFatality = true;
 }
 
+bool Personaje::aplyingFatality()
+{
+	return this->_apllyingFatality;
+}
+
 bool Personaje::receiveFatality()
 {
 	if (this->_isDizzy)
 	{
-		this->_lastFrame = 0;
+		//this->_lastFrame = 0;
 		this->setIdle();
 		this->_receivingFatality = true;
 	}

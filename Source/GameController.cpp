@@ -1068,7 +1068,7 @@ void GameController::procesarEventos(SDL_Event* e) {
 			else if (e->key.keysym.sym == SDLK_q) this->_personaje1->fallSwep(10);
 			else if (e->key.keysym.sym == SDLK_7) this->_personaje1->barrer();
 
-			//Prueba fatalities
+			//TODO Prueba fatalities
 			else if (e->key.keysym.sym == SDLK_5)
 			{
 				if (this->_personaje1->_isDizzy)
@@ -1328,6 +1328,31 @@ void GameController::procesamientoMainScreenTraining() {
 		SDL_Delay(DEF_SLEEP_TIME);
 }
 
+void GameController::procesarFinal(Personaje* player, Personaje* otherPlayer)
+{
+	if(otherPlayer->_isDizzy)
+	{
+		player->canMakeFatality = true;
+		if(player->aplyingFatality())
+		{
+			otherPlayer->receiveFatality();
+		}
+	}
+}
+//TODO testing
+void GameController::procesarFinales()
+{
+	if(this->estoyEnTraining())
+	{
+		this->procesarFinal(this->_personaje1,this->_personaje2);
+	}
+	else
+	{
+		this->procesarFinal(this->_personaje1,this->_personaje2);
+		this->procesarFinal(this->_personaje2,this->_personaje1);
+	}
+}
+
 void GameController::runPVP() {
 	
 	if (!partidaPreparada) {
@@ -1385,6 +1410,8 @@ void GameController::runPVP() {
 		this->printLayers();
 		this->_personaje1->actualizarBufferTeclas();
 		this->_personaje2->actualizarBufferTeclas();
+		//TODO testing
+		procesarFinales();
 		if (this->estoyEnTraining()) {
 
 			if (this->_personaje1->nombreCombo.size() > 0) {

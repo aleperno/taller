@@ -197,6 +197,8 @@ class Personaje
 		void applyBabality();
 		bool receiveBabality();
 
+		bool aplyingFatality();
+
 		unsigned int _zIndex;
 		void showIdle();
 		bool viewDead();
@@ -227,6 +229,8 @@ class Personaje
 		void setOrientacion(bool orientacion);
 		SDL_Rect boundingBox;
 		void lanzarArma();
+
+		bool canMakeFatality;
 };
 
 
