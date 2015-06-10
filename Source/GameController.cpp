@@ -1401,6 +1401,9 @@ void GameController::runPVP() {
 			{
 				this->resetearVentanaPersonajes();
 				inFatality = false;
+				this->_beginRound = true;
+				_toDizzy = false;
+				_wasAlive = true;
 			}
 		} else {//If not in training
 			if (this->actualizarGanador()) {
