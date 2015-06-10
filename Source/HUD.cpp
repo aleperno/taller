@@ -148,11 +148,11 @@ void Hud::actualizarRounds(int round, int p1wins, int p2wins) {
 }
 
 void Hud::actualizarHealthbars() {
-	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
-	this->hud1.healthIlum.w = this->hud1.interno.w * _personaje1->healthPoints / 100;
+	this->hud1.health.w = this->hud1.interno.w * _personaje1->healthPoints / HEALTH;
+	this->hud1.healthIlum.w = this->hud1.interno.w * _personaje1->healthPoints / HEALTH;
 
-	this->hud2.health.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
-	this->hud2.healthIlum.w = this->hud2.interno.w * _personaje2->healthPoints / 100;
+	this->hud2.health.w = this->hud2.interno.w * _personaje2->healthPoints / HEALTH;
+	this->hud2.healthIlum.w = this->hud2.interno.w * _personaje2->healthPoints / HEALTH;
 	this->hud2.health.x = _ventana->_ancho_px - this->hud2.interno.h/2 - this->hud2.health.w;
 	this->hud2.healthIlum.x = _ventana->_ancho_px - this->hud2.interno.h/2 - this->hud2.health.w;
 }

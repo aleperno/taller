@@ -26,6 +26,7 @@ using namespace std;
 #include <AccionesTracking.h>
 #include <Temporizador.h>
 
+#define HEALTH 50;
 #define SPEED 3;
 #define JMP_SPEED 10;
 #define JMP_SPEED2 5;

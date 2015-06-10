@@ -9,7 +9,6 @@
 
 #define OFFSET_SPRITE_GOLPE 1
 
-#define HEALTH 100
 #define LIFE_MAX 5
 #define LIFE_MED 3
 #define LIFE_MIN 1
@@ -183,7 +182,7 @@ void Personaje::resetear() {
 }
 
 void Personaje::actualizarBufferTeclas() {
-	if (bufferTimer->getTimeInTicks() > this->_data.tomasTiempoLimite)
+	if (bufferTimer->getTimeInTicks() > (unsigned)this->_data.tomasTiempoLimite)
 		this->bufferTeclas.clear();
 	else if(this->bufferTeclas.size() > bufferTeclasSize )
 		this->bufferTeclas.erase(this->bufferTeclas.begin(), this->bufferTeclas.begin() + 1);
