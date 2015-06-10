@@ -34,6 +34,7 @@ Toasty::Toasty(Ventana* ventana, ToastyData data)
 void Toasty::setActive()
 {
 	double r = ((double) rand() / (RAND_MAX));
+	//cout << "R vale "<< r << endl;
 	if (r < TOASTY_PROB)
 	{
 		this->active = true;

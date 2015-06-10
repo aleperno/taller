@@ -34,8 +34,7 @@ using namespace std;
 
 
 #define DEF_SLEEP_TIME 20
-#define FIGHT_TIME_COUNTDOWN 200
-#define BUFFER_WAIT_TIME 3
+#define FIGHT_TIME_COUNTDOWN 100
 
 #define NO_MAINSCREEN 0
 #define MAINSCREEN_INTRO 1
@@ -186,6 +185,7 @@ class GameController
 		void procesarFinales();
 		void procesarFinal(Personaje* player, Personaje* otherPlayer);
 		bool inFatality;
+		bool toast_prob;
 
 		//Testing
 		void viewWindowPosition();
