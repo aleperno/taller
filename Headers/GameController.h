@@ -185,6 +185,7 @@ class GameController
 
 		void procesarFinales();
 		void procesarFinal(Personaje* player, Personaje* otherPlayer);
+		bool inFatality;
 
 		//Testing
 		void viewWindowPosition();

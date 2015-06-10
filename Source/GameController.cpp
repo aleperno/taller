@@ -127,6 +127,7 @@ GameController::GameController(Parser* parser)
 	_fightTimer = new Temporizador();
 	comboAUX = new vector<string>();
 	Logger::Instance()->log(DEBUG,"Se crea instancia de GameController");
+	this->inFatality = false;
 }
 
 void GameController::InicializarAI(int _difficulty)
@@ -1333,9 +1334,10 @@ void GameController::procesarFinal(Personaje* player, Personaje* otherPlayer)
 	if(otherPlayer->_isDizzy)
 	{
 		player->canMakeFatality = true;
-		if(player->aplyingFatality())
+		if(player->aplyingFatality() && !this->inFatality)
 		{
 			otherPlayer->receiveFatality();
+			this->inFatality = true;
 		}
 	}
 }
