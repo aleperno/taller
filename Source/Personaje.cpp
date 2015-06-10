@@ -1617,6 +1617,7 @@ void Personaje::evaluarAccion(int accion, bool enPVE) {
     	}
     	this->bufferTeclas.push_back("BL");
 		this->bufferTimer->reset();
+		evaluarCombo();
     }
 
 }
