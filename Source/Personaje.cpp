@@ -1658,7 +1658,7 @@ bool Personaje::evaluarCombo() {
 		if (nombreCombo == FATALITY && this->canMakeFatality)
 			this->applyFatality();
 		this->bufferTeclas.clear();
-		Mix_PlayChannel(-1, this->efectos_sonido->excellent, 0);
+		//Mix_PlayChannel(-1, this->efectos_sonido->excellent, 0);
 		return true;
 	} else {
 		nombreCombo = "";

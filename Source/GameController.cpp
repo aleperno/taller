@@ -1140,14 +1140,14 @@ void GameController::procesarMovimientoJoystick() {
 		const Sint16 AYSP1 = SDL_JoystickGetAxis(this->_joystickOne,1);
 		const Uint8 BLBTP1 = SDL_JoystickGetButton(this->_joystickOne,this->_personaje1->getData()->defensa);
 
-		if (BLBTP1 == 1) {
+		/*if (BLBTP1 == 1) {
 			if (this->_personaje1->isDucking()) {
 				this->_personaje1->blockDuck();
 			} else {
 				this->_personaje1->block();
 			}
 		}
-		else if (AXSP1 < -JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
+		else */if (AXSP1 < -JOYSTICK_DEAD_ZONE && AYSP1 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje1->jumpLeft(JMP_FACTOR);
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP_LEFT);
  		}
@@ -1160,7 +1160,8 @@ void GameController::procesarMovimientoJoystick() {
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(UP);
 		}
 		else if (AYSP1 > JOYSTICK_DEAD_ZONE) {
-			this->_personaje1->duck();
+			if (BLBTP1 != 1)this->_personaje1->duck();
+			else if( BLBTP1 == 1 ) this->_personaje1->blockDuck();
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(DUCK);
 		}
 		else if (AXSP1 < -JOYSTICK_DEAD_ZONE) {
@@ -1174,7 +1175,15 @@ void GameController::procesarMovimientoJoystick() {
 				this->_personaje1->moveRight(MOV_FACTOR2);
 				if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(RIGHT);
 			}
-		} else {
+		}
+		else if (BLBTP1 == 1) {
+			if (this->_personaje1->isDucking()) {
+				this->_personaje1->blockDuck();
+			} else {
+				this->_personaje1->block();
+			}
+		}
+		else {
 			this->_personaje1->idle();
 			if (estoyEnPVE) this->_personaje1->track_movimientos.push_back(IDLE);
 		}
@@ -1187,6 +1196,7 @@ void GameController::procesarMovimientoJoystick() {
 		const Sint16 AYSP2 = SDL_JoystickGetAxis(this->_joystickTwo,1);
 		const Uint8 BLBTP2 = SDL_JoystickGetButton(this->_joystickTwo,this->_personaje2->getData()->defensa);
 
+		/*
 		if (BLBTP2 == 1) {
 			if (this->_personaje2->isDucking()) {
 				this->_personaje2->blockDuck();
@@ -1194,7 +1204,7 @@ void GameController::procesarMovimientoJoystick() {
 				this->_personaje2->block();
 			}
 		}
-		else if (AXSP2 < -JOYSTICK_DEAD_ZONE && AYSP2 < -JOYSTICK_DEAD_ZONE) {
+		else */if (AXSP2 < -JOYSTICK_DEAD_ZONE && AYSP2 < -JOYSTICK_DEAD_ZONE) {
 			this->_personaje2->jumpLeft(JMP_FACTOR);
 		}
 		else if (AXSP2 > JOYSTICK_DEAD_ZONE && AYSP2 < -JOYSTICK_DEAD_ZONE) {
@@ -1204,7 +1214,8 @@ void GameController::procesarMovimientoJoystick() {
 			this->_personaje2->jump(JMP_FACTOR);
 		}
 		else if (AYSP2 > JOYSTICK_DEAD_ZONE) {
-			this->_personaje2->duck();
+			if (BLBTP2 != 1)this->_personaje2->duck();
+			else if( BLBTP2 == 1 ) this->_personaje2->blockDuck();
 		}
 		else if (AXSP2 < -JOYSTICK_DEAD_ZONE) {
 			if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() && canMoveLeft(_personaje2,_personaje1)) {
@@ -1215,7 +1226,15 @@ void GameController::procesarMovimientoJoystick() {
 			if ( !this->_personaje2->isJumping() && !this->_personaje2->isFalling() && canMoveRight(_personaje2,_personaje1)) {
 				this->_personaje2->moveRight(MOV_FACTOR2);
 			}
-		} else {
+		} else if (BLBTP2 == 1) {
+			if (this->_personaje2->isDucking()) {
+				this->_personaje2->blockDuck();
+			} else {
+				this->_personaje2->block();
+			}
+		}
+		else
+		{
 			this->_personaje2->idle();
 		}
 		}
