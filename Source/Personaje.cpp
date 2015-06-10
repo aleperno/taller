@@ -9,7 +9,6 @@
 
 #define OFFSET_SPRITE_GOLPE 1
 
-#define HEALTH 100
 #define LIFE_MAX 5
 #define LIFE_MED 3
 #define LIFE_MIN 1

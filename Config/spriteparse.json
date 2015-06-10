@@ -108,7 +108,7 @@
 									 },
 				"toma1":	["LF", "LF", "GB"],
 				"toma2":	["DW", "DW", "PB"],
-				"fatality":	["BL", "GB", "BL", "GB"]
+				"fatality":	["LF", "RT", "DW", "GA"]
 			 },
 "toasty": { "path": "Images/toasty.png",
 			"alto":	287,
