@@ -302,7 +302,7 @@ bool GameController::actualizarGanador() {
 		}
 	} else {
 		if (this->_personaje1->healthPoints <= 5) {
-			this->_personaje1->freeze();
+			if (personaje2Wins == 1) this->_personaje1->freeze();
 			//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
 			this->_personaje1->dizzy();
 			if (this->_personaje1->healthPoints <= 0) {
@@ -325,7 +325,7 @@ bool GameController::actualizarGanador() {
 			if (this->_personaje2->healthPoints <= 5) {
 				this->_personaje2->freeze();
 				//if(!Mix_Playing(-1)) Mix_PlayChannel(-1, this->musica->finish_him, 0);
-				this->_personaje2->dizzy();
+				if (personaje1Wins == 1) this->_personaje2->dizzy();
 				if (this->_personaje2->healthPoints <= 0) {
 					Logger::Instance()->log(WARNING,"Round ganado por personaje 1.");
 					this->_personaje1->freeze();
