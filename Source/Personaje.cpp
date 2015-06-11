@@ -330,6 +330,13 @@ void Personaje::setBoundingBox()
 
     }
 
+	if ( ( this->_isFalling || this->_isFallingLeft || this->_isFallingRight || this->_isJumping || this->_isJumpingLeft || this->_isJumpingRight ) && ( this->isHitting() ) ){
+		boundingBox.x = this->get_x_px();
+		boundingBox.y = this->get_y_px();
+		boundingBox.h = this->_alto_px;
+		boundingBox.w = this->_ancho_px;
+	}
+
 	if(this->_isDizzy)
 	{
 		boundingBox.x = this->get_x_px() + (this->_ancho_px / 4);
@@ -481,8 +488,8 @@ void Personaje::view(Personaje* otherPlayer)
     {
         if ( this->isJumping() || this->isFalling() )
         {
-			if(!Mix_Playing(-1))
-				Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
+			//if(!Mix_Playing(-1))
+			//	Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
             if ( this->_isHitFalling )
             {
                 this->viewFall();
@@ -521,21 +528,21 @@ void Personaje::view(Personaje* otherPlayer)
                 if ( this->_isJumpingRight || this->_isFallingRight)
                 {
                     //cout << "SALTO DERECHA" << endl;
-					if(!Mix_Playing(-1))
-						Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
+					//if(!Mix_Playing(-1))
+						//Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
                     this->viewJumpRight();
                 }
                 else if ( this->_isJumpingLeft || this->_isFallingLeft)
                 {
                     //cout << "SALTO IZQUIERDA" << endl;
-					if(!Mix_Playing(-1))
-						Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
+					//if(!Mix_Playing(-1))
+						//Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
                     this->viewJumpLeft();
                 }
                 else
                 {
-					if(!Mix_Playing(-1))
-						Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
+					//if(!Mix_Playing(-1))
+						//Mix_PlayChannel(-1, this->efectos_sonido->jump, 0);
                     this->viewJump();
                 }
             }

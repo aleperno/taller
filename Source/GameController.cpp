@@ -984,6 +984,7 @@ void GameController::procesarAxis(SDL_Event* e) {
 	else if ((e->jaxis.which == 0) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue1Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje1->bufferTeclas.push_back("UP");
 		this->_personaje1->bufferTimer->reset();
+		Mix_PlayChannel(-1, this->musica->jump, 0);
 		evaluarCombosAxis(e);
 		lastJoyValue1Y = e->jaxis.value;
 	}
@@ -1017,6 +1018,7 @@ void GameController::procesarAxis(SDL_Event* e) {
 	else if ((e->jaxis.which == 1) && (e->jaxis.value < -JOYSTICK_DEAD_ZONE) && (lastJoyValue2Y > -JOYSTICK_DEAD_ZONE) && (e->jaxis.axis == 1)) {
 		this->_personaje2->bufferTeclas.push_back("UP");
 		this->_personaje2->bufferTimer->reset();
+		Mix_PlayChannel(-1, this->musica->jump, 0);
 		evaluarCombosAxis(e);
 		lastJoyValue2Y = e->jaxis.value;
 	}
